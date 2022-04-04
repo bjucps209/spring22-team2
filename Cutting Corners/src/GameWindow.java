@@ -7,7 +7,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.util.Duration;
 
 
-public class MainWindow {
+public class GameWindow {
 
     @FXML
     void onGreetClicked(ActionEvent event) {
