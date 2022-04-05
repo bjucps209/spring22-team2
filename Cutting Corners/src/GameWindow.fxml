@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.*?>
 
 <VBox fx:controller="GameWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
-    spacing="10" prefHeight="400" prefWidth="250">
+    spacing="10" alignment="CENTER">
 
-    <Pane fx:id="GameWindow" prefHeight="500" prefWidth="800" style="-fx-background-color: lightgray" />
+    <Pane fx:id="GameWindow" prefHeight="500" prefWidth="1000" style="-fx-background-color: lightgray" />
 
 </VBox>
