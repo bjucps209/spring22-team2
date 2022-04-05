@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="vbWindow" fx:controller="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
+    spacing="10" prefHeight="600" prefWidth="1000">
+    <Label text="Copyright 2022 No Touch Studios" />
+    
+    
+    <Pane fx:id="gameBuilder" style="-fx-background-color: lightgray" />
+</VBox>
