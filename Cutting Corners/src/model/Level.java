@@ -23,6 +23,10 @@ public class Level {
         currentScreen = screens[currentRow][currentCol];
     }
 
+    public void placeEntity(int row, int col, Entity entity){
+        screens[row][col].addEntity(entity);
+    }
+
     // private void generateEnemies(){
     //     int totalSize = currentLevel * 20 + 40;
     //     while (true){

@@ -2,5 +2,8 @@ package model;
 
 public enum Cell {
     empty,
-    obstacle
+    rock,
+    tree,
+    plant,
+    enemy
 }

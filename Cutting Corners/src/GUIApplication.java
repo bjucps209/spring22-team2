@@ -14,7 +14,7 @@ public class GUIApplication extends Application{
         // Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);        
         // com.sun.javafx.css.StyleManager.getInstance().addUserAgentStylesheet("MainWindow.css");
         
-        var loader = new FXMLLoader(getClass().getResource("GameWindow.fxml"));
+        var loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
         var scene = new Scene(loader.load());
 
         stage.setScene(scene);
