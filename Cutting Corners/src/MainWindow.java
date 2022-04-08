@@ -168,6 +168,7 @@ public class MainWindow {
     }
     @FXML
     void onStartClicked() throws IOException{
+        startView.setImage(START_BUTTON);
         var loader = new FXMLLoader(getClass().getResource("GameWindow.fxml"));
         
         var scene = new Scene(loader.load());

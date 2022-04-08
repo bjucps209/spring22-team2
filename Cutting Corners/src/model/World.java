@@ -14,7 +14,7 @@ public class World {
         if (world == null){
             world = new World();
             Level currentLev = populate(new Level(2, 1));
-
+            currentLev.currentScreen = currentLev.screens[0][0];
             world.campaign.add(currentLev);
         }
         return world;
@@ -33,13 +33,12 @@ public class World {
     }
 
     public static Level populate(Level emptyLevel){
-        for (Screen[] row: emptyLevel.screens){
-            for (Screen screen: row){
-                screen = new Screen();
-                screen.randomize();
+        for (int i = 0; i < emptyLevel.screens.length; i++){
+            for (int j = 0; j < emptyLevel.screens[0].length; j++){
+                emptyLevel.screens[i][j] = new Screen();
             }
         }
+
         return emptyLevel;
-        
     }
 }
