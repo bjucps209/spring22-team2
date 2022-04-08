@@ -1,15 +1,19 @@
 
+import java.io.IOException;
 import java.util.*;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 
 public class MainWindow {
@@ -77,7 +81,7 @@ public class MainWindow {
         helpView.relocate(1100, 600);
         settingsView.relocate(50, 700);
         startView.setOnMousePressed(me -> startView.setImage(START_BUTTON_PRESSED));
-        startView.setOnMouseReleased(me -> startView.setImage(START_BUTTON));
+        startView.setOnMouseReleased(me -> {try{onStartClicked();}catch(IOException i){}});
         loadView.setOnMousePressed(me -> loadView.setImage(LOAD_BUTTON_PRESSED));
         loadView.setOnMouseReleased(me -> loadView.setImage(LOAD_BUTTON));
         aboutView.setFitHeight(100);
@@ -161,5 +165,17 @@ public class MainWindow {
                 //Move HighScore buttons to center and start buttons offscreen
                 break;
         }
+    }
+    @FXML
+    void onStartClicked() throws IOException{
+        var loader = new FXMLLoader(getClass().getResource("GameWindow.fxml"));
+        
+        var scene = new Scene(loader.load());
+        var stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+        
+        GameWindow gameWindow = loader.getController();
+        gameWindow.Initialize();
     }
 }

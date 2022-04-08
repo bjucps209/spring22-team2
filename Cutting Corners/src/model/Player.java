@@ -11,7 +11,7 @@ public class Player extends Entity {
     Equipment armor;
     Equipment weapon;
     Stats stats;
-    static Image playerImage = new Image("player.png");
+    static Image playerImage = new Image("media/Cirkyle v1.png");
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage);
