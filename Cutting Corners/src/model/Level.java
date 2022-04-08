@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Level {
     ArrayList<Enemy> totalEnemies;
-    Screen[][] screens;
+    public Screen[][] screens;
     Screen currentScreen;
     int currentRow;
     int currentCol;
@@ -21,6 +21,10 @@ public class Level {
 
     public void changeCurrentScreen(){
         currentScreen = screens[currentRow][currentCol];
+    }
+
+    public void placeEntity(int row, int col, Entity entity){
+        screens[row][col].addEntity(entity);
     }
 
     // private void generateEnemies(){
@@ -84,5 +88,31 @@ public class Level {
         return group;
     }
 
+    public Screen[][] getScreens() {
+        return screens;
+    }
 
+    public void setScreens(Screen[][] screens) {
+        this.screens = screens;
+    }
+
+    public int getCurrentRow() {
+        return currentRow;
+    }
+
+    public void setCurrentRow(int currentRow) {
+        this.currentRow = currentRow;
+    }
+
+    public int getCurrentCol() {
+        return currentCol;
+    }
+
+    public void setCurrentCol(int currentCol) {
+        this.currentCol = currentCol;
+    }
+
+    public Screen getCurrentScreen(){
+        return currentScreen;
+    }
 }
