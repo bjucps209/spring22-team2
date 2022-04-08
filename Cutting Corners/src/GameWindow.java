@@ -47,4 +47,15 @@ public class GameWindow {
             GameWindow.getChildren().add(entityImage);
         }
     }
+
+    /**
+     * saves the state of the game when the save button is clicked
+     * @param event
+     */
+    @FXML
+    void onSaveClicked(ActionEvent event) {
+
+    }
+
+    
 }
