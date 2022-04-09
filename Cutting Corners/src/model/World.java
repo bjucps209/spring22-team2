@@ -1,5 +1,6 @@
 package model;
 
+import java.io.FilenameFilter;
 import java.util.*;
 
 public class World {
@@ -9,6 +10,10 @@ public class World {
     private static World world;
 
     private World(){}
+
+    public static void reset() {
+        world = new World();
+    }
 
     public static World instance(){
         if (world == null){
@@ -50,5 +55,27 @@ public class World {
         }
 
         return emptyLevel;
+    }
+
+
+
+
+    
+    /**
+     * opens a file and calls the serialize methods for each object to write to the file
+     * @param filename - the file that will hold the saved game
+     */
+    public void save(String filename) {
+        //world.instance().getCurrentLevel().serialize()
+        //...
+            //the above would save all the instance variables from the current level to the file
+    }
+
+    /**
+     * opens a file and calls the deserialize methods for each object to load the game
+     * @param filename - the saved file
+     */
+    public void load(String filename) {
+        //call objects load method methods, and then load values from file
     }
 }
