@@ -1,10 +1,10 @@
 package model;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.scene.image.Image;
 
 public class Entity {
     Coordinates coords;
-    EntityObserver observer;
     Image image;
 
     public Entity(int xCoord, int yCoord, Image image){
@@ -20,15 +20,19 @@ public class Entity {
         return coords.getyCoord();
     }
 
-    public EntityObserver getObserver(){
-        return observer;
+    public IntegerProperty getXProperty(){
+        return coords.getXProperty();
     }
 
-    public void setObserver(EntityObserver observer){
-        this.observer = observer;
+    public IntegerProperty getYProperty(){
+        return coords.getYProperty();
     }
 
     public Image getImage(){
         return image;
+    }
+
+    public void performMovement(){
+
     }
 }
