@@ -268,6 +268,7 @@ public class MainWindow {
 
         GameWindow gameWindow = loader.getController();
         gameWindow.Initialize();
+        gameWindow.updater();
         
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             

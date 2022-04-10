@@ -3,6 +3,8 @@ package model;
 import java.security.Key;
 import java.util.*;
 
+import javax.print.attribute.standard.DialogOwner;
+
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -38,36 +40,62 @@ public class Player extends Entity {
     }
 
     public void KeyPressed(int index){
+        Direction direction = CheckIfOutOfBounds();
         switch (keys.get(index)){
             case W: {
-                super.coords.subYCoord(stats.speed);
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-                // index--;}
+                if (direction != Direction.up){super.coords.subYCoord(stats.speed);}
+                else if (direction == Direction.up){super.coords.addYCoord(stats.speed * 1);}
                 break;
             }
             case A: {
-                super.coords.subXCoord(stats.speed);
                 if (keys.size() > index + 1){KeyPressed((index + 1)); }
-                // index--;}
+                if (direction != Direction.left){super.coords.subXCoord(stats.speed);}
+                else if (direction == Direction.left){super.coords.addXCoord(stats.speed * 1);}
                 break;
             }
             case S: {
-                super.coords.addYCoord(stats.speed);
                 if (keys.size() > index + 1){KeyPressed((index + 1));} 
-                // index--;}
+                if (direction != Direction.down){super.coords.addYCoord(stats.speed);}
+                else if (direction == Direction.down){super.coords.subYCoord(stats.speed * 1);}
                 break;
             }
             case D: {
-                super.coords.addXCoord(stats.speed);
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-                // index--;}
+                if (direction != Direction.right){super.coords.addXCoord(stats.speed);}
+                else if (direction == Direction.right){super.coords.subXCoord(stats.speed * 1);}
                 break;
             }
             default: return;
         }
     }
 
-    public void multipleKeysPressed(){
-        
+    public Direction CheckIfOutOfBounds(){
+        Level currentLevel = World.instance().getCurrentLevel();
+        if (super.coords.getxCoord() > 1275 && currentLevel.getCurrentScreen().getRight() != null){
+            currentLevel.goRight(); 
+        }
+        else if (super.coords.getxCoord() > 1275){
+            return Direction.right;
+        }
+        if (super.coords.getxCoord() < 0 && currentLevel.getCurrentScreen().getLeft() != null){
+            currentLevel.goLeft(); 
+        }
+        else if (super.coords.getxCoord() < 0){
+            return Direction.left;
+        }
+        if (super.coords.getyCoord() > 700 && currentLevel.getCurrentScreen().getDown() != null){
+            currentLevel.goDown(); 
+        }
+        else if (super.coords.getyCoord() > 700){
+            return Direction.down;
+        }
+        if (super.coords.getyCoord() < 0 && currentLevel.getCurrentScreen().getUp() != null){
+            currentLevel.goUp(); 
+        }
+        else if (super.coords.getyCoord() < 0){
+            return Direction.up;
+        }
+        return null;
     }
 }

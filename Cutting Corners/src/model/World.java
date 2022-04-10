@@ -18,9 +18,11 @@ public class World {
     public static World instance(){
         if (world == null){
             world = new World();
-            Level currentLev = populate(new Level(2, 1), 2, 1);
+            Level currentLev = populate();
             currentLev.currentScreen = currentLev.findScreen(0, 0);
             world.campaign.add(currentLev);
+            Player Cirkyle = new Player(100, 100);
+            currentLev.placeEntity(0, 0, Cirkyle);
         }
         return world;
     }
@@ -44,17 +46,57 @@ public class World {
         return null;
     }
 
-    public static Level populate(Level emptyLevel, int levelSize, int currentLevel){
-        int colCount = 0;
-        int rowCount = -1;
+    public static Level populate(){
+    //     int colCount = 0;
+    //     int rowCount = -1;
 
-        for (int i = 0; i < (levelSize * levelSize); i++){
-            colCount = (colCount + 1) % levelSize;
-            if (colCount == 0){rowCount++;}
-            emptyLevel.screens.add(new Screen(rowCount, colCount, currentLevel));
-        }
+        // for (int i = 0; i < (levelSize * levelSize); i++){
+        //     colCount = (colCount + 1) % levelSize;
+        //     if (colCount == 0){rowCount++;}
+            
+        //     Screen screen = new Screen(rowCount, colCount, currentLevel);
 
-        return emptyLevel;
+        //     try{screen.setLeft(emptyLevel.findScreen(rowCount, colCount - 1));}
+        //     catch(NullPointerException n){}
+
+        //     try{screen.setRight(emptyLevel.findScreen(rowCount, colCount + 1));}
+        //     catch(NullPointerException n){}
+
+        //     try{screen.setUp(emptyLevel.findScreen(rowCount - 1, colCount));}
+        //     catch(NullPointerException n){}
+
+        //     try{screen.setDown(emptyLevel.findScreen(rowCount + 1, colCount));}
+        //     catch(NullPointerException n){}
+
+        //     emptyLevel.screens.add(screen);
+        // }
+
+        // return emptyLevel;
+        Level level1 = new Level(1);
+
+        Screen screen1 = new Screen(0, 0, 1);
+        Screen screen2 = new Screen(0, 1, 1);
+        Screen screen3 = new Screen(1, 0, 1);
+        Screen screen4 = new Screen(1, 1, 1);
+
+        screen1.setUp(screen3);
+        screen1.setRight(screen2);
+
+        screen2.setLeft(screen1);
+        screen2.setUp(screen4);
+        
+        screen3.setDown(screen1);
+        screen3.setRight(screen4);
+
+        screen4.setDown(screen2);
+        screen4.setLeft(screen3);
+
+        level1.addScreen(screen1);
+        level1.addScreen(screen2);
+        level1.addScreen(screen3);
+        level1.addScreen(screen4);
+
+        return level1;
     }
 
 

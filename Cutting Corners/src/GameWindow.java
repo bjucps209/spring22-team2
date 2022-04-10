@@ -19,7 +19,7 @@ import model.*;
 
 public class GameWindow {
 
-    @FXML Pane GameWindow;
+    @FXML Pane gameWindow;
     ArrayList<Character> keysPressed = new ArrayList<Character>();
 
     @FXML
@@ -32,7 +32,7 @@ public class GameWindow {
 
     @FXML
     void updater(){
-        KeyFrame frames = new KeyFrame(Duration.millis(50), this::updateView);
+        KeyFrame frames = new KeyFrame(Duration.millis(20), this::updateView);
         Timeline timer = new Timeline(frames);
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
@@ -40,18 +40,19 @@ public class GameWindow {
 
     @FXML
     public void Initialize() {
-        Player player = new Player(100, 100);
-        World.instance().getCurrentLevel().placeEntity(0, 0, player);
+        gameWindow.getChildren().clear();
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
+        World.instance().getCurrentLevel().setObserver(this::Initialize);
         for (Entity entity: entities){
             ImageView entityImage = new ImageView(entity.getImage());
             entityImage.setX(entity.getX());
             entityImage.setY(entity.getY());
             entityImage.xProperty().bind(entity.getXProperty());
             entityImage.yProperty().bind(entity.getYProperty());
+            entityImage.setUserData(entity);
             entityImage.prefWidth(200);
             entityImage.setPreserveRatio(true);
-            GameWindow.getChildren().add(entityImage);
+            gameWindow.getChildren().add(entityImage);
         }
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
@@ -61,18 +62,17 @@ public class GameWindow {
             obstacleImage.setY(obstacle.getY());
             obstacleImage.prefWidth(200);
             obstacleImage.setPreserveRatio(true);
-            GameWindow.getChildren().add(obstacleImage);
+            gameWindow.getChildren().add(obstacleImage);
         }
-
-        updater();
     }
 
     @FXML
     void updateView(ActionEvent event){
-        for (Entity entity: World.instance().displayCurrentEntities()){
+        try{for (Entity entity: World.instance().displayCurrentEntities()){
             entity.performMovement();
         }
-    } 
+        }catch(ConcurrentModificationException c){return;}
+    }
 
     /**
      * saves the state of the game when the save button is clicked

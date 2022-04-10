@@ -51,6 +51,16 @@ public class Screen {
         return obstacles;
     }
 
+    public Player removePlayer(){
+        for (Entity entity: entities){
+            if (entity instanceof Player){
+                entities.remove(entity);
+                return (Player) entity;
+            }
+        }
+        return null;
+    }
+
     public Screen getLeft() {
         return left;
     }
