@@ -7,7 +7,6 @@
     spacing="10" alignment="CENTER" >
 
     <Pane fx:id="GameWindow" prefHeight="1000" prefWidth="1500" 
-     style="-fx-background-color: lightgray" onKeyPressed="#onKeyPressed"
-     onKeyReleased="#onKeyReleased" />
+     style="-fx-background-color: lightgray" />
 
 </VBox>

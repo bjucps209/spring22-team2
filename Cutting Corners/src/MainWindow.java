@@ -5,6 +5,7 @@ import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,10 +14,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.World;
 
 
 public class MainWindow {
@@ -256,12 +259,32 @@ public class MainWindow {
         var loader = new FXMLLoader(getClass().getResource("GameWindow.fxml"));
         
         var scene = new Scene(loader.load());
+
+        
+
         var stage = new Stage();
         stage.setScene(scene);
         stage.show();
-        
+
         GameWindow gameWindow = loader.getController();
         gameWindow.Initialize();
+        
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            
+            @Override
+            public void handle(KeyEvent event){
+                World.instance().getPlayer().removeKey(event.getCode());
+                World.instance().getPlayer().addKey(event.getCode());
+            }
+        });
+
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            
+            @Override
+            public void handle(KeyEvent event){
+                World.instance().getPlayer().removeKey(event.getCode());
+            }
+        });
     }
     @FXML
     void updateButton(ImageView view,double x,double y)

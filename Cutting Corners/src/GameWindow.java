@@ -35,6 +35,7 @@ public class GameWindow {
         KeyFrame frames = new KeyFrame(Duration.millis(50), this::updateView);
         Timeline timer = new Timeline(frames);
         timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
     }
 
     @FXML
@@ -46,6 +47,8 @@ public class GameWindow {
             ImageView entityImage = new ImageView(entity.getImage());
             entityImage.setX(entity.getX());
             entityImage.setY(entity.getY());
+            entityImage.xProperty().bind(entity.getXProperty());
+            entityImage.yProperty().bind(entity.getYProperty());
             entityImage.prefWidth(200);
             entityImage.setPreserveRatio(true);
             GameWindow.getChildren().add(entityImage);
@@ -60,26 +63,16 @@ public class GameWindow {
             obstacleImage.setPreserveRatio(true);
             GameWindow.getChildren().add(obstacleImage);
         }
+
+        updater();
     }
 
     @FXML
     void updateView(ActionEvent event){
-
+        for (Entity entity: World.instance().displayCurrentEntities()){
+            entity.performMovement();
+        }
     } 
-
-    @FXML
-    void onKeyPressed(KeyEvent event){
-        char key = event.getCharacter().toCharArray()[0];
-        keysPressed.add(key);
-        System.out.println('x');
-    }
-
-    @FXML
-    void onKeyReleased(KeyEvent event){
-        char key = event.getCharacter().toCharArray()[0];
-        keysPressed.remove(key);
-        System.out.println('u');
-    }
 
     /**
      * saves the state of the game when the save button is clicked

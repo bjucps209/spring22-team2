@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Level {
     ArrayList<Enemy> totalEnemies;
-    public Screen[][] screens;
+    public ArrayList<Screen> screens = new ArrayList<Screen>();
     Screen currentScreen;
     int currentRow;
     int currentCol;
@@ -14,17 +14,22 @@ public class Level {
     Random rand = new Random();
 
     public Level(int levelSize, int currentLevel){
-        screens = new Screen[levelSize][levelSize];
+        ;
         // generateEnemies();
         this.currentLevel = currentLevel;
     }
 
-    public void changeCurrentScreen(){
-        currentScreen = screens[currentRow][currentCol];
+    public void placeEntity(int row, int col, Entity entity){
+        findScreen(row, col).addEntity(entity);
     }
 
-    public void placeEntity(int row, int col, Entity entity){
-        screens[row][col].addEntity(entity);
+    public Screen findScreen(int row, int col){
+        for (Screen screen: screens){
+            if (screen.getLocation().getRow() == row && screen.getLocation().getCol() == col){
+                return screen;
+            }
+        }
+        return null;
     }
 
     // private void generateEnemies(){
@@ -54,23 +59,23 @@ public class Level {
     // }
 
     public void goLeft(){
-        currentCol--;
-        changeCurrentScreen();
+        try{currentScreen = currentScreen.getLeft();}
+        catch(NullPointerException n){return;}
     }
 
     public void goRight(){
-        currentCol++;
-        changeCurrentScreen();
+        try{currentScreen = currentScreen.getRight();}
+        catch(NullPointerException n){return;}
     }
 
     public void goUp(){
-        currentRow--;
-        changeCurrentScreen();
+        try{currentScreen = currentScreen.getUp();}
+        catch(NullPointerException n){return;}
     }
 
     public void goDown(){
-        currentRow++;
-        changeCurrentScreen();
+        try{currentScreen = currentScreen.getDown();}
+        catch(NullPointerException n){return;}
     }
 
     public Enemy[] iterate(int groupSize, ListIterator<Enemy> iterator){
@@ -88,11 +93,11 @@ public class Level {
         return group;
     }
 
-    public Screen[][] getScreens() {
+    public ArrayList<Screen> getScreens() {
         return screens;
     }
 
-    public void setScreens(Screen[][] screens) {
+    public void setScreens(ArrayList<Screen> screens) {
         this.screens = screens;
     }
 
