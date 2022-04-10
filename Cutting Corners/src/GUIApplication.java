@@ -20,7 +20,7 @@ public class GUIApplication extends Application{
 
         stage.setScene(scene);
         stage.setTitle("Cutting Corners Alpha"); // Title of main window
-        stage.getIcons().add(new Image("media/Cirkyle v1.png"));
+        stage.getIcons().add(new Image("media/windowicon.png"));
         stage.show();
     }
 
