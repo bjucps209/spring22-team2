@@ -13,7 +13,7 @@ public class Player extends Entity {
     Equipment armor;
     Equipment weapon;
     Stats stats = new Stats(2, 5, 1);
-    static Image playerImage = new Image("media/Cirkyle v1.png");
+    static Image playerImage = new Image("media/Player/Cirkyle v1.png");
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
 
     public Player(int xCoord, int yCoord){

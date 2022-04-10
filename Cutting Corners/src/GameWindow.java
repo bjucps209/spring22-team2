@@ -56,7 +56,7 @@ public class GameWindow {
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         for (Obstacle obstacle: currentScreen.findObstacles()){
-            ImageView obstacleImage = new ImageView(new Image("media/Cirkyle v1.png"));
+            ImageView obstacleImage = new ImageView(new Image("media/Player/Cirkyle v1.png"));
             obstacleImage.setX(obstacle.getX());
             obstacleImage.setY(obstacle.getY());
             obstacleImage.prefWidth(200);
