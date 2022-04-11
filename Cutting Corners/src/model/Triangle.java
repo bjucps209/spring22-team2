@@ -4,15 +4,22 @@ import javafx.scene.image.Image;
 
 public class Triangle extends Enemy{
     Equipment weapon;
-    EntityObserver observer;
     Stats stats;
-    Coordinates coords;
-    static Image image = new Image("triangle.png");
+    static Image image = new Image("media/Enemies/triangle.png");
 
-    public Triangle(int size, int xCoord, int yCoord){
-        super(3, size, xCoord, yCoord, image);
+    public Triangle(int size, int xCoord, int yCoord, Screen homeScreen){
+        super(3, size, xCoord, yCoord, image, homeScreen, 600);
         sizeToStats();
     }
 
-    public void sizeToStats(){stats = null;}
+    public void sizeToStats(){
+        stats = null;
+        super.stats = stats;
+    }
+
+    
+
+    public void complexMovement(){
+        
+    }
 }
