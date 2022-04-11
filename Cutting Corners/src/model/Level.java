@@ -6,25 +6,34 @@ import java.util.Random;
 
 public class Level {
     ArrayList<Enemy> totalEnemies;
-    public Screen[][] screens;
+    public ArrayList<Screen> screens = new ArrayList<Screen>();
     Screen currentScreen;
     int currentRow;
     int currentCol;
     int currentLevel;
+    ScreenObserver observer;
     Random rand = new Random();
 
-    public Level(int levelSize, int currentLevel){
-        screens = new Screen[levelSize][levelSize];
+    public Level(int currentLevel){
         // generateEnemies();
         this.currentLevel = currentLevel;
     }
 
-    public void changeCurrentScreen(){
-        currentScreen = screens[currentRow][currentCol];
+    public void setObserver(ScreenObserver observer){
+        this.observer = observer;
     }
 
     public void placeEntity(int row, int col, Entity entity){
-        screens[row][col].addEntity(entity);
+        findScreen(row, col).addEntity(entity);
+    }
+
+    public Screen findScreen(int row, int col){
+        for (Screen screen: screens){
+            if (screen.getLocation().getRow() == row && screen.getLocation().getCol() == col){
+                return screen;
+            }
+        }
+        return null;
     }
 
     // private void generateEnemies(){
@@ -54,23 +63,47 @@ public class Level {
     // }
 
     public void goLeft(){
-        currentCol--;
-        changeCurrentScreen();
+        if (currentScreen.getLeft() != null){
+            Player player = currentScreen.removePlayer();
+            player.coords.setxCoord(1270);
+            currentScreen = currentScreen.getLeft();
+            currentScreen.addEntity(player);
+            currentCol--;
+            observer.Initialize();
+        }
     }
 
     public void goRight(){
-        currentCol++;
-        changeCurrentScreen();
+        if (currentScreen.getRight() != null){
+            Player player = currentScreen.removePlayer();
+            player.coords.setxCoord(5);
+            currentScreen = currentScreen.getRight();
+            currentScreen.addEntity(player);
+            currentCol++;
+            observer.Initialize();
+        }
     }
 
     public void goUp(){
-        currentRow--;
-        changeCurrentScreen();
+        if (currentScreen.getUp() != null){
+            Player player = currentScreen.removePlayer();
+            player.coords.setyCoord(695);
+            currentScreen = currentScreen.getUp();
+            currentScreen.addEntity(player);
+            currentRow--;
+            observer.Initialize();
+        }
     }
 
     public void goDown(){
-        currentRow++;
-        changeCurrentScreen();
+        if (currentScreen.getDown() != null){
+            Player player = currentScreen.removePlayer();
+            player.coords.setyCoord(5);
+            currentScreen = currentScreen.getDown();
+            currentScreen.addEntity(player);
+            currentRow++;
+            observer.Initialize();
+        }
     }
 
     public Enemy[] iterate(int groupSize, ListIterator<Enemy> iterator){
@@ -88,12 +121,16 @@ public class Level {
         return group;
     }
 
-    public Screen[][] getScreens() {
+    public ArrayList<Screen> getScreens() {
         return screens;
     }
 
-    public void setScreens(Screen[][] screens) {
+    public void setScreens(ArrayList<Screen> screens) {
         this.screens = screens;
+    }
+
+    public void addScreen(Screen screen){
+        screens.add(screen);
     }
 
     public int getCurrentRow() {

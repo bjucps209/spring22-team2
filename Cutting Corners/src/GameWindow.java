@@ -15,11 +15,18 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import model.*;
+import java.awt.*;
 
 
 public class GameWindow {
 
-    @FXML Pane GameWindow;
+    @FXML Pane gameWindow;
+    @FXML VBox vBox;
+    Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
+    double ratioWidth = size.getWidth()/1280;
+    double ratioHeight = size.getHeight()/800;
+    Image background = new Image("media/terrain/medieval/medievalfourway.png");
+    ImageView backgroundView = new ImageView(background);
     ArrayList<Character> keysPressed = new ArrayList<Character>();
 
     @FXML
@@ -32,53 +39,61 @@ public class GameWindow {
 
     @FXML
     void updater(){
-        KeyFrame frames = new KeyFrame(Duration.millis(50), this::updateView);
+        KeyFrame frames = new KeyFrame(Duration.millis(20), this::updateView);
         Timeline timer = new Timeline(frames);
         timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
     }
 
     @FXML
     public void Initialize() {
-        Player player = new Player(100, 100);
-        World.instance().getCurrentLevel().placeEntity(0, 0, player);
+        if(ratioHeight>1)
+        {
+            size = new Dimension((int)size.getWidth(), 800);
+            ratioHeight=0.888888888;
+        }
+        if(ratioWidth>1)
+        {
+            size = new Dimension(1280, (int)size.getHeight());
+            ratioWidth=0.888888888;
+        }
+        vBox.setMinWidth(size.getWidth());
+        vBox.setMinHeight(size.getHeight());
+        gameWindow.setMinWidth(size.getWidth());
+        gameWindow.setMinHeight(size.getHeight());
+        gameWindow.getChildren().clear();
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
+        World.instance().getCurrentLevel().setObserver(this::Initialize);
+        ratioImage(backgroundView);
         for (Entity entity: entities){
             ImageView entityImage = new ImageView(entity.getImage());
             entityImage.setX(entity.getX());
             entityImage.setY(entity.getY());
+            entityImage.xProperty().bind(entity.getXProperty());
+            entityImage.yProperty().bind(entity.getYProperty());
+            entityImage.setUserData(entity);
             entityImage.prefWidth(200);
             entityImage.setPreserveRatio(true);
-            GameWindow.getChildren().add(entityImage);
+            gameWindow.getChildren().add(entityImage);
         }
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         for (Obstacle obstacle: currentScreen.findObstacles()){
-            ImageView obstacleImage = new ImageView(new Image("media/Cirkyle v1.png"));
+            ImageView obstacleImage = new ImageView(new Image("media/terrain/medieval/rock.png"));
             obstacleImage.setX(obstacle.getX());
             obstacleImage.setY(obstacle.getY());
             obstacleImage.prefWidth(200);
             obstacleImage.setPreserveRatio(true);
-            GameWindow.getChildren().add(obstacleImage);
+            gameWindow.getChildren().add(obstacleImage);
         }
     }
 
     @FXML
     void updateView(ActionEvent event){
-
-    } 
-
-    @FXML
-    void onKeyPressed(KeyEvent event){
-        char key = event.getCharacter().toCharArray()[0];
-        keysPressed.add(key);
-        System.out.println('x');
-    }
-
-    @FXML
-    void onKeyReleased(KeyEvent event){
-        char key = event.getCharacter().toCharArray()[0];
-        keysPressed.remove(key);
-        System.out.println('u');
+        try{for (Entity entity: World.instance().displayCurrentEntities()){
+            entity.performMovement();
+        }
+        }catch(ConcurrentModificationException c){return;}
     }
 
     /**
@@ -88,6 +103,13 @@ public class GameWindow {
     @FXML
     void onSaveClicked(ActionEvent event) {
 
+    }
+    @FXML
+    void ratioImage(ImageView view)
+    {
+        view.setFitHeight(view.getFitHeight()*ratioHeight);
+        view.setFitWidth(view.getFitWidth()*ratioWidth);
+        gameWindow.getChildren().add(view);
     }
 
     
