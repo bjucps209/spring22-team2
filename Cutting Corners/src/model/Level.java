@@ -11,12 +11,16 @@ public class Level {
     int currentRow;
     int currentCol;
     int currentLevel;
+    ScreenObserver observer;
     Random rand = new Random();
 
-    public Level(int levelSize, int currentLevel){
-        ;
+    public Level(int currentLevel){
         // generateEnemies();
         this.currentLevel = currentLevel;
+    }
+
+    public void setObserver(ScreenObserver observer){
+        this.observer = observer;
     }
 
     public void placeEntity(int row, int col, Entity entity){
@@ -59,23 +63,47 @@ public class Level {
     // }
 
     public void goLeft(){
-        try{currentScreen = currentScreen.getLeft();}
-        catch(NullPointerException n){return;}
+        if (currentScreen.getLeft() != null){
+            Player player = currentScreen.removePlayer();
+            player.coords.setxCoord(1270);
+            currentScreen = currentScreen.getLeft();
+            currentScreen.addEntity(player);
+            currentCol--;
+            observer.Initialize();
+        }
     }
 
     public void goRight(){
-        try{currentScreen = currentScreen.getRight();}
-        catch(NullPointerException n){return;}
+        if (currentScreen.getRight() != null){
+            Player player = currentScreen.removePlayer();
+            player.coords.setxCoord(5);
+            currentScreen = currentScreen.getRight();
+            currentScreen.addEntity(player);
+            currentCol++;
+            observer.Initialize();
+        }
     }
 
     public void goUp(){
-        try{currentScreen = currentScreen.getUp();}
-        catch(NullPointerException n){return;}
+        if (currentScreen.getUp() != null){
+            Player player = currentScreen.removePlayer();
+            player.coords.setyCoord(695);
+            currentScreen = currentScreen.getUp();
+            currentScreen.addEntity(player);
+            currentRow--;
+            observer.Initialize();
+        }
     }
 
     public void goDown(){
-        try{currentScreen = currentScreen.getDown();}
-        catch(NullPointerException n){return;}
+        if (currentScreen.getDown() != null){
+            Player player = currentScreen.removePlayer();
+            player.coords.setyCoord(5);
+            currentScreen = currentScreen.getDown();
+            currentScreen.addEntity(player);
+            currentRow++;
+            observer.Initialize();
+        }
     }
 
     public Enemy[] iterate(int groupSize, ListIterator<Enemy> iterator){
@@ -99,6 +127,10 @@ public class Level {
 
     public void setScreens(ArrayList<Screen> screens) {
         this.screens = screens;
+    }
+
+    public void addScreen(Screen screen){
+        screens.add(screen);
     }
 
     public int getCurrentRow() {

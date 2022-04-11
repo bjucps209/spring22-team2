@@ -254,7 +254,12 @@ public class MainWindow {
 
         GameWindow gameWindow = loader.getController();
         gameWindow.Initialize();
+<<<<<<< HEAD
         pane.getScene().getWindow().hide();
+=======
+        gameWindow.updater();
+        
+>>>>>>> 4fd3e5e43e825815f16e5d4ed226a1b1e8e7dc4a
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
             @Override
