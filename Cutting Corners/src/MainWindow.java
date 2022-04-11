@@ -286,7 +286,7 @@ public class MainWindow {
         gameWindow.Initialize();
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
-        gameWindow.updater();
+        World.instance().updater();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
             @Override

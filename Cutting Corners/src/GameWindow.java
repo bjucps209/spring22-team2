@@ -36,14 +36,7 @@ public class GameWindow {
         alert.show();
 
     }
-
-    @FXML
-    void updater(){
-        KeyFrame frames = new KeyFrame(Duration.millis(20), this::updateView);
-        Timeline timer = new Timeline(frames);
-        timer.setCycleCount(Timeline.INDEFINITE);
-        timer.play();
-    }
+    
 
     @FXML
     public void Initialize() {
@@ -87,14 +80,7 @@ public class GameWindow {
             gameWindow.getChildren().add(obstacleImage);
         }
     }
-
-    @FXML
-    void updateView(ActionEvent event){
-        try{for (Entity entity: World.instance().displayCurrentEntities()){
-            entity.performMovement();
-        }
-        }catch(ConcurrentModificationException c){return;}
-    }
+    
 
     /**
      * saves the state of the game when the save button is clicked
