@@ -250,6 +250,8 @@ public class MainWindow {
 
         var stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("Cutting Corners Alpha");
+        stage.getIcons().add(new Image("media/windowicon.png"));
         stage.show();
 
         GameWindow gameWindow = loader.getController();
