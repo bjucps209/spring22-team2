@@ -64,7 +64,7 @@ public class GameWindow {
         gameWindow.getChildren().clear();
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         World.instance().getCurrentLevel().setObserver(this::Initialize);
-        gameWindow.getChildren().add(backgroundView);
+        ratioImage(backgroundView);
         for (Entity entity: entities){
             ImageView entityImage = new ImageView(entity.getImage());
             entityImage.setX(entity.getX());
@@ -103,6 +103,13 @@ public class GameWindow {
     @FXML
     void onSaveClicked(ActionEvent event) {
 
+    }
+    @FXML
+    void ratioImage(ImageView view)
+    {
+        view.setFitHeight(view.getFitHeight()*ratioHeight);
+        view.setFitWidth(view.getFitWidth()*ratioWidth);
+        gameWindow.getChildren().add(view);
     }
 
     

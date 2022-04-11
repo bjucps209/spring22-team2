@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.World;
@@ -41,7 +42,8 @@ public class MainWindow {
     double ratioWidth = size.getWidth()/1280;
     double ratioHeight = size.getHeight()/800;
     @FXML
-    Label highScores;
+    Label highScores = new Label();
+    HighScoreManager scores = new HighScoreManager();
     Image TITLE_SCREEN = new Image("media/titlescreen.png");
     // Image MOVE_GIF = new Image("media/moveGif.gif");
     // Image ATTACK_GIF = new Image("media/attackGif.gif");
@@ -74,6 +76,7 @@ public class MainWindow {
     Image USER_CAMPAIGN = new Image("media/buttons/usercampaign.png");
     Image LVL_BUILDER = new Image("media/buttons/lvlbuilderbtn.png");
     Image LVL_BUILDER_PRESSED = new Image("media/buttons/lvlbuilderbtnpressed.png");
+    AudioClip TITLE_MUSIC = new AudioClip(getClass().getResource("media/sounds/music/HoliznaCC0 - Lost In Space (Title Music).mp3").toString());
     ImageView backgroundView = new ImageView(TITLE_SCREEN);
     // ImageView moveView = new ImageView(MOVE_GIF);
     // ImageView attackView = new ImageView(ATTACK_GIF);
@@ -98,6 +101,8 @@ public class MainWindow {
 
     @FXML
     void initialize(){
+        TITLE_MUSIC.setCycleCount(Timeline.INDEFINITE);
+        TITLE_MUSIC.play();
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -113,6 +118,20 @@ public class MainWindow {
         pane.setMinWidth(size.getWidth());
         pane.setMinHeight(size.getHeight());
         timer.setCycleCount(100);
+        highScores.setText("High Scores:");
+        for(int i=0;i<5;i++)
+        {
+            highScores.setText(highScores.getText()+"\n"+scores.get(i).getName()+":\t"+scores.get(i).getScore());
+        }
+        try
+        {
+            scores.save();
+        }
+        catch (IOException e)
+        {
+            System.out.println("Could not save");
+        }
+        highScores.relocate(3220*ratioWidth, 200*ratioHeight);
         backgroundView.relocate(0, 0);
         // moveView.relocate(2500, 50);
         // attackView.relocate(2500, 350);
@@ -144,10 +163,13 @@ public class MainWindow {
         settingsView.setOnMousePressed(me -> settingsView.setImage(SETTINGS_BUTTON_PRESSED));
         settingsView.setOnMouseReleased(me -> {settingsView.setImage(SETTINGS_BUTTON);
                                                 state="SETTINGS";
+                                                backView.relocate(-2490*ratioWidth, 10*ratioHeight);
                                                 timer.play();});
         scoreView.setOnMousePressed(me -> scoreView.setImage(SCORE_BUTTON_PRESSED));
         scoreView.setOnMouseReleased(me -> {scoreView.setImage(SCORE_BUTTON);
-                                                state="SCORES";});
+                                                state="SCORES";
+                                                backView.relocate(2510*ratioWidth, 10*ratioHeight);
+                                                timer.play();});
         backView.setOnMousePressed(me -> backView.setImage(BACK_BUTTON_PRESSED));
         backView.setOnMouseReleased(me -> {backView.setImage(BACK_BUTTON);
                                                 state="START";
@@ -162,10 +184,10 @@ public class MainWindow {
         campaignSliderRight.setOnMouseReleased(me -> campaignSliderPressed(campaignSliderRight));
         lvlBuilderView.setOnMousePressed(me -> lvlBuilderView.setImage(LVL_BUILDER_PRESSED));
         lvlBuilderView.setOnMouseReleased(me ->lvlBuilderView.setImage(LVL_BUILDER));
-        ratioButton(backgroundView);
-        ratioButton(startView);
-        ratioButton(loadView);
-        ratioButton(lvlBuilderView);
+        ratioImage(backgroundView);
+        ratioImage(startView);
+        ratioImage(loadView);
+        ratioImage(lvlBuilderView);
         sizeButton(backView);
         sizeButton(difficultyView);
         sizeButton(diffSliderLeft);
@@ -177,6 +199,7 @@ public class MainWindow {
         sizeButton(settingsView);
         sizeButton(helpView);
         sizeButton(aboutView);
+        pane.getChildren().add(highScores);
         // pane.getChildren().add(moveView);
         // pane.getChildren().add(attackView);
         // pane.getChildren().add(itemView);
@@ -196,42 +219,51 @@ public class MainWindow {
         switch(state)
         {
             case "START":
-            updateButton(startView, 50, 200);
-            updateButton(loadView, 750, 200);
-            updateButton(aboutView, 50, 600);
-            updateButton(helpView, 1100, 600);
-            updateButton(settingsView, 50, 700);
-            updateButton(scoreView, 1100, 700);
-            updateButton(backView, -2490, 10);
-            updateButton(difficultyView, -1930, 700);
-            updateButton(diffSliderLeft, -2090, 700);
-            updateButton(diffSliderRight, -1770, 700);
-            updateButton(campaignView, -1930, 600);
-            updateButton(campaignSliderLeft, -2090, 600);
-            updateButton(campaignSliderRight, -1770, 600);
-            updateButton(lvlBuilderView, -2080, 300);
+                updateButton(startView, 50, 200);
+                updateButton(loadView, 750, 200);
+                updateButton(aboutView, 50, 600);
+                updateButton(helpView, 1100, 600);
+                updateButton(settingsView, 50, 700);
+                updateButton(scoreView, 1100, 700);
+                updateButton(backView, -2490, 10);
+                updateButton(difficultyView, -1930, 700);
+                updateButton(diffSliderLeft, -2090, 700);
+                updateButton(diffSliderRight, -1770, 700);
+                updateButton(campaignView, -1930, 600);
+                updateButton(campaignSliderLeft, -2090, 600);
+                updateButton(campaignSliderRight, -1770, 600);
+                updateButton(lvlBuilderView, -2080, 300);
+                updateButton(highScores, 3220, 200);
                 break;
             case "SETTINGS":
-            updateButton(backView, 10, 10);
-            updateButton(difficultyView, 570, 700);
-            updateButton(diffSliderLeft, 410, 700);
-            updateButton(diffSliderRight, 730, 700);
-            updateButton(campaignView, 570, 600);
-            updateButton(campaignSliderLeft, 410, 600);
-            updateButton(campaignSliderRight, 730, 600);
-            updateButton(lvlBuilderView, 420, 300);
-            updateButton(startView, 2550, 200);
-            updateButton(loadView, 3250, 200);
-            updateButton(aboutView, 2550, 600);
-            updateButton(helpView, 3600, 600);
-            updateButton(settingsView, 2550, 700);
-            updateButton(scoreView, 3600, 700);
+                updateButton(backView, 10, 10);
+                updateButton(difficultyView, 570, 700);
+                updateButton(diffSliderLeft, 410, 700);
+                updateButton(diffSliderRight, 730, 700);
+                updateButton(campaignView, 570, 600);
+                updateButton(campaignSliderLeft, 410, 600);
+                updateButton(campaignSliderRight, 730, 600);
+                updateButton(lvlBuilderView, 420, 300);
+                updateButton(startView, 2550, 200);
+                updateButton(loadView, 3250, 200);
+                updateButton(aboutView, 2550, 600);
+                updateButton(helpView, 3600, 600);
+                updateButton(settingsView, 2550, 700);
+                updateButton(scoreView, 3600, 700);
                 break;
             case "HELP":
                 break;
             case "ABOUT":
                 break;
             case "SCORES":
+                updateButton(backView, 10, 10);
+                updateButton(highScores, 720, 200);
+                updateButton(startView, -2450, 200);
+                updateButton(loadView, -1750, 200);
+                updateButton(aboutView, -2450, 600);
+                updateButton(helpView, -1400, 600);
+                updateButton(settingsView, -2450, 700);
+                updateButton(scoreView, -1400, 700);
             break;
         }
     }
@@ -253,6 +285,7 @@ public class MainWindow {
         GameWindow gameWindow = loader.getController();
         gameWindow.Initialize();
         pane.getScene().getWindow().hide();
+        TITLE_MUSIC.stop();
         gameWindow.updater();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
@@ -328,7 +361,7 @@ public class MainWindow {
         }
     }
     @FXML
-    void updateButton(ImageView view,double x,double y)
+    void updateButton(Node view,double x,double y)
     {
         if(Math.abs(view.getLayoutX()-(x*ratioWidth))>25)
         {
@@ -361,7 +394,7 @@ public class MainWindow {
         pane.getChildren().add(view);
     }
     @FXML
-    void ratioButton(ImageView view)
+    void ratioImage(ImageView view)
     {
         view.setFitHeight(view.getFitHeight()*ratioHeight);
         view.setFitWidth(view.getFitWidth()*ratioWidth);
