@@ -98,8 +98,6 @@ public class MainWindow {
 
     @FXML
     void initialize(){
-        System.out.println(size.getWidth());
-        System.out.println(size.getHeight());
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -110,8 +108,6 @@ public class MainWindow {
             size = new Dimension(1280, (int)size.getHeight());
             ratioWidth=0.888888888;
         }
-        System.out.println(size.getWidth());
-        System.out.println(size.getHeight());
         MainWindow.setMinWidth(size.getWidth());
         MainWindow.setMinHeight(size.getHeight());
         pane.setMinWidth(size.getWidth());

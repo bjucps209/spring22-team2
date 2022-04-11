@@ -3,10 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:controller="GameWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
+<VBox fx:controller="GameWindow" fx:id="vBox" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
     spacing="10" alignment="CENTER" >
 
-    <Pane fx:id="gameWindow" prefHeight="1000" prefWidth="1500" 
+    <Pane fx:id="gameWindow" prefHeight="800" prefWidth="1280" 
      style="-fx-background-color: lightgray" />
 
 </VBox>

@@ -15,11 +15,18 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import model.*;
+import java.awt.*;
 
 
 public class GameWindow {
 
     @FXML Pane gameWindow;
+    @FXML VBox vBox;
+    Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
+    double ratioWidth = size.getWidth()/1280;
+    double ratioHeight = size.getHeight()/800;
+    Image background = new Image("media/terrain/medieval/medievalfourway.png");
+    ImageView backgroundView = new ImageView(background);
     ArrayList<Character> keysPressed = new ArrayList<Character>();
 
     @FXML
@@ -40,9 +47,24 @@ public class GameWindow {
 
     @FXML
     public void Initialize() {
+        if(ratioHeight>1)
+        {
+            size = new Dimension((int)size.getWidth(), 800);
+            ratioHeight=0.888888888;
+        }
+        if(ratioWidth>1)
+        {
+            size = new Dimension(1280, (int)size.getHeight());
+            ratioWidth=0.888888888;
+        }
+        vBox.setMinWidth(size.getWidth());
+        vBox.setMinHeight(size.getHeight());
+        gameWindow.setMinWidth(size.getWidth());
+        gameWindow.setMinHeight(size.getHeight());
         gameWindow.getChildren().clear();
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         World.instance().getCurrentLevel().setObserver(this::Initialize);
+        gameWindow.getChildren().add(backgroundView);
         for (Entity entity: entities){
             ImageView entityImage = new ImageView(entity.getImage());
             entityImage.setX(entity.getX());
@@ -57,7 +79,7 @@ public class GameWindow {
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         for (Obstacle obstacle: currentScreen.findObstacles()){
-            ImageView obstacleImage = new ImageView(new Image("media/Player/Cirkyle v1.png"));
+            ImageView obstacleImage = new ImageView(new Image("media/terrain/medieval/rock.png"));
             obstacleImage.setX(obstacle.getX());
             obstacleImage.setY(obstacle.getY());
             obstacleImage.prefWidth(200);
