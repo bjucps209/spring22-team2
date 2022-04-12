@@ -1,5 +1,9 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import javafx.scene.image.Image;
 
 public class Triangle extends Enemy{
@@ -15,4 +19,14 @@ public class Triangle extends Enemy{
     }
 
     public void performAttack(){}
+
+
+
+    public void serialize(DataOutputStream file) throws IOException {
+    
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        
+    }
 }

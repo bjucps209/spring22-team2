@@ -130,11 +130,13 @@ public class World {
      * @param filename - the file that will hold the saved game
      */
     public void save(String filename) throws IOException {
-        //DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename));
-        //this.getPlayer().serialize(writer);
-        //...
-            //the above would save all the instance variables from the current level to the file
+        try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))) 
+        {
+            this.getPlayer().serialize(writer);
+            // this.campaign.stream().forEach(lvl -> lvl.serialize(writer));
 
+            
+        }
 
     }
 

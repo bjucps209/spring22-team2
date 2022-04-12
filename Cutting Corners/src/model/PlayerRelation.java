@@ -1,5 +1,9 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class PlayerRelation {
     int xDifference;
     int yDifference;
@@ -11,6 +15,17 @@ public class PlayerRelation {
         this.yDifference = yDifference;
         this.distance = distance;
         this.player = player;
+    }
+
+
+
+
+    public void serialize(DataOutputStream file) throws IOException {
+    
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        
     }
    
 }

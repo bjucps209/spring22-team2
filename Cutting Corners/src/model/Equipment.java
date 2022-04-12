@@ -1,5 +1,9 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Equipment extends Item {
     EquipmentType type;
     Stats buffs;
@@ -16,5 +20,16 @@ public class Equipment extends Item {
     public void performAction() {
         // TODO Auto-generated method stub
         super.performAction();
+    }
+
+
+
+
+    public void serialize(DataOutputStream file) throws IOException {
+    
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        
     }
 }

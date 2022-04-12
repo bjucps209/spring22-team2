@@ -1,5 +1,9 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Location {
     int row;
     int col;
@@ -33,5 +37,16 @@ public class Location {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+
+
+
+    public void serialize(DataOutputStream file) throws IOException {
+    
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        
     }
 }
