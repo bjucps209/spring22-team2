@@ -1,6 +1,8 @@
 package model;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -144,7 +146,13 @@ public class World {
      * opens a file and calls the deserialize methods for each object to load the game
      * @param filename - the saved file
      */
-    public void load(String filename) {
-        //call objects load method methods, and then load values from file
+    public void load(String filename) throws IOException {
+
+        try (DataInputStream writer = new DataInputStream(new FileInputStream(filename))) 
+        {   
+            this.getPlayer().deserialize(writer);
+            // this.campaign.stream().forEach(lvl -> lvl.deserialize(writer));
+
+        }
     }
 }
