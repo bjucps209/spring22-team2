@@ -71,10 +71,10 @@ public class Player extends Entity {
 
     public Direction CheckIfOutOfBounds(){
         Level currentLevel = World.instance().getCurrentLevel();
-        if (super.coords.getxCoord() > 1275 && currentLevel.getCurrentScreen().getRight() != null){
+        if (super.coords.getxCoord() > 1000 && currentLevel.getCurrentScreen().getRight() != null){
             currentLevel.goRight(); 
         }
-        else if (super.coords.getxCoord() > 1275){
+        else if (super.coords.getxCoord() > 1000){
             return Direction.right;
         }
         if (super.coords.getxCoord() < 0 && currentLevel.getCurrentScreen().getLeft() != null){
