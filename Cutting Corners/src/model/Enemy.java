@@ -11,13 +11,16 @@ public class Enemy extends Entity{
     Stats stats;
     Enemy type;
     Direction direction;
+    Equipment weapon;
 
-    public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision){
+    public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
         super(xCoord, yCoord, image);
         this.homeScreen = homeScreen;
         this.vision = vision;
         this.size = size;
         this.sides = sides;
+        this.weapon = weapon;
+        this.stats = stats;
         cellWithin = cellWithin(xCoord, yCoord);
         //this.coords = new Corrdinates(WIDTH, HEIGHT);
     }
@@ -83,10 +86,6 @@ public class Enemy extends Entity{
             case right: super.coords.addXCoord(stats.speed);
         }
     }
-
-    public void moveX(PlayerRelation relation){
-        
-    }
     
     public void changeDirection(PlayerRelation relation){
         if (Math.abs(relation.xDifference) < Math.abs(relation.yDifference)){
@@ -98,4 +97,6 @@ public class Enemy extends Entity{
             else{direction = Direction.right;}
         }
     }
+
+    public boolean obstacleInPath(){return false;}
 }

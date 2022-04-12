@@ -17,4 +17,9 @@ public class Projectile extends Entity{
         this.width = width;
         this.direction = direction;
     }
+
+    @Override
+    public void performMovement(){}
+    
+    public Entity chickIfHit(){return null;}
 }

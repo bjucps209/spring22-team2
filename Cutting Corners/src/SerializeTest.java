@@ -15,7 +15,7 @@ public class SerializeTest {
         // World.instance().getCampaign().add(new Level(2, 1));
         // World.instance().getCurrentLevel().placeEntity(1, 2, player);
         // World.instance().getCurrentLevel().placeEntity(2, 4, enemy);
-        World.instance().save("SaveGame.dat");
+        //World.instance().save("SaveGame.dat");
 
     }
 
