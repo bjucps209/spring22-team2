@@ -1,6 +1,9 @@
 package model;
 
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.*;
 
 public class World {
@@ -107,10 +110,13 @@ public class World {
      * opens a file and calls the serialize methods for each object to write to the file
      * @param filename - the file that will hold the saved game
      */
-    public void save(String filename) {
-        //world.instance().getCurrentLevel().serialize()
+    public void save(String filename) throws IOException {
+        DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename));
+        this.getPlayer().serialize(writer);
         //...
             //the above would save all the instance variables from the current level to the file
+
+
     }
 
     /**
