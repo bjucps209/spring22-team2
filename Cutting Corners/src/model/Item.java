@@ -8,4 +8,6 @@ public class Item {
         this.name = name;
         this.cooldown = cooldown;
     }
+
+    public void performAction(){}
 }
