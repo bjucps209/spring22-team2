@@ -3,16 +3,16 @@ package model;
 import javafx.scene.image.Image;
 
 public class Triangle extends Enemy{
-    Equipment weapon;
-    EntityObserver observer;
-    Stats stats;
-    Coordinates coords;
-    static Image image = new Image("triangle.png");
+    static Equipment weapon = null;
+    static Image image = new Image("media/Enemies/triangle.png");
 
-    public Triangle(int size, int xCoord, int yCoord){
-        super(3, size, xCoord, yCoord, image);
-        sizeToStats();
+    public Triangle(int size, int xCoord, int yCoord, Screen homeScreen){
+        super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size));
     }
 
-    public void sizeToStats(){stats = null;}
+    public static Stats sizeToStats(int size){
+        return null;
+    }
+
+    public void performAttack(){}
 }

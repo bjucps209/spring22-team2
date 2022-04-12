@@ -16,7 +16,6 @@ public class Player extends Entity {
     ArrayList<Item> inventory;
     UsableItem equippedItem;
     Equipment armor;
-    Equipment weapon;
     Stats stats = new Stats(2, 5, 1);
     static Image playerImage = new Image("media/Player/Cirkyle v1.png");
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
@@ -75,10 +74,10 @@ public class Player extends Entity {
 
     public Direction CheckIfOutOfBounds(){
         Level currentLevel = World.instance().getCurrentLevel();
-        if (super.coords.getxCoord() > 1275 && currentLevel.getCurrentScreen().getRight() != null){
+        if (super.coords.getxCoord() > 1000 && currentLevel.getCurrentScreen().getRight() != null){
             currentLevel.goRight(); 
         }
-        else if (super.coords.getxCoord() > 1275){
+        else if (super.coords.getxCoord() > 1000){
             return Direction.right;
         }
         if (super.coords.getxCoord() < 0 && currentLevel.getCurrentScreen().getLeft() != null){

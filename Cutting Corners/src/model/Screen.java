@@ -14,7 +14,7 @@ public class Screen {
 
     public Screen(int row, int col, int level){
         location = new Location(row, col, level);
-        grid = new Cell[10][15];
+        grid = new Cell[7][13];
         randomize();
     }
 
@@ -29,8 +29,8 @@ public class Screen {
     public void addEntity(Entity entity){entities.add(entity);}
 
     public void randomize(){
-        for (int i = 0; i < 10; i++){
-            for (int j = 0; j < 15; j++){
+        for (int i = 0; i < 7; i++){
+            for (int j = 0; j < 13; j++){
                 int random = rand.nextInt(40);
                 if (random == 39){grid[i][j] = Cell.rock;}
                 else{grid[i][j] = Cell.empty;}
@@ -40,8 +40,8 @@ public class Screen {
 
     public ArrayList<Obstacle> findObstacles(){
         ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
-        for (int i = 0; i < 10; i++){
-            for (int j = 0; j < 15; j++){
+        for (int i = 0; i < 7; i++){
+            for (int j = 0; j < 13; j++){
                 if (grid[i][j] != Cell.empty){
                     Obstacle obstacle = new Obstacle(i, j, grid[i][j]);
                     obstacles.add(obstacle);

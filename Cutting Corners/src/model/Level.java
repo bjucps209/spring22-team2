@@ -65,7 +65,7 @@ public class Level {
     public void goLeft(){
         if (currentScreen.getLeft() != null){
             Player player = currentScreen.removePlayer();
-            player.coords.setxCoord(1270);
+            player.coords.setxCoord(950);
             currentScreen = currentScreen.getLeft();
             currentScreen.addEntity(player);
             currentCol--;

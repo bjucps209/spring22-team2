@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<VBox fx:controller="MainWindow" fx:id="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css" prefHeight="900" prefWidth="1440">
+<VBox fx:controller="MainWindow" fx:id="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css" prefHeight="800" prefWidth="1280">
 
     <Pane fx:id="pane" onMouseClicked="#onMouseClicked"
         onMouseMoved="#onMouseMoved"         

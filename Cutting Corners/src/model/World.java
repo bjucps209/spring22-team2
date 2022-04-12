@@ -6,11 +6,17 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.util.Duration;
+
 public class World {
     private ArrayList<Level> campaign = new ArrayList<Level>();
     private int currentLevel = 0;
     private int difficulty;
     private static World world;
+    ScreenObserver observer;
 
     private World(){}
 
@@ -102,7 +108,20 @@ public class World {
         return level1;
     }
 
+    public void updater(){
+        KeyFrame frames = new KeyFrame(Duration.millis(20), this::updateView);
+        Timeline timer = new Timeline(frames);
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
+    }
 
+    void updateView(ActionEvent event){
+        try{for (Entity entity: displayCurrentEntities()){
+            entity.performMovement();
+        }
+        observer.Initialize();
+        }catch(ConcurrentModificationException c){return;}
+    }
 
 
     

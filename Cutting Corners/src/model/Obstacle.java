@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.image.Image;
+
 public class Obstacle {
     int row;
     int col;
@@ -18,4 +20,6 @@ public class Obstacle {
     public int getY(){
         return row * 100;
     }
+
+    public Image getImage(){return null;}
 }

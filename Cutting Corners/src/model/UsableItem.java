@@ -2,14 +2,17 @@ package model;
 
 
 public class UsableItem extends Item{
-    boolean reusable;
+    int useCount;
     int duration;
-    Buffs buffs;
+    Stats buffs;
 
-    public UsableItem(String name, int cooldown, boolean reusable, int duration, int Strength, int Health, int Speed){
+    public UsableItem(String name, int cooldown, int useCount, int duration, int Strength, int Health, int Speed){
         super(name, cooldown);
-        this.reusable = reusable;
+        this.useCount = useCount;
         this.duration = duration;
-        buffs = new Buffs(Strength, Health, Speed);
+        buffs = new Stats(Strength, Health, Speed);
     }
+
+    @Override
+    public void performAction(){}
 }
