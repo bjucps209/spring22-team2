@@ -153,12 +153,12 @@ public class World {
      */
     public void load(String filename) throws IOException {
 
-        try (DataInputStream writer = new DataInputStream(new FileInputStream(filename))) 
+        try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) 
         {   
-            this.currentLevel = writer.readInt();
-            this.difficulty = writer.readInt();
-            
-            this.getPlayer().deserialize(writer);
+            this.currentLevel = reader.readInt();
+            this.difficulty = reader.readInt();
+
+            this.getPlayer().deserialize(reader);
             // this.campaign.stream().forEach(lvl -> lvl.deserialize(writer));
 
         }
