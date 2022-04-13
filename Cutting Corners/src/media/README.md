@@ -1,9 +1,9 @@
 # Under the Use of Creative Commons:
-* Title Music (Lost In Space)- https://freemusicarchive.org/genre/Ambient
+* Title Music (Magic Tavern) - https://www.free-stock-music.com/alexander-nakarada-magic-tavern.html
 * Medieval (Percussive-Melodies-4) - https://freemusicarchive.org/genre/Ambient?sort=date&d=0&pageSize=20&page=2
 * Caveman (Little World) - https://freemusicarchive.org/genre/Ambient?sort=date&d=0&pageSize=20&page=3
 * Egypt (Reverie) - https://freemusicarchive.org/genre/Ambient
-* Secret Level (Lurking in the Shadows) - https://freemusicarchive.org/genre/Ambient
+* Secret Level (Surrounded) - https://www.free-stock-music.com/hayden-folker-surrounded.html
 
 
 # Used under the following:

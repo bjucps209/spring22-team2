@@ -76,7 +76,7 @@ public class MainWindow {
     Image USER_CAMPAIGN = new Image("media/buttons/usercampaign.png");
     Image LVL_BUILDER = new Image("media/buttons/lvlbuilderbtn.png");
     Image LVL_BUILDER_PRESSED = new Image("media/buttons/lvlbuilderbtnpressed.png");
-    AudioClip TITLE_MUSIC = new AudioClip(getClass().getResource("media/sounds/music/HoliznaCC0 - Lost In Space (Title Music).mp3").toString());
+    AudioClip TITLE_MUSIC = new AudioClip(getClass().getResource("media/sounds/music/alexander-nakarada-magic-tavern (Title Music).mp3").toString());
     ImageView backgroundView = new ImageView(TITLE_SCREEN);
     // ImageView moveView = new ImageView(MOVE_GIF);
     // ImageView attackView = new ImageView(ATTACK_GIF);
