@@ -1,7 +1,9 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -26,6 +28,8 @@ public class SerializeTest {
             assertEquals(World.instance().getCurrentLevel(), reader.readInt());
             assertEquals(World.instance().getDifficultyLevel(), reader.readInt());
             assertEquals(World.instance().getPlayer().getHealth(), reader.readInt());
+        } catch (IOException e) {
+            fail();
         }
 
     }
