@@ -36,7 +36,8 @@ public class SerializeTest {
         Level currentLevel = World.instance().getCurrentLevel();
         assertEquals(currentLevel.getEntities().size(), 0);
         World.instance().load("SaveGame.dat");
-        assertEquals(currentLevel.getEntities().size(), 2);
+        assertEquals(currentLevel.getEntities().size(), 1);
+        assertEquals(World.instance().getPlayer().getHealth(), 5);
 
     }
 }
