@@ -1,5 +1,9 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import javafx.scene.image.Image;
 
 public class Obstacle {
@@ -22,4 +26,15 @@ public class Obstacle {
     }
 
     public Image getImage(){return null;}
+
+
+    
+
+    public void serialize(DataOutputStream file) throws IOException {
+    
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        
+    }
 }

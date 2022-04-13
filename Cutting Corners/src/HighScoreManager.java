@@ -30,9 +30,9 @@ public class HighScoreManager {
     }
     public void addScore(HighScore score)
     {
-        if(score.getScore()>scores[4].getScore())
+        if(score.getScore()>scores[0].getScore())
         {
-            scores[4]=score;
+            scores[0]=score;
             this.sort();
         }
     }

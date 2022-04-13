@@ -1,5 +1,8 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 public class Screen {
@@ -91,6 +94,16 @@ public class Screen {
 
     public void setDown(Screen down) {
         this.down = down;
+    }
+
+
+
+    public void serialize(DataOutputStream file) throws IOException {
+    
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        
     }
 
     

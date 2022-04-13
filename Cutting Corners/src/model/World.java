@@ -1,6 +1,11 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.*;
 
 import javafx.animation.KeyFrame;
@@ -126,17 +131,36 @@ public class World {
      * opens a file and calls the serialize methods for each object to write to the file
      * @param filename - the file that will hold the saved game
      */
-    public void save(String filename) {
-        //world.instance().getCurrentLevel().serialize()
-        //...
-            //the above would save all the instance variables from the current level to the file
+    public void save(String filename) throws IOException {
+        try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))) 
+        {   
+            writer.writeInt(this.currentLevel);
+            writer.writeInt(this.difficulty);
+
+            this.getPlayer().serialize(writer);
+            
+            // this.campaign.stream().forEach(lvl -> lvl.serialize(writer));
+            // the line commented above will call each object's serialize method
+
+            
+        }
+
     }
 
     /**
      * opens a file and calls the deserialize methods for each object to load the game
      * @param filename - the saved file
      */
-    public void load(String filename) {
-        //call objects load method methods, and then load values from file
+    public void load(String filename) throws IOException {
+
+        try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) 
+        {   
+            this.currentLevel = reader.readInt();
+            this.difficulty = reader.readInt();
+
+            this.getPlayer().deserialize(reader);
+            // this.campaign.stream().forEach(lvl -> lvl.deserialize(writer));
+
+        }
     }
 }

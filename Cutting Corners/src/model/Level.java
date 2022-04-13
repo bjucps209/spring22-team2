@@ -1,5 +1,8 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Random;
@@ -152,4 +155,16 @@ public class Level {
     public Screen getCurrentScreen(){
         return currentScreen;
     }
+
+
+
+    public void serialize(DataOutputStream file) throws IOException {
+        //save the level data
+    
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        
+    }
+
 }

@@ -1,5 +1,8 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Random;
 
 import javafx.beans.property.IntegerProperty;
@@ -60,5 +63,16 @@ public class Coordinates {
     
     public IntegerProperty getYProperty(){
         return yCoord;
+    }
+
+
+
+    
+    public void serialize(DataOutputStream file) throws IOException {
+    
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        
     }
 }
