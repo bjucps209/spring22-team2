@@ -133,9 +133,14 @@ public class World {
      */
     public void save(String filename) throws IOException {
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))) 
-        {
+        {   
+            writer.writeInt(this.currentLevel);
+            writer.writeInt(this.difficulty);
+
             this.getPlayer().serialize(writer);
+            
             // this.campaign.stream().forEach(lvl -> lvl.serialize(writer));
+            // the line commented above will call each object's serialize method
 
             
         }
@@ -150,6 +155,9 @@ public class World {
 
         try (DataInputStream writer = new DataInputStream(new FileInputStream(filename))) 
         {   
+            this.currentLevel = writer.readInt();
+            this.difficulty = writer.readInt();
+            
             this.getPlayer().deserialize(writer);
             // this.campaign.stream().forEach(lvl -> lvl.deserialize(writer));
 
