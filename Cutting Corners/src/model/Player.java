@@ -46,26 +46,26 @@ public class Player extends Entity {
         switch (keys.get(index)){
             case W: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-                if (direction != Direction.up){super.coords.subYCoord(stats.speed);}
-                else if (direction == Direction.up){super.coords.addYCoord(stats.speed * 1);}
+            if (direction != Direction.up){super.coords.subYCoord(stats.speed);}
+            else if (direction == Direction.up){/*super.coords.addYCoord(stats.speed * 1);*/}
                 break;
             }
             case A: {
                 if (keys.size() > index + 1){KeyPressed((index + 1)); }
-                if (direction != Direction.left){super.coords.subXCoord(stats.speed);}
-                else if (direction == Direction.left){super.coords.addXCoord(stats.speed * 1);}
+            if (direction != Direction.left){super.coords.subXCoord(stats.speed);}
+            else if (direction == Direction.left){/*super.coords.addXCoord(stats.speed * 1);*/}
                 break;
             }
             case S: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));} 
-                if (direction != Direction.down){super.coords.addYCoord(stats.speed);}
-                else if (direction == Direction.down){super.coords.subYCoord(stats.speed * 1);}
+            if (direction != Direction.down){super.coords.addYCoord(stats.speed);}
+            else if (direction == Direction.down){/*super.coords.subYCoord(stats.speed * 1);*/}
                 break;
             }
             case D: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-                if (direction != Direction.right){super.coords.addXCoord(stats.speed);}
-                else if (direction == Direction.right){super.coords.subXCoord(stats.speed * 1);}
+            if (direction != Direction.right){super.coords.addXCoord(stats.speed);}
+            else if (direction == Direction.right){/*super.coords.subXCoord(stats.speed * 1);*/}
                 break;
             }
             default: return;
