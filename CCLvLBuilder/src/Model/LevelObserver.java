@@ -1,8 +1,11 @@
 //-----------------------------------------------------------
 //File:   SomeObserver.java
 //Desc:   Name pending
-//        Observes things, might be replaced
+//        Observes things
 //----------------------------------------------------------- 
-package LvLBuilderStuff.LBModel;
+package Model;
 
-public interface SomeObserver {}
+public interface LevelObserver {
+    public void createScreen(String StrID);
+    //public void movetoScreen(String StrID);
+}
