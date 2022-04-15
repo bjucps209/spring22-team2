@@ -10,14 +10,14 @@ import java.util.ArrayList;
 
 public class Screen {
     private int[] IDSeries;
-    private Screen[] adjacentIDs; // N S E W Up Down
+    private Screen[] adjacentScreens; // N S E W Up Down
     
     private ArrayList<LvLObject> objectList;
     private static int currentObjID;
 
     public Screen(int x, int y, int z) {
         IDSeries = new int[] {x, y, z};
-        adjacentIDs = new Screen[6];
+        adjacentScreens = new Screen[6];
     }
 
     //public void addObject(LvLObject blah) (should give object id here)
@@ -40,15 +40,18 @@ public class Screen {
         return IDSeries;
     }
 
-    public void setAdjacentLocArea(int side, int adjacentid) {
-        return;
+    //public void setAdjacentScreen(int side, int adjacentid) {return;}
+
+    public Screen[] getAdjacentScreens(){
+        return adjacentScreens;
     }
 
-    public void setAdjacentID(int direction, Screen adjScreen) {
-        adjacentIDs[direction] = adjScreen;
+    public void setAdjacentScreen(int direction, Screen adjScreen) {
+        adjacentScreens[direction] = adjScreen;
     }
 
     public ArrayList<LvLObject> getObjects() {
         return objectList;
     }
+
 }

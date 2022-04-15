@@ -16,11 +16,11 @@ public class CCLvLFileReaderTest {
         assertEquals( 9, DM.getScreens().size()); ///
         assert DM.getCurrentScreen() != null; ///
 
-        String playerLoc = DM.getPlayerLoc(); //Not implemented yet (Could switch to Screen from StrID)
+        //String playerLoc = DM.getPlayerLoc(); //Not implemented yet (Could switch to Screen from StrID)
         int incr = 0;
         for (Screen sc : DM.getScreens()) {
 
-            if(sc.getStrID().equals(playerLoc)) {
+            if(sc.getStrID().equals("blah")) { //change to playerLoc
                 boolean testthing = false;
                 for(LvLObject obj : sc.getObjects()) {
                     if (obj.getName().equals("Player")) {

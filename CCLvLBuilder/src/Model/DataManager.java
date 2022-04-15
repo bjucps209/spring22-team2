@@ -70,7 +70,7 @@ public class DataManager {
             var idCan =  Screen.ConvertToStrID(getAdjacentID(directions[dir], tempID));
             var screenCan = Screens.stream().filter((eh) -> eh.getStrID().equals(idCan)).findFirst().get();
             if (screenCan != null){
-                newScreen.setAdjacentID(dir, screenCan);
+                newScreen.setAdjacentScreen(dir, screenCan);
             }
         }
         Screens.add(newScreen);
@@ -90,6 +90,7 @@ public class DataManager {
                 return true;
             }
         }//Maybe send one here depending on how everything works out
+
         return false;
     }
 
@@ -97,13 +98,6 @@ public class DataManager {
         //TODO: fill it with goodies
         return;
     }
-
-    public enum Direction {
-        North, South,
-        East, West,
-        Up, Down
-    }
-
 
     //Interesting Stuff
     //

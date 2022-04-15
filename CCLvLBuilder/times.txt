@@ -1,3 +1,8 @@
 ///8:31 pm - 10:27 pm -- 30 min
 
+4/14/22
 9:00 am - 9:25 am
+
+Some questions to ask:
+    Does importing an entire package (ie javafx.scene.layout.*) actually
+    negatively impact anything.
