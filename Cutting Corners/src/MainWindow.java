@@ -36,7 +36,27 @@ public class MainWindow {
     @FXML
     VBox MainWindow;
     String state = "START";
-    KeyFrame keyFrame = new KeyFrame(Duration.millis(10),e->changeScreens(e));
+    KeyFrame keyFrame = new KeyFrame(Duration.millis(10),e->{changeScreens(e);MainWindow.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            
+        @Override
+        public void handle(KeyEvent event){
+            keys.add(event.getCode());
+        }
+    });
+
+    MainWindow.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
+        
+        @Override
+        public void handle(KeyEvent event){
+            if(keys.get(keys.size()-1)==KeyCode.ESCAPE)
+            {
+                state="START";
+                timerCredits.stop();
+                timer.play();
+                credits.relocate(100*ratioHeight, 1000*ratioWidth);
+            }
+        }
+    });});
     Timeline timer = new Timeline(keyFrame);
     KeyFrame keyFrameCredits = new KeyFrame(Duration.millis(10),e->rollCredits());
     Timeline timerCredits = new Timeline(keyFrameCredits);
@@ -57,7 +77,8 @@ public class MainWindow {
     @FXML
     Label credits = new Label();
     HighScoreManager scores = new HighScoreManager();
-    HashMap<String,Boolean> currentlyActiveKeys = new HashMap<>();
+    
+    ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Image TITLE_SCREEN = new Image("media/titlescreen.png");
     // Image MOVE_GIF = new Image("media/moveGif.gif");
     // Image ATTACK_GIF = new Image("media/attackGif.gif");
@@ -109,6 +130,7 @@ public class MainWindow {
     ImageView settingsView = new ImageView(SETTINGS_BUTTON);
     ImageView scoreView = new ImageView(SCORE_BUTTON);
     // ImageView cheatModeView = new ImageView(CHEATMODE);
+    
         
 
     @FXML
@@ -129,7 +151,7 @@ public class MainWindow {
         MainWindow.setMinHeight(size.getHeight());
         pane.setMinWidth(size.getWidth());
         pane.setMinHeight(size.getHeight());
-        timer.setCycleCount(100);
+        timer.setCycleCount(50);
         timerCredits.setCycleCount(Timeline.INDEFINITE);
         highScores.setText("High Scores:\n");
         for(int i=0;i<5;i++)
@@ -252,15 +274,6 @@ public class MainWindow {
         // pane.getChildren().add(attackView);
         // pane.getChildren().add(itemView);
         // pane.getChildren().add(creditView);
-        pane.setOnKeyPressed(ke->{isESC(ke);});
-    }
-    @FXML
-    void onMouseClicked(MouseEvent event)
-    {
-    }
-    @FXML
-    void onMouseMoved(MouseEvent event)
-    {
     }
     @FXML
     void changeScreens(ActionEvent event)
@@ -476,16 +489,5 @@ public class MainWindow {
         view.setFitHeight(view.getFitHeight()*ratioHeight);
         view.setFitWidth(view.getFitWidth()*ratioWidth);
         pane.getChildren().add(view);
-    }
-    @FXML
-    public static boolean isESC(KeyEvent event) {
-        boolean esc = event.getCode() == KeyCode.ESCAPE;
-        if (!esc) {
-            String str = event.getCharacter();
-            if (!str.isEmpty()) {
-                esc = str.charAt(0) == 27;
-            }//  www.j  a v a  2 s.  co  m
-        }
-        return esc;
     }
 }

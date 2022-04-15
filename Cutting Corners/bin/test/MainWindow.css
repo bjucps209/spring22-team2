@@ -25,6 +25,7 @@
     -fx-font-family: 'Helvetica', Arial, sans-serif;
     -fx-font-size: 40px;
     -fx-font-weight: bold;
-    -fx-text-fill: #919191;
+    -fx-text-fill: #000000;
+    -fx-effect: dropshadow( gaussian , #ffffff , 1,1,0,0 );
     -fx-alignment:center;
   }
