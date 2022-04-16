@@ -104,12 +104,13 @@ public class Player extends Entity {
 
 
     public void serialize(DataOutputStream file) throws IOException {
-        //file.writeInt(stats.strength);
+        stats.serialize(file);
+
 
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        //stats.strength = file.readInt();
+        stats.deserialize(file);
 
     }
 }

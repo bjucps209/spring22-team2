@@ -26,7 +26,8 @@ public class Equipment extends Item {
 
 
     public void serialize(DataOutputStream file) throws IOException {
-    
+        file.writeUTF(type.toString()); //save the type of equipment
+        buffs.serialize(file);
     }
 
     public void deserialize(DataInputStream file) throws IOException {

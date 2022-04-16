@@ -31,10 +31,14 @@ public class Obstacle {
     
 
     public void serialize(DataOutputStream file) throws IOException {
-    
+        file.writeInt(row);
+        file.writeInt(col);
+        file.writeUTF(type.toString());
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        this.row = file.readInt();
+        this.col = file.readInt();
+        this.type = file.readUTF();
     }
 }
