@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:controller="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
+    spacing="10" prefHeight="1000" prefWidth="1000">
+    <Label text="Copyright 2022 No Touch Studios" />
+    <HBox fx:id="screenBox"></HBox>
+
+    <VBox fx:id="vboxScreenNav">
+        <HBox>
+            <Button fx:id="btnCreate" text="Create" onAction="#onCreateClicked" />
+            <Button fx:id="btnDelete" text="Delete" onAction="#onDeleteClicked" />
+        </HBox>
+        <HBox>
+            <Button fx:id="btnNorth" onAction="#onNavButtonClicked" text="North" />
+            <Button fx:id="btnUp" onAction="#onNavButtonClicked" text="Up" />
+        </HBox> 
+        <HBox>
+            <Button fx:id="btnSouth" onAction="#onNavButtonClicked" text="South" />
+            <Button fx:id="btnDown" onAction="#onNavButtonClicked" text="Down" />
+        </HBox> 
+        <HBox>
+            <Button fx:id="btnWest" onAction="#onNavButtonClicked" text="West" />
+            <Button fx:id="btnEast" onAction="#onNavButtonClicked" text="East" />
+        </HBox> 
+    </VBox>
+</VBox>

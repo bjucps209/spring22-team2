@@ -121,7 +121,10 @@ public class World {
         try{for (Entity entity: displayCurrentEntities()){
             entity.performMovement();
         }
-        observer.Initialize();
+        if(observer!=null)
+        {
+            observer.Initialize();
+        }
         }catch(ConcurrentModificationException c){return;}
     }
 
