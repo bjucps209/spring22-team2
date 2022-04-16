@@ -18,10 +18,12 @@ public class Item {
 
 
     public void serialize(DataOutputStream file) throws IOException {
-    
+        file.writeUTF(name);
+        file.writeInt(cooldown);
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        this.name = file.readUTF();
+        this.cooldown = file.readInt();
     }
 }

@@ -39,6 +39,6 @@ public class Obstacle {
     public void deserialize(DataInputStream file) throws IOException {
         this.row = file.readInt();
         this.col = file.readInt();
-        this.type = file.readUTF();
+        //this.type = file.readUTF();
     }
 }
