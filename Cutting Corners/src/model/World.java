@@ -90,6 +90,22 @@ public class World {
         Screen screen3 = new Screen(1, 0, 1);
         Screen screen4 = new Screen(1, 1, 1);
 
+        Triangle triangle1 = new Triangle(4, 400, 400, screen1);
+        Triangle triangle2 = new Triangle(5, 200, 600, screen1);
+        Triangle triangle3 = new Triangle(7, 700, 100, screen2);
+        Triangle triangle4 = new Triangle(5, 300, 600, screen2);
+        Triangle triangle5 = new Triangle(5, 400, 600, screen3);
+        Triangle triangle6 = new Triangle(5, 200, 600, screen4);
+        // Pyramid triangleBoss = new Pyramid(11, 500, 500, screen4);
+
+        screen1.addEntity(triangle1);
+        screen1.addEntity(triangle2);
+        screen2.addEntity(triangle3);
+        screen2.addEntity(triangle4);
+        screen3.addEntity(triangle5);
+        screen4.addEntity(triangle6);
+        // screen4.addEntity(triangleBoss);
+
         screen1.setUp(screen3);
         screen1.setRight(screen2);
 
@@ -110,18 +126,16 @@ public class World {
         return level1;
     }
 
-    public void updater(){
-        KeyFrame frames = new KeyFrame(Duration.millis(20), this::updateView);
-        Timeline timer = new Timeline(frames);
-        timer.setCycleCount(Timeline.INDEFINITE);
-        timer.play();
-    }
+    
 
-    void updateView(ActionEvent event){
+    public void updateView(){
         try{for (Entity entity: displayCurrentEntities()){
             entity.performMovement();
         }
-        observer.Initialize();
+        if(observer!=null)
+        {
+            observer.Initialize();
+        }
         }catch(ConcurrentModificationException c){return;}
     }
 

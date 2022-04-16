@@ -12,6 +12,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import model.*;
@@ -79,6 +80,19 @@ public class GameWindow {
             obstacleImage.setPreserveRatio(true);
             gameWindow.getChildren().add(obstacleImage);
         }
+    }
+
+    // @FXML
+    // void onMousePressed(MouseEvent event){
+    //     event.getX();
+    // }
+
+    @FXML
+    void updater(){
+        KeyFrame frames = new KeyFrame(Duration.millis(20), me -> World.instance().updateView());
+        Timeline timer = new Timeline(frames);
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
     }
     
 

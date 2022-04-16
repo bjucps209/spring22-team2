@@ -14,8 +14,9 @@ public class Enemy extends Entity{
     int size;
     Stats stats;
     Enemy type;
-    Direction direction;
+    Direction direction = Direction.left;
     Equipment weapon;
+    EnemyState state = EnemyState.patrolling;
 
     public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
         super(xCoord, yCoord, image);
@@ -51,8 +52,8 @@ public class Enemy extends Entity{
     }
 
     public Cell cellWithin(int xCoord, int yCoord){
-        int row = (int) super.getX() / 100;
-        int col = (int) super.getY() / 100;
+        int row = (int) super.getX() / 100 - 1;
+        int col = (int) super.getY() / 100 - 1;
 
         Cell cell = homeScreen.grid[row][col];
         return cell;
@@ -61,8 +62,15 @@ public class Enemy extends Entity{
     @Override
     public void performMovement(){
         PlayerRelation relation = PlayerInVision();
-        if (relation.distance < vision){
-            complexMovement(relation);
+        switch (state){
+            case patrolling: {
+                if (relation.distance < vision) state = EnemyState.seeking; 
+                break;
+            }
+            case seeking:{
+                complexMovement(relation);
+            }
+            default: break;
         }
     }
 
@@ -76,6 +84,9 @@ public class Enemy extends Entity{
             case left: xSpeed = -1 * stats.speed;
             case right: xSpeed = stats.speed;
         }
+
+        System.out.println(xSpeed);
+        System.out.println(ySpeed);
 
         int newX = super.getX() + xSpeed;
         int newY = super.getY() + ySpeed;
