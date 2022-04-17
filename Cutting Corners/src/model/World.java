@@ -41,6 +41,9 @@ public class World {
 
     public void passLevel(){currentLevel++;}
 
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
     public Level getCurrentLevel(){
         Level current = campaign.get(currentLevel);
         return current;
