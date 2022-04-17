@@ -5,8 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Item {
-    String name;
-    int cooldown;
+    private String name;
+    private int cooldown;
 
     public Item(String name, int cooldown){
         this.name = name;
@@ -15,6 +15,23 @@ public class Item {
 
     public void performAction(){}
 
+    
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCooldown() {
+        return cooldown;
+    }
+
+    public void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
+    }
 
 
     public void serialize(DataOutputStream file) throws IOException {

@@ -7,9 +7,9 @@ import java.io.IOException;
 import javafx.scene.image.Image;
 
 public class Obstacle {
-    int row;
-    int col;
-    Cell type;
+    private int row;
+    private int col;
+    private Cell type;
 
     public Obstacle(int row, int col, Cell type) {
         this.row = row;

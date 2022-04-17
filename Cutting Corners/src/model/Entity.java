@@ -8,8 +8,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.scene.image.Image;
 
 public class Entity {
-    Coordinates coords;
-    Image image;
+    private Coordinates coords;
+    private Image image;
 
     public Entity(int xCoord, int yCoord, Image image){
         coords = new Coordinates(xCoord, yCoord);
@@ -36,6 +36,18 @@ public class Entity {
         return image;
     }
 
+    public Coordinates getCoords() {
+        return coords;
+    }
+
+    public void setCoords(Coordinates coords) {
+        this.coords = coords;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     public void performMovement(){
 
     }
@@ -43,10 +55,10 @@ public class Entity {
 
     
     public void serialize(DataOutputStream file) throws IOException {
-    
+        coords.serialize(file);
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        coords.deserialize(file);
     }
 }

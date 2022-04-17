@@ -5,8 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Equipment extends Item {
-    EquipmentType type;
-    Stats buffs;
+    private EquipmentType type;
+    private Stats buffs;
 
     public Equipment(String name, int cooldown, EquipmentType type, Stats buffs){
         super(name, cooldown);
@@ -23,14 +23,30 @@ public class Equipment extends Item {
     }
 
 
+    public EquipmentType getType() {
+        return type;
+    }
 
+    public void setType(EquipmentType type) {
+        this.type = type;
+    }
+
+    public Stats getBuffs() {
+        return buffs;
+    }
+
+    public void setBuffs(Stats buffs) {
+        this.buffs = buffs;
+    }
 
     public void serialize(DataOutputStream file) throws IOException {
+        super.serialize(file);
         file.writeUTF(type.toString()); //save the type of equipment
         buffs.serialize(file);
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        super.deserialize(file);
+        // this.type = file.readUTF();
     }
 }

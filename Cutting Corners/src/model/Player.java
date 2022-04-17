@@ -46,22 +46,22 @@ public class Player extends Entity {
         switch (keys.get(index)){
             case W: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (direction != Direction.up){super.coords.subYCoord(stats.speed);}
+            if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
                 break;
             }
             case A: {
                 if (keys.size() > index + 1){KeyPressed((index + 1)); }
-            if (direction != Direction.left){super.coords.subXCoord(stats.speed);}
+            if (direction != Direction.left){super.getCoords().subXCoord(stats.getSpeed());}
                 break;
             }
             case S: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));} 
-            if (direction != Direction.down){super.coords.addYCoord(stats.speed);}
+            if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
                 break;
             }
             case D: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (direction != Direction.right){super.coords.addXCoord(stats.speed);}
+            if (direction != Direction.right){super.getCoords().addXCoord(stats.getSpeed());}
                 break;
             }
             default: return;
@@ -70,28 +70,28 @@ public class Player extends Entity {
 
     public Direction CheckIfOutOfBounds(){
         Level currentLevel = World.instance().getCurrentLevel();
-        if (super.coords.getxCoord() > 1000 && currentLevel.getCurrentScreen().getRight() != null){
+        if (super.getCoords().getxCoord() > 1000 && currentLevel.getCurrentScreen().getRight() != null){
             currentLevel.goRight(); 
         }
-        else if (super.coords.getxCoord() > 1000){
+        else if (super.getCoords().getxCoord() > 1000){
             return Direction.right;
         }
-        if (super.coords.getxCoord() < 0 && currentLevel.getCurrentScreen().getLeft() != null){
+        if (super.getCoords().getxCoord() < 0 && currentLevel.getCurrentScreen().getLeft() != null){
             currentLevel.goLeft(); 
         }
-        else if (super.coords.getxCoord() < 0){
+        else if (super.getCoords().getxCoord() < 0){
             return Direction.left;
         }
-        if (super.coords.getyCoord() > 700 && currentLevel.getCurrentScreen().getDown() != null){
+        if (super.getCoords().getyCoord() > 700 && currentLevel.getCurrentScreen().getDown() != null){
             currentLevel.goDown(); 
         }
-        else if (super.coords.getyCoord() > 700){
+        else if (super.getCoords().getyCoord() > 700){
             return Direction.down;
         }
-        if (super.coords.getyCoord() < 0 && currentLevel.getCurrentScreen().getUp() != null){
+        if (super.getCoords().getyCoord() < 0 && currentLevel.getCurrentScreen().getUp() != null){
             currentLevel.goUp(); 
         }
-        else if (super.coords.getyCoord() < 0){
+        else if (super.getCoords().getyCoord() < 0){
             return Direction.up;
         }
         return null;
@@ -100,6 +100,12 @@ public class Player extends Entity {
 
 
     public void serialize(DataOutputStream file) throws IOException {
+        super.serialize(file);
+        for (Item i : inventory) {
+            i.serialize(file);
+        }
+        equippedItem.serialize(file);
+        armor.serialize(file);
         stats.serialize(file);
 
 
