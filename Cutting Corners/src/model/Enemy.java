@@ -126,7 +126,7 @@ public class Enemy extends Entity{
         file.writeInt(sides);
         file.writeInt(size);
         stats.serialize(file);
-        
+        // direction ??
         weapon.serialize(file);
         file.writeUTF(state.toString());
     
@@ -136,7 +136,7 @@ public class Enemy extends Entity{
     public void deserialize(DataInputStream file) throws IOException {
         this.getCoords().deserialize(file);
         homeScreen.deserialize(file);
-        // cellWithin = file.readUTF();
+        // cellWithin = file.readUTF(); add case statements
         this.vision = file.readInt();
         this.sides = file.readInt();
         this.size = file.readInt();
