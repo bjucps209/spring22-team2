@@ -21,7 +21,6 @@
 
 ### Serialization
 * Serialization methods are implemented for each class and for World.java
-* Serialization is passing unit tests.
 
 ### Level Builder
 * Background work has been completed
