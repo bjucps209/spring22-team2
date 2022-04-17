@@ -2,10 +2,13 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 
 <VBox fx:controller="MainWindow" fx:id="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css" prefHeight="800" prefWidth="1280">
 
     <Pane fx:id="pane" style="-fx-background-color: black"
-        prefWidth="1440" prefHeight="900"/>
+        prefWidth="1440" prefHeight="900">
+        <ImageView fx:id="imgView"><image><Image url="@media/windowicon.png"/></image></ImageView>
+    </Pane>
 </VBox>
