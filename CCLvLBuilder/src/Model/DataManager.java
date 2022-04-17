@@ -109,6 +109,7 @@ public class DataManager {
 
     // Singleton model
     private DataManager() {
+        Screens = new ArrayList<Screen>();
         currentScreen = new Screen(0,0,0);
         Screens.add(currentScreen);
     }
