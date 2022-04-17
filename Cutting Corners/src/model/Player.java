@@ -100,19 +100,23 @@ public class Player extends Entity {
 
 
     public void serialize(DataOutputStream file) throws IOException {
-        super.serialize(file);
+        this.getCoords().serialize(file);
         for (Item i : inventory) {
             i.serialize(file);
         }
         equippedItem.serialize(file);
         armor.serialize(file);
         stats.serialize(file);
-
-
     }
 
     public void deserialize(DataInputStream file) throws IOException {
+        this.getCoords().deserialize(file);
         stats.deserialize(file);
-
+        for (Item i : inventory) {
+            i.deserialize(file);
+        }
+        equippedItem.deserialize(file);
+        armor.deserialize(file);
+        stats.deserialize(file);
     }
 }

@@ -152,9 +152,8 @@ public class World {
             writer.writeInt(this.difficulty);
 
             this.getPlayer().serialize(writer);
-            
-            // this.campaign.stream().forEach(lvl -> lvl.serialize(writer));
-            // the line commented above will call each object's serialize method
+
+            getCurrentLevel().serialize(writer);
 
             
         }

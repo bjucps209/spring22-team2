@@ -79,10 +79,10 @@ public class Enemy extends Entity{
         int ySpeed = 0;
 
         switch (direction){
-            case up: ySpeed = -1 * stats.speed;
-            case down: ySpeed = stats.speed;
-            case left: xSpeed = -1 * stats.speed;
-            case right: xSpeed = stats.speed;
+            case up: ySpeed = -1 * stats.getSpeed();
+            case down: ySpeed = stats.getSpeed();
+            case left: xSpeed = -1 * stats.getSpeed();
+            case right: xSpeed = stats.getSpeed();
         }
 
         System.out.println(xSpeed);
@@ -95,10 +95,10 @@ public class Enemy extends Entity{
         if (super.getY() % 100 > newY % 100){changeDirection(relation);}
 
         switch (direction){
-            case up: super.coords.subYCoord(stats.speed);
-            case down: super.coords.addYCoord(stats.speed);
-            case left: super.coords.subXCoord(stats.speed);
-            case right: super.coords.addXCoord(stats.speed);
+            case up: super.getCoords().subYCoord(stats.getSpeed());
+            case down: super.getCoords().addYCoord(stats.getSpeed());
+            case left: super.getCoords().subXCoord(stats.getSpeed());
+            case right: super.getCoords().addXCoord(stats.getSpeed());
         }
     }
     
