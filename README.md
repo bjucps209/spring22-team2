@@ -16,7 +16,7 @@
 * Left Clicking triggers an attack.
 * Enemies and Obsticles are distributed randomly around the screen.
 * Enemies move toward the player when in range
-* Enemies attack the player
+* Enemies die when attacked
 * Multi-screen movement is functional (ie the player can move to different segments of the level)
 
 ### Serialization
@@ -28,6 +28,8 @@
 ## Known Issues
 * The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
 * Attacks currently hit all enemies on screen
+* Level Builder does not compile
+* Serialization Unit Tests are unable to access the world singleton
 
 ## Recording
 [Screen Recording]()
