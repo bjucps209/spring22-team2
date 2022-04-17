@@ -21,13 +21,13 @@
 
 ### Serialization
 * Serialization methods are implemented for each class and for World.java
-* Serialization is passing unit tests.
 
 ### Level Builder
-
+* Background work has been completed
 
 ## Known Issues
 * The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
+* Attacks currently hit all enemies on screen
 
 ## Recording
 [Screen Recording]()

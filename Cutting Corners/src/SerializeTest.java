@@ -13,7 +13,11 @@ public class SerializeTest {
 
 
     @Test
-    void testSave_savesToFile()  {
+    public void testSave_savesToFile()  {
+        World.instance().getCurrentLevel().getTotal
+        assertEquals(World.instance().displayCurrentEntities().size(), 7);
+        Player extraPlayer = new Player(50, 50);
+        World.instance().getCurrentLevel().placeEntity(0, 1, extraPlayer);
         
         // World.reset();
         // World.instance().setCurrentLevel(1);
@@ -35,7 +39,7 @@ public class SerializeTest {
     }
 
     @Test
-    void testLoad_loadsFromFile() {
+    public void testLoad_loadsFromFile() {
         // World.reset();
         // Level currentLevel = World.instance().getCurrentLevel();
         // assertEquals(currentLevel.getEntities().size(), 0);

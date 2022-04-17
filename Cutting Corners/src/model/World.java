@@ -178,7 +178,8 @@ public class World {
             this.difficulty = reader.readInt();
 
             this.getPlayer().deserialize(reader);
-            // this.campaign.stream().forEach(lvl -> lvl.deserialize(writer));
+            
+            getCurrentLevel().deserialize(reader);
 
         }
     }
