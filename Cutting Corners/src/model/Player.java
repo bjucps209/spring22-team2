@@ -120,26 +120,26 @@ public class Player extends Entity {
         switch (keys.get(index)){
             case W: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (direction != Direction.up){super.coords.subYCoord(stats.speed);}
-            if (super.coords.getyCoord() < 0){super.coords.addYCoord(stats.speed);}
+            if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
+            if (super.getCoords().getyCoord() < 0){super.getCoords().addYCoord(stats.getSpeed());}
                 break;
             }
             case A: {
                 if (keys.size() > index + 1){KeyPressed((index + 1)); }
-            if (direction != Direction.left){super.coords.subXCoord(stats.speed);}
-            if (super.coords.getxCoord() < 0){super.coords.addXCoord(stats.speed);}
+            if (direction != Direction.left){super.getCoords().subXCoord(stats.getSpeed());}
+            if (super.getCoords().getxCoord() < 0){super.getCoords().addXCoord(stats.getSpeed());}
                 break;
             }
             case S: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));} 
-            if (direction != Direction.down){super.coords.addYCoord(stats.speed);}
-            if (super.coords.getyCoord() > 700){super.coords.subYCoord(stats.speed);}
+            if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
+            if (super.getCoords().getyCoord() > 700){super.getCoords().subYCoord(stats.getSpeed());}
                 break;
             }
             case D: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (direction != Direction.right){super.coords.addXCoord(stats.speed);}
-            if (super.coords.getxCoord() > 1200){super.coords.subXCoord(stats.speed);}
+            if (direction != Direction.right){super.getCoords().addXCoord(stats.getSpeed());}
+            if (super.getCoords().getxCoord() > 1200){super.getCoords().subXCoord(stats.getSpeed());}
                 break;
             }
             default: return;
@@ -148,28 +148,28 @@ public class Player extends Entity {
 
     public Direction CheckIfOutOfBounds(){
         Level currentLevel = World.instance().getCurrentLevel();
-        if (super.coords.getxCoord() > 1000 && currentLevel.getCurrentScreen().getRight() != null){
+        if (super.getCoords().getxCoord() > 1000 && currentLevel.getCurrentScreen().getRight() != null){
             currentLevel.goRight(); 
         }
-        else if (super.coords.getxCoord() > 1000){
+        else if (super.getCoords().getxCoord() > 1000){
             return Direction.right;
         }
-        if (super.coords.getxCoord() <= 0 && currentLevel.getCurrentScreen().getLeft() != null){
+        if (super.getCoords().getxCoord() <= 0 && currentLevel.getCurrentScreen().getLeft() != null){
             currentLevel.goLeft(); 
         }
-        else if (super.coords.getxCoord() <= -10){
+        else if (super.getCoords().getxCoord() <= 0){
             return Direction.left;
         }
-        if (super.coords.getyCoord() >= 700 && currentLevel.getCurrentScreen().getDown() != null){
+        if (super.getCoords().getyCoord() >= 700 && currentLevel.getCurrentScreen().getDown() != null){
             currentLevel.goDown(); 
         }
-        else if (super.coords.getyCoord() >= 700){
+        else if (super.getCoords().getyCoord() >= 700){
             return Direction.down;
         }
-        if (super.coords.getyCoord() <= 0 && currentLevel.getCurrentScreen().getUp() != null){
+        if (super.getCoords().getyCoord() <= 0 && currentLevel.getCurrentScreen().getUp() != null){
             currentLevel.goUp(); 
         }
-        else if (super.coords.getyCoord() <= 0){
+        else if (super.getCoords().getyCoord() <= 0){
             return Direction.up;
         }
         return null;
@@ -181,8 +181,8 @@ public class Player extends Entity {
             // AudioClip audio = new AudioClip("media/Sounds/Sound Effects/SwordStrike.wav");
             // audio.play();
             MeleeWeapon weapon = (MeleeWeapon) equippedItem;
-            weapon.setDamage(stats.strength);
-            weapon.setSpeed((int) stats.speed / 2);
+            weapon.setDamage(stats.getStrength());
+            weapon.setSpeed((int) stats.getSpeed() / 2);
 
             System.out.println(mouseCoordinates.getxCoord() - super.getX());
             System.out.println(mouseCoordinates.getyCoord() - super.getY());
@@ -211,12 +211,27 @@ public class Player extends Entity {
         if (attackCount > 0){attackCount = 50;}
     }
 
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
-        //file.writeInt(stats.strength);
+        this.getCoords().serialize(file);
+        file.writeInt(inventory.size()); // how many items are in the inventory
+        for (Item i : inventory) {
+            i.serialize(file);
+        }
+        equippedItem.serialize(file);
+        armor.serialize(file);
+        stats.serialize(file);
     }
-
+    
+    @Override
     public void deserialize(DataInputStream file) throws IOException {
-        //stats.strength = file.readInt();
-
+        this.getCoords().deserialize(file);
+        int numItems = file.readInt();
+        for (int i = 0; i < numItems; ++i) {
+            inventory.get(i).deserialize(file);
+        }
+        equippedItem.deserialize(file);
+        armor.deserialize(file);
+        stats.deserialize(file);
     }
 }

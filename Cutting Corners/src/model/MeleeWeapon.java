@@ -1,9 +1,13 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import javafx.scene.image.Image;
 
 public class MeleeWeapon extends Equipment{
-    int range;
+    private int range;
     double direction;
     int damage;
     int speed;
@@ -33,5 +37,24 @@ public class MeleeWeapon extends Equipment{
     public void performAction(Entity user){
         Swing swing = new Swing(direction, damage, speed, range, arc, image, user);
         World.instance().displayCurrentEntities().add(swing);
+    }
+
+
+    public int getRange() {
+        return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+    }
+
+
+    
+    public void serialize(DataOutputStream file) throws IOException {
+        file.writeInt(range);
+    }
+
+    public void deserialize(DataInputStream file) throws IOException {
+        this.range = file.readInt();
     }
 }

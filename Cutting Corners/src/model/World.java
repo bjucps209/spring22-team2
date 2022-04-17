@@ -153,14 +153,13 @@ public class World {
      */
     public void save(String filename) throws IOException {
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))) 
-        {   
+        {  // SaveGame.dat
             writer.writeInt(this.currentLevel);
             writer.writeInt(this.difficulty);
 
             this.getPlayer().serialize(writer);
-            
-            // this.campaign.stream().forEach(lvl -> lvl.serialize(writer));
-            // the line commented above will call each object's serialize method
+
+            getCurrentLevel().serialize(writer);
 
             
         }

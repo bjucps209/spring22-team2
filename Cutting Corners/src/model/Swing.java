@@ -11,14 +11,14 @@ import javax.imageio.*;
 import java.io.*;
 
 public class Swing extends Entity{
-    Entity swinger;
-    int damage;
-    int radius;
-    int arc;
-    double direction;
-    ArrayList<Entity> hitEntities = new ArrayList<Entity>();
-    double directionChange;
-    int speed;
+    private Entity swinger;
+    private int damage;
+    private int radius;
+    private int arc;
+    private double direction;
+    private ArrayList<Entity> hitEntities = new ArrayList<Entity>();
+    private double directionChange;
+    private int speed;
 
     public Swing(double direction, int damage, int speed, int radius, int arc, Image image, Entity swinger) {
         super(swinger.getX(), swinger.getY(), image, 0);
@@ -37,8 +37,8 @@ public class Swing extends Entity{
         arc -= directionChange;
         // super.coords.setxCoord(swinger.getX());
         // super.coords.setyCoord(swinger.getY());
-        super.coords.setxCoord((int) (super.getX() - speed * Math.cos(direction * Math.PI / 180)));
-        super.coords.setyCoord((int) (super.getY() - speed * Math.sin(direction * Math.PI / 180)));
+        super.getCoords().setxCoord((int) (super.getX() - speed * Math.cos(direction * Math.PI / 180)));
+        super.getCoords().setyCoord((int) (super.getY() - speed * Math.sin(direction * Math.PI / 180)));
         
         if (arc <= 0){super.performDie();}
         checkIfHit();
@@ -90,11 +90,52 @@ public class Swing extends Entity{
 
 
 
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public int getArc() {
+        return arc;
+    }
+
+    public void setArc(int arc) {
+        this.arc = arc;
+    }
+
+
+
+
     public void serialize(DataOutputStream file) throws IOException {
-    
+        file.writeInt(damage);
+        file.writeInt(speed);
+        file.writeInt(radius);
+        file.writeInt(arc);
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        this.damage = file.readInt();
+        this.speed = file.readInt();
+        this.radius = file.readInt();
+        this.arc = file.readInt();
     }
 }

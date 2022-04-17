@@ -8,9 +8,9 @@ import javafx.beans.property.IntegerProperty;
 import javafx.scene.image.Image;
 
 public class Entity {
-    Coordinates coords;
-    Image image;
-    int size;
+    private int size;
+    private Coordinates coords;
+    private Image image;
 
     public Entity(int xCoord, int yCoord, Image image, int size){
         coords = new Coordinates(xCoord, yCoord);
@@ -42,6 +42,18 @@ public class Entity {
     }
 
     public void performMovement(){}
+    public Coordinates getCoords() {
+        return coords;
+    }
+
+    public void setCoords(Coordinates coords) {
+        this.coords = coords;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
 
     public void takeDamage(int damage){}
 
@@ -51,12 +63,8 @@ public class Entity {
     }
 
     public void performAttack(){}
-    
-    public void serialize(DataOutputStream file) throws IOException {
-    
-    }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        
-    }
+    //methods overridden by children
+    public void serialize(DataOutputStream file) throws IOException {}
+    public void deserialize(DataInputStream file) throws IOException {}
 }

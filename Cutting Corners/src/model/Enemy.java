@@ -16,6 +16,7 @@ public class Enemy extends Entity{
     Direction direction = Direction.left;
     Equipment weapon;
     EnemyState state = EnemyState.patrolling;
+    int size;
 
     public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
         super(xCoord, yCoord, image, size);
@@ -24,12 +25,13 @@ public class Enemy extends Entity{
         this.sides = sides;
         this.weapon = weapon;
         this.stats = stats;
+        this.size = size;
         cellWithin = cellWithin(xCoord, yCoord);
         //this.coords = new Corrdinates(WIDTH, HEIGHT);
     }
 
     public void generateEnemy(int xCoord, int yCoord){
-        type = new Triangle(size, xCoord, yCoord, homeScreen);
+        type = new Triangle(super.getSize(), xCoord, yCoord, homeScreen);
         // switch (sides) {
         //     case 3:{type = new Triangle(size);}
         //     default: break;
@@ -77,10 +79,10 @@ public class Enemy extends Entity{
         int ySpeed = 0;
 
         switch (direction){
-            case up: ySpeed = -1 * stats.speed;
-            case down: ySpeed = stats.speed;
-            case left: xSpeed = -1 * stats.speed;
-            case right: xSpeed = stats.speed;
+            case up: ySpeed = -1 * stats.getSpeed();
+            case down: ySpeed = stats.getSpeed();
+            case left: xSpeed = -1 * stats.getSpeed();
+            case right: xSpeed = stats.getSpeed();
         }
 
         int newX = super.getX() + xSpeed;
@@ -92,19 +94,19 @@ public class Enemy extends Entity{
 
         switch (direction){
             case up: {
-                super.coords.subYCoord(stats.speed);
+                super.getCoords().subYCoord(stats.getSpeed());
                 break;
             }
             case down: {
-                super.coords.addYCoord(stats.speed);
+                super.getCoords().addYCoord(stats.getSpeed());
                 break;
             }
             case left: {
-                super.coords.subXCoord(stats.speed);
+                super.getCoords().subXCoord(stats.getSpeed());
                 break;
             }
             case right: {
-                super.coords.addXCoord(stats.speed);
+                super.getCoords().addXCoord(stats.getSpeed());
                 break;
             }
         }
@@ -126,14 +128,38 @@ public class Enemy extends Entity{
     @Override
     public void takeDamage(int damage){
         stats.subHealth(damage);
-        if (stats.health <= 0){super.performDie();}
+        if (stats.getHealth() <= 0){super.performDie();}
     }
 
+
+
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
+        this.getCoords().serialize(file);
+        homeScreen.serialize(file);
+        file.writeUTF(cellWithin.toString());
+        file.writeInt(vision);
+        file.writeInt(sides);
+        file.writeInt(super.getSize());
+        stats.serialize(file);
+        // direction ??
+        weapon.serialize(file);
+        file.writeUTF(state.toString());
     
     }
-
+ 
+    @Override
     public void deserialize(DataInputStream file) throws IOException {
+        this.getCoords().deserialize(file);
+        homeScreen.deserialize(file);
+        // cellWithin = file.readUTF(); add case statements
+        this.vision = file.readInt();
+        this.sides = file.readInt();
+        this.size = file.readInt();
+        this.stats.deserialize(file);
+
+        this.weapon.deserialize(file);
+        // this.state = file.readUTF();
         
     }
 
