@@ -2,6 +2,7 @@
 
 4/14/22
 9:00 am - 9:25 am
+++30-40 min
 
 Some questions to ask:
     Does importing an entire package (ie javafx.scene.layout.*) actually
