@@ -32,8 +32,8 @@
 * Serialization Unit Tests are unable to access the world singleton
 
 ## Recording
-[Screen Recording: Title Screen](https://youtu.be/pOgFQCrmpjg)
-[Screen Recording: Gameplay](https://youtu.be/7v2Vsq_bCF0)
+* [Screen Recording: Title Screen](https://youtu.be/pOgFQCrmpjg)
+* [Screen Recording: Gameplay](https://youtu.be/7v2Vsq_bCF0)
 ## Expenses
 |Name|Username|Ownership Area|Hours Completed|Remaining Hours|Journal|
 |---|---|---|---|----|---|
