@@ -37,6 +37,6 @@
 |Name|Username|Ownership Area|Hours Completed|Remaining Hours|Journal|
 |---|---|---|---|----|---|
 |Ethan Collins|EthanCollins02|Auxiliary Screens|25hrs 20min|24hrs 40min|[Ethan's Journal](https://github.com/bjucps209/spring22-team2/wiki/EthanJournal)|
-|Paul Alger|PaulAlger05|Serialization|5hrs 20min|44hrs 40min|[Paul's Journal](https://github.com/bjucps209/spring22-team2/wiki/PaulJournal)|
+|Paul Alger|PaulAlger05|Serialization|9hrs 50min|44hrs 40min|[Paul's Journal](https://github.com/bjucps209/spring22-team2/wiki/PaulJournal)|
 |Seth Meyer|smeye584|Level Builder|~9-10hrs|~40-41hrs|[Seth's Journal](https://github.com/bjucps209/spring22-team2/wiki/SethJournal)|
 |Tripp Lawrence|Tripp|Basic Game Play|18hrs 45min|31hrs 15min|[Tripp's Journal](https://github.com/bjucps209/spring22-team2/wiki/TrippJournal)|
