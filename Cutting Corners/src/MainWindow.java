@@ -393,7 +393,8 @@ public class MainWindow {
         gameWindow.Initialize();
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
-        World.instance().updater();
+        Thread movingThread = new Thread(() -> gameWindow.updater());
+        movingThread.start();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
             @Override

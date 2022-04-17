@@ -5,9 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Location {
-    int row;
-    int col;
-    int level;
+    private int row;
+    private int col;
+    private int level;
 
     public Location(int row, int col, int level) {
         this.row = row;
@@ -43,10 +43,14 @@ public class Location {
 
 
     public void serialize(DataOutputStream file) throws IOException {
-    
+        file.writeInt(row);
+        file.writeInt(col);
+        file.writeInt(level);
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        this.row = file.readInt();
+        this.col = file.readInt();
+        this.level = file.readInt();
     }
 }

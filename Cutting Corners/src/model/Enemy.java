@@ -14,8 +14,9 @@ public class Enemy extends Entity{
     int size;
     Stats stats;
     Enemy type;
-    Direction direction;
+    Direction direction = Direction.left;
     Equipment weapon;
+    EnemyState state = EnemyState.patrolling;
 
     public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
         super(xCoord, yCoord, image);
@@ -51,8 +52,8 @@ public class Enemy extends Entity{
     }
 
     public Cell cellWithin(int xCoord, int yCoord){
-        int row = (int) super.getX() / 100;
-        int col = (int) super.getY() / 100;
+        int row = (int) super.getX() / 100 - 1;
+        int col = (int) super.getY() / 100 - 1;
 
         Cell cell = homeScreen.grid[row][col];
         return cell;
@@ -61,8 +62,15 @@ public class Enemy extends Entity{
     @Override
     public void performMovement(){
         PlayerRelation relation = PlayerInVision();
-        if (relation.distance < vision){
-            complexMovement(relation);
+        switch (state){
+            case patrolling: {
+                if (relation.distance < vision) state = EnemyState.seeking; 
+                break;
+            }
+            case seeking:{
+                complexMovement(relation);
+            }
+            default: break;
         }
     }
 
@@ -71,11 +79,14 @@ public class Enemy extends Entity{
         int ySpeed = 0;
 
         switch (direction){
-            case up: ySpeed = -1 * stats.speed;
-            case down: ySpeed = stats.speed;
-            case left: xSpeed = -1 * stats.speed;
-            case right: xSpeed = stats.speed;
+            case up: ySpeed = -1 * stats.getSpeed();
+            case down: ySpeed = stats.getSpeed();
+            case left: xSpeed = -1 * stats.getSpeed();
+            case right: xSpeed = stats.getSpeed();
         }
+
+        System.out.println(xSpeed);
+        System.out.println(ySpeed);
 
         int newX = super.getX() + xSpeed;
         int newY = super.getY() + ySpeed;
@@ -84,10 +95,10 @@ public class Enemy extends Entity{
         if (super.getY() % 100 > newY % 100){changeDirection(relation);}
 
         switch (direction){
-            case up: super.coords.subYCoord(stats.speed);
-            case down: super.coords.addYCoord(stats.speed);
-            case left: super.coords.subXCoord(stats.speed);
-            case right: super.coords.addXCoord(stats.speed);
+            case up: super.getCoords().subYCoord(stats.getSpeed());
+            case down: super.getCoords().addYCoord(stats.getSpeed());
+            case left: super.getCoords().subXCoord(stats.getSpeed());
+            case right: super.getCoords().addXCoord(stats.getSpeed());
         }
     }
     
@@ -106,12 +117,33 @@ public class Enemy extends Entity{
 
 
 
-
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
+        this.getCoords().serialize(file);
+        homeScreen.serialize(file);
+        file.writeUTF(cellWithin.toString());
+        file.writeInt(vision);
+        file.writeInt(sides);
+        file.writeInt(size);
+        stats.serialize(file);
+        
+        weapon.serialize(file);
+        file.writeUTF(state.toString());
     
     }
-
+ 
+    @Override
     public void deserialize(DataInputStream file) throws IOException {
+        this.getCoords().deserialize(file);
+        homeScreen.deserialize(file);
+        // cellWithin = file.readUTF();
+        this.vision = file.readInt();
+        this.sides = file.readInt();
+        this.size = file.readInt();
+        this.stats.deserialize(file);
+
+        this.weapon.deserialize(file);
+        // this.state = file.readUTF();
         
     }
 

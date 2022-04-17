@@ -45,34 +45,49 @@ public class MainWindow implements LevelObserver {
     void onCreateClicked(ActionEvent event) {
         switch (navPanelState) {
             case MOVE:
-                navPanelState = ScreenNavPanelState.CREATE; //nav buttons now create
+                navPanelState = ScreenNavPanelState.CREATE; //nav buttons now create screens
                 btnCreate.setText("Cancel");
+                break;
             case CREATE:
                 navPanelState = ScreenNavPanelState.MOVE; //Create is cancelled
                 btnCreate.setText("Create");
-            case DELETE:
-                navPanelState = ScreenNavPanelState.CREATE; //Delete is cancelled and create activated
-                btnCreate.setText("Create");
-                btnDelete.setText("Delete");
+                break;
         }
         disableNavButtons(navPanelState);
     }
 
     @FXML
     void onDeleteClicked(ActionEvent event) {
-        return;
+        switch (navPanelState) {
+            case MOVE:
+                return;
+        }
     }
 
     @FXML
     void onNavButtonClicked(ActionEvent event) {
-        return;
+        Direction[] dir = new Direction[] {Direction.North, Direction.South,Direction.East,Direction.West, Direction.Up, Direction.Down};
+        String[] buttonnames = new String[] {"North", "South", "East", "West", "Up", "Down"};
+        
+        for (int i = 0; i < buttonnames.length; i++ ) {
+            var buttonton = (Button)event.getSource(); //Creates button reference
+            if (buttonton.getText().equals(buttonnames[0])) { //Chooses what to do depending on button
+                switch (navPanelState){ //Chooses action
+                    case MOVE:
+                        DataManager.DaMan().attemptMoveToScreen(dir[i]);
+                        break;
+                    case CREATE:
+                        DataManager.DaMan().attemptCreateScreen(dir[i]);
+                }
+            }
+            } 
     }
 
     public void disableNavButtons(ScreenNavPanelState latestState) {
         Screen[] surroundingScreens = DataManager.DaMan().getCurrentScreen().getAdjacentScreens();
         Button[] bleck = new Button[] {btnNorth, btnSouth, btnEast, btnWest, btnUp, btnDown};
         switch (latestState) {
-            case CREATE, DELETE:
+            case CREATE:
                 DNavBtnExtended1(true, surroundingScreens, bleck);
             case MOVE:
                 DNavBtnExtended1(false, surroundingScreens, bleck);
@@ -93,6 +108,7 @@ public class MainWindow implements LevelObserver {
     @Override
     public void createScreen(String StrID) {
         currentScreen = new Pane();
+        thePanes.add(currentScreen);
         currentScreen.setPrefSize(500, 500); /// Needs attention -----------------
         currentScreen.setStyle("-fx-background-color: lightgray");
         currentScreen.setUserData(StrID);
@@ -101,7 +117,7 @@ public class MainWindow implements LevelObserver {
     }
 
     public enum ScreenNavPanelState {
-        MOVE, CREATE, DELETE
+        MOVE, CREATE
     }
 
 }

@@ -7,9 +7,9 @@ import java.io.IOException;
 import javafx.scene.image.Image;
 
 public class Obstacle {
-    int row;
-    int col;
-    Cell type;
+    private int row;
+    private int col;
+    private Cell type;
 
     public Obstacle(int row, int col, Cell type) {
         this.row = row;
@@ -31,10 +31,14 @@ public class Obstacle {
     
 
     public void serialize(DataOutputStream file) throws IOException {
-    
+        file.writeInt(row);
+        file.writeInt(col);
+        file.writeUTF(type.toString());
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        this.row = file.readInt();
+        this.col = file.readInt();
+        //this.type = file.readUTF();
     }
 }
