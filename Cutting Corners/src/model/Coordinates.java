@@ -69,10 +69,12 @@ public class Coordinates {
 
     
     public void serialize(DataOutputStream file) throws IOException {
-    
+        file.writeInt(xCoord.get());
+        file.writeInt(yCoord.get());
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        xCoord.set(file.readInt());
+        yCoord.set(file.readInt());
     }
 }

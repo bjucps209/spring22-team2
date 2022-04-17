@@ -11,26 +11,27 @@ public class Enemy extends Entity{
     Cell cellWithin;
     int vision;
     int sides;
-    int size;
     Stats stats;
     Enemy type;
-    Direction direction;
+    Direction direction = Direction.left;
     Equipment weapon;
+    EnemyState state = EnemyState.patrolling;
+    int size;
 
     public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
-        super(xCoord, yCoord, image);
+        super(xCoord, yCoord, image, size);
         this.homeScreen = homeScreen;
         this.vision = vision;
-        this.size = size;
         this.sides = sides;
         this.weapon = weapon;
         this.stats = stats;
+        this.size = size;
         cellWithin = cellWithin(xCoord, yCoord);
         //this.coords = new Corrdinates(WIDTH, HEIGHT);
     }
 
     public void generateEnemy(int xCoord, int yCoord){
-        type = new Triangle(size, xCoord, yCoord, homeScreen);
+        type = new Triangle(super.getSize(), xCoord, yCoord, homeScreen);
         // switch (sides) {
         //     case 3:{type = new Triangle(size);}
         //     default: break;
@@ -51,8 +52,8 @@ public class Enemy extends Entity{
     }
 
     public Cell cellWithin(int xCoord, int yCoord){
-        int row = (int) super.getX() / 100;
-        int col = (int) super.getY() / 100;
+        int row = (int) super.getX() / 100 - 1;
+        int col = (int) super.getY() / 100 - 1;
 
         Cell cell = homeScreen.grid[row][col];
         return cell;
@@ -61,8 +62,15 @@ public class Enemy extends Entity{
     @Override
     public void performMovement(){
         PlayerRelation relation = PlayerInVision();
-        if (relation.distance < vision){
-            complexMovement(relation);
+        switch (state){
+            case patrolling: {
+                if (relation.distance < vision) state = EnemyState.seeking; 
+                break;
+            }
+            case seeking:{
+                complexMovement(relation);
+            }
+            default: break;
         }
     }
 
@@ -71,10 +79,10 @@ public class Enemy extends Entity{
         int ySpeed = 0;
 
         switch (direction){
-            case up: ySpeed = -1 * stats.speed;
-            case down: ySpeed = stats.speed;
-            case left: xSpeed = -1 * stats.speed;
-            case right: xSpeed = stats.speed;
+            case up: ySpeed = -1 * stats.getSpeed();
+            case down: ySpeed = stats.getSpeed();
+            case left: xSpeed = -1 * stats.getSpeed();
+            case right: xSpeed = stats.getSpeed();
         }
 
         int newX = super.getX() + xSpeed;
@@ -83,18 +91,31 @@ public class Enemy extends Entity{
         if (super.getX() % 100 > newX % 100){changeDirection(relation);}
         if (super.getY() % 100 > newY % 100){changeDirection(relation);}
 
+
         switch (direction){
-            case up: super.coords.subYCoord(stats.speed);
-            case down: super.coords.addYCoord(stats.speed);
-            case left: super.coords.subXCoord(stats.speed);
-            case right: super.coords.addXCoord(stats.speed);
+            case up: {
+                super.getCoords().subYCoord(stats.getSpeed());
+                break;
+            }
+            case down: {
+                super.getCoords().addYCoord(stats.getSpeed());
+                break;
+            }
+            case left: {
+                super.getCoords().subXCoord(stats.getSpeed());
+                break;
+            }
+            case right: {
+                super.getCoords().addXCoord(stats.getSpeed());
+                break;
+            }
         }
     }
     
     public void changeDirection(PlayerRelation relation){
         if (Math.abs(relation.xDifference) < Math.abs(relation.yDifference)){
-            if (relation.yDifference > 0){direction = Direction.down;}
-            else{direction = Direction.up;}
+            if (relation.yDifference > 0){direction = Direction.up;}
+            else{direction = Direction.down;}
         }
         else{
             if (relation.xDifference > 0){direction = Direction.left;}
@@ -104,14 +125,41 @@ public class Enemy extends Entity{
 
     public boolean obstacleInPath(){return false;}
 
-
-
-
-    public void serialize(DataOutputStream file) throws IOException {
-    
+    @Override
+    public void takeDamage(int damage){
+        stats.subHealth(damage);
+        if (stats.getHealth() <= 0){super.performDie();}
     }
 
+
+
+    @Override
+    public void serialize(DataOutputStream file) throws IOException {
+        this.getCoords().serialize(file);
+        homeScreen.serialize(file);
+        file.writeUTF(cellWithin.toString());
+        file.writeInt(vision);
+        file.writeInt(sides);
+        file.writeInt(super.getSize());
+        stats.serialize(file);
+        // direction ??
+        weapon.serialize(file);
+        file.writeUTF(state.toString());
+    
+    }
+ 
+    @Override
     public void deserialize(DataInputStream file) throws IOException {
+        this.getCoords().deserialize(file);
+        homeScreen.deserialize(file);
+        // cellWithin = file.readUTF(); add case statements
+        this.vision = file.readInt();
+        this.sides = file.readInt();
+        this.size = file.readInt();
+        this.stats.deserialize(file);
+
+        this.weapon.deserialize(file);
+        // this.state = file.readUTF();
         
     }
 

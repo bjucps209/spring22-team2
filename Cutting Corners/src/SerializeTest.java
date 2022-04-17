@@ -12,8 +12,13 @@ import model.*;
 public class SerializeTest {
 
 
+
     @Test
-    void testSave_savesToFile()  {
+    public void testSave_savesToFile()  {
+        
+        assertEquals(100, World.instance().getPlayer().getCoords().getxCoord());
+        Player extraPlayer = new Player(50, 50);
+        World.instance().getCurrentLevel().placeEntity(0, 1, extraPlayer);
         
         // World.reset();
         // World.instance().setCurrentLevel(1);
@@ -35,7 +40,7 @@ public class SerializeTest {
     }
 
     @Test
-    void testLoad_loadsFromFile() {
+    public void testLoad_loadsFromFile() {
         // World.reset();
         // Level currentLevel = World.instance().getCurrentLevel();
         // assertEquals(currentLevel.getEntities().size(), 0);

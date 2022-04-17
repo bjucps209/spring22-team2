@@ -5,9 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Stats {
-    int strength;
-    int speed;
-    int health;
+    private int strength;
+    private int speed;
+    private int health;
     
     public Stats(int strength, int speed, int health) {
         this.strength = strength;
@@ -39,15 +39,31 @@ public class Stats {
         this.health = health;
     }
 
+    public void subHealth(int damage) {
+        health -= damage;
+    }
 
+    public void ApplyBuffs(Item item){
+        strength += item.buffs.strength;
+        health += item.buffs.health;
+        speed += item.buffs.speed;
+    }
 
-
+    public void unApplyBuffs(Item item){
+        strength -= item.buffs.strength;
+        health -= item.buffs.health;
+        speed -= item.buffs.speed;
+    }
 
     public void serialize(DataOutputStream file) throws IOException {
-    
+        file.writeInt(strength);
+        file.writeInt(speed);
+        file.writeInt(health);
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
-    }
+        this.strength = file.readInt();
+        this.speed = file.readInt();
+        this.health = file.readInt();
+    }   
 }

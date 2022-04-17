@@ -12,15 +12,4 @@ public class Armor extends Equipment{
 
 
 
-
-
-
-    public void serialize(DataOutputStream file) throws IOException {
-    
-    }
-
-    public void deserialize(DataInputStream file) throws IOException {
-        
-    }
-
 }

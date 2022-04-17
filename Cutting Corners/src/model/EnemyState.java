@@ -4,5 +4,5 @@ public enum EnemyState {
     attacking,
     stunned,
     patrolling,
-    charging
+    seeking
 }

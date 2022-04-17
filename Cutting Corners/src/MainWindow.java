@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,8 +26,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Coordinates;
+import model.PlayerState;
 import model.World;
 import java.awt.*;
 
@@ -36,7 +42,27 @@ public class MainWindow {
     @FXML
     VBox MainWindow;
     String state = "START";
-    KeyFrame keyFrame = new KeyFrame(Duration.millis(10),e->changeScreens(e));
+    KeyFrame keyFrame = new KeyFrame(Duration.millis(10),e->{changeScreens(e);MainWindow.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            
+        @Override
+        public void handle(KeyEvent event){
+            keys.add(event.getCode());
+        }
+    });
+
+    MainWindow.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
+        
+        @Override
+        public void handle(KeyEvent event){
+            if(keys.get(keys.size()-1)==KeyCode.ESCAPE)
+            {
+                state="START";
+                timerCredits.stop();
+                timer.play();
+                credits.relocate(100*ratioHeight, 1000*ratioWidth);
+            }
+        }
+    });});
     Timeline timer = new Timeline(keyFrame);
     KeyFrame keyFrameCredits = new KeyFrame(Duration.millis(10),e->rollCredits());
     Timeline timerCredits = new Timeline(keyFrameCredits);
@@ -56,10 +82,13 @@ public class MainWindow {
     Label controls = new Label();
     @FXML
     Label credits = new Label();
+    @FXML
+    ImageView imgView;
     HighScoreManager scores = new HighScoreManager();
-    HashMap<String,Boolean> currentlyActiveKeys = new HashMap<>();
+    
+    ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Image TITLE_SCREEN = new Image("media/titlescreen.png");
-    // Image MOVE_GIF = new Image("media/moveGif.gif");
+    Image MOVE_GIF = new Image("media/moveGif.gif");
     // Image ATTACK_GIF = new Image("media/attackGif.gif");
     // Image ITEM_GIF = new Image("media/itemGif.gif");
     Image DIFFICULTY_EASY = new Image("media/buttons/difficultyeasy.png");
@@ -83,17 +112,15 @@ public class MainWindow {
     Image SETTINGS_BUTTON_PRESSED = new Image("media/buttons/settingsbtnpressed.png");
     Image SCORE_BUTTON = new Image("media/buttons/highscoresbtn.png");
     Image SCORE_BUTTON_PRESSED = new Image("media/buttons/highscoresbtnpressed.png");
-    // Image CHEATMODE = new Image("media/cheatmode.png");
-    // Image CHEATMODE_SELECTED = new Image("media/cheatmodeselected.png");
+    Image CHEATMODE = new Image("media/buttons/cheatmode.png");
+    Image CHEATMODE_SELECTED = new Image("media/buttons/cheatmodeselected.png");
     Image DEFAULT_CAMPAIGN = new Image("media/buttons/defaultcampaign.png");
     Image USER_CAMPAIGN = new Image("media/buttons/usercampaign.png");
     Image LVL_BUILDER = new Image("media/buttons/lvlbuilderbtn.png");
     Image LVL_BUILDER_PRESSED = new Image("media/buttons/lvlbuilderbtnpressed.png");
     AudioClip TITLE_MUSIC = new AudioClip(getClass().getResource("media/sounds/music/alexander-nakarada-magic-tavern (Title Music).mp3").toString());
     ImageView backgroundView = new ImageView(TITLE_SCREEN);
-    // ImageView moveView = new ImageView(MOVE_GIF);
-    // ImageView attackView = new ImageView(ATTACK_GIF);
-    // ImageView itemView = new ImageView(ITEM_GIF);
+    ImageView moveView = new ImageView(MOVE_GIF);
     ImageView difficultyView = new ImageView(DIFFICULTY_NORMAL);
     ImageView backView = new ImageView(BACK_BUTTON);
     ImageView campaignView = new ImageView(DEFAULT_CAMPAIGN);
@@ -108,7 +135,8 @@ public class MainWindow {
     ImageView helpView = new ImageView(HELP_BUTTON);
     ImageView settingsView = new ImageView(SETTINGS_BUTTON);
     ImageView scoreView = new ImageView(SCORE_BUTTON);
-    // ImageView cheatModeView = new ImageView(CHEATMODE);
+    ImageView cheatModeView = new ImageView(CHEATMODE);
+    
         
 
     @FXML
@@ -129,7 +157,7 @@ public class MainWindow {
         MainWindow.setMinHeight(size.getHeight());
         pane.setMinWidth(size.getWidth());
         pane.setMinHeight(size.getHeight());
-        timer.setCycleCount(100);
+        timer.setCycleCount(50);
         timerCredits.setCycleCount(Timeline.INDEFINITE);
         highScores.setText("High Scores:\n");
         for(int i=0;i<5;i++)
@@ -163,7 +191,7 @@ public class MainWindow {
         title.getStyleClass().add("title");
         settings.getStyleClass().add("title");
         controls.getStyleClass().add("title");
-        credits.getStyleClass().addAll("credits");
+        credits.getStyleClass().add("credits");
         credits.setAlignment(Pos.CENTER);
         highScores.relocate(3020*ratioWidth, 100*ratioHeight);
         title.relocate(250*ratioHeight, 30*ratioWidth);
@@ -171,18 +199,18 @@ public class MainWindow {
         settings.relocate(-2000*ratioHeight, 30*ratioWidth);
         credits.relocate(100*ratioHeight, 1000*ratioWidth);
         backgroundView.relocate(0, 0);
-        // moveView.relocate(2500, 50);
+        moveView.relocate(240*ratioWidth, -2350*ratioHeight);
         // attackView.relocate(2500, 350);
         // itemView.relocate(2500, 650);
-        // creditView.relocate(200, 1500);
-        difficultyView.relocate(-1930*ratioWidth, 700*ratioHeight);
-        diffSliderLeft.relocate(-2090*ratioWidth, 700*ratioHeight);
-        diffSliderRight.relocate(-1770*ratioWidth, 700*ratioHeight);
+        difficultyView.relocate(-1930*ratioWidth, 600*ratioHeight);
+        diffSliderLeft.relocate(-2090*ratioWidth, 600*ratioHeight);
+        diffSliderRight.relocate(-1770*ratioWidth, 600*ratioHeight);
         backView.relocate(-2490*ratioWidth, 10*ratioHeight);
-        campaignView.relocate(-1930*ratioWidth, 600*ratioHeight);
-        campaignSliderLeft.relocate(-2090*ratioWidth, 600*ratioHeight);
-        campaignSliderRight.relocate(-1770*ratioWidth, 600*ratioHeight);
-        lvlBuilderView.relocate(-2080*ratioWidth, 300*ratioHeight);
+        campaignView.relocate(-1930*ratioWidth, 500*ratioHeight);
+        campaignSliderLeft.relocate(-2090*ratioWidth, 500*ratioHeight);
+        campaignSliderRight.relocate(-1770*ratioWidth, 500*ratioHeight);
+        lvlBuilderView.relocate(-2110*ratioWidth, 200*ratioHeight);
+        cheatModeView.relocate(-2180*ratioWidth, 750*ratioHeight);
         startView.relocate(50*ratioWidth, 200*ratioHeight);
         aboutView.relocate(50*ratioWidth, 600*ratioHeight);
         loadView.relocate(750*ratioWidth, 200*ratioHeight);
@@ -218,6 +246,7 @@ public class MainWindow {
         backView.setOnMouseReleased(me -> {backView.setImage(BACK_BUTTON);
                                                 state="START";
                                                 timer.play();});
+        cheatModeView.setOnMouseReleased(me -> {if(cheatMode){cheatModeView.setImage(CHEATMODE);cheatMode=false;}else{cheatModeView.setImage(CHEATMODE_SELECTED);cheatMode=true;}});
         diffSliderLeft.setOnMousePressed(me -> diffSliderLeft.setImage(SLIDER_LEFT_PRESSED));
         diffSliderLeft.setOnMouseReleased(me -> diffSliderPressed(diffSliderLeft));
         diffSliderRight.setOnMousePressed(me -> diffSliderRight.setImage(SLIDER_RIGHT_PRESSED));
@@ -231,7 +260,9 @@ public class MainWindow {
         ratioImage(backgroundView);
         ratioImage(startView);
         ratioImage(loadView);
+        ratioImage(moveView);
         ratioImage(lvlBuilderView);
+        ratioImage(cheatModeView);
         sizeButton(backView);
         sizeButton(difficultyView);
         sizeButton(diffSliderLeft);
@@ -248,19 +279,8 @@ public class MainWindow {
         pane.getChildren().add(settings);
         pane.getChildren().add(controls);
         pane.getChildren().add(credits);
-        // pane.getChildren().add(moveView);
         // pane.getChildren().add(attackView);
         // pane.getChildren().add(itemView);
-        // pane.getChildren().add(creditView);
-        pane.setOnKeyPressed(ke->{isESC(ke);});
-    }
-    @FXML
-    void onMouseClicked(MouseEvent event)
-    {
-    }
-    @FXML
-    void onMouseMoved(MouseEvent event)
-    {
     }
     @FXML
     void changeScreens(ActionEvent event)
@@ -277,26 +297,33 @@ public class MainWindow {
                 updateButton(scoreView, 1100, 700);
                 updateButton(settings, -2000, 30);
                 updateButton(backView, -2490, 10);
-                updateButton(difficultyView, -1930, 700);
-                updateButton(diffSliderLeft, -2090, 700);
-                updateButton(diffSliderRight, -1770, 700);
-                updateButton(campaignView, -1930, 600);
-                updateButton(campaignSliderLeft, -2090, 600);
-                updateButton(campaignSliderRight, -1770, 600);
-                updateButton(lvlBuilderView, -2080, 300);
+                updateButton(difficultyView, -1930, 600);
+                updateButton(diffSliderLeft, -2090, 600);
+                updateButton(diffSliderRight, -1770, 600);
+                updateButton(campaignView, -1930, 500);
+                updateButton(campaignSliderLeft, -2090, 500);
+                updateButton(campaignSliderRight, -1770, 500);
+                updateButton(lvlBuilderView, -2110, 200);
+                updateButton(cheatModeView, -2180, 750);
                 updateButton(highScores, 3020, 100);
                 updateButton(controls, 500, -2470);
+                updateButton(moveView, 240, -2350);
+                // updateButton(moveView3, 240, -2350);
+                // updateButton(moveView4, 240, -2350);
+                // updateButton(moveView5, 240, -2350);
+                // updateButton(moveView6, 240, -2350);
                 break;
             case "SETTINGS":
                 updateButton(settings,500 , 30);
                 updateButton(backView, 10, 10);
-                updateButton(difficultyView, 570, 700);
-                updateButton(diffSliderLeft, 410, 700);
-                updateButton(diffSliderRight, 730, 700);
-                updateButton(campaignView, 570, 600);
-                updateButton(campaignSliderLeft, 410, 600);
-                updateButton(campaignSliderRight, 730, 600);
-                updateButton(lvlBuilderView, 420, 300);
+                updateButton(difficultyView, 570, 600);
+                updateButton(diffSliderLeft, 410, 600);
+                updateButton(diffSliderRight, 730, 600);
+                updateButton(campaignView, 570, 500);
+                updateButton(campaignSliderLeft, 410, 500);
+                updateButton(campaignSliderRight, 730, 500);
+                updateButton(lvlBuilderView, 390, 200);
+                updateButton(cheatModeView, 320, 750);
                 updateButton(title, 2750, 30);
                 updateButton(startView, 2550, 200);
                 updateButton(loadView, 3250, 200);
@@ -308,6 +335,11 @@ public class MainWindow {
             case "HELP":
                 updateButton(backView, 10, 10);
                 updateButton(controls, 500, 30);
+                updateButton(moveView, 240, 150);
+                // updateButton(moveView3, 240, 150);
+                // updateButton(moveView4, 240, 150);
+                // updateButton(moveView5, 240, 150);
+                // updateButton(moveView6, 240, 150);
                 updateButton(title, 250, 2530);
                 updateButton(startView, 50, 2700);
                 updateButton(loadView, 750, 2700);
@@ -363,7 +395,9 @@ public class MainWindow {
         gameWindow.Initialize();
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
-        World.instance().updater();
+        gameWindow.updater();
+        Thread movingThread = new Thread(() -> gameWindow.playerUpdater());
+        movingThread.start();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
             @Override
@@ -378,6 +412,25 @@ public class MainWindow {
             @Override
             public void handle(KeyEvent event){
                 World.instance().getPlayer().removeKey(event.getCode());
+            }
+        });
+
+        scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            
+            @Override
+            public void handle(MouseEvent event){
+                int xCoord = (int) event.getX();
+                int yCoord = (int) event.getY();
+                World.instance().getPlayer().setMouseCoordinates(new Coordinates(xCoord, yCoord));
+            }
+        });
+
+        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            
+            @Override
+            public void handle(MouseEvent event){
+                Thread t = new Thread(() -> World.instance().getPlayer().performAttack());
+                t.start();
             }
         });
     }
@@ -476,16 +529,5 @@ public class MainWindow {
         view.setFitHeight(view.getFitHeight()*ratioHeight);
         view.setFitWidth(view.getFitWidth()*ratioWidth);
         pane.getChildren().add(view);
-    }
-    @FXML
-    public static boolean isESC(KeyEvent event) {
-        boolean esc = event.getCode() == KeyCode.ESCAPE;
-        if (!esc) {
-            String str = event.getCharacter();
-            if (!str.isEmpty()) {
-                esc = str.charAt(0) == 27;
-            }//  www.j  a v a  2 s.  co  m
-        }
-        return esc;
     }
 }

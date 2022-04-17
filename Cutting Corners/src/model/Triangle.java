@@ -15,7 +15,10 @@ public class Triangle extends Enemy{
     }
 
     public static Stats sizeToStats(int size){
-        return null;
+        int speed = (int) 30 / size;
+        int strength = (int) size / 2;
+        int health = (int) size;
+        return new Stats(strength, speed, health);
     }
 
     public void performAttack(){}

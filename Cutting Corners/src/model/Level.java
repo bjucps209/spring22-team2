@@ -26,6 +26,10 @@ public class Level {
         this.observer = observer;
     }
 
+    public ScreenObserver getObserver(){
+        return observer;
+    }
+
     public void placeEntity(int row, int col, Entity entity){
         findScreen(row, col).addEntity(entity);
     }
@@ -68,7 +72,7 @@ public class Level {
     public void goLeft(){
         if (currentScreen.getLeft() != null){
             Player player = currentScreen.removePlayer();
-            player.coords.setxCoord(950);
+            player.getCoords().setxCoord(950);
             currentScreen = currentScreen.getLeft();
             currentScreen.addEntity(player);
             currentCol--;
@@ -79,7 +83,7 @@ public class Level {
     public void goRight(){
         if (currentScreen.getRight() != null){
             Player player = currentScreen.removePlayer();
-            player.coords.setxCoord(5);
+            player.getCoords().setxCoord(5);
             currentScreen = currentScreen.getRight();
             currentScreen.addEntity(player);
             currentCol++;
@@ -90,7 +94,7 @@ public class Level {
     public void goUp(){
         if (currentScreen.getUp() != null){
             Player player = currentScreen.removePlayer();
-            player.coords.setyCoord(695);
+            player.getCoords().setyCoord(695);
             currentScreen = currentScreen.getUp();
             currentScreen.addEntity(player);
             currentRow--;
@@ -101,7 +105,7 @@ public class Level {
     public void goDown(){
         if (currentScreen.getDown() != null){
             Player player = currentScreen.removePlayer();
-            player.coords.setyCoord(5);
+            player.getCoords().setyCoord(5);
             currentScreen = currentScreen.getDown();
             currentScreen.addEntity(player);
             currentRow++;
@@ -155,16 +159,48 @@ public class Level {
     public Screen getCurrentScreen(){
         return currentScreen;
     }
+    
+    public ArrayList<Enemy> getTotalEnemies() {
+        return totalEnemies;
+    }
+
+    public void setTotalEnemies(ArrayList<Enemy> totalEnemies) {
+        this.totalEnemies = totalEnemies;
+    }
+
 
 
 
     public void serialize(DataOutputStream file) throws IOException {
-        //save the level data
+        file.writeInt(totalEnemies.size());
+        for (Enemy e : totalEnemies) {
+            e.serialize(file);
+        }
+        file.writeInt(screens.size());
+        for (Screen s : screens) {
+            s.serialize(file);
+        }
+        // currentScreen ?
+        file.writeInt(currentRow);
+        file.writeInt(currentCol);
+        file.writeInt(currentLevel);
     
     }
 
     public void deserialize(DataInputStream file) throws IOException {
-        
+        int numEnemies = file.readInt();
+        for (int i = 0; i < numEnemies; ++i) {
+            totalEnemies.get(i).deserialize(file);
+        }
+        int numScreens = file.readInt();
+        for (int i = 0; i < numScreens; ++i) {
+            screens.get(i).deserialize(file);
+        }
+        //
+        currentRow = file.readInt();
+        currentCol = file.readInt();
+        currentLevel = file.readInt();
+
     }
 
 }
