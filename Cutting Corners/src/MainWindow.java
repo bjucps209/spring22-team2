@@ -88,7 +88,7 @@ public class MainWindow {
     
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Image TITLE_SCREEN = new Image("media/titlescreen.png");
-    Image MOVE_GIF = new Image("media/moveGif.gif");
+    //Image MOVE_GIF = new Image("media/moveGif.gif");
     // Image ATTACK_GIF = new Image("media/attackGif.gif");
     // Image ITEM_GIF = new Image("media/itemGif.gif");
     Image DIFFICULTY_EASY = new Image("media/buttons/difficultyeasy.png");
@@ -120,7 +120,7 @@ public class MainWindow {
     Image LVL_BUILDER_PRESSED = new Image("media/buttons/lvlbuilderbtnpressed.png");
     AudioClip TITLE_MUSIC = new AudioClip(getClass().getResource("media/sounds/music/alexander-nakarada-magic-tavern (Title Music).mp3").toString());
     ImageView backgroundView = new ImageView(TITLE_SCREEN);
-    ImageView moveView = new ImageView(MOVE_GIF);
+    //ImageView moveView = new ImageView(MOVE_GIF);
     ImageView difficultyView = new ImageView(DIFFICULTY_NORMAL);
     ImageView backView = new ImageView(BACK_BUTTON);
     ImageView campaignView = new ImageView(DEFAULT_CAMPAIGN);
@@ -199,7 +199,7 @@ public class MainWindow {
         settings.relocate(-2000*ratioHeight, 30*ratioWidth);
         credits.relocate(100*ratioHeight, 1000*ratioWidth);
         backgroundView.relocate(0, 0);
-        moveView.relocate(240*ratioWidth, -2350*ratioHeight);
+        //moveView.relocate(240*ratioWidth, -2350*ratioHeight);
         // attackView.relocate(2500, 350);
         // itemView.relocate(2500, 650);
         difficultyView.relocate(-1930*ratioWidth, 600*ratioHeight);
@@ -260,7 +260,7 @@ public class MainWindow {
         ratioImage(backgroundView);
         ratioImage(startView);
         ratioImage(loadView);
-        ratioImage(moveView);
+        //ratioImage(moveView);
         ratioImage(lvlBuilderView);
         ratioImage(cheatModeView);
         sizeButton(backView);
@@ -307,11 +307,7 @@ public class MainWindow {
                 updateButton(cheatModeView, -2180, 750);
                 updateButton(highScores, 3020, 100);
                 updateButton(controls, 500, -2470);
-                updateButton(moveView, 240, -2350);
-                // updateButton(moveView3, 240, -2350);
-                // updateButton(moveView4, 240, -2350);
-                // updateButton(moveView5, 240, -2350);
-                // updateButton(moveView6, 240, -2350);
+                //updateButton(moveView, 240, -2350);
                 break;
             case "SETTINGS":
                 updateButton(settings,500 , 30);
@@ -335,7 +331,7 @@ public class MainWindow {
             case "HELP":
                 updateButton(backView, 10, 10);
                 updateButton(controls, 500, 30);
-                updateButton(moveView, 240, 150);
+                //updateButton(moveView, 240, 150);
                 // updateButton(moveView3, 240, 150);
                 // updateButton(moveView4, 240, 150);
                 // updateButton(moveView5, 240, 150);
