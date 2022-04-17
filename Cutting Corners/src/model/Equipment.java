@@ -39,14 +39,22 @@ public class Equipment extends Item {
         this.buffs = buffs;
     }
 
+
+
+
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
-        super.serialize(file);
-        file.writeUTF(type.toString()); //save the type of equipment
+        file.writeUTF(this.getName());
+        file.writeInt(this.getCooldown());
+        file.writeUTF(type.toString()); //save the type of equipment as string
         buffs.serialize(file);
     }
 
+    @Override
     public void deserialize(DataInputStream file) throws IOException {
-        super.deserialize(file);
+        this.setName(file.readUTF());
+        this.setCooldown(file.readInt());
         // this.type = file.readUTF();
+        buffs.deserialize(file);
     }
 }

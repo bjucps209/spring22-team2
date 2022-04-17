@@ -53,12 +53,7 @@ public class Entity {
     }
 
 
-    
-    public void serialize(DataOutputStream file) throws IOException {
-        coords.serialize(file);
-    }
-
-    public void deserialize(DataInputStream file) throws IOException {
-        coords.deserialize(file);
-    }
+    //methods overridden by children
+    public void serialize(DataOutputStream file) throws IOException {}
+    public void deserialize(DataInputStream file) throws IOException {}
 }

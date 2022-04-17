@@ -34,13 +34,7 @@ public class Item {
     }
 
 
-    public void serialize(DataOutputStream file) throws IOException {
-        file.writeUTF(name);
-        file.writeInt(cooldown);
-    }
-
-    public void deserialize(DataInputStream file) throws IOException {
-        this.name = file.readUTF();
-        this.cooldown = file.readInt();
-    }
+    //methods overridden by children
+    public void serialize(DataOutputStream file) throws IOException {}
+    public void deserialize(DataInputStream file) throws IOException {}
 }

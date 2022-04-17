@@ -98,9 +98,10 @@ public class Player extends Entity {
     }
 
 
-
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
         this.getCoords().serialize(file);
+        file.writeInt(inventory.size()); // how many items are in the inventory
         for (Item i : inventory) {
             i.serialize(file);
         }
@@ -108,12 +109,13 @@ public class Player extends Entity {
         armor.serialize(file);
         stats.serialize(file);
     }
-
+    
+    @Override
     public void deserialize(DataInputStream file) throws IOException {
         this.getCoords().deserialize(file);
-        stats.deserialize(file);
-        for (Item i : inventory) {
-            i.deserialize(file);
+        int numItems = file.readInt();
+        for (int i = 0; i < numItems; ++i) {
+            inventory.get(i).deserialize(file);
         }
         equippedItem.deserialize(file);
         armor.deserialize(file);
