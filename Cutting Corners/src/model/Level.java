@@ -155,6 +155,15 @@ public class Level {
     public Screen getCurrentScreen(){
         return currentScreen;
     }
+    
+    public ArrayList<Enemy> getTotalEnemies() {
+        return totalEnemies;
+    }
+
+    public void setTotalEnemies(ArrayList<Enemy> totalEnemies) {
+        this.totalEnemies = totalEnemies;
+    }
+
 
 
 
