@@ -28,6 +28,7 @@
 
 ## Known Issues
 * The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
+* Attacks currently hit all enemies on screen
 
 ## Recording
 [Screen Recording]()
