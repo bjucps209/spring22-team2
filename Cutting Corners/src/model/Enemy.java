@@ -11,7 +11,6 @@ public class Enemy extends Entity{
     Cell cellWithin;
     int vision;
     int sides;
-    int size;
     Stats stats;
     Enemy type;
     Direction direction = Direction.left;
@@ -19,10 +18,9 @@ public class Enemy extends Entity{
     EnemyState state = EnemyState.patrolling;
 
     public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
-        super(xCoord, yCoord, image);
+        super(xCoord, yCoord, image, size);
         this.homeScreen = homeScreen;
         this.vision = vision;
-        this.size = size;
         this.sides = sides;
         this.weapon = weapon;
         this.stats = stats;
@@ -85,27 +83,37 @@ public class Enemy extends Entity{
             case right: xSpeed = stats.speed;
         }
 
-        System.out.println(xSpeed);
-        System.out.println(ySpeed);
-
         int newX = super.getX() + xSpeed;
         int newY = super.getY() + ySpeed;
 
         if (super.getX() % 100 > newX % 100){changeDirection(relation);}
         if (super.getY() % 100 > newY % 100){changeDirection(relation);}
 
+
         switch (direction){
-            case up: super.coords.subYCoord(stats.speed);
-            case down: super.coords.addYCoord(stats.speed);
-            case left: super.coords.subXCoord(stats.speed);
-            case right: super.coords.addXCoord(stats.speed);
+            case up: {
+                super.coords.subYCoord(stats.speed);
+                break;
+            }
+            case down: {
+                super.coords.addYCoord(stats.speed);
+                break;
+            }
+            case left: {
+                super.coords.subXCoord(stats.speed);
+                break;
+            }
+            case right: {
+                super.coords.addXCoord(stats.speed);
+                break;
+            }
         }
     }
     
     public void changeDirection(PlayerRelation relation){
         if (Math.abs(relation.xDifference) < Math.abs(relation.yDifference)){
-            if (relation.yDifference > 0){direction = Direction.down;}
-            else{direction = Direction.up;}
+            if (relation.yDifference > 0){direction = Direction.up;}
+            else{direction = Direction.down;}
         }
         else{
             if (relation.xDifference > 0){direction = Direction.left;}
@@ -115,8 +123,11 @@ public class Enemy extends Entity{
 
     public boolean obstacleInPath(){return false;}
 
-
-
+    @Override
+    public void takeDamage(int damage){
+        stats.subHealth(damage);
+        if (stats.health <= 0){super.performDie();}
+    }
 
     public void serialize(DataOutputStream file) throws IOException {
     

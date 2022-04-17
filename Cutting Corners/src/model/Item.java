@@ -7,15 +7,19 @@ import java.io.IOException;
 public class Item {
     String name;
     int cooldown;
+    Stats buffs;
 
-    public Item(String name, int cooldown){
+    public Item(String name, int cooldown, Stats buffs){
         this.name = name;
         this.cooldown = cooldown;
+        this.buffs = buffs;
     }
 
-    public void performAction(){}
+    public void performAction(Entity user){}
 
+    
 
+    
 
     public void serialize(DataOutputStream file) throws IOException {
     

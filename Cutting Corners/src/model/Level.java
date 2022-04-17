@@ -26,6 +26,10 @@ public class Level {
         this.observer = observer;
     }
 
+    public ScreenObserver getObserver(){
+        return observer;
+    }
+
     public void placeEntity(int row, int col, Entity entity){
         findScreen(row, col).addEntity(entity);
     }

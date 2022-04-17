@@ -66,7 +66,7 @@ public class GameWindow {
             entityImage.xProperty().bind(entity.getXProperty());
             entityImage.yProperty().bind(entity.getYProperty());
             entityImage.setUserData(entity);
-            entityImage.prefWidth(200);
+            entityImage.setFitWidth(entity.getSize());
             entityImage.setPreserveRatio(true);
             gameWindow.getChildren().add(entityImage);
         }
@@ -82,14 +82,17 @@ public class GameWindow {
         }
     }
 
-    // @FXML
-    // void onMousePressed(MouseEvent event){
-    //     event.getX();
-    // }
-
     @FXML
     void updater(){
         KeyFrame frames = new KeyFrame(Duration.millis(20), me -> World.instance().updateView());
+        Timeline timer = new Timeline(frames);
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
+    }
+
+    @FXML
+    void playerUpdater(){
+        KeyFrame frames = new KeyFrame(Duration.millis(20), me -> World.instance().updatePlayer());
         Timeline timer = new Timeline(frames);
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();

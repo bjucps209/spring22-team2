@@ -10,10 +10,15 @@ import javafx.scene.image.Image;
 public class Entity {
     Coordinates coords;
     Image image;
+    int size;
 
-    public Entity(int xCoord, int yCoord, Image image){
+    public Entity(int xCoord, int yCoord, Image image, int size){
         coords = new Coordinates(xCoord, yCoord);
         this.image = image;
+    }
+
+    public int getSize(){
+        return size;
     }
 
     public int getX(){
@@ -36,11 +41,16 @@ public class Entity {
         return image;
     }
 
-    public void performMovement(){
+    public void performMovement(){}
 
+    public void takeDamage(int damage){}
+
+    public void performDie(){
+        World.instance().displayCurrentEntities().remove(this);
+        World.instance().getCurrentLevel().getObserver().Initialize();
     }
 
-
+    public void performAttack(){}
     
     public void serialize(DataOutputStream file) throws IOException {
     

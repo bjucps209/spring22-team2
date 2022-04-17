@@ -39,9 +39,21 @@ public class Stats {
         this.health = health;
     }
 
+    public void subHealth(int damage) {
+        health -= damage;
+    }
 
+    public void ApplyBuffs(Item item){
+        strength += item.buffs.strength;
+        health += item.buffs.health;
+        speed += item.buffs.speed;
+    }
 
-
+    public void unApplyBuffs(Item item){
+        strength -= item.buffs.strength;
+        health -= item.buffs.health;
+        speed -= item.buffs.speed;
+    }
 
     public void serialize(DataOutputStream file) throws IOException {
     

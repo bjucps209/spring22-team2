@@ -13,8 +13,8 @@ public class Projectile extends Entity{
     int width;
     int direction;
 
-    public Projectile(int damage, int speed, int startX, int startY, int range, Image image, int width, int direction){
-        super(startX, startY, image);
+    public Projectile(int damage, int speed, int startX, int startY, int range, Image image, int width, int direction, int size){
+        super(startX, startY, image, size);
         this.speed = speed;
         this.damage = damage;
         this.range = range;

@@ -90,7 +90,7 @@ public class World {
         Screen screen3 = new Screen(1, 0, 1);
         Screen screen4 = new Screen(1, 1, 1);
 
-        Triangle triangle1 = new Triangle(4, 400, 400, screen1);
+        Triangle triangle1 = new Triangle(4, 100, 100, screen1);
         Triangle triangle2 = new Triangle(5, 200, 600, screen1);
         Triangle triangle3 = new Triangle(7, 700, 100, screen2);
         Triangle triangle4 = new Triangle(5, 300, 600, screen2);
@@ -130,13 +130,19 @@ public class World {
 
     public void updateView(){
         try{for (Entity entity: displayCurrentEntities()){
+            if (! (entity instanceof Player)){
             entity.performMovement();
+            }
         }
         if(observer!=null)
         {
             observer.Initialize();
         }
         }catch(ConcurrentModificationException c){return;}
+    }
+
+    public void updatePlayer(){
+        getPlayer().performMovement();
     }
 
 
