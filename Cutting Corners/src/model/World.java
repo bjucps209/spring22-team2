@@ -22,8 +22,9 @@ public class World {
 
     private World(){}
 
-    public static void reset() {
+    public static World reset() {
         world = new World();
+        return world;
     }
 
     public static World instance(){

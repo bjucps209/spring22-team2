@@ -12,10 +12,11 @@ import model.*;
 public class SerializeTest {
 
 
+
     @Test
     public void testSave_savesToFile()  {
-        World.instance().getCurrentLevel().getTotal
-        assertEquals(World.instance().displayCurrentEntities().size(), 7);
+        
+        assertEquals(100, World.instance().getPlayer().getCoords().getxCoord());
         Player extraPlayer = new Player(50, 50);
         World.instance().getCurrentLevel().placeEntity(0, 1, extraPlayer);
         
