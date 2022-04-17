@@ -24,7 +24,7 @@
 * Serialization is passing unit tests.
 
 ### Level Builder
-
+* Background work has been completed
 
 ## Known Issues
 * The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
