@@ -15,7 +15,7 @@ public class RangedWeapon extends Equipment{
     }
 
     @Override
-    public void performAction(){}
+    public void performAction(Entity user){}
 
 
     public int getRange() {

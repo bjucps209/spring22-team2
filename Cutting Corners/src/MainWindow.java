@@ -30,6 +30,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Coordinates;
+import model.PlayerState;
 import model.World;
 import java.awt.*;
 
@@ -393,7 +395,8 @@ public class MainWindow {
         gameWindow.Initialize();
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
-        Thread movingThread = new Thread(() -> gameWindow.updater());
+        gameWindow.updater();
+        Thread movingThread = new Thread(() -> gameWindow.playerUpdater());
         movingThread.start();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
@@ -409,6 +412,25 @@ public class MainWindow {
             @Override
             public void handle(KeyEvent event){
                 World.instance().getPlayer().removeKey(event.getCode());
+            }
+        });
+
+        scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            
+            @Override
+            public void handle(MouseEvent event){
+                int xCoord = (int) event.getX();
+                int yCoord = (int) event.getY();
+                World.instance().getPlayer().setMouseCoordinates(new Coordinates(xCoord, yCoord));
+            }
+        });
+
+        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            
+            @Override
+            public void handle(MouseEvent event){
+                Thread t = new Thread(() -> World.instance().getPlayer().performAttack());
+                t.start();
             }
         });
     }

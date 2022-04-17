@@ -9,17 +9,35 @@ public class Equipment extends Item {
     private Stats buffs;
 
     public Equipment(String name, int cooldown, EquipmentType type, Stats buffs){
-        super(name, cooldown);
+        super(name, cooldown, buffs);
         this.type = type;
-        this.buffs = buffs;
     }
 
-    public void applyBuffs(){}
+    public void applyBuffs(Entity user){
+        if (user instanceof Enemy){
+            Enemy enemy = (Enemy) user;
+            enemy.stats.ApplyBuffs(this);
+        }
+        else if (user instanceof Player){
+            Player player = (Player) user;
+            player.stats.ApplyBuffs(this);
+        }
+    }
+
+    public void unApplyBuffs(Entity user){
+        if (user instanceof Enemy){
+            Enemy enemy = (Enemy) user;
+            enemy.stats.unApplyBuffs(this);
+        }
+        else if (user instanceof Player){
+            Player player = (Player) user;
+            player.stats.unApplyBuffs(this);
+        }
+    }
 
     @Override
-    public void performAction() {
-        // TODO Auto-generated method stub
-        super.performAction();
+    public void performAction(Entity user) {
+        super.performAction(user);
     }
 
 
