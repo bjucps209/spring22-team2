@@ -15,27 +15,19 @@ public class SerializeTest {
 
     @Test
     public void testSave_savesToFile()  {
-        
         assertEquals(100, World.instance().getPlayer().getCoords().getxCoord());
         Player extraPlayer = new Player(50, 50);
         World.instance().getCurrentLevel().placeEntity(0, 1, extraPlayer);
-        
+        World.instance().setCurrentLevel(1);
         // World.reset();
-        // World.instance().setCurrentLevel(1);
-        // World.instance().setDifficulty(2);
-        // Player player = new Player(1, 2);
-        // player.setHealth(5);
-        // World.instance().getCampaign().add(new Level(1));
-        // World.instance().getCurrentLevel().placeEntity(1, 2, player);
-        // World.instance().save("SaveGame.dat");
+
+        World.instance().save("SaveGame.dat");
         
-        // try (DataInputStream reader = new DataInputStream(new FileInputStream("SaveGame.dat"))) {
-        //     assertEquals(World.instance().getCurrentLevel(), reader.readInt());
-        //     assertEquals(World.instance().getDifficultyLevel(), reader.readInt());
-        //     assertEquals(World.instance().getPlayer().getHealth(), reader.readInt());
-        // } catch (IOException e) {
-        //     fail();
-        // }
+        try (DataInputStream reader = new DataInputStream(new FileInputStream("SaveGame.dat"))) {
+            assertEquals(World.instance().getCurrentLevel(), reader.readInt());
+        } catch (IOException e) {
+            fail();
+        }
 
     }
 
