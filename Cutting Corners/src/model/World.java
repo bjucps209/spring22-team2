@@ -22,7 +22,7 @@ public class World {
 
     private World(){}
 
-    public static World reset() {
+    public static void reset() {
         world = new World();
     }
 
