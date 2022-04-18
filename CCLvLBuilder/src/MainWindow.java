@@ -1,13 +1,13 @@
-import java.util.ArrayList;
-
 import Model.*;
 import Model.Screen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import java.util.ArrayList;
 
 /* 
 GameWindow gameWindow = loader.getController();
@@ -27,8 +27,10 @@ public class MainWindow implements LevelObserver {
     //@FXML VBox vbWindow;
     @FXML HBox screenBox;
     @FXML Pane currentScreen;
+    @FXML Label lblCurScreenID;
     protected ScreenNavPanelState navPanelState = ScreenNavPanelState.MOVE;
 
+    //Nav Panel
     @FXML Button btnCreate; @FXML Button btnDelete;
     @FXML Button btnNorth; @FXML Button btnSouth;
     @FXML Button btnEast; @FXML Button btnWest;
@@ -36,9 +38,12 @@ public class MainWindow implements LevelObserver {
 
     @FXML
     void initialize() {
-        DataManager.DaMan().setMrObserver(this);
-        createScreen("0,0,0"); /// Try to manage this with DaMan ----------------
-        disableNavButtons(navPanelState);
+        DataManager.DaMan().setMrObserver(this);        
+        thePanes = new ArrayList<Pane>();
+        createScreen("0,0,0"); /// Try to manage this with DaMan ---------------- no
+        
+        disableNavButtons();
+        btnDelete.setDisable(true);
     }
 
     @FXML
@@ -52,57 +57,78 @@ public class MainWindow implements LevelObserver {
                 navPanelState = ScreenNavPanelState.MOVE; //Create is cancelled
                 btnCreate.setText("Create");
                 break;
+            case DELETE: //Deletion occurs
+                navPanelState = ScreenNavPanelState.MOVE;
+                DataManager.DaMan().deleteScreen();
+                btnCreate.setText("Create");
+                btnDelete.setText("Delete");
+                
         }
-        disableNavButtons(navPanelState);
+        disableNavButtons();
     }
 
     @FXML
     void onDeleteClicked(ActionEvent event) {
         switch (navPanelState) {
-            case MOVE:
-                return;
+            case MOVE, CREATE:
+                navPanelState = ScreenNavPanelState.DELETE;            
+                btnCreate.setText("Confirm");
+                btnDelete.setText("Cancel");
+                break;
+            case DELETE:
+                navPanelState = ScreenNavPanelState.MOVE;
+                btnCreate.setText("Create");
+                btnDelete.setText("Delete");
+                break;
         }
     }
 
     @FXML
     void onNavButtonClicked(ActionEvent event) {
         Direction[] dir = new Direction[] {Direction.North, Direction.South,Direction.East,Direction.West, Direction.Up, Direction.Down};
-        String[] buttonnames = new String[] {"North", "South", "East", "West", "Up", "Down"};
+        Button[] buttonnames = new Button[] {btnNorth, btnSouth, btnEast, btnWest, btnUp, btnDown};
         
+        var sourcebtn = (Button)event.getSource(); //Creates button reference        
         for (int i = 0; i < buttonnames.length; i++ ) {
-            var buttonton = (Button)event.getSource(); //Creates button reference
-            if (buttonton.getText().equals(buttonnames[0])) { //Chooses what to do depending on button
+            if (sourcebtn == buttonnames[i]) { //Chooses what to do depending on button
                 switch (navPanelState){ //Chooses action
                     case MOVE:
                         DataManager.DaMan().attemptMoveToScreen(dir[i]);
                         break;
                     case CREATE:
                         DataManager.DaMan().attemptCreateScreen(dir[i]);
+                        break;
+                    case DELETE:
+                        System.out.println("MWonNavButtonCLicked, DELETE section accessed (not good)");
                 }
             }
             } 
     }
 
-    public void disableNavButtons(ScreenNavPanelState latestState) {
+    public void disableNavButtons() {
         Screen[] surroundingScreens = DataManager.DaMan().getCurrentScreen().getAdjacentScreens();
         Button[] bleck = new Button[] {btnNorth, btnSouth, btnEast, btnWest, btnUp, btnDown};
-        switch (latestState) {
-            case CREATE:
-                DNavBtnExtended1(true, surroundingScreens, bleck);
-            case MOVE:
-                DNavBtnExtended1(false, surroundingScreens, bleck);
-        }
-    }
-    //Separated due to duplicate code
-    private void DNavBtnExtended1(boolean see4urself, Screen[] surScreen, Button[] blecc) {
-        for (int dir = 0; dir < blecc.length; dir++) {
-            if (surScreen[dir] == null) {
-                blecc[dir].setDisable(see4urself);
+        
+        for (int dir = 0; dir < bleck.length; dir++) {
+            if (surroundingScreens[dir] == null) {
+                bleck[dir].setDisable(navPanelState == ScreenNavPanelState.MOVE);
             } else {
-                blecc[dir].setDisable(!see4urself);
+                bleck[dir].setDisable(navPanelState == ScreenNavPanelState.CREATE);
             }
         }
+        btnDelete.setDisable(thePanes.size() == 1); //Disables delete button if only one screen
     }
+
+/*     //Separated due to duplicate code
+    private void DNavBtnExtended1(ScreenNavPanelState latestStateAgain, Screen[] surScreen, Button[] blecc) {
+        for (int dir = 0; dir < blecc.length; dir++) {
+            if (surScreen[dir] == null) {
+                blecc[dir].setDisable(latestStateAgain == ScreenNavPanelState.MOVE);
+            } else {
+                blecc[dir].setDisable(latestStateAgain == ScreenNavPanelState.CREATE);
+            }
+        }
+    } */
 
     //Observer functions
     @Override
@@ -114,10 +140,45 @@ public class MainWindow implements LevelObserver {
         currentScreen.setUserData(StrID);
         screenBox.getChildren().clear();
         screenBox.getChildren().add(currentScreen);
+        lblCurScreenID.setText(StrID);
+
+        //Switch the buttons back to normal depending on nav panel state
+        if (navPanelState == ScreenNavPanelState.CREATE) {
+            onCreateClicked(null);
+        }
+    }
+
+    @Override
+    public void movetoScreen(String StrID) { 
+        for (Pane aPane : thePanes) {
+            System.out.println(aPane.getUserData());
+            if (aPane.getUserData().equals(StrID)) {
+                currentScreen = aPane;
+                lblCurScreenID.setText(StrID);
+
+               
+            }
+        }
+        disableNavButtons();
     }
 
     public enum ScreenNavPanelState {
-        MOVE, CREATE
+        MOVE, CREATE, DELETE
+    }
+
+    @Override
+    public void deleteCurrentScreen(String oldStrID, String newStrID) {
+        Pane delPane = null;
+        for (Pane paaa : thePanes) {
+            if (paaa.getUserData().equals(oldStrID)) {
+                delPane = paaa;
+             } /*else if (paaa.getUserData().equals(newStrID)) {
+                currentScreen = paaa;
+            } */
+        }
+        movetoScreen(newStrID);
+        thePanes.remove(delPane);
+
     }
 
 }

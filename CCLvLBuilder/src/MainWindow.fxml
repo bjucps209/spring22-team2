@@ -7,7 +7,7 @@
     spacing="10" prefHeight="1000" prefWidth="1000">
     <Label text="Copyright 2022 No Touch Studios" />
     <HBox fx:id="screenBox"></HBox>
-
+    <Label fx:id="lblCurScreenID" />
     <VBox fx:id="vboxScreenNav">
         <HBox>
             <Button fx:id="btnCreate" text="Create" onAction="#onCreateClicked" />
