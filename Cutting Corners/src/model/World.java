@@ -20,6 +20,8 @@ public class World {
     private static World world;
     ScreenObserver observer;
 
+
+
     private World(){}
 
     public static void reset() {
@@ -149,7 +151,16 @@ public class World {
     }
 
 
-    
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+
+
+
+
+
     /**
      * opens a file and calls the serialize methods for each object to write to the file
      * @param filename - the file that will hold the saved game
