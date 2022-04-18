@@ -16,9 +16,9 @@ public class SerializeTest {
     @Test
     public void testSave_savesToFile() throws IOException  {
         World.reset();
-        // assertEquals(0, World.instance().currentLevel);
-        World.instance().setCurrentLevel(1);
-        // World.instance().setDifficulty(1);
+        assertEquals(0, World.instance().currentLevel);
+        World.instance().currentLevel = 1;
+        World.instance().setDifficulty(1);
 
         World.instance().save("savegame.dat");
         

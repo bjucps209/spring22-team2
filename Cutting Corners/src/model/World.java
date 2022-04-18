@@ -15,7 +15,7 @@ import javafx.util.Duration;
 
 public class World {
     private ArrayList<Level> campaign = new ArrayList<Level>();
-    int currentLevel = 0;
+    public int currentLevel = 0;
     private int difficulty;
     private static World world;
     ScreenObserver observer;
@@ -187,8 +187,10 @@ public class World {
 
         try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) 
         {   
+
             this.currentLevel = reader.readInt();
             this.difficulty = reader.readInt();
+
 
             this.getPlayer().deserialize(reader);
             
