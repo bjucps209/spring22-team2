@@ -24,7 +24,6 @@ public class World {
 
     public static World reset() {
         world = new World();
-        return world;
     }
 
     public static World instance(){
