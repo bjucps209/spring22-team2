@@ -44,14 +44,18 @@ public class UsableItem extends Item{
 
 
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF(this.getName());
+        file.writeInt(this.getCooldown());
+        buffs.serialize(file);
         file.writeInt(useCount);
         file.writeInt(duration);
-        buffs.serialize(file);
     }
 
     public void deserialize(DataInputStream file) throws IOException {
+        this.setName(file.readUTF());
+        this.setCooldown(file.readInt());
+        buffs.deserialize(file);
         this.useCount = file.readInt();
         this.duration = file.readInt();
-        buffs.deserialize(file);
     }
 }

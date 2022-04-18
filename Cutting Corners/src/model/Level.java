@@ -196,7 +196,7 @@ public class Level {
         for (int i = 0; i < numScreens; ++i) {
             screens.get(i).deserialize(file);
         }
-        //
+        // currentScreen
         currentRow = file.readInt();
         currentCol = file.readInt();
         currentLevel = file.readInt();

@@ -213,6 +213,7 @@ public class Player extends Entity {
 
     @Override
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeInt(this.getSize());
         this.getCoords().serialize(file);
         file.writeInt(inventory.size()); // how many items are in the inventory
         for (Item i : inventory) {
@@ -225,6 +226,7 @@ public class Player extends Entity {
     
     @Override
     public void deserialize(DataInputStream file) throws IOException {
+        this.setSize(file.readInt());
         this.getCoords().deserialize(file);
         int numItems = file.readInt();
         for (int i = 0; i < numItems; ++i) {

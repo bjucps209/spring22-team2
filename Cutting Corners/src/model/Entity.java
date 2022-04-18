@@ -20,6 +20,9 @@ public class Entity {
     public int getSize(){
         return size;
     }
+    public void setSize(int size) {
+        this.size = size;
+    }
 
     public int getX(){
         return coords.getxCoord();

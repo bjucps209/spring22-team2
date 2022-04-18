@@ -137,29 +137,24 @@ public class Enemy extends Entity{
     public void serialize(DataOutputStream file) throws IOException {
         this.getCoords().serialize(file);
         homeScreen.serialize(file);
-        file.writeUTF(cellWithin.toString());
         file.writeInt(vision);
         file.writeInt(sides);
         file.writeInt(super.getSize());
         stats.serialize(file);
         // direction ??
-        weapon.serialize(file);
-        file.writeUTF(state.toString());
-    
+        weapon.serialize(file);    
     }
  
     @Override
     public void deserialize(DataInputStream file) throws IOException {
         this.getCoords().deserialize(file);
         homeScreen.deserialize(file);
-        // cellWithin = file.readUTF(); add case statements
         this.vision = file.readInt();
         this.sides = file.readInt();
         this.size = file.readInt();
         this.stats.deserialize(file);
 
         this.weapon.deserialize(file);
-        // this.state = file.readUTF();
         
     }
 
