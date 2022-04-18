@@ -15,7 +15,7 @@ import javafx.util.Duration;
 
 public class World {
     private ArrayList<Level> campaign = new ArrayList<Level>();
-    private int currentLevel = 0;
+    int currentLevel = 0;
     private int difficulty;
     private static World world;
     ScreenObserver observer;
@@ -42,9 +42,6 @@ public class World {
 
     public void passLevel(){currentLevel++;}
 
-    public void setCurrentLevel(int currentLevel) {
-        this.currentLevel = currentLevel;
-    }
     public Level getCurrentLevel(){
         Level current = campaign.get(currentLevel);
         return current;
@@ -155,10 +152,12 @@ public class World {
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
-
-
-
-
+    public int getDifficulty() {
+        return difficulty;
+    }
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
 
 
     /**

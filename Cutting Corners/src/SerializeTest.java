@@ -23,8 +23,8 @@ public class SerializeTest {
         World.instance().save("savegame.dat");
         
         try (DataInputStream reader = new DataInputStream(new FileInputStream("SaveGame.dat"))) {
-            assertEquals(1, reader.readInt());
-            assertEquals(1, reader.readInt());
+            assertEquals(1, reader.readInt()); //currentLevel
+            assertEquals(1, reader.readInt()); //difficulty
         } catch (IOException e) {
             fail();
         }
