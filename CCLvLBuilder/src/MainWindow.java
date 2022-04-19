@@ -70,12 +70,12 @@ public class MainWindow implements LevelObserver {
     @FXML
     void onDeleteClicked(ActionEvent event) {
         switch (navPanelState) {
-            case MOVE, CREATE:
+            case MOVE, CREATE: //Enables deletion
                 navPanelState = ScreenNavPanelState.DELETE;            
                 btnCreate.setText("Confirm");
                 btnDelete.setText("Cancel");
                 break;
-            case DELETE:
+            case DELETE: //Cancels Deletion
                 navPanelState = ScreenNavPanelState.MOVE;
                 btnCreate.setText("Create");
                 btnDelete.setText("Delete");
@@ -105,6 +105,8 @@ public class MainWindow implements LevelObserver {
             } 
     }
 
+
+    //Disables appropriate navigation buttons (btnNorth, btnEast, btnDelete...)
     public void disableNavButtons() {
         Screen[] surroundingScreens = DataManager.DaMan().getCurrentScreen().getAdjacentScreens();
         Button[] bleck = new Button[] {btnNorth, btnSouth, btnEast, btnWest, btnUp, btnDown};
@@ -118,17 +120,6 @@ public class MainWindow implements LevelObserver {
         }
         btnDelete.setDisable(thePanes.size() == 1); //Disables delete button if only one screen
     }
-
-/*     //Separated due to duplicate code
-    private void DNavBtnExtended1(ScreenNavPanelState latestStateAgain, Screen[] surScreen, Button[] blecc) {
-        for (int dir = 0; dir < blecc.length; dir++) {
-            if (surScreen[dir] == null) {
-                blecc[dir].setDisable(latestStateAgain == ScreenNavPanelState.MOVE);
-            } else {
-                blecc[dir].setDisable(latestStateAgain == ScreenNavPanelState.CREATE);
-            }
-        }
-    } */
 
     //Observer functions
     @Override

@@ -15,6 +15,12 @@
 
 >>>>>>> 1a93a410faade790e411ffdd147bb5bb882092e9
 
+9:00 am - 9:25 am (Something idk)
+++30-40 min (Screen flow)
+
+4/15/22
+++30 min ish (more Screen flow)
+
 Some questions to ask:
     Does importing an entire package (ie javafx.scene.layout.*) actually
     negatively impact anything.
