@@ -3,11 +3,37 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:controller="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
+<HBox fx:controller="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
     spacing="10" prefHeight="1000" prefWidth="1000">
-    <Label text="Copyright 2022 No Touch Studios" />
-    <HBox fx:id="screenBox"></HBox>
-    <Label fx:id="lblCurScreenID" />
+    
+    <VBox>
+        <HBox>
+            <Button text="Prev" />
+            <Label text="List name here" />
+            <Button text="Next" />
+        </HBox>
+        <HBox>
+            <Button text="Prev" />
+            <Label text="blah of blah" />
+            <Button text="Next" />
+        </HBox>
+        <VBox>
+            <Button text="Dumby object" />
+        </VBox>
+    </VBox>
+
+    <VBox>
+        <HBox>
+            <Label text = "Screen ID: " />
+            <Label fx:id="lblCurScreenID" />
+            <Label text = "                Level Name Here                    " />
+            <Label text="Copyright 2022 No Touch Studios" />
+        </HBox>
+        <HBox fx:id="screenBox"></HBox>
+        <HBox> <Label text="Randomized stuff here" /> </HBox>
+    </VBox>
+    
+
     <VBox fx:id="vboxScreenNav">
         <HBox>
             <Button fx:id="btnCreate" text="Create" onAction="#onCreateClicked" />
@@ -26,4 +52,4 @@
             <Button fx:id="btnEast" onAction="#onNavButtonClicked" text="East" />
         </HBox> 
     </VBox>
-</VBox>
+</HBox>
