@@ -53,7 +53,6 @@ public class DataManager {
     }
 
     //Attempts to create a screen from the current screen depending on the given direction
-    //TODO: not done
     public void attemptCreateScreen(Direction direction) {
         int[] tempID = getAdjacentID(direction, currentScreen.getIDSeries());
         System.out.println(Screen.ConvertToStrID(tempID));//________________
@@ -84,17 +83,17 @@ public class DataManager {
         if (mrObserver != null) { mrObserver.createScreen(moveID); }
     }
 
-    //TODO: idk I forgot
     public void attemptMoveToScreen(Direction direction) {
         Screen nextScreen = currentScreen.getAdjacentScreen(direction);
         if (nextScreen != null) {
             currentScreen = nextScreen;
-            mrObserver.movetoScreen(currentScreen.getStrID());
+            if (mrObserver != null) { mrObserver.movetoScreen(currentScreen.getStrID()); }
             return;
         }
 
     }
-
+    
+    //Deletes the current screen and moves to an adjacent one
     public void deleteScreen() {
         var adjscrs = currentScreen.getAdjacentScreens();
         String oldScrStrID = currentScreen.getStrID();
@@ -109,7 +108,11 @@ public class DataManager {
                 }
             }
         }
-        currentScreen = newScreen;
+        if (newScreen != null) {
+            currentScreen = newScreen;
+        } else {
+            currentScreen = Screens.get(0);
+        }
         if (mrObserver != null) { mrObserver.deleteCurrentScreen(oldScrStrID, currentScreen.getStrID());}
     }
 

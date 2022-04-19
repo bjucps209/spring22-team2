@@ -20,6 +20,8 @@ public class MainWindow implements LevelObserver {
     //Stuff for window dimensions
     protected Stage theStage; //don't ask
     protected Vector windowSize;
+    protected static final double screensizescalar = 60;
+    protected static double screenwidth = screensizescalar * 16; protected static double screenheight = screensizescalar * 9;
 
     //Panes
     @FXML ArrayList<Pane> thePanes;
@@ -126,7 +128,8 @@ public class MainWindow implements LevelObserver {
     public void createScreen(String StrID) {
         currentScreen = new Pane();
         thePanes.add(currentScreen);
-        currentScreen.setPrefSize(500, 500); /// Needs attention -----------------
+        currentScreen.setMinSize(16 * screensizescalar, 9 * screensizescalar); /// Needs attention -----------------
+        currentScreen.setMaxSize(16 * screensizescalar, 9 * screensizescalar);
         currentScreen.setStyle("-fx-background-color: lightgray");
         currentScreen.setUserData(StrID);
         screenBox.getChildren().clear();

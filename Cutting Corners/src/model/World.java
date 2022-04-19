@@ -15,10 +15,12 @@ import javafx.util.Duration;
 
 public class World {
     private ArrayList<Level> campaign = new ArrayList<Level>();
-    private int currentLevel = 0;
+    public int currentLevel = 0;
     private int difficulty;
     private static World world;
     ScreenObserver observer;
+
+
 
     private World(){}
 
@@ -40,9 +42,6 @@ public class World {
 
     public void passLevel(){currentLevel++;}
 
-    public void setCurrentLevel(int currentLevel) {
-        this.currentLevel = currentLevel;
-    }
     public Level getCurrentLevel(){
         Level current = campaign.get(currentLevel);
         return current;
@@ -149,7 +148,18 @@ public class World {
     }
 
 
-    
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+    public int getDifficulty() {
+        return difficulty;
+    }
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
+
+
     /**
      * opens a file and calls the serialize methods for each object to write to the file
      * @param filename - the file that will hold the saved game
@@ -177,8 +187,10 @@ public class World {
 
         try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) 
         {   
+
             this.currentLevel = reader.readInt();
             this.difficulty = reader.readInt();
+
 
             this.getPlayer().deserialize(reader);
             

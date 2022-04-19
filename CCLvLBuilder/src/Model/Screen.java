@@ -40,8 +40,8 @@ public class Screen {
         return IDSeries;
     }
 
-    //public void setAdjacentScreen(int side, int adjacentid) {return;}
-
+    /// Adjacent Screen manipulation
+    //
     public Screen[] getAdjacentScreens(){
         return adjacentScreens;
     }
@@ -73,6 +73,8 @@ public class Screen {
         }
     }
 
+    /// Object Stuff
+    //
     public ArrayList<LvLObject> getObjects() {
         return objectList;
     }

@@ -1,7 +1,6 @@
 ///8:31 pm - 10:27 pm -- 30 min
 
 4/14/22
-<<<<<<< HEAD
 9:00 am - 9:25 am
 ++30-40 min
 =======
@@ -11,9 +10,8 @@
 4/15/22
 ++30 min ish (more Screen flow)
 
-
-
->>>>>>> 1a93a410faade790e411ffdd147bb5bb882092e9
+4/18/22
+6:30 pm - 8:01 pm
 
 9:00 am - 9:25 am (Something idk)
 ++30-40 min (Screen flow)
