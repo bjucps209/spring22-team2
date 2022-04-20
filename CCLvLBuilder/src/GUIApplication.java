@@ -21,6 +21,10 @@ public class GUIApplication extends Application{
         stage.setTitle("Shape Slaughter World Builder Copyright"); // Title of main window
         stage.show();
 
+        final double blah = 1.2;
+        stage.setMinHeight(720 * blah); stage.setMinWidth(1280 * blah); stage.setMaxHeight(720 * blah); stage.setMaxWidth(1280 * blah);
+        stage.setAlwaysOnTop(true);
+
     }
 
 }
