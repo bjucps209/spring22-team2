@@ -24,7 +24,7 @@ public class GUIApplication extends Application{
         var scene = new Scene(loader.load());
         
         stage.setScene(scene);
-        stage.setTitle("Cutting Corners Alpha"); // Title of main window
+        stage.setTitle("Cutting Corners Beta"); // Title of main window
         stage.getIcons().add(new Image("media/windowicon.png"));
         stage.show();
     }
