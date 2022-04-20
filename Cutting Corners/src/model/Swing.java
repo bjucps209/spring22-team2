@@ -24,8 +24,8 @@ public class Swing extends Entity{
         super(swinger.getX(), swinger.getY(), image, 0);
         this.damage = damage;
         this.radius = radius;
-        this.arc = arc;
-        this.direction = direction * 180 / Math.PI;
+        this.arc = 100;
+        this.direction = direction;
         this.speed = speed;
         directionChange = arc * speed / 50;
         this.swinger = swinger;
@@ -33,12 +33,13 @@ public class Swing extends Entity{
 
     @Override
     public void performMovement(){
-        direction -= directionChange;
-        arc -= directionChange;
-        // super.coords.setxCoord(swinger.getX());
-        // super.coords.setyCoord(swinger.getY());
-        super.getCoords().setxCoord((int) (super.getX() - speed * Math.cos(direction * Math.PI / 180)));
-        super.getCoords().setyCoord((int) (super.getY() - speed * Math.sin(direction * Math.PI / 180)));
+        // direction -= directionChange;
+        // arc -= directionChange;
+        // super.getCoords().setxCoord(swinger.getX());
+        // super.getCoords().setyCoord(swinger.getY());
+        super.getCoords().setxCoord((int) (swinger.getX() + radius * Math.cos(direction)));
+        super.getCoords().setyCoord((int) (swinger.getY() - radius * Math.sin(direction)));
+        arc--;
         
         if (arc <= 0){super.performDie();}
         checkIfHit();
@@ -46,13 +47,14 @@ public class Swing extends Entity{
     }
 
     public void checkIfHit(){
-        double slope = direction / 180 * Math.PI;
+        double slope = direction;
+
         double yIntercept = super.getY() - (slope * super.getX());
         
         for (Entity entity: World.instance().displayCurrentEntities()){
-            int yValue = entity.getY();
-            int xValue = entity.getX();
             int size = entity.getSize();
+            int yValue = entity.getY() - size / 2;
+            int xValue = entity.getX() - size / 2;
 
             double aValue = (slope * slope) + 1;
             double bValue = 2 * (((yIntercept - yValue) * slope) - xValue);
@@ -60,14 +62,15 @@ public class Swing extends Entity{
             (size * size);
 
             double determinant = (bValue * bValue) - (4 * aValue * cValue);
-
-            if (determinant < 0){
-                if (! hitEntities.contains(entity) && entity != swinger){
-                    entity.takeDamage(damage);
-                    hitEntities.add(entity);
-                }
-                return;
-            }
+            // if (determinant < 0){
+            //     if (! hitEntities.contains(entity) && entity != swinger){
+            //         entity.takeDamage(damage);
+            //         hitEntities.add(entity);
+            //     }
+            //     return;
+            // }
+            System.out.println(determinant);
+            if (determinant < 0){return;}
 
             double x1 = (Math.sqrt(determinant) - bValue) / (2 * aValue) - super.getX();
             double x2 = (Math.sqrt(determinant) + bValue) / (-2 * aValue) - super.getX();
