@@ -29,7 +29,10 @@ public class Enemy extends Entity{
         cellWithin = cellWithin(xCoord, yCoord);
         //this.coords = new Corrdinates(WIDTH, HEIGHT);
     }
-
+    public Stats getStats()
+    {
+        return stats;
+    }
     public void generateEnemy(int xCoord, int yCoord){
         type = new Triangle(super.getSize(), xCoord, yCoord, homeScreen);
         // switch (sides) {

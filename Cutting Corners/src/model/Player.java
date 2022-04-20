@@ -24,6 +24,7 @@ public class Player extends Entity {
     Coordinates mouseCoordinates = new Coordinates(0, 0);
     PlayerState state = PlayerState.standing;
     int attackCount = 50;
+    ArrayList<Enemy> enemies;
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -56,6 +57,10 @@ public class Player extends Entity {
         unApplyEquipmentBuffs();
         this.armor = armor;
         applyEquipmentBuffs();
+    }
+    public void setEnemies(ArrayList<Enemy> enemies)
+    {
+        this.enemies=enemies;
     }
 
     public void setMouseCoordinates(Coordinates coords){
@@ -118,6 +123,14 @@ public class Player extends Entity {
     public void KeyPressed(int index){
         Direction direction = CheckIfOutOfBounds();
         switch (keys.get(index)){
+            default:
+                if(state!=PlayerState.standing)
+                {
+                    if(state!=PlayerState.walking)
+                    {
+                        return;
+                    }
+                }
             case W: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
             if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
@@ -142,7 +155,6 @@ public class Player extends Entity {
             if (super.getCoords().getxCoord() > 1200){super.getCoords().subXCoord(stats.getSpeed());}
                 break;
             }
-            default: return;
         }
     }
 
@@ -178,11 +190,42 @@ public class Player extends Entity {
     @Override
     public void performAttack(){
         if (equippedItem instanceof MeleeWeapon){
-            // AudioClip audio = new AudioClip("media/Sounds/Sound Effects/SwordStrike.wav");
-            // audio.play();
+            // AudioClip SWORD_ATTACK = new AudioClip("media/Sounds/Sound effects/mixkit-dagger-woosh-1487-(Sword Attack).wav");
+            // SWORD_ATTACK.play();
             MeleeWeapon weapon = (MeleeWeapon) equippedItem;
             weapon.setDamage(stats.getStrength());
             weapon.setSpeed((int) stats.getSpeed() / 2);
+            for(int i=0;i<enemies.size();i++)
+            {
+                if(attackCount==50)
+                {
+                    if(getMousDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
+                    {
+                        enemies.get(i).takeDamage(weapon.getDamage());
+                        System.out.println("Hit!");
+                        continue;
+                    }
+                    else if(getMousDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
+                    {
+                        enemies.get(i).takeDamage(weapon.getDamage());
+                        System.out.println("Hit!");
+                        continue;
+                    }
+                    if(getMousDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
+                    {
+                        enemies.get(i).takeDamage(weapon.getDamage());
+                        System.out.println("Hit!");
+                        continue;
+                    }
+                    else if(getMousDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
+                    {
+                        enemies.get(i).takeDamage(weapon.getDamage());
+                        System.out.println("Hit!");
+                        continue;
+                    }
+                }
+            }
+            
 
             System.out.println(mouseCoordinates.getxCoord() - super.getX());
             System.out.println(mouseCoordinates.getyCoord() - super.getY());
@@ -206,9 +249,34 @@ public class Player extends Entity {
 
             weapon.setDirection(slope);
         }
-        if (attackCount == 50){equippedItem.performAction(this);}
+        // if (attackCount == 50){equippedItem.performAction(this);}
         attackCount--;
         if (attackCount > 0){attackCount = 50;}
+    }
+    public Direction getMousDirection()
+    {
+        if(Math.sqrt(Math.pow(mouseCoordinates.getxCoord(), 2)+Math.pow(super.getX(), 2))>Math.sqrt(Math.pow(mouseCoordinates.getxCoord(), 2)+Math.pow(super.getX(), 2)))
+        {
+            if(super.getX()-mouseCoordinates.getxCoord()>0)
+            {
+                return Direction.right;
+            }
+            else
+            {
+                return Direction.left;
+            }
+        }
+        else
+        {
+            if(super.getY()-mouseCoordinates.getyCoord()>0)
+            {
+                return Direction.down;
+            }
+            else
+            {
+                return Direction.up;
+            }
+        }
     }
 
     @Override

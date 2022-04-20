@@ -394,8 +394,9 @@ public class MainWindow {
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
         gameWindow.updater();
-        Thread movingThread = new Thread(() -> gameWindow.playerUpdater());
-        movingThread.start();
+        // Thread movingThread = new Thread(() -> gameWindow.playerUpdater());
+        // movingThread.start();
+        gameWindow.playerUpdater();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
             @Override
@@ -427,8 +428,10 @@ public class MainWindow {
             
             @Override
             public void handle(MouseEvent event){
-                Thread t = new Thread(() -> World.instance().getPlayer().performAttack());
-                t.start();
+                // Thread t = new Thread(() -> {World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());World.instance().getPlayer().performAttack();});
+                // t.start();
+                World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
+                World.instance().getPlayer().performAttack();
             }
         });
     }
