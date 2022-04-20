@@ -14,16 +14,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.media.AudioClip;
 
 public class Player extends Entity {
-    ArrayList<Item> inventory;
-    Image weaponImage = new Image ("media/Player/swordwalk.gif");
-    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 250, 120, weaponImage);
-    Equipment armor;
-    Stats stats = new Stats(2, 5, 4);
-    static Image playerImage = new Image("media/Player/Cirkyle v1.png");
-    ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
-    Coordinates mouseCoordinates = new Coordinates(0, 0);
-    PlayerState state = PlayerState.standing;
-    int attackCount = 50;
+    private ArrayList<Item> inventory;
+    private Image weaponImage = new Image ("media/Player/swordwalk.gif");
+    private Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 250, 120, weaponImage);
+    private Equipment armor;
+    private Stats stats = new Stats(2, 5, 4);
+    private static Image playerImage = new Image("media/Player/Cirkyle v1.png");
+    private ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
+    private Coordinates mouseCoordinates = new Coordinates(0, 0);
+    private PlayerState state = PlayerState.standing;
+    private int attackCount = 50;
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -40,10 +40,6 @@ public class Player extends Entity {
 
     public ArrayList<KeyCode> getKeys(){
         return keys;
-    }
-
-    public void setState(PlayerState state){
-        this.state = state;
     }
 
     public void setEquippedItem(Item equippedItem){
@@ -211,29 +207,106 @@ public class Player extends Entity {
         if (attackCount > 0){attackCount = 50;}
     }
 
-    @Override
+
+    // Getters and Setters -----------------------
+  
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(ArrayList<Item> inventory) {
+        this.inventory = inventory;
+    }
+
+    public Image getWeaponImage() {
+        return weaponImage;
+    }
+
+    public void setWeaponImage(Image weaponImage) {
+        this.weaponImage = weaponImage;
+    }
+
+    public Item getEquippedItem() {
+        return equippedItem;
+    }
+
+    public Equipment getArmor() {
+        return armor;
+    }
+
+    public void setArmor(Equipment armor) {
+        this.armor = armor;
+    }
+
+    public Stats getStats() {
+        return stats;
+    }
+
+    public void setStats(Stats stats) {
+        this.stats = stats;
+    }
+
+    public static Image getPlayerImage() {
+        return playerImage;
+    }
+
+    public static void setPlayerImage(Image playerImage) {
+        Player.playerImage = playerImage;
+    }
+
+    public void setKeys(ArrayList<KeyCode> keys) {
+        this.keys = keys;
+    }
+
+    public Coordinates getMouseCoordinates() {
+        return mouseCoordinates;
+    }
+
+    public PlayerState getState() {
+        return state;
+    }
+    
+    public void setState(PlayerState state){
+        this.state = state;
+    }
+
+    public int getAttackCount() {
+        return attackCount;
+    }
+
+    public void setAttackCount(int attackCount) {
+        this.attackCount = attackCount;
+    }    
+
+
+
+
     public void serialize(DataOutputStream file) throws IOException {
-        file.writeInt(this.getSize());
-        this.getCoords().serialize(file);
+        file.writeInt(this.getX());
+        file.writeInt(this.getY());
         file.writeInt(inventory.size()); // how many items are in the inventory
         for (Item i : inventory) {
             i.serialize(file);
         }
-        equippedItem.serialize(file);
+        // equippedItem.serialize(file);
         armor.serialize(file);
         stats.serialize(file);
     }
-    
-    @Override
-    public void deserialize(DataInputStream file) throws IOException {
-        this.setSize(file.readInt());
-        this.getCoords().deserialize(file);
+
+    public static Player deserialize(DataInputStream file) throws IOException {
+        // create a Player and return it with variables from the file
+        int x = file.readInt();
+        int y = file.readInt();
+        Player p = new Player(x, y);
+
         int numItems = file.readInt();
         for (int i = 0; i < numItems; ++i) {
-            inventory.get(i).deserialize(file);
+            p.getInventory().add(Item.deserialize(file));
         }
-        equippedItem.deserialize(file);
-        armor.deserialize(file);
-        stats.deserialize(file);
+        // p.setEquippedItem(Item.deserialize(file);
+        p.setArmor(Armor.deserialize(file));
+        p.setStats(Stats.deserialize(file);
+
+        return p;
     }
 }

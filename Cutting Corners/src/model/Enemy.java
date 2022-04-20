@@ -7,16 +7,16 @@ import java.io.IOException;
 import javafx.scene.image.Image;
 
 public class Enemy extends Entity{
-    Screen homeScreen;
-    Cell cellWithin;
-    int vision;
-    int sides;
-    Stats stats;
-    Enemy type;
-    Direction direction = Direction.left;
-    Equipment weapon;
-    EnemyState state = EnemyState.patrolling;
-    int size;
+    private Screen homeScreen;
+    private Cell cellWithin;
+    private int vision;
+    private int sides;
+    private Stats stats;
+    private Enemy type;
+    private Direction direction = Direction.left;
+    private Equipment weapon;
+    private EnemyState state = EnemyState.patrolling;
+    private int size;
 
     public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
         super(xCoord, yCoord, image, size);
@@ -132,10 +132,95 @@ public class Enemy extends Entity{
     }
 
 
+    
+    // Getters and Setters ---------------
 
-    @Override
+    public Screen getHomeScreen() {
+        return homeScreen;
+    }
+
+    public void setHomeScreen(Screen homeScreen) {
+        this.homeScreen = homeScreen;
+    }
+
+    public Cell getCellWithin() {
+        return cellWithin;
+    }
+
+    public void setCellWithin(Cell cellWithin) {
+        this.cellWithin = cellWithin;
+    }
+
+    public int getVision() {
+        return vision;
+    }
+
+    public void setVision(int vision) {
+        this.vision = vision;
+    }
+
+    public int getSides() {
+        return sides;
+    }
+
+    public void setSides(int sides) {
+        this.sides = sides;
+    }
+
+    public Stats getStats() {
+        return stats;
+    }
+
+    public void setStats(Stats stats) {
+        this.stats = stats;
+    }
+
+    public Enemy getType() {
+        return type;
+    }
+
+    public void setType(Enemy type) {
+        this.type = type;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public Equipment getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Equipment weapon) {
+        this.weapon = weapon;
+    }
+
+    public EnemyState getState() {
+        return state;
+    }
+
+    public void setState(EnemyState state) {
+        this.state = state;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+    
+
+
+
     public void serialize(DataOutputStream file) throws IOException {
-        this.getCoords().serialize(file);
+        file.writeInt(this.getX());
+        file.writeInt(this.getY());
         homeScreen.serialize(file);
         file.writeInt(vision);
         file.writeInt(sides);
@@ -144,18 +229,20 @@ public class Enemy extends Entity{
         // direction ??
         weapon.serialize(file);    
     }
- 
-    @Override
-    public void deserialize(DataInputStream file) throws IOException {
-        this.getCoords().deserialize(file);
-        homeScreen.deserialize(file);
-        this.vision = file.readInt();
-        this.sides = file.readInt();
-        this.size = file.readInt();
-        this.stats.deserialize(file);
 
-        this.weapon.deserialize(file);
-        
+    public static Enemy deserialize(DataInputStream file) throws IOException {
+        int sides = file.readInt();
+        int size = file.readInt();
+        int x = file.readInt();
+        int y = file.readInt();
+        Screen homeScreen = Screen.deserialize(file);
+        int vision = file.readInt();
+        Equipment weapon = Equipment.deserialize(file);
+        Stats stats = Stats.deserialize(file);
+
+
+        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats);
+        return enemy;
     }
 
     

@@ -101,7 +101,7 @@ public class Screen {
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(entities.size());
         for (Entity e : entities) {
-            e.serialize(file);
+            // e.serialize(file);
         }
         for (int row = 0; row < 7; ++row) {
             for (int col = 0; col < 13; ++col) {
@@ -114,7 +114,7 @@ public class Screen {
     public void deserialize(DataInputStream file) throws IOException {
         int numEntities = file.readInt();
         for (int i = 0; i < numEntities; ++i) {
-            entities.get(i).deserialize(file);
+            // entities.get(i).deserialize(file);
         }
         for (int row = 0; row < 7; ++row) {
             for (int col = 0; col < 13; ++col) {

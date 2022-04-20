@@ -16,22 +16,22 @@ public class Equipment extends Item {
     public void applyBuffs(Entity user){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
-            enemy.stats.ApplyBuffs(this);
+            enemy.getStats().ApplyBuffs(this);
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            player.stats.ApplyBuffs(this);
+            player.getStats().ApplyBuffs(this);
         }
     }
 
     public void unApplyBuffs(Entity user){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
-            enemy.stats.unApplyBuffs(this);
+            enemy.getStats().unApplyBuffs(this);
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            player.stats.unApplyBuffs(this);
+            player.getStats().unApplyBuffs(this);
         }
     }
 
@@ -60,8 +60,10 @@ public class Equipment extends Item {
 
 
 
+
     @Override
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Equipment"); // type of item
         file.writeUTF(this.getName());
         file.writeInt(this.getCooldown());
         this.getBuffs().serialize(file);
@@ -69,22 +71,25 @@ public class Equipment extends Item {
 
     }
 
-    @Override
-    public void deserialize(DataInputStream file) throws IOException {
-        this.setName(file.readUTF());
-        this.setCooldown(file.readInt());
-        this.getBuffs().deserialize(file);
+    public static Equipment deserialize(DataInputStream file) throws IOException {
+        String name = file.readUTF();
+        int cooldown = file.readInt();
+        Stats stats = Stats.deserialize(file);
         String equipmentType = file.readUTF();
+        EquipmentType type = EquipmentType.MELEE_WEAPON;
         switch (equipmentType) {
             case "RANGED_WEAPON": {
-                this.type = EquipmentType.RANGED_WEAPON;
+                type = EquipmentType.RANGED_WEAPON;
             }
             case "MELEE_WEAPON": {
-                this.type = EquipmentType.MELEE_WEAPON;
+                type = EquipmentType.MELEE_WEAPON;
             }
             case "ARMOR": {
-                this.type = EquipmentType.ARMOR;
+                type = EquipmentType.ARMOR;
             }
         }
+
+        Equipment e = new Equipment(name, cooldown, type, stats);
+        return e;
     }
 }

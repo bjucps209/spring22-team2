@@ -169,9 +169,6 @@ public class World {
         {  // SaveGame.dat
             writer.writeInt(this.currentLevel);
             writer.writeInt(this.difficulty);
-
-            this.getPlayer().serialize(writer);
-
             getCurrentLevel().serialize(writer);
 
             
@@ -190,10 +187,6 @@ public class World {
 
             this.currentLevel = reader.readInt();
             this.difficulty = reader.readInt();
-
-
-            this.getPlayer().deserialize(reader);
-            
             getCurrentLevel().deserialize(reader);
 
         }
