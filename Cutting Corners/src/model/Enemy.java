@@ -170,10 +170,6 @@ public class Enemy extends Entity{
         this.sides = sides;
     }
 
-    public Stats getStats() {
-        return stats;
-    }
-
     public void setStats(Stats stats) {
         this.stats = stats;
     }
