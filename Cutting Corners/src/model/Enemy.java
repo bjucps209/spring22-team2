@@ -219,6 +219,7 @@ public class Enemy extends Entity{
 
 
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Enemy");
         file.writeInt(this.getX());
         file.writeInt(this.getY());
         homeScreen.serialize(file);

@@ -128,6 +128,9 @@ public class Level {
         return group;
     }
 
+
+    // Getters and Setters ----------------------------
+    
     public ArrayList<Screen> getScreens() {
         return screens;
     }

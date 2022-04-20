@@ -41,6 +41,9 @@ public class Equipment extends Item {
     }
 
 
+
+    // Getters and Setters ----------------------
+
     public EquipmentType getType() {
         return type;
     }
@@ -68,7 +71,6 @@ public class Equipment extends Item {
         file.writeInt(this.getCooldown());
         this.getBuffs().serialize(file);
         file.writeUTF(type.toString()); //save the type of equipment as string
-
     }
 
     public static Equipment deserialize(DataInputStream file) throws IOException {

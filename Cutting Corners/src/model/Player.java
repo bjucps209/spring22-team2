@@ -282,6 +282,7 @@ public class Player extends Entity {
 
 
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Player");
         file.writeInt(this.getX());
         file.writeInt(this.getY());
         file.writeInt(inventory.size()); // how many items are in the inventory
@@ -297,16 +298,17 @@ public class Player extends Entity {
         // create a Player and return it with variables from the file
         int x = file.readInt();
         int y = file.readInt();
-        Player p = new Player(x, y);
+        Player player = new Player(x, y);
 
         int numItems = file.readInt();
         for (int i = 0; i < numItems; ++i) {
-            p.getInventory().add(Item.deserialize(file));
+            Item item = Item.deserialize(file);
+            player.getInventory().add(item);
         }
         // p.setEquippedItem(Item.deserialize(file);
-        p.setArmor(Armor.deserialize(file));
-        p.setStats(Stats.deserialize(file);
+        player.setArmor(Armor.deserialize(file));
+        player.setStats(Stats.deserialize(file));
 
-        return p;
+        return player;
     }
 }
