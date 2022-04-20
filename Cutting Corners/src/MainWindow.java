@@ -429,8 +429,7 @@ public class MainWindow {
             
             @Override
             public void handle(MouseEvent event){
-                Thread t = new Thread(() -> World.instance().getPlayer().performAttack());
-                t.start();
+                World.instance().getPlayer().setState(PlayerState.attacking);
             }
         });
     }

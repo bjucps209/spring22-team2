@@ -95,6 +95,7 @@ public class Player extends Entity {
 
         switch (state) {
             case standing: {
+
                 if (keys.size() > 0){state = PlayerState.walking;}
                 break;
             }
@@ -105,9 +106,22 @@ public class Player extends Entity {
                 break;
             }
             case attacking: {
-                if (attackCount == 0){state = PlayerState.standing;}
+                if (attackCount <50){
+                    state = PlayerState.resting; 
+                    break;
+                }
+                Thread attack = new Thread(() -> performAttack());
+                attack.start();
+                state = PlayerState.resting;
             }
-            
+            case resting:{
+                attackCount--;
+                if (attackCount == 0){
+                    state = PlayerState.standing; 
+                    attackCount = 50;
+                }
+                break;
+            }
         }
     }
 
@@ -183,32 +197,32 @@ public class Player extends Entity {
             MeleeWeapon weapon = (MeleeWeapon) equippedItem;
             weapon.setDamage(stats.getStrength());
             weapon.setSpeed((int) stats.getSpeed() / 2);
-
-            System.out.println(mouseCoordinates.getxCoord() - super.getX());
-            System.out.println(mouseCoordinates.getyCoord() - super.getY());
             
-            double slope = Math.atan((mouseCoordinates.getyCoord() - super.getY()) /
-                               (mouseCoordinates.getxCoord() - super.getX()));
+            double slope = -1 * (mouseCoordinates.getyCoord() - super.getY() - 100) /
+                           (mouseCoordinates.getxCoord() - super.getX() - 100);
 
-            if (mouseCoordinates.getyCoord() - super.getY() < 0 && 
-                mouseCoordinates.getxCoord() - super.getX() > 0){
-                    slope *= -1;
+
+            double direction = Math.atan(slope);
+
+            if (mouseCoordinates.getyCoord() - super.getY() > 100 && 
+                mouseCoordinates.getxCoord() - super.getX() > 100){
+                    direction += 2 * Math.PI;
                 }
 
-                if (mouseCoordinates.getyCoord() - super.getY() < 0 && 
-                mouseCoordinates.getxCoord() - super.getX() < 0){
-                    slope += Math.PI;
-                }
+            else if (mouseCoordinates.getyCoord() - super.getY() > 100 && 
+                mouseCoordinates.getxCoord() - super.getX() < 100){
+                    direction += Math.PI;
+            }
 
-                
+            else if (mouseCoordinates.getyCoord() - super.getY() < 100 && 
+                mouseCoordinates.getxCoord() - super.getX() < 100){
+                    direction += Math.PI;
+            }
 
-            System.out.print(slope);
-
-            weapon.setDirection(slope);
+            weapon.setDirection(direction);
         }
-        if (attackCount == 50){equippedItem.performAction(this);}
-        attackCount--;
-        if (attackCount > 0){attackCount = 50;}
+        
+        equippedItem.performAction(this);
     }
 
     @Override
