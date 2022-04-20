@@ -9,9 +9,10 @@ import java.util.ArrayList;
 
 public class DataManager {
     LevelObserver mrObserver; //LevelObserver
+    private Level theLevel;
 
     private Screen currentScreen;
-    private ArrayList<Screen> Screens;
+    //private ArrayList<Screen> Screens;
 
     public void save(String pathway, String fileName) { return; } //For show
     public void load(String pathway, String fileName) { return; } //Or is it? :O
@@ -59,7 +60,7 @@ public class DataManager {
 
         //Check if Screen already exists (Won't need later) -----------------------------------------------------
         String moveID = Screen.ConvertToStrID(tempID[0], tempID[1], tempID[2]);
-        for (Screen aScreen : Screens) {
+        for (Screen aScreen : theLevel.getScreens()) {
             if (moveID.equals(aScreen.getStrID())) {
                 return;
             }
@@ -71,13 +72,13 @@ public class DataManager {
         Direction[] opposingDir = new Direction[] {Direction.South, Direction.North, Direction.West, Direction.East, Direction.Down, Direction.Up};
         for (int dir = 0; dir < directions.length; dir++) {
             var idCan =  Screen.ConvertToStrID(getAdjacentID(directions[dir], tempID));
-            var screenCan = Screens.stream().filter((eh) -> eh.getStrID().equals(idCan)).findFirst();
+            var screenCan = theLevel.getScreens().stream().filter((eh) -> eh.getStrID().equals(idCan)).findFirst();
             if (screenCan.isPresent()){
                 newScreen.setAdjacentScreen(directions[dir], screenCan.get());
                 screenCan.get().setAdjacentScreen(opposingDir[dir], newScreen);
             }
         }
-        Screens.add(newScreen);
+        theLevel.getScreens().add(newScreen);
         currentScreen = newScreen;  
 
         if (mrObserver != null) { mrObserver.createScreen(moveID); }
@@ -98,7 +99,7 @@ public class DataManager {
         var adjscrs = currentScreen.getAdjacentScreens();
         String oldScrStrID = currentScreen.getStrID();
         Screen newScreen = null;
-        Screens.remove(currentScreen); //Removes screen from scrList
+        theLevel.getScreens().remove(currentScreen); //Removes screen from scrList
 
         for (int i = 0; i < adjscrs.length; i++) {
             if (adjscrs[i] != null) {
@@ -111,7 +112,7 @@ public class DataManager {
         if (newScreen != null) {
             currentScreen = newScreen;
         } else {
-            currentScreen = Screens.get(0);
+            currentScreen = theLevel.getScreens().get(0);
         }
         if (mrObserver != null) { mrObserver.deleteCurrentScreen(oldScrStrID, currentScreen.getStrID());}
     }
@@ -126,9 +127,10 @@ public class DataManager {
 
     // Singleton model
     private DataManager() {
-        Screens = new ArrayList<Screen>();
+        theLevel = new Level();
+        //Screens = new ArrayList<Screen>();
         currentScreen = new Screen(0,0,0);
-        Screens.add(currentScreen);
+        theLevel.addScreen(currentScreen);
     }
     private static DataManager theThing = new DataManager();
     public static DataManager DaMan() { return theThing; } //abbr.
@@ -139,12 +141,12 @@ public class DataManager {
 
     //Normal getters and setters
     public ArrayList<Screen> getScreens() {
-        return Screens;
+        return theLevel.getScreens();
     }
 
-    public void setScreens(ArrayList<Screen> newScreens) {
+/*     public void setScreens(ArrayList<Screen> newScreens) {
         Screens = newScreens;
-    }
+    } */
 
     public Screen getCurrentScreen() {
         return currentScreen;

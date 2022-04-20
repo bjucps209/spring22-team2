@@ -19,6 +19,10 @@
 4/15/22
 ++30 min ish (more Screen flow)
 
+4/19/2022
+++40 min (Figuring out what I'm supposed to do)
+7:48 pm - 9:05 pm
+
 Some questions to ask:
     Does importing an entire package (ie javafx.scene.layout.*) actually
     negatively impact anything.
