@@ -59,6 +59,18 @@ public class Screen {
         }
         return null;
     }
+    public ArrayList<Enemy> getEnemies()
+    {
+        ArrayList<Enemy> output = new ArrayList<>();
+        for(Entity e:entities)
+        {
+            if(e instanceof Enemy)
+            {
+                output.add((Enemy)e);
+            }
+        }
+        return output;
+    }
 
 
     // Getters and Setters -------------------------

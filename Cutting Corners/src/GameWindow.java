@@ -69,6 +69,18 @@ public class GameWindow {
             entityImage.setFitWidth(entity.getSize());
             entityImage.setPreserveRatio(true);
             gameWindow.getChildren().add(entityImage);
+            if(entity instanceof Player)
+            {
+                ImageView weaponImage=new ImageView(new Image("media/Player/swordwalk.gif"));
+                weaponImage.setX(entity.getX());
+                weaponImage.setY(entity.getY());
+                weaponImage.xProperty().bind(entity.getXProperty());
+                weaponImage.yProperty().bind(entity.getYProperty());
+                weaponImage.setUserData(entity);
+                weaponImage.setFitWidth(entity.getSize());
+                weaponImage.setPreserveRatio(true);
+                gameWindow.getChildren().add(weaponImage);
+            }
         }
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();

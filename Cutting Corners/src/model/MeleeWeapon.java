@@ -63,6 +63,17 @@ public class MeleeWeapon extends Equipment{
         this.damage = damage;
     }
 
+    public void getSpeed(){
+        this.speed = speed;
+    }
+    public Double getDirection(){
+        return direction;
+    }
+
+    public int getDamage(){
+        return damage;
+    }
+
     public void setSpeed(int speed){
         this.speed = speed;
     }

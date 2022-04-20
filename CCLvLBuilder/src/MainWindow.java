@@ -20,7 +20,7 @@ public class MainWindow implements LevelObserver {
     //Stuff for window dimensions
     protected Stage theStage; //don't ask
     protected Vector windowSize;
-    protected static final double screensizescalar = 60;
+    protected static final double screensizescalar = 65;
     protected static double screenwidth = screensizescalar * 16; protected static double screenheight = screensizescalar * 9;
 
     //Panes
