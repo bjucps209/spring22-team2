@@ -216,10 +216,10 @@ public class Level {
             lvl.getScreens().add(s);
         }
         // currentScreen ??
-        currentRow = file.readInt();
-        currentCol = file.readInt();
-        currentLevel = file.readInt();
+        lvl.setCurrentRow(file.readInt());
+        lvl.setCurrentCol(file.readInt());
 
+        return lvl;
     }
 
 }

@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.util.*;
 
 public class Screen {
-    ArrayList<Entity> entities = new ArrayList<Entity>();
-    Cell[][] grid;
-    Location location;
-    Screen left;
-    Screen right;
-    Screen up;
-    Screen down;
+    private ArrayList<Entity> entities = new ArrayList<Entity>();
+    private Cell[][] grid;
+    private Location location;
+    private Screen left;
+    private Screen right;
+    private Screen up;
+    private Screen down;
     Random rand = new Random();
 
     public Screen(int row, int col, int level){
@@ -132,8 +132,6 @@ public class Screen {
     }
 
 
-
-
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(location.getRow());
         file.writeInt(location.getCol());
@@ -150,39 +148,42 @@ public class Screen {
     
     }
 
-    // public static Screen deserialize(DataInputStream file) throws IOException {
-    //     int numEntities = file.readInt();
-    //     for (int i = 0; i < numEntities; ++i) {
-    //         // entities.get(i).deserialize(file);
-    //     }
-    //     for (int row = 0; row < 7; ++row) {
-    //         for (int col = 0; col < 13; ++col) {
-    //             String cellType = file.readUTF();
-    //             switch (cellType) {
-    //                 case "empty": {
-    //                     grid[row][col] = Cell.empty;
-    //                 }
-    //                 case "rock": {
-    //                     grid[row][col] = Cell.rock;
-    //                 }
-    //                 case "tree": {
-    //                     grid[row][col] = Cell.tree;
-    //                 }
-    //                 case "plant": {
-    //                     grid[row][col] = Cell.plant;
-    //                 }
-    //                 case "enemy": {
-    //                     grid[row][col] = Cell.enemy;
-    //                 }
-    //             }
-    //         }
-    //     }
+    public static Screen deserialize(DataInputStream file) throws IOException {
+        int row = file.readInt();
+        int col = file.readInt();
+        int level = file.readInt();
+        Screen s = new Screen(row, col, level);
 
-    //     Screen screen = new Screen(row, col, level)
+        int numEntities = file.readInt();
+        for (int i = 0; i < numEntities; ++i) {
+            Entity e = Entity.deserialize(file);
+            s.getEntities().add(e);
+        }
+        for (int r = 0; r < 7; ++r) {
+            for (int c = 0; c < 13; ++c) {
+                String cellType = file.readUTF();
+                switch (cellType) {
+                    case "empty": {
+                        s.getGrid()[r][c] = Cell.empty;
+                    }
+                    case "rock": {
+                        s.getGrid()[r][c] = Cell.rock;
+                    }
+                    case "tree": {
+                        s.getGrid()[r][c] = Cell.tree;
+                    }
+                    case "plant": {
+                        s.getGrid()[r][c] = Cell.plant;
+                    }
+                    case "enemy": {
+                        s.getGrid()[row][col] = Cell.enemy;
+                    }
+                }
+            }
+        }
 
-
-        
-    // }
+        return s; 
+    }
 
     
 }

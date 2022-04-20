@@ -60,10 +60,6 @@ public class Equipment extends Item {
         this.buffs = buffs;
     }
 
-
-
-
-
     @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Equipment"); // type of item
