@@ -24,6 +24,7 @@ public class Player extends Entity {
     Coordinates mouseCoordinates = new Coordinates(0, 0);
     PlayerState state = PlayerState.standing;
     int attackCount = 50;
+    //Making a update so I can push
     ArrayList<Enemy> enemies;
 
     public Player(int xCoord, int yCoord){
