@@ -21,10 +21,6 @@ public class Screen {
         randomize();
     }
 
-    public Location getLocation(){
-        return location;
-    }
-
     public void addEnemyGroup(Enemy[] group){
         for (Enemy enemy: group){entities.add(enemy);}
     }
@@ -76,6 +72,33 @@ public class Screen {
         return output;
     }
 
+
+    // Getters and Setters -------------------------
+    
+    public Location getLocation(){
+        return location;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(ArrayList<Entity> entities) {
+        this.entities = entities;
+    }
+
+    public Cell[][] getGrid() {
+        return grid;
+    }
+
+    public void setGrid(Cell[][] grid) {
+        this.grid = grid;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     public Screen getLeft() {
         return left;
     }
@@ -110,7 +133,11 @@ public class Screen {
 
 
 
+
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeInt(location.getRow());
+        file.writeInt(location.getCol());
+        file.writeInt(location.getLevel());
         file.writeInt(entities.size());
         for (Entity e : entities) {
             e.serialize(file);
@@ -123,10 +150,10 @@ public class Screen {
     
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
+    public static Screen deserialize(DataInputStream file) throws IOException {
         int numEntities = file.readInt();
         for (int i = 0; i < numEntities; ++i) {
-            entities.get(i).deserialize(file);
+            // entities.get(i).deserialize(file);
         }
         for (int row = 0; row < 7; ++row) {
             for (int col = 0; col < 13; ++col) {
@@ -150,6 +177,8 @@ public class Screen {
                 }
             }
         }
+
+        Screen screen = new Screen(row, col, level)
 
 
         

@@ -16,7 +16,7 @@ public class Buffs {
     }
 
 
-
+    // Getters and Setters ----------------
 
     public int getStrengthBuff() {
         return strengthBuff;
@@ -46,10 +46,13 @@ public class Buffs {
         file.writeInt(healthBuff);
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.strengthBuff = file.readInt();
-        this.speedBuff = file.readInt();
-        this.healthBuff = file.readInt();
+    public static Buffs deserialize(DataInputStream file) throws IOException {
 
+        int strengthBuff = file.readInt();
+        int speedBuff = file.readInt();
+        int healthBuff = file.readInt();
+
+        Buffs buffs = new Buffs(strengthBuff, healthBuff, speedBuff);
+        return buffs;
     }
 }

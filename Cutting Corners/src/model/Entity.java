@@ -69,5 +69,15 @@ public class Entity {
 
     //methods overridden by children
     public void serialize(DataOutputStream file) throws IOException {}
-    public void deserialize(DataInputStream file) throws IOException {}
+
+    public static Entity deserialize(DataInputStream file) throws IOException {
+        String type = file.readUTF();
+        if (type.equals("Enemy")) {
+            Entity e = Enemy.deserialize(file);
+            return e;
+        } else {
+            Entity player = Player.deserialize(file);
+            return player;
+        }
+    }
 }

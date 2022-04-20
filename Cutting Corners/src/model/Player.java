@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.media.AudioClip;
 
 public class Player extends Entity {
+
     ArrayList<Item> inventory;
     Image weaponImage = new Image ("media/Player/swordwalk.gif");
     Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 250, 120, weaponImage);
@@ -42,10 +43,6 @@ public class Player extends Entity {
 
     public ArrayList<KeyCode> getKeys(){
         return keys;
-    }
-
-    public void setState(PlayerState state){
-        this.state = state;
     }
 
     public void setEquippedItem(Item equippedItem){
@@ -280,29 +277,108 @@ public class Player extends Entity {
         }
     }
 
-    @Override
+
+    // Getters and Setters -----------------------
+  
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(ArrayList<Item> inventory) {
+        this.inventory = inventory;
+    }
+
+    public Image getWeaponImage() {
+        return weaponImage;
+    }
+
+    public void setWeaponImage(Image weaponImage) {
+        this.weaponImage = weaponImage;
+    }
+
+    public Item getEquippedItem() {
+        return equippedItem;
+    }
+
+    public Equipment getArmor() {
+        return armor;
+    }
+
+    public void setArmor(Equipment armor) {
+        this.armor = armor;
+    }
+
+    public Stats getStats() {
+        return stats;
+    }
+
+    public void setStats(Stats stats) {
+        this.stats = stats;
+    }
+
+    public static Image getPlayerImage() {
+        return playerImage;
+    }
+
+    public static void setPlayerImage(Image playerImage) {
+        Player.playerImage = playerImage;
+    }
+
+    public void setKeys(ArrayList<KeyCode> keys) {
+        this.keys = keys;
+    }
+
+    public Coordinates getMouseCoordinates() {
+        return mouseCoordinates;
+    }
+
+    public PlayerState getState() {
+        return state;
+    }
+    
+    public void setState(PlayerState state){
+        this.state = state;
+    }
+
+    public int getAttackCount() {
+        return attackCount;
+    }
+
+    public void setAttackCount(int attackCount) {
+        this.attackCount = attackCount;
+    }    
+
+
+
+
     public void serialize(DataOutputStream file) throws IOException {
-        file.writeInt(this.getSize());
-        this.getCoords().serialize(file);
+        file.writeUTF("Player");
+        file.writeInt(this.getX());
+        file.writeInt(this.getY());
         file.writeInt(inventory.size()); // how many items are in the inventory
         for (Item i : inventory) {
             i.serialize(file);
         }
-        equippedItem.serialize(file);
+        // equippedItem.serialize(file);
         armor.serialize(file);
         stats.serialize(file);
     }
-    
-    @Override
-    public void deserialize(DataInputStream file) throws IOException {
-        this.setSize(file.readInt());
-        this.getCoords().deserialize(file);
+
+    public static Player deserialize(DataInputStream file) throws IOException {
+        // create a Player and return it with variables from the file
+        int x = file.readInt();
+        int y = file.readInt();
+        Player player = new Player(x, y);
+
         int numItems = file.readInt();
         for (int i = 0; i < numItems; ++i) {
-            inventory.get(i).deserialize(file);
+            Item item = Item.deserialize(file);
+            player.getInventory().add(item);
         }
-        equippedItem.deserialize(file);
-        armor.deserialize(file);
-        stats.deserialize(file);
+        // p.setEquippedItem(Item.deserialize(file);
+        player.setArmor(Armor.deserialize(file));
+        player.setStats(Stats.deserialize(file));
+
+        return player;
     }
 }

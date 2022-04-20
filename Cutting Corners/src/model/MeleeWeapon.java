@@ -8,11 +8,11 @@ import javafx.scene.image.Image;
 
 public class MeleeWeapon extends Equipment{
     private int range;
-    double direction;
-    int damage;
-    int speed;
-    int arc;
-    Image image;
+    private double direction;
+    private int damage;
+    private int speed;
+    private int arc;
+    private Image image;
 
     public MeleeWeapon(String name, int cooldown, int Strength, int Health, int Speed, int range, int arc, Image image){
         super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Health, Speed));
@@ -21,8 +21,42 @@ public class MeleeWeapon extends Equipment{
         this.image = image;
     }
 
+    @Override
+    public void performAction(Entity user){
+        Swing swing = new Swing(direction, damage, speed, range, arc, image, user);
+        World.instance().displayCurrentEntities().add(swing);
+    }
+
+
+
+    // Getters and Setters -------------------------
+
     public void setDirection(double direction){
         this.direction = direction;
+    }
+
+    public double getDirection() {
+        return direction;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getArc() {
+        return arc;
+    }
+
+    public void setArc(int arc) {
+        this.arc = arc;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public void setDamage(int damage){
@@ -43,13 +77,9 @@ public class MeleeWeapon extends Equipment{
     public void setSpeed(int speed){
         this.speed = speed;
     }
-
-    @Override
-    public void performAction(Entity user){
-        Swing swing = new Swing(direction, damage, speed, range, arc, image, user);
-        World.instance().displayCurrentEntities().add(swing);
+    public int getSpeed() {
+        return speed;
     }
-
 
     public int getRange() {
         return range;

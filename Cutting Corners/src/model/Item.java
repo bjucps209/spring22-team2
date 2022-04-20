@@ -36,7 +36,18 @@ public class Item {
     }
 
 
-    //methods overridden by children
-    public void serialize(DataOutputStream file) throws IOException {}
-    public void deserialize(DataInputStream file) throws IOException {}
+    public void serialize(DataOutputStream file) throws IOException {
+        //method overridden by children
+    }
+
+    public static Item deserialize(DataInputStream file) throws IOException {
+        String type = file.readUTF();
+        if (type.equals("UsableItem")) {
+            Item item = UsableItem.deserialize(file);
+            return item;
+        } else {
+            Item item = Equipment.deserialize(file);
+            return item;
+        }
+    }
 }

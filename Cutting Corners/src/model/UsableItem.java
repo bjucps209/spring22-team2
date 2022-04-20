@@ -18,22 +18,22 @@ public class UsableItem extends Item{
     public void applyBuffs(Entity user){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
-            enemy.stats.ApplyBuffs(this);
+            enemy.getStats().ApplyBuffs(this);
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            player.stats.ApplyBuffs(this);
+            player.getStats().ApplyBuffs(this);
         }
     }
 
     public void unApplyBuffs(Entity user){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
-            enemy.stats.unApplyBuffs(this);
+            enemy.getStats().unApplyBuffs(this);
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            player.stats.unApplyBuffs(this);
+            player.getStats().unApplyBuffs(this);
         }
     }
 
@@ -41,9 +41,37 @@ public class UsableItem extends Item{
     public void performAction(Entity user){}
 
 
+    // Getters and Setters---------------------------
+
+    public int getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public Stats getBuffs() {
+        return buffs;
+    }
+
+    public void setBuffs(Stats buffs) {
+        this.buffs = buffs;
+    }
 
 
+
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("UsableItem"); //type of item
         file.writeUTF(this.getName());
         file.writeInt(this.getCooldown());
         buffs.serialize(file);
@@ -51,11 +79,18 @@ public class UsableItem extends Item{
         file.writeInt(duration);
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.setName(file.readUTF());
-        this.setCooldown(file.readInt());
-        buffs.deserialize(file);
-        this.useCount = file.readInt();
-        this.duration = file.readInt();
+
+    public static UsableItem deserialize(DataInputStream file) throws IOException {
+        String name = file.readUTF();
+        int cooldown = file.readInt();
+        int useCount = file.readInt();
+        int duration = file.readInt();
+        Buffs buffs = Buffs.deserialize(file);
+        int strength = buffs.getStrengthBuff();
+        int health = buffs.getHealthBuff();
+        int speed = buffs.getSpeedBuff();
+
+        UsableItem item = new UsableItem(name, cooldown, useCount, duration, strength, health, speed);
+        return item;
     }
 }
