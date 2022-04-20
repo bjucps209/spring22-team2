@@ -29,7 +29,7 @@ public class Triangle extends Enemy{
     
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
+    // public void deserialize(DataInputStream file) throws IOException {
         
-    }
+    // }
 }

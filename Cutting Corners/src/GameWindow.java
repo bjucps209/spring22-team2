@@ -66,7 +66,7 @@ public class GameWindow {
             entityImage.xProperty().bind(entity.getXProperty());
             entityImage.yProperty().bind(entity.getYProperty());
             entityImage.setUserData(entity);
-            entityImage.setFitWidth(entity.getSize());
+            //entityImage.setFitWidth(entity.getSize());
             entityImage.setPreserveRatio(true);
             gameWindow.getChildren().add(entityImage);
             if(entity instanceof Player)

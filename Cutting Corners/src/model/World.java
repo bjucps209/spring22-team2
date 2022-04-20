@@ -169,7 +169,7 @@ public class World {
         {  // SaveGame.dat
             writer.writeInt(this.currentLevel);
             writer.writeInt(this.difficulty);
-            getCurrentLevel().serialize(writer);
+            //getCurrentLevel().serialize(writer);
 
             
         }
@@ -187,7 +187,7 @@ public class World {
 
             this.currentLevel = reader.readInt();
             this.difficulty = reader.readInt();
-            getCurrentLevel().deserialize(reader);
+            //getCurrentLevel().deserialize(reader);
 
         }
     }

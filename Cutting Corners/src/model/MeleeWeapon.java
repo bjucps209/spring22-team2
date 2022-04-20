@@ -35,14 +35,6 @@ public class MeleeWeapon extends Equipment{
         this.direction = direction;
     }
 
-    public double getDirection() {
-        return direction;
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
     public int getArc() {
         return arc;
     }
@@ -63,9 +55,6 @@ public class MeleeWeapon extends Equipment{
         this.damage = damage;
     }
 
-    public void getSpeed(){
-        this.speed = speed;
-    }
     public Double getDirection(){
         return direction;
     }
@@ -95,7 +84,7 @@ public class MeleeWeapon extends Equipment{
         file.writeInt(range);
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.range = file.readInt();
-    }
+    // public void deserialize(DataInputStream file) throws IOException {
+    //     this.range = file.readInt();
+    // }
 }

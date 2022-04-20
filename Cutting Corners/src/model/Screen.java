@@ -150,39 +150,39 @@ public class Screen {
     
     }
 
-    public static Screen deserialize(DataInputStream file) throws IOException {
-        int numEntities = file.readInt();
-        for (int i = 0; i < numEntities; ++i) {
-            // entities.get(i).deserialize(file);
-        }
-        for (int row = 0; row < 7; ++row) {
-            for (int col = 0; col < 13; ++col) {
-                String cellType = file.readUTF();
-                switch (cellType) {
-                    case "empty": {
-                        grid[row][col] = Cell.empty;
-                    }
-                    case "rock": {
-                        grid[row][col] = Cell.rock;
-                    }
-                    case "tree": {
-                        grid[row][col] = Cell.tree;
-                    }
-                    case "plant": {
-                        grid[row][col] = Cell.plant;
-                    }
-                    case "enemy": {
-                        grid[row][col] = Cell.enemy;
-                    }
-                }
-            }
-        }
+    // public static Screen deserialize(DataInputStream file) throws IOException {
+    //     int numEntities = file.readInt();
+    //     for (int i = 0; i < numEntities; ++i) {
+    //         // entities.get(i).deserialize(file);
+    //     }
+    //     for (int row = 0; row < 7; ++row) {
+    //         for (int col = 0; col < 13; ++col) {
+    //             String cellType = file.readUTF();
+    //             switch (cellType) {
+    //                 case "empty": {
+    //                     grid[row][col] = Cell.empty;
+    //                 }
+    //                 case "rock": {
+    //                     grid[row][col] = Cell.rock;
+    //                 }
+    //                 case "tree": {
+    //                     grid[row][col] = Cell.tree;
+    //                 }
+    //                 case "plant": {
+    //                     grid[row][col] = Cell.plant;
+    //                 }
+    //                 case "enemy": {
+    //                     grid[row][col] = Cell.enemy;
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        Screen screen = new Screen(row, col, level)
+    //     Screen screen = new Screen(row, col, level)
 
 
         
-    }
+    // }
 
     
 }

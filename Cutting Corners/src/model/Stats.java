@@ -66,7 +66,7 @@ public class Stats {
         int strength = file.readInt();
         int speed = file.readInt();
         int health = file.readInt();
-        Stats s = new Stats(strength, speed, health)
+        Stats s = new Stats(strength, speed, health);
         return s;
     }   
 }
