@@ -61,9 +61,12 @@ public class Stats {
         file.writeInt(health);
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.strength = file.readInt();
-        this.speed = file.readInt();
-        this.health = file.readInt();
+    
+    public static Stats deserialize(DataInputStream file) throws IOException {
+        int strength = file.readInt();
+        int speed = file.readInt();
+        int health = file.readInt();
+        Stats s = new Stats(strength, speed, health);
+        return s;
     }   
 }

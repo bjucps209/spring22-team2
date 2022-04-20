@@ -5,5 +5,13 @@
 //----------------------------------------------------------- 
 
 public class ObjectSelectorCompiler {
-    
+    SelectorListSet testSet;
+
+    public ObjectSelectorCompiler() {
+        testSet = new SelectorListSet();
+    }
+
+    public void compileLists() {
+        
+    }
 }

@@ -128,6 +128,9 @@ public class Level {
         return group;
     }
 
+
+    // Getters and Setters ----------------------------
+    
     public ArrayList<Screen> getScreens() {
         return screens;
     }
@@ -171,36 +174,36 @@ public class Level {
 
 
 
-    public void serialize(DataOutputStream file) throws IOException {
-        file.writeInt(totalEnemies.size());
-        for (Enemy e : totalEnemies) {
-            e.serialize(file);
-        }
-        file.writeInt(screens.size());
-        for (Screen s : screens) {
-            s.serialize(file);
-        }
-        // currentScreen ?
-        file.writeInt(currentRow);
-        file.writeInt(currentCol);
-        file.writeInt(currentLevel);
+    // public void serialize(DataOutputStream file) throws IOException {
+    //     file.writeInt(totalEnemies.size());
+    //     for (Enemy e : totalEnemies) {
+    //         e.serialize(file);
+    //     }
+    //     file.writeInt(screens.size());
+    //     for (Screen s : screens) {
+    //         s.serialize(file);
+    //     }
+    //     // currentScreen ?
+    //     file.writeInt(currentRow);
+    //     file.writeInt(currentCol);
+    //     file.writeInt(currentLevel);
     
-    }
+    // }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        int numEnemies = file.readInt();
-        for (int i = 0; i < numEnemies; ++i) {
-            totalEnemies.get(i).deserialize(file);
-        }
-        int numScreens = file.readInt();
-        for (int i = 0; i < numScreens; ++i) {
-            screens.get(i).deserialize(file);
-        }
-        //
-        currentRow = file.readInt();
-        currentCol = file.readInt();
-        currentLevel = file.readInt();
+    // public void deserialize(DataInputStream file) throws IOException {
+    //     int numEnemies = file.readInt();
+    //     for (int i = 0; i < numEnemies; ++i) {
+    //         totalEnemies.get(i).deserialize(file);
+    //     }
+    //     int numScreens = file.readInt();
+    //     for (int i = 0; i < numScreens; ++i) {
+    //         screens.get(i).deserialize(file);
+    //     }
+    //     // currentScreen
+    //     currentRow = file.readInt();
+    //     currentCol = file.readInt();
+    //     currentLevel = file.readInt();
 
-    }
+    // }
 
 }

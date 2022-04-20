@@ -40,16 +40,41 @@ public class Screen {
         return IDSeries;
     }
 
-    //public void setAdjacentScreen(int side, int adjacentid) {return;}
-
+    /// Adjacent Screen manipulation
+    //
     public Screen[] getAdjacentScreens(){
         return adjacentScreens;
     }
 
-    public void setAdjacentScreen(int direction, Screen adjScreen) {
-        adjacentScreens[direction] = adjScreen;
+    public Screen getAdjacentScreen(Direction direction) {
+        Direction[] stuff = Direction.values();
+        for (int i = 0; i < stuff.length; i++) {
+            if (stuff[i] == direction) {
+                return adjacentScreens[i];
+            }
+        }
+        return null;
     }
 
+    public void setAdjacentScreen(Direction direction, Screen adjScreen) {
+        Direction[] dirs = Direction.values();
+        for (int i = 0; i < dirs.length; i++) {
+            if(dirs[i] == direction) {
+                adjacentScreens[i] = adjScreen;                
+            }
+        }
+    }
+
+    public void removeAdjacentScreen(Screen screen) {
+        for (int scr = 0; scr < adjacentScreens.length; scr++) {
+            if (adjacentScreens[scr] == screen) {
+                adjacentScreens[scr] = null;
+            }
+        }
+    }
+
+    /// Object Stuff
+    //
     public ArrayList<LvLObject> getObjects() {
         return objectList;
     }

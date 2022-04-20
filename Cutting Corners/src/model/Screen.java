@@ -21,10 +21,6 @@ public class Screen {
         randomize();
     }
 
-    public Location getLocation(){
-        return location;
-    }
-
     public void addEnemyGroup(Enemy[] group){
         for (Enemy enemy: group){entities.add(enemy);}
     }
@@ -63,6 +59,45 @@ public class Screen {
         }
         return null;
     }
+    public ArrayList<Enemy> getEnemies()
+    {
+        ArrayList<Enemy> output = new ArrayList<>();
+        for(Entity e:entities)
+        {
+            if(e instanceof Enemy)
+            {
+                output.add((Enemy)e);
+            }
+        }
+        return output;
+    }
+
+
+    // Getters and Setters -------------------------
+    
+    public Location getLocation(){
+        return location;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(ArrayList<Entity> entities) {
+        this.entities = entities;
+    }
+
+    public Cell[][] getGrid() {
+        return grid;
+    }
+
+    public void setGrid(Cell[][] grid) {
+        this.grid = grid;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public Screen getLeft() {
         return left;
@@ -98,7 +133,11 @@ public class Screen {
 
 
 
+
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeInt(location.getRow());
+        file.writeInt(location.getCol());
+        file.writeInt(location.getLevel());
         file.writeInt(entities.size());
         for (Entity e : entities) {
             e.serialize(file);
@@ -111,37 +150,39 @@ public class Screen {
     
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        int numEntities = file.readInt();
-        for (int i = 0; i < numEntities; ++i) {
-            entities.get(i).deserialize(file);
-        }
-        for (int row = 0; row < 7; ++row) {
-            for (int col = 0; col < 13; ++col) {
-                String cellType = file.readUTF();
-                switch (cellType) {
-                    case "empty": {
-                        grid[row][col] = Cell.empty;
-                    }
-                    case "rock": {
-                        grid[row][col] = Cell.rock;
-                    }
-                    case "tree": {
-                        grid[row][col] = Cell.tree;
-                    }
-                    case "plant": {
-                        grid[row][col] = Cell.plant;
-                    }
-                    case "enemy": {
-                        grid[row][col] = Cell.enemy;
-                    }
-                }
-            }
-        }
+    // public static Screen deserialize(DataInputStream file) throws IOException {
+    //     int numEntities = file.readInt();
+    //     for (int i = 0; i < numEntities; ++i) {
+    //         // entities.get(i).deserialize(file);
+    //     }
+    //     for (int row = 0; row < 7; ++row) {
+    //         for (int col = 0; col < 13; ++col) {
+    //             String cellType = file.readUTF();
+    //             switch (cellType) {
+    //                 case "empty": {
+    //                     grid[row][col] = Cell.empty;
+    //                 }
+    //                 case "rock": {
+    //                     grid[row][col] = Cell.rock;
+    //                 }
+    //                 case "tree": {
+    //                     grid[row][col] = Cell.tree;
+    //                 }
+    //                 case "plant": {
+    //                     grid[row][col] = Cell.plant;
+    //                 }
+    //                 case "enemy": {
+    //                     grid[row][col] = Cell.enemy;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     Screen screen = new Screen(row, col, level)
 
 
         
-    }
+    // }
 
     
 }

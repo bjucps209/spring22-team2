@@ -79,11 +79,11 @@ public class Projectile extends Entity{
         file.writeInt(direction);
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.damage = file.readInt();
-        this.speed = file.readInt();
-        this.range = file.readInt();
-        this.width = file.readInt();
-        this.direction = file.readInt();
-    }
+    // public void deserialize(DataInputStream file) throws IOException {
+    //     this.damage = file.readInt();
+    //     this.speed = file.readInt();
+    //     this.range = file.readInt();
+    //     this.width = file.readInt();
+    //     this.direction = file.readInt();
+    // }
 }

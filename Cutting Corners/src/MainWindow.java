@@ -89,8 +89,8 @@ public class MainWindow {
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Image TITLE_SCREEN = new Image("media/titlescreen.png");
     Image MOVE_GIF = new Image("media/moveGif.gif");
-    // Image ATTACK_GIF = new Image("media/attackGif.gif");
-    // Image ITEM_GIF = new Image("media/itemGif.gif");
+    Image ATTACK_GIF = new Image("media/attackGif.gif");
+    Image ITEM_GIF = new Image("media/itemGif.gif");
     Image DIFFICULTY_EASY = new Image("media/buttons/difficultyeasy.png");
     Image DIFFICULTY_NORMAL = new Image("media/buttons/difficultynormal.png");
     Image DIFFICULTY_HARD = new Image("media/buttons/difficultyhard.png");
@@ -121,6 +121,8 @@ public class MainWindow {
     AudioClip TITLE_MUSIC = new AudioClip(getClass().getResource("media/sounds/music/alexander-nakarada-magic-tavern (Title Music).mp3").toString());
     ImageView backgroundView = new ImageView(TITLE_SCREEN);
     ImageView moveView = new ImageView(MOVE_GIF);
+    ImageView attackView = new ImageView(ATTACK_GIF);
+    ImageView itemView = new ImageView(ITEM_GIF);
     ImageView difficultyView = new ImageView(DIFFICULTY_NORMAL);
     ImageView backView = new ImageView(BACK_BUTTON);
     ImageView campaignView = new ImageView(DEFAULT_CAMPAIGN);
@@ -199,9 +201,9 @@ public class MainWindow {
         settings.relocate(-2000*ratioHeight, 30*ratioWidth);
         credits.relocate(100*ratioHeight, 1000*ratioWidth);
         backgroundView.relocate(0, 0);
-        moveView.relocate(240*ratioWidth, -2350*ratioHeight);
-        // attackView.relocate(2500, 350);
-        // itemView.relocate(2500, 650);
+        moveView.relocate(150*ratioWidth, -2350*ratioHeight);
+        attackView.relocate(150*ratioWidth, -2100*ratioHeight);
+        itemView.relocate(150*ratioWidth, -1850*ratioHeight);
         difficultyView.relocate(-1930*ratioWidth, 600*ratioHeight);
         diffSliderLeft.relocate(-2090*ratioWidth, 600*ratioHeight);
         diffSliderRight.relocate(-1770*ratioWidth, 600*ratioHeight);
@@ -261,6 +263,8 @@ public class MainWindow {
         ratioImage(startView);
         ratioImage(loadView);
         ratioImage(moveView);
+        ratioImage(attackView);
+        ratioImage(itemView);
         ratioImage(lvlBuilderView);
         ratioImage(cheatModeView);
         sizeButton(backView);
@@ -279,8 +283,6 @@ public class MainWindow {
         pane.getChildren().add(settings);
         pane.getChildren().add(controls);
         pane.getChildren().add(credits);
-        // pane.getChildren().add(attackView);
-        // pane.getChildren().add(itemView);
     }
     @FXML
     void changeScreens(ActionEvent event)
@@ -307,11 +309,9 @@ public class MainWindow {
                 updateButton(cheatModeView, -2180, 750);
                 updateButton(highScores, 3020, 100);
                 updateButton(controls, 500, -2470);
-                updateButton(moveView, 240, -2350);
-                // updateButton(moveView3, 240, -2350);
-                // updateButton(moveView4, 240, -2350);
-                // updateButton(moveView5, 240, -2350);
-                // updateButton(moveView6, 240, -2350);
+                updateButton(moveView, 150, -2350);
+                updateButton(attackView, 150, -2100);
+                updateButton(itemView, 150, -1850);
                 break;
             case "SETTINGS":
                 updateButton(settings,500 , 30);
@@ -335,11 +335,9 @@ public class MainWindow {
             case "HELP":
                 updateButton(backView, 10, 10);
                 updateButton(controls, 500, 30);
-                updateButton(moveView, 240, 150);
-                // updateButton(moveView3, 240, 150);
-                // updateButton(moveView4, 240, 150);
-                // updateButton(moveView5, 240, 150);
-                // updateButton(moveView6, 240, 150);
+                updateButton(moveView, 150, 150);
+                updateButton(attackView, 150, 400);
+                updateButton(itemView, 150, 650);
                 updateButton(title, 250, 2530);
                 updateButton(startView, 50, 2700);
                 updateButton(loadView, 750, 2700);
@@ -387,7 +385,7 @@ public class MainWindow {
 
         var stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("Cutting Corners Alpha");
+        stage.setTitle("Cutting Corners Beta");
         stage.getIcons().add(new Image("media/windowicon.png"));
         stage.show();
 
@@ -396,8 +394,9 @@ public class MainWindow {
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
         gameWindow.updater();
-        Thread movingThread = new Thread(() -> gameWindow.playerUpdater());
-        movingThread.start();
+        // Thread movingThread = new Thread(() -> gameWindow.playerUpdater());
+        // movingThread.start();
+        gameWindow.playerUpdater();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
             @Override
@@ -429,6 +428,10 @@ public class MainWindow {
             
             @Override
             public void handle(MouseEvent event){
+                // Thread t = new Thread(() -> {World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());World.instance().getPlayer().performAttack();});
+                // t.start();
+                World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
+                
                 World.instance().getPlayer().setState(PlayerState.attacking);
             }
         });

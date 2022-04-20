@@ -42,8 +42,8 @@ public class RangedWeapon extends Equipment{
         projectile.serialize(file);
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.range = file.readInt();
-        projectile.deserialize(file);
-    }
+    // public void deserialize(DataInputStream file) throws IOException {
+    //     this.range = file.readInt();
+    //     projectile.deserialize(file);
+    // }
 }

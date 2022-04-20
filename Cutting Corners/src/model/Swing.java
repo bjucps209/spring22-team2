@@ -135,10 +135,10 @@ public class Swing extends Entity{
         file.writeInt(arc);
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.damage = file.readInt();
-        this.speed = file.readInt();
-        this.radius = file.readInt();
-        this.arc = file.readInt();
-    }
+    // public static void deserialize(DataInputStream file) throws IOException {
+    //     this.damage = file.readInt();
+    //     this.speed = file.readInt();
+    //     this.radius = file.readInt();
+    //     this.arc = file.readInt();
+    // }
 }
