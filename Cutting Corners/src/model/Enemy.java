@@ -230,21 +230,21 @@ public class Enemy extends Entity{
         weapon.serialize(file);    
     }
 
-    // public static Enemy deserialize(DataInputStream file) throws IOException {
-    //     int sides = file.readInt();
-    //     int size = file.readInt();
-    //     int x = file.readInt();
-    //     int y = file.readInt();
-    //     Screen homeScreen = Screen.deserialize(file);
-    //     int vision = file.readInt();
-    //     Equipment weapon = Equipment.deserialize(file);
-    //     Stats stats = Stats.deserialize(file);
+    public static Enemy deserialize(DataInputStream file) throws IOException {
+        int sides = file.readInt();
+        int size = file.readInt();
+        int x = file.readInt();
+        int y = file.readInt();
+        Screen homeScreen = Screen.deserialize(file);
+        int vision = file.readInt();
+        Equipment weapon = Equipment.deserialize(file);
+        Stats stats = Stats.deserialize(file);
 
-    //     Image image = new Image("basecase.png");
+        Image image = new Image("basecase.png");
 
-    //     Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats);
-    //     return enemy;
-    // }
+        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats);
+        return enemy;
+    }
 
     
 }

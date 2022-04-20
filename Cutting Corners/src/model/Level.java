@@ -8,12 +8,12 @@ import java.util.ListIterator;
 import java.util.Random;
 
 public class Level {
-    ArrayList<Enemy> totalEnemies;
-    public ArrayList<Screen> screens = new ArrayList<Screen>();
-    Screen currentScreen;
-    int currentRow;
-    int currentCol;
-    int currentLevel;
+    private ArrayList<Enemy> totalEnemies;
+    private ArrayList<Screen> screens = new ArrayList<Screen>();
+    private Screen currentScreen;
+    private int currentRow;
+    private int currentCol;
+    private int currentLevel;
     ScreenObserver observer;
     Random rand = new Random();
 
@@ -171,39 +171,55 @@ public class Level {
         this.totalEnemies = totalEnemies;
     }
 
+    public void setCurrentScreen(Screen currentScreen) {
+        this.currentScreen = currentScreen;
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
 
 
 
-    // public void serialize(DataOutputStream file) throws IOException {
-    //     file.writeInt(totalEnemies.size());
-    //     for (Enemy e : totalEnemies) {
-    //         e.serialize(file);
-    //     }
-    //     file.writeInt(screens.size());
-    //     for (Screen s : screens) {
-    //         s.serialize(file);
-    //     }
-    //     // currentScreen ?
-    //     file.writeInt(currentRow);
-    //     file.writeInt(currentCol);
-    //     file.writeInt(currentLevel);
+    public void serialize(DataOutputStream file) throws IOException {
+        file.writeInt(currentLevel);
+        file.writeInt(totalEnemies.size());
+        for (Enemy e : totalEnemies) {
+            e.serialize(file);
+        }
+        file.writeInt(screens.size());
+        for (Screen s : screens) {
+            s.serialize(file);
+        }
+        // currentScreen ?
+        file.writeInt(currentRow);
+        file.writeInt(currentCol);
     
-    // }
+    }
 
-    // public void deserialize(DataInputStream file) throws IOException {
-    //     int numEnemies = file.readInt();
-    //     for (int i = 0; i < numEnemies; ++i) {
-    //         totalEnemies.get(i).deserialize(file);
-    //     }
-    //     int numScreens = file.readInt();
-    //     for (int i = 0; i < numScreens; ++i) {
-    //         screens.get(i).deserialize(file);
-    //     }
-    //     // currentScreen
-    //     currentRow = file.readInt();
-    //     currentCol = file.readInt();
-    //     currentLevel = file.readInt();
+    public static Level deserialize(DataInputStream file) throws IOException {
+        int currentLevel = file.readInt();
+        Level lvl = new Level(currentLevel);
 
-    // }
+        int numEnemies = file.readInt();
+        for (int i = 0; i < numEnemies; ++i) {
+            Enemy e = Enemy.deserialize(file);
+            lvl.getTotalEnemies().add(e);
+        }
+        int numScreens = file.readInt();
+        for (int i = 0; i < numScreens; ++i) {
+            Screen s = Screen.deserialize(file);
+            lvl.getScreens().add(s);
+        }
+        // currentScreen ??
+        currentRow = file.readInt();
+        currentCol = file.readInt();
+        currentLevel = file.readInt();
+
+    }
 
 }
