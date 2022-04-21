@@ -58,7 +58,8 @@ public class Entity {
     }
 
 
-    public void takeDamage(int damage){}
+    public void takeDamage(int damage){
+    }
 
     public void performDie(){
         World.instance().displayCurrentEntities().remove(this);

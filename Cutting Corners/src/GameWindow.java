@@ -66,8 +66,12 @@ public class GameWindow {
             entityImage.xProperty().bind(entity.getXProperty());
             entityImage.yProperty().bind(entity.getYProperty());
             entityImage.setUserData(entity);
-            //entityImage.setFitWidth(entity.getSize());
+            //entityImage.setFitWidth(entity.getSize()*200*ratioWidth);
             entityImage.setPreserveRatio(true);
+            if(entity instanceof Boss)
+            {
+                entityImage.setFitWidth(1280);
+            }
             gameWindow.getChildren().add(entityImage);
             if(entity instanceof Player)
             {

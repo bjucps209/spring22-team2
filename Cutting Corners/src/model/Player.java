@@ -17,7 +17,7 @@ public class Player extends Entity {
 
     ArrayList<Item> inventory;
     Image weaponImage = new Image ("media/Player/swordwalk.gif");
-    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 250, 120, weaponImage);
+    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, 120, weaponImage);
     Equipment armor;
     Stats stats = new Stats(2, 5, 4);
     static Image playerImage = new Image("media/Player/Cirkyle v1.png");
@@ -25,7 +25,6 @@ public class Player extends Entity {
     Coordinates mouseCoordinates = new Coordinates(0, 0);
     PlayerState state = PlayerState.standing;
     int attackCount = 50;
-    //Making a update so I can push
     ArrayList<Enemy> enemies;
 
     public Player(int xCoord, int yCoord){
@@ -98,17 +97,18 @@ public class Player extends Entity {
 
         switch (state) {
             case standing: {
-                if (keys.size() > 0){state = PlayerState.walking;}
+                if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
                 break;
             }
             case walking: {
-                if (keys.size() == 0){state = PlayerState.standing;}
+                if (keys.size() == 0&&state!=PlayerState.attacking){state = PlayerState.standing;}
                 try{KeyPressed(0);}
                 catch(IndexOutOfBoundsException i){}
                 break;
             }
             case attacking: {
-                if (attackCount == 0){state = PlayerState.standing;}
+                attackCount--;
+                if (attackCount <= 0){state = PlayerState.standing;attackCount=50;}
             }
             
         }
@@ -158,10 +158,10 @@ public class Player extends Entity {
 
     public Direction CheckIfOutOfBounds(){
         Level currentLevel = World.instance().getCurrentLevel();
-        if (super.getCoords().getxCoord() > 1000 && currentLevel.getCurrentScreen().getRight() != null){
+        if (super.getCoords().getxCoord() > 1100 && currentLevel.getCurrentScreen().getRight() != null){
             currentLevel.goRight(); 
         }
-        else if (super.getCoords().getxCoord() > 1000){
+        else if (super.getCoords().getxCoord() > 1100){
             return Direction.right;
         }
         if (super.getCoords().getxCoord() <= 0 && currentLevel.getCurrentScreen().getLeft() != null){
@@ -188,45 +188,50 @@ public class Player extends Entity {
     @Override
     public void performAttack(){
         if (equippedItem instanceof MeleeWeapon){
-            // AudioClip SWORD_ATTACK = new AudioClip("media/Sounds/Sound effects/mixkit-dagger-woosh-1487-(Sword Attack).wav");
-            // SWORD_ATTACK.play();
+            AudioClip SWORD_ATTACK = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/SwordAttack.mp3").toString());
+            AudioClip SWORD_HIT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/SwordHit.mp3").toString());
+            SWORD_ATTACK.play();
             MeleeWeapon weapon = (MeleeWeapon) equippedItem;
             weapon.setDamage(stats.getStrength());
             weapon.setSpeed((int) stats.getSpeed() / 2);
             for(int i=0;i<enemies.size();i++)
             {
-                if(attackCount==50)
+                if(attackCount==50&&Math.sqrt(Math.pow(enemies.get(i).getCoords().getxCoord()-super.getX(), 2)+Math.pow(enemies.get(i).getCoords().getyCoord()-super.getY(), 2))<=weapon.getRange())
                 {
                     if(getMousDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
                     {
                         enemies.get(i).takeDamage(weapon.getDamage());
                         System.out.println("Hit!");
+                        SWORD_HIT.play();
                         continue;
                     }
                     else if(getMousDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
                     {
                         enemies.get(i).takeDamage(weapon.getDamage());
                         System.out.println("Hit!");
+                        SWORD_HIT.play();
                         continue;
                     }
                     if(getMousDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
                     {
                         enemies.get(i).takeDamage(weapon.getDamage());
                         System.out.println("Hit!");
+                        SWORD_HIT.play();
                         continue;
                     }
                     else if(getMousDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
                     {
                         enemies.get(i).takeDamage(weapon.getDamage());
                         System.out.println("Hit!");
+                        SWORD_HIT.play();
                         continue;
                     }
                 }
             }
             
 
-            System.out.println(mouseCoordinates.getxCoord() - super.getX());
-            System.out.println(mouseCoordinates.getyCoord() - super.getY());
+            // System.out.println(mouseCoordinates.getxCoord() - super.getX());
+            // System.out.println(mouseCoordinates.getyCoord() - super.getY());
             
             double slope = Math.atan((mouseCoordinates.getyCoord() - super.getY()) /
                                (mouseCoordinates.getxCoord() - super.getX()));
@@ -243,17 +248,15 @@ public class Player extends Entity {
 
                 
 
-            System.out.print(slope);
+            // System.out.print(slope);
 
             weapon.setDirection(slope);
         }
         // if (attackCount == 50){equippedItem.performAction(this);}
-        attackCount--;
-        if (attackCount > 0){attackCount = 50;}
     }
     public Direction getMousDirection()
     {
-        if(Math.sqrt(Math.pow(mouseCoordinates.getxCoord(), 2)+Math.pow(super.getX(), 2))>Math.sqrt(Math.pow(mouseCoordinates.getxCoord(), 2)+Math.pow(super.getX(), 2)))
+        if(Math.abs(mouseCoordinates.getxCoord()-(super.getX()+100))>Math.abs(mouseCoordinates.getyCoord()-(super.getY()+100)))
         {
             if(super.getX()-mouseCoordinates.getxCoord()>0)
             {
@@ -277,7 +280,12 @@ public class Player extends Entity {
         }
     }
 
-
+    @Override
+    public void takeDamage(int damage)
+    {
+        stats.subHealth(damage);
+        if (stats.getHealth() <= 0){super.performDie();}
+    }
     // Getters and Setters -----------------------
   
     public ArrayList<Item> getInventory() {
