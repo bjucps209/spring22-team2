@@ -88,11 +88,11 @@ public class World {
         // return emptyLevel;
         Level level1 = new Level(1);
 
-        Screen screen1 = new Screen(0, 0, 1);
-        Screen screen2 = new Screen(0, 1, 1);
-        Screen screen3 = new Screen(1, 0, 1);
-        Screen screen4 = new Screen(1, 1, 1);
-        Screen bossScreen = new Screen(1, 2, 1);
+        Screen screen1 = new Screen(0, 0, 1,"media/terrain/medieval/medievalonewayright.png");
+        Screen screen2 = new Screen(0, 1, 1,"media/terrain/medieval/medievalthreewayleft.png");
+        Screen screen3 = new Screen(1, 0, 1,"media/terrain/medieval/medievalonewayright.png");
+        Screen screen4 = new Screen(1, 1, 1,"media/terrain/medieval/medievalthreewaydown.png");
+        Screen bossScreen = new Screen(1, 2, 1,"media/terrain/secret&boss/bossroom.png");
 
         Triangle triangle1 = new Triangle(1, 100, 100, screen1);
         Triangle triangle2 = new Triangle(2, 200, 600, screen1);

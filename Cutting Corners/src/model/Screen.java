@@ -13,11 +13,21 @@ public class Screen {
     private Screen right;
     private Screen up;
     private Screen down;
+    private String filename;
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
     Random rand = new Random();
 
-    public Screen(int row, int col, int level){
+    public Screen(int row, int col, int level,String filename){
         location = new Location(row, col, level);
         grid = new Cell[7][13];
+        this.filename=filename;
         randomize();
     }
 
@@ -136,6 +146,7 @@ public class Screen {
         file.writeInt(location.getRow());
         file.writeInt(location.getCol());
         file.writeInt(location.getLevel());
+        file.writeUTF(filename);
         file.writeInt(entities.size());
         for (Entity e : entities) {
             e.serialize(file);
@@ -152,7 +163,8 @@ public class Screen {
         int row = file.readInt();
         int col = file.readInt();
         int level = file.readInt();
-        Screen s = new Screen(row, col, level);
+        String filename = file.readUTF();
+        Screen s = new Screen(row, col, level,filename);
 
         int numEntities = file.readInt();
         for (int i = 0; i < numEntities; ++i) {

@@ -62,6 +62,7 @@ public class GameWindow {
         gameWindow.getChildren().clear();
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         World.instance().getCurrentLevel().setObserver(this::Initialize);
+        backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         ratioImage(backgroundView);
         for (Entity entity: entities){
             entity.setObserver(this::changeImage, this::flipImage);
