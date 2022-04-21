@@ -6,24 +6,17 @@ package Model;
 
 public class Obstacle extends LvLObject {
     
-    // Subject to change
-    private boolean random; // Whether object should be randomly placed
-    
-    public Obstacle(String name, double height, double width, double x, double y) {
-        super(name, height, width, x, y);
+
+
+    public Obstacle(String name, int id, Vector dimensions, Vector topleftcell) {
+        super(name, id, dimensions, topleftcell);
     }
 
     //Eventually will change newLoc depending on newLoc's location
     @Override
     public Vector moveLocation(Vector newLoc) {
-        this.objectLoc = newLoc;
+        this.topLeftCell = newLoc;
         return newLoc;
     }
-
-    @Override
-    public boolean isStackable() {
-        return false;
-    }
-
     
 }

@@ -9,4 +9,6 @@ public interface LevelObserver {
     public void createScreen(String StrID);
     public void movetoScreen(String StrID);
     public void deleteCurrentScreen(String oldStrID, String newStrID);
+    public void addLvLObject(LvLObject theObject);
+    public void updateActionStatement(String statementMsg);
 }

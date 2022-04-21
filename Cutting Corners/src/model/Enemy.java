@@ -14,9 +14,12 @@ public class Enemy extends Entity{
     private Stats stats;
     private Enemy type;
     private Direction direction = Direction.left;
-    private Equipment weapon;
+    private Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, new Image("media/Player/swordwalk.gif"));
     private EnemyState state = EnemyState.patrolling;
     private int size;
+    private int stunCount;
+    private int knockback;
+    private int attackCount=50;
 
     public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
         super(xCoord, yCoord, image, size);
@@ -65,18 +68,79 @@ public class Enemy extends Entity{
     @Override
     public void performMovement(){
         PlayerRelation relation = PlayerInVision();
+        if(relation!=null)
+        {
+            if(relation.getDistance()<=((MeleeWeapon) weapon).getRange())
+            {
+                state=EnemyState.attacking;
+            }
+        }
         switch (state){
+            case stunned:
+                stunCount--;
+                if(stunCount<=0)
+                {
+                    state=EnemyState.patrolling;
+                }
+                break;
             case patrolling: {
-                if (relation.distance < vision) state = EnemyState.seeking; 
+                if(relation!=null)
+                {
+                    if (relation.distance < vision&&state!=EnemyState.stunned) state = EnemyState.seeking; 
+                }
                 break;
             }
             case seeking:{
-                complexMovement(relation);
+                if(relation!=null)
+                {
+                    complexMovement(relation);
+                }
+            }
+            case attacking: {
+                if(attackCount==50)
+                {
+                    performAttack();
+                }
+                attackCount--;
+                if (attackCount <= 0){state = EnemyState.seeking;attackCount=50;}
             }
             default: break;
         }
     }
 
+    @Override
+    public void performAttack() {
+        PlayerRelation p = PlayerInVision();
+        if(p!=null)
+        {
+            MeleeWeapon weapon = (MeleeWeapon) this.weapon;
+                weapon.setDamage(getStats().getStrength());
+                weapon.setSpeed((int) getStats().getSpeed() / 2);
+                if(p.getDistance()<=weapon.getRange())
+                    {
+                        if(p.getDirection()==Direction.up)
+                        {
+                            p.getPlayer().takeDamage(weapon.getDamage());
+                            System.out.println("Enemy Hit!");
+                        }
+                        else if(p.getDirection()==Direction.down)
+                        {
+                            p.getPlayer().takeDamage(weapon.getDamage());
+                            System.out.println("Enemy Hit!");
+                        }
+                        if(p.getDirection()==Direction.left)
+                        {
+                            p.getPlayer().takeDamage(weapon.getDamage());
+                            System.out.println("Enemy Hit!");
+                        }
+                        else if(p.getDirection()==Direction.right)
+                        {
+                            p.getPlayer().takeDamage(weapon.getDamage());
+                            System.out.println("Enemy Hit!");
+                        }
+                    }
+            }
+    }
     public void complexMovement(PlayerRelation relation){
         int xSpeed = 0;
         int ySpeed = 0;
@@ -131,6 +195,12 @@ public class Enemy extends Entity{
     @Override
     public void takeDamage(int damage){
         stats.subHealth(damage);
+        state=EnemyState.stunned;
+        knockback=10;
+        if(stunCount<=0)
+        {
+            stunCount=50;
+        }
         if (stats.getHealth() <= 0){super.performDie();}
     }
 

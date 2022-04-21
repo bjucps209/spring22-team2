@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class DataManager {
     LevelObserver mrObserver; //LevelObserver
     private Level theLevel;
+    public static final Vector gridDimensions = new Vector(7, 13); 
 
     private Screen currentScreen;
     //private ArrayList<Screen> Screens;
@@ -22,7 +23,24 @@ public class DataManager {
     //public void placeObject(LvLObject blah) {} (LvLObject comes from a clone of prefabricated objects)
     //
 
+    //Checks if object is within bounds, sends error if not
+    //Makes currentScreen do the rest (Besides observers)
+    public void createObject(String name, Cell celltype, Vector topLeftCell, Vector dimensions) {
+        if (topLeftCell.getY() < 0 || topLeftCell.getY() + dimensions.getY() >= gridDimensions.getY()) {
+            if(mrObserver != null) { mrObserver.updateActionStatement("Out of Bounds");}
+            return;
+        } if (topLeftCell.getX() < 0 || topLeftCell.getX() + dimensions.getX() >= gridDimensions.getX()) {
+            if(mrObserver != null) {  mrObserver.updateActionStatement("Out of Bounds"); }
+            return;
+        }
+        if (!currentScreen.areaIsEmpty(topLeftCell, dimensions)) {
+            if(mrObserver != null) { mrObserver.updateActionStatement("Selected area isn't empty"); }
+            return;
+        }
 
+        LvLObject newObject = currentScreen.createObject(name, celltype, topLeftCell, dimensions);
+        //Add Observer push here
+    }
 
 
     /// Screen Methods ///
@@ -67,7 +85,7 @@ public class DataManager {
         }
 
         //Fill adjacent ID's if adjacent screens exist
-        Screen newScreen = new Screen(tempID[0], tempID[1], tempID[2]);
+        Screen newScreen = new Screen(tempID[0], tempID[1], tempID[2], gridDimensions);
         Direction[] directions = Direction.values();
         Direction[] opposingDir = new Direction[] {Direction.South, Direction.North, Direction.West, Direction.East, Direction.Down, Direction.Up};
         for (int dir = 0; dir < directions.length; dir++) {
@@ -129,7 +147,7 @@ public class DataManager {
     private DataManager() {
         theLevel = new Level();
         //Screens = new ArrayList<Screen>();
-        currentScreen = new Screen(0,0,0);
+        currentScreen = new Screen(0,0,0, gridDimensions);
         theLevel.addScreen(currentScreen);
     }
     private static DataManager theThing = new DataManager();

@@ -21,7 +21,7 @@ import javafx.scene.layout.*;
 import javafx.util.Duration;
 import model.*;
 import java.awt.*;
-import javafx.embed.swing.SwingFXUtils;
+//import javafx.embed.swing.SwingFXUtils;
 
 public class GameWindow {
 
@@ -71,8 +71,12 @@ public class GameWindow {
             entityImage.xProperty().bind(entity.getXProperty());
             entityImage.yProperty().bind(entity.getYProperty());
             entityImage.setUserData(entity);
-            //entityImage.setFitWidth(entity.getSize());
+            //entityImage.setFitWidth(entity.getSize()*200*ratioWidth);
             entityImage.setPreserveRatio(true);
+            if(entity instanceof Boss)
+            {
+                entityImage.setFitWidth(1280);
+            }
             gameWindow.getChildren().add(entityImage);
             if(entity instanceof Player)
             {
@@ -146,8 +150,8 @@ public class GameWindow {
                     Graphics2D g2D = bImage.createGraphics();
                     g2D.drawImage(bImage, 0, 0, width, height, 0, height, width, 0, null);
                     g2D.dispose();
-                    Image flippedImage = SwingFXUtils.toFXImage(dimg, null);
-                    imageview.setImage(flippedImage);
+                    //Image flippedImage = SwingFXUtils.toFXImage(dimg, null);
+                    //imageview.setImage(flippedImage);
                 }
             }
         }
