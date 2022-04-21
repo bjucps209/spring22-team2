@@ -21,7 +21,11 @@ public class Player extends Entity {
     Equipment armor;
     Stats stats = new Stats(2, 5, 4);
     static Image playerImage = new Image("media/Player/Cirkyle v1.png");
-    static Image walkingImage = new Image("media/Player/Cirkylewalk.gif");
+    static Image[] walkingGif = {new Image("media/Player/Cirkyle Walking/Frame1.png"),
+                                 new Image("media/Player/Cirkyle Walking/Frame2.png"),
+                                 new Image("media/Player/Cirkyle Walking/Frame3.png"),
+                                 new Image("media/Player/Cirkyle Walking/Frame4.png"),
+                                 new Image("media/Player/Cirkyle Walking/Frame5.png")};
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Coordinates mouseCoordinates = new Coordinates(0, 0);
     PlayerState state = PlayerState.standing;
@@ -30,6 +34,7 @@ public class Player extends Entity {
     ArrayList<Entity> enemies;
     Direction facing = Direction.left;
     PlayerState previousState = PlayerState.standing;
+    int walkingStep = 0;
 
 
     public Player(int xCoord, int yCoord){
@@ -104,7 +109,7 @@ public class Player extends Entity {
         switch (state) {
             case standing: {
                 if (previousState == PlayerState.walking){
-
+                    walkingStep = 0;
                     super.getObserver().changeImage(playerImage, this);
                     previousState = PlayerState.standing;
                 }
@@ -113,10 +118,8 @@ public class Player extends Entity {
                 break;
             }
             case walking: {
-                if (previousState == PlayerState.standing){
-                    super.getObserver().changeImage(walkingImage, this);
-                    previousState = PlayerState.walking;
-                }
+                walkingStep = (walkingStep + 1) % 50;
+                super.getObserver().changeImage(walkingGif[(int) walkingStep / 10], this);
                 if (keys.size() == 0){state = PlayerState.standing;}
                 try{KeyPressed(0);}
                 catch(IndexOutOfBoundsException i){}
