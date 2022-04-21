@@ -20,16 +20,21 @@ public class Enemy extends Entity{
     private int stunCount;
     private int knockback;
     private int attackCount=50;
+    private static Image walking;
+    private static Image attacking;
+    private String currentImage = "Standing";
 
-    public Enemy(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats){
-        super(xCoord, yCoord, image, size);
+    public Enemy(int sides, int size, int col, int row, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats,Image walking,Image attacking){
+        super(col*100, row*100, image, size);
         this.homeScreen = homeScreen;
         this.vision = vision;
         this.sides = sides;
         this.weapon = weapon;
         this.stats = stats;
         this.size = size;
-        cellWithin = cellWithin(xCoord, yCoord);
+        this.walking=walking;
+        this.attacking=attacking;
+        cellWithin = cellWithin(col, row);
         //this.coords = new Corrdinates(WIDTH, HEIGHT);
     }
     public Stats getStats()
@@ -57,9 +62,7 @@ public class Enemy extends Entity{
         return null;
     }
 
-    public Cell cellWithin(int xCoord, int yCoord){
-        int row = (int) super.getX() / 100 - 1;
-        int col = (int) super.getY() / 100 - 1;
+    public Cell cellWithin(int col, int row){
 
         Cell cell = homeScreen.getGrid()[row][col];
         return cell;
@@ -73,6 +76,11 @@ public class Enemy extends Entity{
             if(relation.getDistance()<=((MeleeWeapon) weapon).getRange())
             {
                 state=EnemyState.attacking;
+                if(currentImage!="Attacking")
+                {
+                    super.getObserver().changeImage(attacking,false);
+                    currentImage="Attacking";
+                }
             }
         }
         switch (state){
@@ -81,12 +89,24 @@ public class Enemy extends Entity{
                 if(stunCount<=0)
                 {
                     state=EnemyState.patrolling;
+                    if(currentImage!="Standing")
+                    {
+                        super.getObserver().changeImage(super.getImage(),false);
+                        currentImage="Standing";
+                    }
                 }
                 break;
             case patrolling: {
                 if(relation!=null)
                 {
-                    if (relation.distance < vision&&state!=EnemyState.stunned) state = EnemyState.seeking; 
+                    if (relation.distance < vision&&state!=EnemyState.stunned) {
+                        state = EnemyState.seeking; 
+                        if(currentImage!="Walking")
+                        {
+                            super.getObserver().changeImage(walking,false);
+                            currentImage="Walking";
+                        }
+                    }
                 }
                 break;
             }
@@ -102,7 +122,15 @@ public class Enemy extends Entity{
                     performAttack();
                 }
                 attackCount--;
-                if (attackCount <= 0){state = EnemyState.seeking;attackCount=50;}
+                if (attackCount <= 0){
+                    state = EnemyState.seeking;
+                    attackCount=50;
+                    if(currentImage!="Walking")
+                    {
+                        super.getObserver().changeImage(walking,false);
+                        currentImage="Walking";
+                    }
+                }
             }
             default: break;
         }
@@ -118,24 +146,16 @@ public class Enemy extends Entity{
                 weapon.setSpeed((int) getStats().getSpeed() / 2);
                 if(p.getDistance()<=weapon.getRange())
                     {
-                        if(p.getDirection()==Direction.up)
-                        {
-                            p.getPlayer().takeDamage(weapon.getDamage());
-                            System.out.println("Enemy Hit!");
-                        }
-                        else if(p.getDirection()==Direction.down)
-                        {
-                            p.getPlayer().takeDamage(weapon.getDamage());
-                            System.out.println("Enemy Hit!");
-                        }
                         if(p.getDirection()==Direction.left)
                         {
                             p.getPlayer().takeDamage(weapon.getDamage());
+                            super.getObserver().changeImage(attacking, false);
                             System.out.println("Enemy Hit!");
                         }
-                        else if(p.getDirection()==Direction.right)
+                        else
                         {
                             p.getPlayer().takeDamage(weapon.getDamage());
+                            super.getObserver().changeImage(attacking, true);
                             System.out.println("Enemy Hit!");
                         }
                     }
@@ -170,10 +190,12 @@ public class Enemy extends Entity{
             }
             case left: {
                 super.getCoords().subXCoord(stats.getSpeed());
+                super.getObserver().changeImage(walking, true);
                 break;
             }
             case right: {
                 super.getCoords().addXCoord(stats.getSpeed());
+                super.getObserver().changeImage(walking, false);
                 break;
             }
         }
@@ -196,6 +218,11 @@ public class Enemy extends Entity{
     public void takeDamage(int damage){
         stats.subHealth(damage);
         state=EnemyState.stunned;
+        if(currentImage!="Standing")
+        {
+            super.getObserver().changeImage(super.getImage(),false);
+            currentImage="Standing";
+        }
         knockback=10;
         if(stunCount<=0)
         {
@@ -313,7 +340,7 @@ public class Enemy extends Entity{
 
         Image image = new Image("basecase.png");
 
-        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats);
+        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking);
         return enemy;
     }
 
