@@ -29,6 +29,8 @@ public class Projectile extends Entity{
 
 
 
+    // Getters and Setters ---------------------
+
     public int getDamage() {
         return damage;
     }
@@ -70,8 +72,12 @@ public class Projectile extends Entity{
     }
 
 
-
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Projectile");
+        file.writeInt(getSize());
+        file.writeInt(getX());
+        file.writeInt(getY());
         file.writeInt(damage);
         file.writeInt(speed);
         file.writeInt(range);
@@ -79,11 +85,19 @@ public class Projectile extends Entity{
         file.writeInt(direction);
     }
 
-    // public void deserialize(DataInputStream file) throws IOException {
-    //     this.damage = file.readInt();
-    //     this.speed = file.readInt();
-    //     this.range = file.readInt();
-    //     this.width = file.readInt();
-    //     this.direction = file.readInt();
-    // }
+    public static Projectile deserialize(DataInputStream file) throws IOException {
+        int size = file.readInt();
+        int x = file.readInt();
+        int y = file.readInt();
+        int damage = file.readInt();
+        int speed = file.readInt();
+        int range = file.readInt();
+        int width = file.readInt();
+        int direction = file.readInt();
+
+        Image image = new Image("basecase.png");
+
+        Projectile p = new Projectile(damage, speed, x, y, range, image, width, direction, size);
+        return p;
+    }
 }

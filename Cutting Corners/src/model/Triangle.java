@@ -7,7 +7,7 @@ import java.io.IOException;
 import javafx.scene.image.Image;
 
 public class Triangle extends Enemy{
-    static Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, 120, new Image("media/Player/swordwalk.gif"));
+    static Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, new Image("media/Player/swordwalk.gif"));
     static Image image = new Image("media/Enemies/triangle.png");
 
     public Triangle(int size, int xCoord, int yCoord, Screen homeScreen){
@@ -15,6 +15,7 @@ public class Triangle extends Enemy{
     }
 
     public static Stats sizeToStats(int size){
+
         //int speed = (int) 30 / size;
         int speed = 5;
         int strength = (int) size / 2;
@@ -23,12 +24,4 @@ public class Triangle extends Enemy{
     }
 
 
-
-    public void serialize(DataOutputStream file) throws IOException {
-    
-    }
-
-    // public void deserialize(DataInputStream file) throws IOException {
-        
-    // }
 }

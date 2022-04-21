@@ -3,44 +3,39 @@ package model;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.scene.image.Image;
 
 public class MeleeWeapon extends Equipment{
     private int range;
-    private double direction;
+    private Direction direction;
     private int damage;
     private int speed;
-    private int arc;
     private Image image;
+    private ArrayList<Entity> enemies;
 
-    public MeleeWeapon(String name, int cooldown, int Strength, int Health, int Speed, int range, int arc, Image image){
+    public MeleeWeapon(String name, double cooldown, int Strength, int Health, int Speed, int range, Image image){
         super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Health, Speed));
         this.range = range;
-        this.arc = arc;
         this.image = image;
     }
 
     @Override
     public void performAction(Entity user){
-        Swing swing = new Swing(direction, damage, speed, range, arc, image, user);
-        World.instance().displayCurrentEntities().add(swing);
+        Swing swing = new Swing(direction, damage, range, user);
+        swing.checkIfHit(enemies, direction);
     }
 
 
 
     // Getters and Setters -------------------------
+    public void setEnemies(ArrayList<Entity> enemies){
+        this.enemies = enemies;
+    }
 
-    public void setDirection(double direction){
+    public void setDirection(Direction direction){
         this.direction = direction;
-    }
-
-    public int getArc() {
-        return arc;
-    }
-
-    public void setArc(int arc) {
-        this.arc = arc;
     }
 
     public Image getImage() {
@@ -55,7 +50,7 @@ public class MeleeWeapon extends Equipment{
         this.damage = damage;
     }
 
-    public Double getDirection(){
+    public Direction getDirection(){
         return direction;
     }
 
@@ -81,10 +76,31 @@ public class MeleeWeapon extends Equipment{
 
     
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Melee");
+        file.writeUTF(getName());
+        file.writeInt(getCooldown());
+        getBuffs().serialize(file);
         file.writeInt(range);
+        file.writeDouble(direction);
+        file.writeInt(damage);
+        file.writeInt(arc);
     }
 
-    // public void deserialize(DataInputStream file) throws IOException {
-    //     this.range = file.readInt();
-    // }
+    public static MeleeWeapon deserialize(DataInputStream file) throws IOException {
+        String name = file.readUTF();
+        int cooldown = file.readInt();
+        Stats buffs = Stats.deserialize(file);
+        int Strength = buffs.getStrength();
+        int Health = buffs.getHealth();
+        int Speed = buffs.getSpeed();
+        int range = file.readInt();
+        double direction = file.readDouble();
+        int damage = file.readInt();
+        int arc = file.readInt();
+
+        Image image = new Image("basecase.png");
+        
+        MeleeWeapon m = new MeleeWeapon(name, cooldown, Strength, Health, Speed, range, arc, image);
+        return m;
+    }
 }

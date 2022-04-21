@@ -45,7 +45,7 @@ public class Enemy extends Entity{
     }
 
     public PlayerRelation PlayerInVision(){
-        for (Entity entity: homeScreen.entities){
+        for (Entity entity: homeScreen.getEntities()){
             if (entity instanceof Player){
                 int xDifference = super.getX() - entity.getX();
                 int yDifference = super.getY() - entity.getY();
@@ -61,7 +61,7 @@ public class Enemy extends Entity{
         int row = (int) super.getX() / 100 - 1;
         int col = (int) super.getY() / 100 - 1;
 
-        Cell cell = homeScreen.grid[row][col];
+        Cell cell = homeScreen.getGrid()[row][col];
         return cell;
     }
 
@@ -289,32 +289,33 @@ public class Enemy extends Entity{
 
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Enemy");
+        file.writeInt(size);
         file.writeInt(this.getX());
         file.writeInt(this.getY());
         homeScreen.serialize(file);
         file.writeInt(vision);
         file.writeInt(sides);
-        file.writeInt(super.getSize());
-        stats.serialize(file);
         // direction ??
-        weapon.serialize(file);    
+        weapon.serialize(file);
+        stats.serialize(file);
+    
     }
 
-    // public static Enemy deserialize(DataInputStream file) throws IOException {
-    //     int sides = file.readInt();
-    //     int size = file.readInt();
-    //     int x = file.readInt();
-    //     int y = file.readInt();
-    //     Screen homeScreen = Screen.deserialize(file);
-    //     int vision = file.readInt();
-    //     Equipment weapon = Equipment.deserialize(file);
-    //     Stats stats = Stats.deserialize(file);
+    public static Enemy deserialize(DataInputStream file) throws IOException {
+        int size = file.readInt();
+        int x = file.readInt();
+        int y = file.readInt();
+        Screen homeScreen = Screen.deserialize(file);
+        int vision = file.readInt();
+        int sides = file.readInt();
+        Equipment weapon = Equipment.deserialize(file);
+        Stats stats = Stats.deserialize(file);
 
-    //     Image image = new Image("basecase.png");
+        Image image = new Image("basecase.png");
 
-    //     Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats);
-    //     return enemy;
-    // }
+        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats);
+        return enemy;
+    }
 
     
 }

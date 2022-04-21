@@ -4,11 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javax.swing.plaf.metal.MetalLabelUI;
+
 public class Equipment extends Item {
     private EquipmentType type;
     private Stats buffs;
 
-    public Equipment(String name, int cooldown, EquipmentType type, Stats buffs){
+    public Equipment(String name, double cooldown, EquipmentType type, Stats buffs){
         super(name, cooldown, buffs);
         this.type = type;
     }
@@ -61,37 +63,20 @@ public class Equipment extends Item {
     }
 
 
-
-
-
-    @Override
     public void serialize(DataOutputStream file) throws IOException {
-        file.writeUTF("Equipment"); // type of item
-        file.writeUTF(this.getName());
-        file.writeInt(this.getCooldown());
-        this.getBuffs().serialize(file);
-        file.writeUTF(type.toString()); //save the type of equipment as string
     }
 
     public static Equipment deserialize(DataInputStream file) throws IOException {
-        String name = file.readUTF();
-        int cooldown = file.readInt();
-        Stats stats = Stats.deserialize(file);
         String equipmentType = file.readUTF();
-        EquipmentType type = EquipmentType.MELEE_WEAPON;
-        switch (equipmentType) {
-            case "RANGED_WEAPON": {
-                type = EquipmentType.RANGED_WEAPON;
-            }
-            case "MELEE_WEAPON": {
-                type = EquipmentType.MELEE_WEAPON;
-            }
-            case "ARMOR": {
-                type = EquipmentType.ARMOR;
-            }
+        if (equipmentType.equals("Ranged")) {
+            Equipment e = RangedWeapon.deserialize(file);
+            return e;
+        } else if (equipmentType.equals("Melee")) {
+            Equipment e = MeleeWeapon.deserialize(file);
+            return e;
+        } else {
+            Equipment e = Armor.deserialize(file);
+            return e;
         }
-
-        Equipment e = new Equipment(name, cooldown, type, stats);
-        return e;
     }
 }

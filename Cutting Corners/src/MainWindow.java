@@ -444,6 +444,10 @@ public class MainWindow {
                     World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
                     World.instance().getPlayer().performAttack();
                 }
+
+                // World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
+                
+                // World.instance().getPlayer().setState(PlayerState.attacking);
             }
         });
     }

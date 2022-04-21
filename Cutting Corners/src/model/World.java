@@ -26,14 +26,14 @@ public class World {
     private World(){}
 
     public static void reset() {
-        world = new World();
+        world = null;
     }
 
     public static World instance(){
         if (world == null){
             world = new World();
             Level currentLev = populate();
-            currentLev.currentScreen = currentLev.findScreen(0, 0);
+            currentLev.setCurrentScreen(currentLev.findScreen(0, 0));
             world.campaign.add(currentLev);
             Player Cirkyle = new Player(100, 100);
             currentLev.placeEntity(0, 0, Cirkyle);
@@ -50,7 +50,7 @@ public class World {
 
     public ArrayList<Entity> displayCurrentEntities(){
         Level current = campaign.get(currentLevel);
-        return current.currentScreen.entities;
+        return current.getCurrentScreen().getEntities();
     }
 
     public Player getPlayer(){
@@ -182,7 +182,8 @@ public class World {
         {  // SaveGame.dat
             writer.writeInt(this.currentLevel);
             writer.writeInt(this.difficulty);
-            //getCurrentLevel().serialize(writer);
+            Level lvl = getCurrentLevel();
+            lvl.serialize(writer);
 
             
         }
@@ -200,7 +201,8 @@ public class World {
 
             this.currentLevel = reader.readInt();
             this.difficulty = reader.readInt();
-            //getCurrentLevel().deserialize(reader);
+
+            Level lvl = Level.deserialize(reader);
 
         }
     }
