@@ -431,7 +431,8 @@ public class MainWindow {
                 // Thread t = new Thread(() -> {World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());World.instance().getPlayer().performAttack();});
                 // t.start();
                 World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
-                World.instance().getPlayer().performAttack();
+                
+                World.instance().getPlayer().setState(PlayerState.attacking);
             }
         });
     }
