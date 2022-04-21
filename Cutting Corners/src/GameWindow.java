@@ -5,8 +5,12 @@ import javax.swing.JFrame;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import java.awt.image.*;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -17,7 +21,7 @@ import javafx.scene.layout.*;
 import javafx.util.Duration;
 import model.*;
 import java.awt.*;
-
+import javafx.embed.swing.SwingFXUtils;
 
 public class GameWindow {
 
@@ -60,6 +64,7 @@ public class GameWindow {
         World.instance().getCurrentLevel().setObserver(this::Initialize);
         ratioImage(backgroundView);
         for (Entity entity: entities){
+            entity.setObserver(this::changeImage, this::flipImage);
             ImageView entityImage = new ImageView(entity.getImage());
             entityImage.setX(entity.getX());
             entityImage.setY(entity.getY());
@@ -108,6 +113,44 @@ public class GameWindow {
         Timeline timer = new Timeline(frames);
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
+    }
+
+    @FXML 
+    void changeImage(Image image, Entity entity){
+        for (Node node: gameWindow.getChildren()){
+            if (node instanceof ImageView){
+                ImageView imageview = (ImageView) node;
+                if (imageview.getUserData() == null) continue;
+                if (imageview.getUserData().equals(entity)){
+                    imageview.setImage(image);
+                }
+            }
+        }
+    }
+
+    @FXML
+    void flipImage(Entity entity){
+        for (Node node: gameWindow.getChildren()){
+            if (node instanceof ImageView){
+                ImageView imageview = (ImageView) node;
+                if (imageview.getUserData() == null) continue;
+                if (imageview.getUserData().equals(entity)){
+                    Image image = entity.getImage();
+                    int width = (int) image.getWidth();
+                    int height = (int) image.getHeight();
+                    BufferedImage bImage = new BufferedImage
+                        (width, height, BufferedImage.TYPE_INT_RGB);
+                    BufferedImage dimg = new BufferedImage
+                        (width, height, bImage.getColorModel()
+                        .getTransparency());
+                    Graphics2D g2D = bImage.createGraphics();
+                    g2D.drawImage(bImage, 0, 0, width, height, 0, height, width, 0, null);
+                    g2D.dispose();
+                    Image flippedImage = SwingFXUtils.toFXImage(dimg, null);
+                    imageview.setImage(flippedImage);
+                }
+            }
+        }
     }
     
 

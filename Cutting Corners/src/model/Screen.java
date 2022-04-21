@@ -59,9 +59,9 @@ public class Screen {
         }
         return null;
     }
-    public ArrayList<Enemy> getEnemies()
+    public ArrayList<Entity> getEnemies()
     {
-        ArrayList<Enemy> output = new ArrayList<>();
+        ArrayList<Entity> output = new ArrayList<>();
         for(Entity e:entities)
         {
             if(e instanceof Enemy)

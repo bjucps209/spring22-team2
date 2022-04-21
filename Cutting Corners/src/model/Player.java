@@ -17,16 +17,20 @@ public class Player extends Entity {
 
     ArrayList<Item> inventory;
     Image weaponImage = new Image ("media/Player/swordwalk.gif");
-    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 250, 120, weaponImage);
+    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 250, weaponImage);
     Equipment armor;
     Stats stats = new Stats(2, 5, 4);
     static Image playerImage = new Image("media/Player/Cirkyle v1.png");
+    static Image walkingImage = new Image("media/Player/Cirkylewalk.gif");
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Coordinates mouseCoordinates = new Coordinates(0, 0);
     PlayerState state = PlayerState.standing;
     int attackCount = 50;
-    //Making a update so I can push
-    ArrayList<Enemy> enemies;
+    //Making a update so I can push // changed to entities so enemies can use on player
+    ArrayList<Entity> enemies;
+    Direction facing = Direction.left;
+    PlayerState previousState = PlayerState.standing;
+
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -56,7 +60,8 @@ public class Player extends Entity {
         this.armor = armor;
         applyEquipmentBuffs();
     }
-    public void setEnemies(ArrayList<Enemy> enemies)
+
+    public void setEnemies(ArrayList<Entity> enemies)
     {
         this.enemies=enemies;
     }
@@ -98,11 +103,20 @@ public class Player extends Entity {
 
         switch (state) {
             case standing: {
+                if (previousState == PlayerState.walking){
 
+                    super.getObserver().changeImage(playerImage, this);
+                    previousState = PlayerState.standing;
+                }
+                super.getObserver().changeImage(playerImage, this);;
                 if (keys.size() > 0){state = PlayerState.walking;}
                 break;
             }
             case walking: {
+                if (previousState == PlayerState.standing){
+                    super.getObserver().changeImage(walkingImage, this);
+                    previousState = PlayerState.walking;
+                }
                 if (keys.size() == 0){state = PlayerState.standing;}
                 try{KeyPressed(0);}
                 catch(IndexOutOfBoundsException i){}
@@ -113,8 +127,7 @@ public class Player extends Entity {
                     state = PlayerState.resting; 
                     break;
                 }
-                Thread attack = new Thread(() -> performAttack());
-                attack.start();
+                performAttack();
                 state = PlayerState.resting;
             }
             case resting:{
@@ -134,15 +147,16 @@ public class Player extends Entity {
 
     public void KeyPressed(int index){
         Direction direction = CheckIfOutOfBounds();
+        if(state!=PlayerState.standing)
+            {
+                if(state!=PlayerState.walking)
+                {
+                    return;
+                }
+            }
         switch (keys.get(index)){
             default:
-                if(state!=PlayerState.standing)
-                {
-                    if(state!=PlayerState.walking)
-                    {
-                        return;
-                    }
-                }
+                return;
             case W: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
             if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
@@ -151,7 +165,13 @@ public class Player extends Entity {
             }
             case A: {
                 if (keys.size() > index + 1){KeyPressed((index + 1)); }
-            if (direction != Direction.left){super.getCoords().subXCoord(stats.getSpeed());}
+            if (direction != Direction.left){
+                super.getCoords().subXCoord(stats.getSpeed());
+                if (facing == Direction.right){
+                    facing = Direction.left;
+                    super.getFlipper().flipImage(this);
+                }
+            }
             if (super.getCoords().getxCoord() < 0){super.getCoords().addXCoord(stats.getSpeed());}
                 break;
             }
@@ -163,7 +183,13 @@ public class Player extends Entity {
             }
             case D: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (direction != Direction.right){super.getCoords().addXCoord(stats.getSpeed());}
+            if (direction != Direction.right){
+                super.getCoords().addXCoord(stats.getSpeed());
+                if (facing == Direction.left){
+                    facing = Direction.right;
+                    super.getFlipper().flipImage(this);
+                }
+            }
             if (super.getCoords().getxCoord() > 1200){super.getCoords().subXCoord(stats.getSpeed());}
                 break;
             }
@@ -201,69 +227,73 @@ public class Player extends Entity {
 
     @Override
     public void performAttack(){
+        
         if (equippedItem instanceof MeleeWeapon){
             // AudioClip SWORD_ATTACK = new AudioClip("media/Sounds/Sound effects/mixkit-dagger-woosh-1487-(Sword Attack).wav");
             // SWORD_ATTACK.play();
             MeleeWeapon weapon = (MeleeWeapon) equippedItem;
             weapon.setDamage(stats.getStrength());
             weapon.setSpeed((int) stats.getSpeed() / 2);
-            for(int i=0;i<enemies.size();i++)
-            {
-                if(attackCount==50)
-                {
-                    if(getMousDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
-                    {
-                        enemies.get(i).takeDamage(weapon.getDamage());
-                        System.out.println("Hit!");
-                        continue;
-                    }
-                    else if(getMousDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
-                    {
-                        enemies.get(i).takeDamage(weapon.getDamage());
-                        System.out.println("Hit!");
-                        continue;
-                    }
-                    if(getMousDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
-                    {
-                        enemies.get(i).takeDamage(weapon.getDamage());
-                        System.out.println("Hit!");
-                        continue;
-                    }
-                    else if(getMousDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
-                    {
-                        enemies.get(i).takeDamage(weapon.getDamage());
-                        System.out.println("Hit!");
-                        continue;
-                    }
-                }
-            }
+
+            weapon.setDirection(getMousDirection());
+            weapon.setEnemies(enemies);
+            // for(int i=0;i<enemies.size();i++)
+            // {
+            //     if(attackCount==50)
+            //     {
+            //         if(getMousDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
+            //         {
+            //             enemies.get(i).takeDamage(weapon.getDamage());
+            //             System.out.println("Hit!");
+            //             continue;
+            //         }
+            //         else if(getMousDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
+            //         {
+            //             enemies.get(i).takeDamage(weapon.getDamage());
+            //             System.out.println("Hit!");
+            //             continue;
+            //         }
+            //         if(getMousDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
+            //         {
+            //             enemies.get(i).takeDamage(weapon.getDamage());
+            //             System.out.println("Hit!");
+            //             continue;
+            //         }
+            //         else if(getMousDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
+            //         {
+            //             enemies.get(i).takeDamage(weapon.getDamage());
+            //             System.out.println("Hit!");
+            //             continue;
+            //         }
+            //     }
+            // }
             
 
-            System.out.println(mouseCoordinates.getxCoord() - super.getX());
-            System.out.println(mouseCoordinates.getyCoord() - super.getY());
+            // System.out.println(mouseCoordinates.getxCoord() - super.getX());
+            // System.out.println(mouseCoordinates.getyCoord() - super.getY());
             
-            double slope = -1 * (mouseCoordinates.getyCoord() - super.getY() - 100) /
-                           (mouseCoordinates.getxCoord() - super.getX() - 100);
+            // double slope = -1 * (mouseCoordinates.getyCoord() - super.getY() - 100) /
+            //                (mouseCoordinates.getxCoord() - super.getX() - 100);
 
 
-            double direction = Math.atan(slope);
+            // double direction = Math.atan(slope);
 
-            if (mouseCoordinates.getyCoord() - super.getY() > 100 && 
-                mouseCoordinates.getxCoord() - super.getX() > 100){
-                    direction += 2 * Math.PI;
-                }
+            // if (mouseCoordinates.getyCoord() - super.getY() > 100 && 
+            //     mouseCoordinates.getxCoord() - super.getX() > 100){
+            //         direction += 2 * Math.PI;
+            //     }
 
-            else if (mouseCoordinates.getyCoord() - super.getY() > 100 && 
-                mouseCoordinates.getxCoord() - super.getX() < 100){
-                    direction += Math.PI;
-            }
+            // else if (mouseCoordinates.getyCoord() - super.getY() > 100 && 
+            //     mouseCoordinates.getxCoord() - super.getX() < 100){
+            //         direction += Math.PI;
+            // }
 
-            else if (mouseCoordinates.getyCoord() - super.getY() < 100 && 
-                mouseCoordinates.getxCoord() - super.getX() < 100){
-                    direction += Math.PI;
-            }
+            // else if (mouseCoordinates.getyCoord() - super.getY() < 100 && 
+            //     mouseCoordinates.getxCoord() - super.getX() < 100){
+            //         direction += Math.PI;
+            
 
-            weapon.setDirection(direction);
+            // weapon.setDirection(direction);
         }
         
         equippedItem.performAction(this);

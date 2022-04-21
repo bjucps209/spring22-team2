@@ -6,10 +6,10 @@ import java.io.IOException;
 
 public class Item {
     private String name;
-    private int cooldown;
+    private double cooldown;
     Stats buffs;
 
-    public Item(String name, int cooldown, Stats buffs){
+    public Item(String name, double cooldown, Stats buffs){
         this.name = name;
         this.cooldown = cooldown;
         this.buffs = buffs;
@@ -27,7 +27,7 @@ public class Item {
         this.name = name;
     }
 
-    public int getCooldown() {
+    public double getCooldown() {
         return cooldown;
     }
 

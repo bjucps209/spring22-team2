@@ -8,7 +8,7 @@ public class Equipment extends Item {
     private EquipmentType type;
     private Stats buffs;
 
-    public Equipment(String name, int cooldown, EquipmentType type, Stats buffs){
+    public Equipment(String name, double cooldown, EquipmentType type, Stats buffs){
         super(name, cooldown, buffs);
         this.type = type;
     }
@@ -64,7 +64,8 @@ public class Equipment extends Item {
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Equipment"); // type of item
         file.writeUTF(this.getName());
-        file.writeInt(this.getCooldown());
+        // file.writeInt(this.getCooldown());
+        file.writeDouble(this.getCooldown());
         this.getBuffs().serialize(file);
         file.writeUTF(type.toString()); //save the type of equipment as string
     }

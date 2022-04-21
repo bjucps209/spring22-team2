@@ -11,6 +11,8 @@ public class Entity {
     private int size;
     private Coordinates coords;
     private Image image;
+    private imageObserver imgObserver;
+    private imageFlipper imgFlipper;
 
     public Entity(int xCoord, int yCoord, Image image, int size){
         coords = new Coordinates(xCoord, yCoord);
@@ -22,6 +24,19 @@ public class Entity {
     }
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public void setObserver(imageObserver observer, imageFlipper flipper){
+        imgObserver = observer;
+        imgFlipper = flipper;
+    }
+
+    public imageObserver getObserver(){
+        return imgObserver;
+    }
+
+    public imageFlipper getFlipper(){
+        return imgFlipper;
     }
 
     public int getX(){
