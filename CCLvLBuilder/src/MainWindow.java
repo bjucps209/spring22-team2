@@ -1,11 +1,12 @@
 import Model.*;
-import Model.Screen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 
@@ -23,6 +24,11 @@ public class MainWindow implements LevelObserver {
     protected static final double screensizescalar = 65;
     protected static double screenwidth = screensizescalar * 16; protected static double screenheight = screensizescalar * 9;
 
+    //Object Button lists
+    protected ObjectSelectorCompiler objectBtnCompiler;
+    @FXML VBox VBObjectBtnLocation;
+    @FXML CustomButton currentSelectedObjButton; //Obj Button currently clicked
+
     //Panes
     @FXML ArrayList<Pane> thePanes;
 
@@ -38,9 +44,16 @@ public class MainWindow implements LevelObserver {
     @FXML Button btnEast; @FXML Button btnWest;
     @FXML Button btnUp; @FXML Button btnDown;
 
+    //Other Stuff
+    @FXML Label lblErrorMsg;
+
     @FXML
     void initialize() {
-        DataManager.DaMan().setMrObserver(this);        
+        DataManager.DaMan().setMrObserver(this);
+        
+        objectBtnCompiler = new ObjectSelectorCompiler(VBObjectBtnLocation);
+        objectBtnCompiler.compileStuff();
+        objectBtnCompiler.pushCurrentBtnSet();
         thePanes = new ArrayList<Pane>();
         createScreen("0,0,0"); /// Try to manage this with DaMan ---------------- no
         
@@ -48,6 +61,8 @@ public class MainWindow implements LevelObserver {
         btnDelete.setDisable(true);
     }
 
+    ///Screen Control System
+    //
     @FXML
     void onCreateClicked(ActionEvent event) {
         switch (navPanelState) {
@@ -107,7 +122,6 @@ public class MainWindow implements LevelObserver {
             } 
     }
 
-
     //Disables appropriate navigation buttons (btnNorth, btnEast, btnDelete...)
     public void disableNavButtons() {
         Screen[] surroundingScreens = DataManager.DaMan().getCurrentScreen().getAdjacentScreens();
@@ -123,15 +137,35 @@ public class MainWindow implements LevelObserver {
         btnDelete.setDisable(thePanes.size() == 1); //Disables delete button if only one screen
     }
 
-    //Observer functions
+    /// Object Control System
+    //
+    @FXML void onObjectBtnClicked(ActionEvent event){
+        CustomButton btnClicked = (CustomButton)event.getSource();
+        if(currentSelectedObjButton != null) {
+            currentSelectedObjButton.setText(currentSelectedObjButton.getName());
+        }
+        currentSelectedObjButton = btnClicked;
+        btnClicked.setText(btnClicked.getName() + "/n" + "Selected");
+    }
+
+    @FXML void onPaneClicked(MouseEvent event) {
+        if (currentSelectedObjButton == null) { return; }
+        double xx = event.getSceneX();
+        double yy = event.getSceneY();
+        
+    }
+
+    ///Observer functions
+    //
     @Override
-    public void createScreen(String StrID) {
+    public void createScreen(String StrID) { //Needs work
         currentScreen = new Pane();
         thePanes.add(currentScreen);
-        currentScreen.setMinSize(16 * screensizescalar, 9 * screensizescalar); /// Needs attention -----------------
+        currentScreen.setMinSize(16 * screensizescalar, 9 * screensizescalar);
         currentScreen.setMaxSize(16 * screensizescalar, 9 * screensizescalar);
         currentScreen.setStyle("-fx-background-color: lightgray");
         currentScreen.setUserData(StrID);
+        currentScreen.setOnMouseClicked(this::onPaneClicked);
         screenBox.getChildren().clear();
         screenBox.getChildren().add(currentScreen);
         lblCurScreenID.setText(StrID);
@@ -172,7 +206,19 @@ public class MainWindow implements LevelObserver {
         }
         movetoScreen(newStrID);
         thePanes.remove(delPane);
+    }
+
+    @Override
+    public void addLvLObject(LvLObject theObject) {
 
     }
 
+
+    @Override
+    public void updateActionStatement(String statementMsg) {
+        lblErrorMsg.setText(statementMsg);
+    }
+
+
+    ///The big one
 }

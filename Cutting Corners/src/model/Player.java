@@ -21,7 +21,11 @@ public class Player extends Entity {
     Equipment armor;
     Stats stats = new Stats(2, 5, 4);
     static Image playerImage = new Image("media/Player/Cirkyle v1.png");
-    static Image walkingImage = new Image("media/Player/Cirkylewalk.gif");
+    static Image[] walkingGif = {new Image("media/Player/Cirkyle Walking/Frame1.png"),
+                                 new Image("media/Player/Cirkyle Walking/Frame2.png"),
+                                 new Image("media/Player/Cirkyle Walking/Frame3.png"),
+                                 new Image("media/Player/Cirkyle Walking/Frame4.png"),
+                                 new Image("media/Player/Cirkyle Walking/Frame5.png")};
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Coordinates mouseCoordinates = new Coordinates(0, 0);
     PlayerState state = PlayerState.standing;
@@ -29,6 +33,7 @@ public class Player extends Entity {
     ArrayList<Entity> enemies;
     Direction facing = Direction.left;
     PlayerState previousState = PlayerState.standing;
+    int walkingStep = 0;
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -101,11 +106,23 @@ public class Player extends Entity {
 
         switch (state) {
             case standing: {
-                if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
+                if (previousState == PlayerState.walking){
+                    walkingStep = 0;
+                    super.getObserver().changeImage(playerImage, this);
+                    previousState = PlayerState.standing;
+                }
+                super.getObserver().changeImage(playerImage, this);;
+                if (keys.size() > 0){state = PlayerState.walking;}
                 break;
             }
             case walking: {
-                if (keys.size() == 0&&state!=PlayerState.attacking){state = PlayerState.standing;}
+                walkingStep = (walkingStep + 1) % 50;
+                super.getObserver().changeImage(walkingGif[(int) walkingStep / 10], this);
+                if (keys.size() == 0){state = PlayerState.standing;}
+                if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
+                
+            // case walking: {
+            //     if (keys.size() == 0&&state!=PlayerState.attacking){state = PlayerState.standing;}
 //                 if (previousState == PlayerState.walking){
 
 //                     super.getObserver().changeImage(playerImage, this);

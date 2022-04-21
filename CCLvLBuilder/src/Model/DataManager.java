@@ -10,8 +10,10 @@ import java.util.ArrayList;
 public class DataManager {
     LevelObserver mrObserver; //LevelObserver
     private Level theLevel;
+    public final Vector gridDimensions = new Vector(7, 13); 
 
     private Screen currentScreen;
+    private String playerScrStrID;
     //private ArrayList<Screen> Screens;
 
     public void save(String pathway, String fileName) { return; } //For show
@@ -22,7 +24,24 @@ public class DataManager {
     //public void placeObject(LvLObject blah) {} (LvLObject comes from a clone of prefabricated objects)
     //
 
+    //Checks if object is within bounds, sends error if not
+    //Makes currentScreen do the rest (Besides observers)
+    public void createObject(String name, ObjType objtype, Vector topLeftCell, Vector dimensions) {
+        if (topLeftCell.getY() < 0 || topLeftCell.getY() + dimensions.getY() >= gridDimensions.getY()) {
+            if(mrObserver != null) { mrObserver.updateActionStatement("Out of Bounds");}
+            return;
+        } if (topLeftCell.getX() < 0 || topLeftCell.getX() + dimensions.getX() >= gridDimensions.getX()) {
+            if(mrObserver != null) {  mrObserver.updateActionStatement("Out of Bounds"); }
+            return;
+        }
+        if (!currentScreen.areaIsEmpty(topLeftCell, dimensions)) {
+            if(mrObserver != null) { mrObserver.updateActionStatement("Selected area isn't empty"); }
+            return;
+        }
 
+        LvLObject newObject = currentScreen.createObject(name, objtype, topLeftCell, dimensions);
+        //Add Observer push here
+    }
 
 
     /// Screen Methods ///
@@ -67,15 +86,15 @@ public class DataManager {
         }
 
         //Fill adjacent ID's if adjacent screens exist
-        Screen newScreen = new Screen(tempID[0], tempID[1], tempID[2]);
+        Screen newScreen = new Screen(tempID[0], tempID[1], tempID[2], gridDimensions);
         Direction[] directions = Direction.values();
         Direction[] opposingDir = new Direction[] {Direction.South, Direction.North, Direction.West, Direction.East, Direction.Down, Direction.Up};
-        for (int dir = 0; dir < directions.length; dir++) {
-            var idCan =  Screen.ConvertToStrID(getAdjacentID(directions[dir], tempID));
-            var screenCan = theLevel.getScreens().stream().filter((eh) -> eh.getStrID().equals(idCan)).findFirst();
-            if (screenCan.isPresent()){
-                newScreen.setAdjacentScreen(directions[dir], screenCan.get());
-                screenCan.get().setAdjacentScreen(opposingDir[dir], newScreen);
+        for (int dir = 0; dir < directions.length; dir++) { //Goes through all the directions
+            var idCan =  Screen.ConvertToStrID(getAdjacentID(directions[dir], tempID)); //Possible screenID
+            var screenCan = theLevel.getScreens().stream().filter((eh) -> eh.getStrID().equals(idCan)).findFirst(); //Finds screen with ID
+            if (screenCan.isPresent()){ //Checks if Optional exists
+                newScreen.setAdjacentScreen(directions[dir], screenCan.get()); // Sets as adjacentScreen in direction
+                screenCan.get().setAdjacentScreen(opposingDir[dir], newScreen); // Sets found screen's adjacent screen
             }
         }
         theLevel.getScreens().add(newScreen);
@@ -129,7 +148,7 @@ public class DataManager {
     private DataManager() {
         theLevel = new Level();
         //Screens = new ArrayList<Screen>();
-        currentScreen = new Screen(0,0,0);
+        currentScreen = new Screen(0,0,0, gridDimensions);
         theLevel.addScreen(currentScreen);
     }
     private static DataManager theThing = new DataManager();
@@ -154,5 +173,13 @@ public class DataManager {
 
     public void setCurrentScreen(Screen newScreen) {
         currentScreen = newScreen;
+    }
+
+    public void setPlayerScrID(String StrID) {
+        playerScrStrID = StrID;
+    }
+
+    public String getPlayerScrID(String StrID) {
+        return playerScrStrID;
     }
 }

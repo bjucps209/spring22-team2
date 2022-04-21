@@ -17,8 +17,8 @@
             <Label text="blah of blah" />
             <Button text="Next" />
         </HBox>
-        <VBox>
-            <Button text="Dumby object" />
+        <VBox fx:id="VBObjectBtnLocation">
+           
         </VBox>
     </VBox>
 
@@ -27,7 +27,7 @@
             <Label text = "Screen ID: " />
             <Label fx:id="lblCurScreenID" />
             <Label text = "                Level Name Here                    " />
-            <Label text="Copyright 2022 No Touch Studios" />
+            <Label fx:id="lblErrorMsg" />
         </HBox>
         <HBox fx:id="screenBox"></HBox>
         <HBox> <Label text="Randomized stuff here" /> </HBox>

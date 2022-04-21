@@ -1,28 +1,8 @@
-///8:31 pm - 10:27 pm -- 30 min
-
-4/14/22
-9:00 am - 9:25 am
-++30-40 min
-=======
-9:00 am - 9:25 am (Something idk)
-++30-40 min (Screen flow)
-
-4/15/22
-++30 min ish (more Screen flow)
-
-4/18/22
-6:30 pm - 8:01 pm
-
-9:00 am - 9:25 am (Something idk)
-++30-40 min (Screen flow)
-
-4/15/22
-++30 min ish (more Screen flow)
-
-4/19/2022
-++40 min (Figuring out what I'm supposed to do)
-7:48 pm - 9:05 pm
-
 Some questions to ask:
     Does importing an entire package (ie javafx.scene.layout.*) actually
     negatively impact anything.
+
+    4/21/22
+    9:03 am - 10:43 am
+
+    left off at DimensionMan
