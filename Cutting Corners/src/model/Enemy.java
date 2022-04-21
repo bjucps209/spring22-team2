@@ -14,7 +14,7 @@ public class Enemy extends Entity{
     private Stats stats;
     private Enemy type;
     private Direction direction = Direction.left;
-    private Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, 120, new Image("media/Player/swordwalk.gif"));
+    private Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, new Image("media/Player/swordwalk.gif"));
     private EnemyState state = EnemyState.patrolling;
     private int size;
     private int stunCount;
