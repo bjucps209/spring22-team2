@@ -36,9 +36,20 @@ public class Obstacle {
         file.writeUTF(type.toString());
     }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.row = file.readInt();
-        this.col = file.readInt();
-        //this.type = file.readUTF();
+    public static Obstacle deserialize(DataInputStream file) throws IOException {
+        int row = file.readInt();
+        int col = file.readInt();
+        String type = file.readUTF();
+        Cell obstacleType = Cell.empty;
+        if (type.equals("rock")) {
+            obstacleType = Cell.rock;
+        } else if (type.equals("tree")) {
+            obstacleType = Cell.tree;
+        } else {
+            obstacleType = Cell.plant;
+        }
+
+        Obstacle o = new Obstacle(row, col, obstacleType);
+        return o;
     }
 }

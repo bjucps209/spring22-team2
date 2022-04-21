@@ -367,7 +367,7 @@ public class Player extends Entity {
 
 
 
-
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Player");
         file.writeInt(this.getX());

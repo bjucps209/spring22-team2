@@ -69,8 +69,7 @@ public class Projectile extends Entity{
         this.direction = direction;
     }
 
-
-
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(damage);
         file.writeInt(speed);
