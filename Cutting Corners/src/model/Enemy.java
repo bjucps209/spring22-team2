@@ -219,12 +219,12 @@ public class Enemy extends Entity{
 
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Enemy");
+        file.writeInt(size);
         file.writeInt(this.getX());
         file.writeInt(this.getY());
         homeScreen.serialize(file);
         file.writeInt(vision);
         file.writeInt(sides);
-        file.writeInt(size);
         // direction ??
         weapon.serialize(file);
         stats.serialize(file);
@@ -232,12 +232,12 @@ public class Enemy extends Entity{
     }
 
     public static Enemy deserialize(DataInputStream file) throws IOException {
+        int size = file.readInt();
         int x = file.readInt();
         int y = file.readInt();
         Screen homeScreen = Screen.deserialize(file);
         int vision = file.readInt();
         int sides = file.readInt();
-        int size = file.readInt();
         Equipment weapon = Equipment.deserialize(file);
         Stats stats = Stats.deserialize(file);
 

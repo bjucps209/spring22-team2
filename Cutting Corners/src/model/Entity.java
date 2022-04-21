@@ -75,6 +75,9 @@ public class Entity {
         if (type.equals("Enemy")) {
             Entity e = Enemy.deserialize(file);
             return e;
+        } else if (type.equals("Projectile")) {
+            Entity p = Projectile.deserialize(file);
+            return p;
         } else {
             Entity player = Player.deserialize(file);
             return player;
