@@ -169,7 +169,7 @@ public class Screen {
         int numEntities = file.readInt();
         for (int i = 0; i < numEntities; ++i) {
             Entity e = Entity.deserialize(file);
-            s.getEntities().add(e);
+            s.addEntity(e);
         }
         for (int r = 0; r < 7; ++r) {
             for (int c = 0; c < 13; ++c) {
