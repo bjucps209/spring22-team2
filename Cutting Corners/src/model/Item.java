@@ -18,7 +18,7 @@ public class Item {
     public void performAction(Entity user){}
 
     
-
+    // Getters and Setters
     public String getName() {
         return name;
     }
@@ -43,10 +43,10 @@ public class Item {
     public static Item deserialize(DataInputStream file) throws IOException {
         String type = file.readUTF();
         if (type.equals("UsableItem")) {
-            Item item = UsableItem.deserialize(file);
+            UsableItem item = UsableItem.deserialize(file);
             return item;
         } else {
-            Item item = Equipment.deserialize(file);
+            Equipment item = Equipment.deserialize(file);
             return item;
         }
     }

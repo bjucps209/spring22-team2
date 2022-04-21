@@ -42,15 +42,15 @@ public class Location {
 
 
 
-    public void serialize(DataOutputStream file) throws IOException {
-        file.writeInt(row);
-        file.writeInt(col);
-        file.writeInt(level);
-    }
+    // public void serialize(DataOutputStream file) throws IOException {
+    //     file.writeInt(row);
+    //     file.writeInt(col);
+    //     file.writeInt(level);
+    // }
 
-    public void deserialize(DataInputStream file) throws IOException {
-        this.row = file.readInt();
-        this.col = file.readInt();
-        this.level = file.readInt();
-    }
+    // public void deserialize(DataInputStream file) throws IOException {
+    //     this.row = file.readInt();
+    //     this.col = file.readInt();
+    //     this.level = file.readInt();
+    // }
 }

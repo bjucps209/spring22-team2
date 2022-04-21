@@ -76,10 +76,31 @@ public class MeleeWeapon extends Equipment{
 
     
     public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Melee");
+        file.writeUTF(getName());
+        file.writeInt(getCooldown());
+        getBuffs().serialize(file);
         file.writeInt(range);
+        file.writeDouble(direction);
+        file.writeInt(damage);
+        file.writeInt(arc);
     }
 
-    // public void deserialize(DataInputStream file) throws IOException {
-    //     this.range = file.readInt();
-    // }
+    public static MeleeWeapon deserialize(DataInputStream file) throws IOException {
+        String name = file.readUTF();
+        int cooldown = file.readInt();
+        Stats buffs = Stats.deserialize(file);
+        int Strength = buffs.getStrength();
+        int Health = buffs.getHealth();
+        int Speed = buffs.getSpeed();
+        int range = file.readInt();
+        double direction = file.readDouble();
+        int damage = file.readInt();
+        int arc = file.readInt();
+
+        Image image = new Image("basecase.png");
+        
+        MeleeWeapon m = new MeleeWeapon(name, cooldown, Strength, Health, Speed, range, arc, image);
+        return m;
+    }
 }
