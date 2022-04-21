@@ -25,7 +25,7 @@ public class World {
     private World(){}
 
     public static void reset() {
-        world = new World();
+        world = null;
     }
 
     public static World instance(){
@@ -169,7 +169,8 @@ public class World {
         {  // SaveGame.dat
             writer.writeInt(this.currentLevel);
             writer.writeInt(this.difficulty);
-            getCurrentLevel().serialize(writer);
+            Level lvl = getCurrentLevel();
+            lvl.serialize(writer);
 
             
         }

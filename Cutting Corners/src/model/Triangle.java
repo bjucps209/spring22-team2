@@ -24,12 +24,4 @@ public class Triangle extends Enemy{
     public void performAttack(){}
 
 
-
-    public void serialize(DataOutputStream file) throws IOException {
-    
-    }
-
-    // public void deserialize(DataInputStream file) throws IOException {
-        
-    // }
 }
