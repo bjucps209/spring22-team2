@@ -19,6 +19,7 @@ public class Screen {
     public Screen(int x, int y, int z, Vector gridDim) {
         IDSeries = new int[] {x, y, z};
         adjacentScreens = new Screen[6];
+        objectList = new ArrayList<LvLObject>();
         objectLocations = new LvLObject[gridDim.getY()][gridDim.getX()];
     }
 
@@ -58,7 +59,7 @@ public class Screen {
 
     //fills area with objectFiller references (can be null)
     public void fillArea(LvLObject an_object, LvLObject objectFiller) {
-        Vector tlc = an_object.getLTopLeftCell();
+        Vector tlc = an_object.getTopLeftCell();
         Vector dim = an_object.getDimensions();
         for (int yy = tlc.getY(); yy < tlc.getY() + dim.getY() - 1; yy++) {
             for (int xx = tlc.getX(); xx < tlc.getX() + dim.getX() - 1; xx++) {
