@@ -3,20 +3,16 @@ package Model;
 public class Item extends LvLObject {
 
     
-    public Item(String name, double height, double width, double x, double y) {
-        super(name, height, width, x, y);
+    public Item(String name, int id, Vector dimensions, Vector topleftcell) {
+        super(name, id,dimensions, topleftcell);
     }
 
     //Eventually will change newLoc depending on newLoc's location
     @Override
     public Vector moveLocation(Vector newLoc) {
-        this.objectLoc = newLoc;
+        this.topLeftCell = newLoc;
         return newLoc;
     }
 
-    @Override
-    public boolean isStackable() {
-        return true;
-    }
 
 }
