@@ -40,7 +40,10 @@ public class DataManager {
         }
 
         LvLObject newObject = currentScreen.createObject(name, objtype, topLeftCell, dimensions);
-        //Add Observer push here
+        if (mrObserver != null) {
+             mrObserver.addLvLObject(newObject); 
+             mrObserver.updateActionStatement("Placed at: " + newObject.getTopLeftCell().getX() + "," + newObject.getTopLeftCell().getY());
+        }
     }
 
 

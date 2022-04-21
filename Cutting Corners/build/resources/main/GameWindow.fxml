@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:controller="GameWindow" fx:id="vBox" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css" prefHeight="800" prefWidth="1280"
+    spacing="10" alignment="CENTER" >
+
+    <Pane fx:id="gameWindow" prefHeight="800" prefWidth="1280" 
+     style="-fx-background-color: lightgray" />
+
+</VBox>

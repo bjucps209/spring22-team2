@@ -3,6 +3,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -21,13 +22,11 @@ public class MainWindow implements LevelObserver {
     //Stuff for window dimensions
     protected Stage theStage; //don't ask
     protected Vector windowSize;
-    protected static final double screensizescalar = 65;
-    protected static double screenwidth = screensizescalar * 16; protected static double screenheight = screensizescalar * 9;
 
     //Object Button lists
     protected ObjectSelectorCompiler objectBtnCompiler;
     @FXML VBox VBObjectBtnLocation;
-    @FXML CustomButton currentSelectedObjButton; //Obj Button currently clicked
+    @FXML CustomButton currObjButton; //Obj Button currently clicked
 
     //Panes
     @FXML ArrayList<Pane> thePanes;
@@ -50,8 +49,8 @@ public class MainWindow implements LevelObserver {
     @FXML
     void initialize() {
         DataManager.DaMan().setMrObserver(this);
-        
-        objectBtnCompiler = new ObjectSelectorCompiler(VBObjectBtnLocation);
+        DimensionMan.DiMan(); // initialize 
+        objectBtnCompiler = new ObjectSelectorCompiler(VBObjectBtnLocation, this);
         objectBtnCompiler.compileStuff();
         objectBtnCompiler.pushCurrentBtnSet();
         thePanes = new ArrayList<Pane>();
@@ -141,18 +140,19 @@ public class MainWindow implements LevelObserver {
     //
     @FXML void onObjectBtnClicked(ActionEvent event){
         CustomButton btnClicked = (CustomButton)event.getSource();
-        if(currentSelectedObjButton != null) {
-            currentSelectedObjButton.setText(currentSelectedObjButton.getName());
+        if(currObjButton != null) {
+            currObjButton.setText(currObjButton.getName());
         }
-        currentSelectedObjButton = btnClicked;
+        currObjButton = btnClicked;
         btnClicked.setText(btnClicked.getName() + "/n" + "Selected");
     }
 
     @FXML void onPaneClicked(MouseEvent event) {
-        if (currentSelectedObjButton == null) { return; }
+        if (currObjButton == null) { return; }
         double xx = event.getSceneX();
         double yy = event.getSceneY();
-        
+        Vector topleftcell = DimensionMan.DiMan().coordstoGrid(yy, xx);
+        DataManager.DaMan().createObject(currObjButton.getName(), currObjButton.getObjType(), topleftcell, currObjButton.getDimensions());
     }
 
     ///Observer functions
@@ -161,8 +161,8 @@ public class MainWindow implements LevelObserver {
     public void createScreen(String StrID) { //Needs work
         currentScreen = new Pane();
         thePanes.add(currentScreen);
-        currentScreen.setMinSize(16 * screensizescalar, 9 * screensizescalar);
-        currentScreen.setMaxSize(16 * screensizescalar, 9 * screensizescalar);
+        currentScreen.setMinSize(16 * DimensionMan.screensizescalar, 9 * DimensionMan.screensizescalar);
+        currentScreen.setMaxSize(16 * DimensionMan.screensizescalar, 9 * DimensionMan.screensizescalar);
         currentScreen.setStyle("-fx-background-color: lightgray");
         currentScreen.setUserData(StrID);
         currentScreen.setOnMouseClicked(this::onPaneClicked);
@@ -181,10 +181,10 @@ public class MainWindow implements LevelObserver {
         for (Pane aPane : thePanes) {
             System.out.println(aPane.getUserData());
             if (aPane.getUserData().equals(StrID)) {
+                screenBox.getChildren().clear();
+                screenBox.getChildren().add(aPane);
                 currentScreen = aPane;
                 lblCurScreenID.setText(StrID);
-
-               
             }
         }
         disableNavButtons();
@@ -210,7 +210,14 @@ public class MainWindow implements LevelObserver {
 
     @Override
     public void addLvLObject(LvLObject theObject) {
+        double imgwidth = theObject.getDimensions().getX() * DimensionMan.DiMan().getCellLength();
+        double imgheight = theObject.getDimensions().getY() * DimensionMan.DiMan().getCellLength();
+        double[] coord = DimensionMan.DiMan().gridtoCoords((theObject.getTopLeftCell()));
 
+        ImageView newObj = new ImageView(currObjButton.getImg());
+        newObj.setFitWidth(imgwidth); newObj.setFitHeight(imgheight);
+        newObj.setLayoutY(coord[0]); newObj.setLayoutX(coord[1]);
+        currentScreen.getChildren().add(newObj);
     }
 
 

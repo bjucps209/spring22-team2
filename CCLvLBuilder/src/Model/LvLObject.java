@@ -26,10 +26,6 @@ public class LvLObject {
         return newLoc;
     }
 
-    public Vector getLTopLeftCell() {
-        return topLeftCell;
-    }
-
     public void setID(int newID) {
         id = newID;
     }
