@@ -7,6 +7,7 @@
 import java.util.ArrayList;
 
 import Model.Cell;
+import Model.ObjType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -18,6 +19,8 @@ public class ObjectSelectorCompiler {
     ArrayList<SelectorListSet> setList;
     
     private int currentSelectorSet;
+
+    private static final int BtnImgSize = 100; 
     
     public ObjectSelectorCompiler(VBox btnlocation) {
         setLocation = btnlocation;
@@ -34,12 +37,8 @@ public class ObjectSelectorCompiler {
     public void compileLists() {}
 
     public void compileSpecial() {
-        ImageView playerimage = new ImageView(new Image("TempImages/Cirkyle v1.png"));
-        playerimage.setFitWidth(100); playerimage.setFitHeight(100);
-        CustomButton newbutton = new CustomButton(Cell.Player);
-        newbutton.setGraphic(playerimage);
-        newbutton.setText("Cirkyle v1");
-
+        Image playerimage = new Image("TempImages/Cirkyle v1.png");
+        CustomButton newbutton = new CustomButton("Cirkyle v1" , playerimage, ObjType.Player, BtnImgSize);
         specialSet.addCButton(newbutton);
     }
 

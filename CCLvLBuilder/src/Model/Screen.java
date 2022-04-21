@@ -26,12 +26,13 @@ public class Screen {
 
     } */
 
-    public LvLObject createObject(String name, Cell celltype, Vector topleftcell, Vector dimensions) {
+    public LvLObject createObject(String name, ObjType celltype, Vector topleftcell, Vector dimensions) {
         currentObjID++; //increment object id of screen
-        LvLObject newobject = new Entity(null, 0, null, null);
+        LvLObject newobject = new LvLObject(null, 0, null, null, null);
         switch (celltype) { //defines newobject based on type
             case Player:
-                newobject = new Entity(name, currentObjID, dimensions, topleftcell);
+                newobject = new LvLObject(name, currentObjID, ObjType.Player, dimensions, topleftcell);
+                DataManager.DaMan().setPlayerScrID(this.getStrID());
                 break;
             default:
                 break;

@@ -3,6 +3,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -26,6 +27,7 @@ public class MainWindow implements LevelObserver {
     //Object Button lists
     protected ObjectSelectorCompiler objectBtnCompiler;
     @FXML VBox VBObjectBtnLocation;
+    @FXML CustomButton currentSelectedObjButton; //Obj Button currently clicked
 
     //Panes
     @FXML ArrayList<Pane> thePanes;
@@ -59,6 +61,8 @@ public class MainWindow implements LevelObserver {
         btnDelete.setDisable(true);
     }
 
+    ///Screen Control System
+    //
     @FXML
     void onCreateClicked(ActionEvent event) {
         switch (navPanelState) {
@@ -118,7 +122,6 @@ public class MainWindow implements LevelObserver {
             } 
     }
 
-
     //Disables appropriate navigation buttons (btnNorth, btnEast, btnDelete...)
     public void disableNavButtons() {
         Screen[] surroundingScreens = DataManager.DaMan().getCurrentScreen().getAdjacentScreens();
@@ -134,16 +137,35 @@ public class MainWindow implements LevelObserver {
         btnDelete.setDisable(thePanes.size() == 1); //Disables delete button if only one screen
     }
 
+    /// Object Control System
+    //
+    @FXML void onObjectBtnClicked(ActionEvent event){
+        CustomButton btnClicked = (CustomButton)event.getSource();
+        if(currentSelectedObjButton != null) {
+            currentSelectedObjButton.setText(currentSelectedObjButton.getName());
+        }
+        currentSelectedObjButton = btnClicked;
+        btnClicked.setText(btnClicked.getName() + "/n" + "Selected");
+    }
+
+    @FXML void onPaneClicked(MouseEvent event) {
+        if (currentSelectedObjButton == null) { return; }
+        double xx = event.getSceneX();
+        double yy = event.getSceneY();
+        
+    }
+
     ///Observer functions
     //
     @Override
-    public void createScreen(String StrID) {
+    public void createScreen(String StrID) { //Needs work
         currentScreen = new Pane();
         thePanes.add(currentScreen);
-        currentScreen.setMinSize(16 * screensizescalar, 9 * screensizescalar); /// Needs attention -----------------
+        currentScreen.setMinSize(16 * screensizescalar, 9 * screensizescalar);
         currentScreen.setMaxSize(16 * screensizescalar, 9 * screensizescalar);
         currentScreen.setStyle("-fx-background-color: lightgray");
         currentScreen.setUserData(StrID);
+        currentScreen.setOnMouseClicked(this::onPaneClicked);
         screenBox.getChildren().clear();
         screenBox.getChildren().add(currentScreen);
         lblCurScreenID.setText(StrID);
