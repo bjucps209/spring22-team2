@@ -10,7 +10,7 @@ public class Equipment extends Item {
     private EquipmentType type;
     private Stats buffs;
 
-    public Equipment(String name, int cooldown, EquipmentType type, Stats buffs){
+    public Equipment(String name, double cooldown, EquipmentType type, Stats buffs){
         super(name, cooldown, buffs);
         this.type = type;
     }

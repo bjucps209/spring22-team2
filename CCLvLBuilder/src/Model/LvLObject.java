@@ -5,27 +5,25 @@
 package Model;
 
 
-//TODO: implement random location
-public abstract class LvLObject {
+public class LvLObject {
     protected String name;
-    protected Vector objectLoc;
+    protected ObjType objType; // New system to replace Entity.java, Obstacle.java, etc
+    protected Vector topLeftCell;
     protected Vector dimensions;
-    protected int id; //Null should crash system
+    protected int id; //   Null should crash system ___Maybe
 
-    public LvLObject(String name, double height, double width, double x, double y) {
+    public LvLObject(String name, int id, ObjType objType, Vector dimensions, Vector topleftcell) {
         this.name = name;
-        objectLoc = new Vector(x, y);
-        dimensions = new Vector(height, width);
+        this.objType = objType;
+        topLeftCell = topleftcell;
+        this.dimensions = dimensions;
+        this.id  = id;
     }
 
-    //Differs between Object types
+    //May not use
     public Vector moveLocation(Vector newLoc) {
-        objectLoc = newLoc;
+        topLeftCell = newLoc;
         return newLoc;
-    }
-
-    public Vector getLocation() {
-        return objectLoc;
     }
 
     public void setID(int newID) {
@@ -44,5 +42,27 @@ public abstract class LvLObject {
         name = newName;
     }
 
-    public abstract boolean isStackable();
+    public Vector getTopLeftCell() {
+        return topLeftCell;
+    }
+
+    public void setTopLeftCell(Vector topLeftCell) {
+        this.topLeftCell = topLeftCell;
+    }
+
+    public Vector getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(Vector dimensions) {
+        this.dimensions = dimensions;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

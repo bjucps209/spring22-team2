@@ -11,6 +11,9 @@ public class Entity {
     private int size;
     private Coordinates coords;
     private Image image;
+    private imageObserver imgObserver;
+    private imageFlipper imgFlipper;
+    private EntityObserver observer;
 
     public Entity(int xCoord, int yCoord, Image image, int size){
         coords = new Coordinates(xCoord, yCoord);
@@ -22,6 +25,28 @@ public class Entity {
     }
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public void setEventObservers(imageObserver observer, imageFlipper flipper){
+        imgObserver = observer;
+        imgFlipper = flipper;
+    }
+    public void setObserver(EntityObserver o)
+    {
+        observer=o;
+    }
+
+    public EntityObserver getObserver(){
+        return observer;
+    }
+
+    public imageObserver getEObserver()
+    {
+        return imgObserver;
+    }
+
+    public imageFlipper getFlipper(){
+        return imgFlipper;
     }
 
     public int getX(){
@@ -58,7 +83,8 @@ public class Entity {
     }
 
 
-    public void takeDamage(int damage){}
+    public void takeDamage(int damage){
+    }
 
     public void performDie(){
         World.instance().displayCurrentEntities().remove(this);

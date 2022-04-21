@@ -42,7 +42,7 @@ public class RangedWeapon extends Equipment{
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Ranged");
         file.writeUTF(getName());
-        file.writeInt(getCooldown());
+        file.writeDouble(getCooldown());
         getBuffs().serialize(file);
         file.writeInt(range);
         projectile.serialize(file);

@@ -73,7 +73,8 @@ public class UsableItem extends Item{
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("UsableItem"); //type of item
         file.writeUTF(this.getName());
-        file.writeInt(this.getCooldown());
+        // file.writeInt(this.getCooldown());
+        file.writeDouble(this.getCooldown());
         buffs.serialize(file);
         file.writeInt(useCount);
         file.writeInt(duration);

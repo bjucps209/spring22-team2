@@ -5,8 +5,12 @@ import javax.swing.JFrame;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import java.awt.image.*;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -17,7 +21,7 @@ import javafx.scene.layout.*;
 import javafx.util.Duration;
 import model.*;
 import java.awt.*;
-
+//import javafx.embed.swing.SwingFXUtils;
 
 public class GameWindow {
 
@@ -58,20 +62,29 @@ public class GameWindow {
         gameWindow.getChildren().clear();
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         World.instance().getCurrentLevel().setObserver(this::Initialize);
+        backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         ratioImage(backgroundView);
         for (Entity entity: entities){
-            ImageView entityImage = new ImageView(entity.getImage());
+            entity.setEventObservers(this::changeImage, this::flipImage);
+            EntityImageView entityImage = new EntityImageView(entity.getImage());
+            entity.setObserver(entityImage);
             entityImage.setX(entity.getX());
             entityImage.setY(entity.getY());
             entityImage.xProperty().bind(entity.getXProperty());
             entityImage.yProperty().bind(entity.getYProperty());
             entityImage.setUserData(entity);
-            //entityImage.setFitWidth(entity.getSize());
+            //entityImage.setFitWidth(entity.getSize()*200*ratioWidth);
             entityImage.setPreserveRatio(true);
+            if(entity instanceof Boss)
+            {
+                entityImage.setFitWidth(1280);
+            }
             gameWindow.getChildren().add(entityImage);
             if(entity instanceof Player)
             {
-                ImageView weaponImage=new ImageView(new Image("media/Player/swordwalk.gif"));
+                EntityImageView weaponImage=new EntityImageView(new Image("media/Player/swordwalk.gif"));
+                ((Player) entity).setWeaponImage(new Image("media/Player/swordwalk.gif"));
+                ((Player) entity).setWeaponObserver(weaponImage);
                 weaponImage.setX(entity.getX());
                 weaponImage.setY(entity.getY());
                 weaponImage.xProperty().bind(entity.getXProperty());
@@ -85,10 +98,28 @@ public class GameWindow {
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         for (Obstacle obstacle: currentScreen.findObstacles()){
-            ImageView obstacleImage = new ImageView(new Image("media/terrain/medieval/rock.png"));
+            ImageView obstacleImage = new ImageView();
+            if(currentScreen.getFilename().contains("medieval"))
+            {
+                obstacleImage.setImage(new Image("media/terrain/medieval/rock.png"));
+            }
+            if(currentScreen.getFilename().contains("desert"))
+            {
+                obstacleImage.setImage(new Image("media/terrain/egypt/cactus.png"));
+            }
+            if(currentScreen.getFilename().contains("caveman"))
+            {
+                obstacleImage.setImage(new Image("media/terrain/caveman/deadbush.png"));
+                obstacleImage.setFitWidth(70);
+            }
+            if(currentScreen.getFilename().contains("secret")||currentScreen.getFilename().contains("boss"))
+            {
+                obstacleImage.setImage(new Image("media/terrain/secret&boss/lantern.png"));
+                obstacleImage.setFitWidth(100);
+            }
             obstacleImage.setX(obstacle.getX());
             obstacleImage.setY(obstacle.getY());
-            obstacleImage.prefWidth(200);
+            obstacleImage.prefWidth(100);
             obstacleImage.setPreserveRatio(true);
             gameWindow.getChildren().add(obstacleImage);
         }
@@ -108,6 +139,44 @@ public class GameWindow {
         Timeline timer = new Timeline(frames);
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
+    }
+
+    @FXML 
+    void changeImage(Image image, Entity entity){
+        for (Node node: gameWindow.getChildren()){
+            if (node instanceof ImageView){
+                ImageView imageview = (ImageView) node;
+                if (imageview.getUserData() == null) continue;
+                if (imageview.getUserData().equals(entity)){
+                    imageview.setImage(image);
+                }
+            }
+        }
+    }
+
+    @FXML
+    void flipImage(Entity entity){
+        for (Node node: gameWindow.getChildren()){
+            if (node instanceof ImageView){
+                ImageView imageview = (ImageView) node;
+                if (imageview.getUserData() == null) continue;
+                if (imageview.getUserData().equals(entity)){
+                    Image image = entity.getImage();
+                    int width = (int) image.getWidth();
+                    int height = (int) image.getHeight();
+                    BufferedImage bImage = new BufferedImage
+                        (width, height, BufferedImage.TYPE_INT_RGB);
+                    BufferedImage dimg = new BufferedImage
+                        (width, height, bImage.getColorModel()
+                        .getTransparency());
+                    Graphics2D g2D = bImage.createGraphics();
+                    g2D.drawImage(bImage, 0, 0, width, height, 0, height, width, 0, null);
+                    g2D.dispose();
+                    //Image flippedImage = SwingFXUtils.toFXImage(dimg, null);
+                    //imageview.setImage(flippedImage);
+                }
+            }
+        }
     }
     
 

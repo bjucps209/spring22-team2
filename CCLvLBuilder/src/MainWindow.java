@@ -1,11 +1,13 @@
 import Model.*;
-import Model.Screen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 
@@ -20,8 +22,11 @@ public class MainWindow implements LevelObserver {
     //Stuff for window dimensions
     protected Stage theStage; //don't ask
     protected Vector windowSize;
-    protected static final double screensizescalar = 65;
-    protected static double screenwidth = screensizescalar * 16; protected static double screenheight = screensizescalar * 9;
+
+    //Object Button lists
+    protected ObjectSelectorCompiler objectBtnCompiler;
+    @FXML VBox VBObjectBtnLocation;
+    @FXML CustomButton currObjButton; //Obj Button currently clicked
 
     //Panes
     @FXML ArrayList<Pane> thePanes;
@@ -38,9 +43,16 @@ public class MainWindow implements LevelObserver {
     @FXML Button btnEast; @FXML Button btnWest;
     @FXML Button btnUp; @FXML Button btnDown;
 
+    //Other Stuff
+    @FXML Label lblErrorMsg;
+
     @FXML
     void initialize() {
-        DataManager.DaMan().setMrObserver(this);        
+        DataManager.DaMan().setMrObserver(this);
+        DimensionMan.DiMan(); // initialize 
+        objectBtnCompiler = new ObjectSelectorCompiler(VBObjectBtnLocation, this);
+        objectBtnCompiler.compileStuff();
+        objectBtnCompiler.pushCurrentBtnSet();
         thePanes = new ArrayList<Pane>();
         createScreen("0,0,0"); /// Try to manage this with DaMan ---------------- no
         
@@ -48,6 +60,8 @@ public class MainWindow implements LevelObserver {
         btnDelete.setDisable(true);
     }
 
+    ///Screen Control System
+    //
     @FXML
     void onCreateClicked(ActionEvent event) {
         switch (navPanelState) {
@@ -107,7 +121,6 @@ public class MainWindow implements LevelObserver {
             } 
     }
 
-
     //Disables appropriate navigation buttons (btnNorth, btnEast, btnDelete...)
     public void disableNavButtons() {
         Screen[] surroundingScreens = DataManager.DaMan().getCurrentScreen().getAdjacentScreens();
@@ -123,15 +136,36 @@ public class MainWindow implements LevelObserver {
         btnDelete.setDisable(thePanes.size() == 1); //Disables delete button if only one screen
     }
 
-    //Observer functions
+    /// Object Control System
+    //
+    @FXML void onObjectBtnClicked(ActionEvent event){
+        CustomButton btnClicked = (CustomButton)event.getSource();
+        if(currObjButton != null) {
+            currObjButton.setText(currObjButton.getName());
+        }
+        currObjButton = btnClicked;
+        btnClicked.setText(btnClicked.getName() + "/n" + "Selected");
+    }
+
+    @FXML void onPaneClicked(MouseEvent event) {
+        if (currObjButton == null) { return; }
+        double xx = event.getSceneX();
+        double yy = event.getSceneY();
+        Vector topleftcell = DimensionMan.DiMan().coordstoGrid(yy, xx);
+        DataManager.DaMan().createObject(currObjButton.getName(), currObjButton.getObjType(), topleftcell, currObjButton.getDimensions());
+    }
+
+    ///Observer functions
+    //
     @Override
-    public void createScreen(String StrID) {
+    public void createScreen(String StrID) { //Needs work
         currentScreen = new Pane();
         thePanes.add(currentScreen);
-        currentScreen.setMinSize(16 * screensizescalar, 9 * screensizescalar); /// Needs attention -----------------
-        currentScreen.setMaxSize(16 * screensizescalar, 9 * screensizescalar);
+        currentScreen.setMinSize(16 * DimensionMan.screensizescalar, 9 * DimensionMan.screensizescalar);
+        currentScreen.setMaxSize(16 * DimensionMan.screensizescalar, 9 * DimensionMan.screensizescalar);
         currentScreen.setStyle("-fx-background-color: lightgray");
         currentScreen.setUserData(StrID);
+        currentScreen.setOnMouseClicked(this::onPaneClicked);
         screenBox.getChildren().clear();
         screenBox.getChildren().add(currentScreen);
         lblCurScreenID.setText(StrID);
@@ -147,10 +181,10 @@ public class MainWindow implements LevelObserver {
         for (Pane aPane : thePanes) {
             System.out.println(aPane.getUserData());
             if (aPane.getUserData().equals(StrID)) {
+                screenBox.getChildren().clear();
+                screenBox.getChildren().add(aPane);
                 currentScreen = aPane;
                 lblCurScreenID.setText(StrID);
-
-               
             }
         }
         disableNavButtons();
@@ -172,7 +206,26 @@ public class MainWindow implements LevelObserver {
         }
         movetoScreen(newStrID);
         thePanes.remove(delPane);
-
     }
 
+    @Override
+    public void addLvLObject(LvLObject theObject) {
+        double imgwidth = theObject.getDimensions().getX() * DimensionMan.DiMan().getCellLength();
+        double imgheight = theObject.getDimensions().getY() * DimensionMan.DiMan().getCellLength();
+        double[] coord = DimensionMan.DiMan().gridtoCoords((theObject.getTopLeftCell()));
+
+        ImageView newObj = new ImageView(currObjButton.getImg());
+        newObj.setFitWidth(imgwidth); newObj.setFitHeight(imgheight);
+        newObj.setLayoutY(coord[0]); newObj.setLayoutX(coord[1]);
+        currentScreen.getChildren().add(newObj);
+    }
+
+
+    @Override
+    public void updateActionStatement(String statementMsg) {
+        lblErrorMsg.setText(statementMsg);
+    }
+
+
+    ///The big one
 }
