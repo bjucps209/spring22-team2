@@ -3,5 +3,6 @@ package model;
 public enum PlayerState {
     walking,
     standing,
-    attacking
+    attacking,
+    resting
 }

@@ -6,10 +6,10 @@ import java.io.IOException;
 
 public class Item {
     private String name;
-    private int cooldown;
+    private double cooldown;
     Stats buffs;
 
-    public Item(String name, int cooldown, Stats buffs){
+    public Item(String name, double cooldown, Stats buffs){
         this.name = name;
         this.cooldown = cooldown;
         this.buffs = buffs;
@@ -18,7 +18,7 @@ public class Item {
     public void performAction(Entity user){}
 
     
-
+    // Getters and Setters
     public String getName() {
         return name;
     }
@@ -27,7 +27,7 @@ public class Item {
         this.name = name;
     }
 
-    public int getCooldown() {
+    public double getCooldown() {
         return cooldown;
     }
 
@@ -43,10 +43,10 @@ public class Item {
     public static Item deserialize(DataInputStream file) throws IOException {
         String type = file.readUTF();
         if (type.equals("UsableItem")) {
-            Item item = UsableItem.deserialize(file);
+            UsableItem item = UsableItem.deserialize(file);
             return item;
         } else {
-            Item item = Equipment.deserialize(file);
+            Equipment item = Equipment.deserialize(file);
             return item;
         }
     }

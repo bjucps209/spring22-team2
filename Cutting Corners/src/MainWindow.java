@@ -401,8 +401,11 @@ public class MainWindow {
             
             @Override
             public void handle(KeyEvent event){
-                World.instance().getPlayer().removeKey(event.getCode());
-                World.instance().getPlayer().addKey(event.getCode());
+                if(World.instance().getPlayer()!=null)
+                {
+                    World.instance().getPlayer().removeKey(event.getCode());
+                    World.instance().getPlayer().addKey(event.getCode());
+                }
             }
         });
 
@@ -410,7 +413,10 @@ public class MainWindow {
             
             @Override
             public void handle(KeyEvent event){
-                World.instance().getPlayer().removeKey(event.getCode());
+                if(World.instance().getPlayer()!=null)
+                {
+                    World.instance().getPlayer().removeKey(event.getCode());
+                }
             }
         });
 
@@ -420,7 +426,10 @@ public class MainWindow {
             public void handle(MouseEvent event){
                 int xCoord = (int) event.getX();
                 int yCoord = (int) event.getY();
-                World.instance().getPlayer().setMouseCoordinates(new Coordinates(xCoord, yCoord));
+                if(World.instance().getPlayer()!=null)
+                {
+                    World.instance().getPlayer().setMouseCoordinates(new Coordinates(xCoord, yCoord));
+                }
             }
         });
 
@@ -430,8 +439,15 @@ public class MainWindow {
             public void handle(MouseEvent event){
                 // Thread t = new Thread(() -> {World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());World.instance().getPlayer().performAttack();});
                 // t.start();
-                World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
-                World.instance().getPlayer().performAttack();
+                if(World.instance().getPlayer()!=null)
+                {
+                    World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
+                    World.instance().getPlayer().performAttack();
+                }
+
+                // World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
+                
+                // World.instance().getPlayer().setState(PlayerState.attacking);
             }
         });
     }

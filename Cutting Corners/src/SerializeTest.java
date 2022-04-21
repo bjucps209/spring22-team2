@@ -16,12 +16,15 @@ public class SerializeTest {
     @Test
     public void testSave_savesToFile() throws IOException  {
         World.reset();
+        World.instance();
         assertEquals(0, World.instance().currentLevel);
-        World.instance().currentLevel = 1;
+        World.instance().currentLevel = 0;
         World.instance().setDifficulty(1);
+        World.instance().getPlayer().getStats().setHealth(5);
 
         World.instance().save("savegame.dat");
-        
+        World.instance().currentLevel = 1;
+
         try (DataInputStream reader = new DataInputStream(new FileInputStream("SaveGame.dat"))) {
             assertEquals(1, reader.readInt()); //currentLevel
             assertEquals(1, reader.readInt()); //difficulty
@@ -34,10 +37,17 @@ public class SerializeTest {
 
     @Test
     public void testLoad_loadsFromFile() {
-        // assertEquals(0, World.instance().currentLevel);
-        // World.instance().load("SaveGame.dat");
-        // assertEquals(currentLevel.getEntities().size(), 1);
-        // assertEquals(World.instance().getPlayer().getHealth(), 5);
+        World.reset();
+        World.instance();
+        assertEquals(0, World.instance().currentLevel);
+
+        try {
+            World.instance().load("savegame.dat");
+        } catch (IOException e) {
+            fail();
+        }
+        assertEquals(1, World.instance().currentLevel);
+        assertEquals(World.instance().getPlayer().getStats().getHealth(), 5);
 
     }
 }

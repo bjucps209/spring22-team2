@@ -19,13 +19,14 @@ public class World {
     private int difficulty;
     private static World world;
     ScreenObserver observer;
+    boolean isPaused = false;
 
 
 
     private World(){}
 
     public static void reset() {
-        world = new World();
+        world = null;
     }
 
     public static World instance(){
@@ -91,14 +92,15 @@ public class World {
         Screen screen2 = new Screen(0, 1, 1);
         Screen screen3 = new Screen(1, 0, 1);
         Screen screen4 = new Screen(1, 1, 1);
+        Screen bossScreen = new Screen(1, 2, 1);
 
-        Triangle triangle1 = new Triangle(4, 100, 100, screen1);
-        Triangle triangle2 = new Triangle(5, 200, 600, screen1);
-        Triangle triangle3 = new Triangle(7, 700, 100, screen2);
-        Triangle triangle4 = new Triangle(5, 300, 600, screen2);
+        Triangle triangle1 = new Triangle(1, 100, 100, screen1);
+        Triangle triangle2 = new Triangle(2, 200, 600, screen1);
+        Triangle triangle3 = new Triangle(3, 700, 100, screen2);
+        Triangle triangle4 = new Triangle(4, 300, 600, screen2);
         Triangle triangle5 = new Triangle(5, 400, 600, screen3);
-        Triangle triangle6 = new Triangle(5, 200, 600, screen4);
-        // Pyramid triangleBoss = new Pyramid(11, 500, 500, screen4);
+        Triangle triangle6 = new Triangle(6, 200, 600, screen4);
+        Pyramid triangleBoss = new Pyramid(11, 100, 100, bossScreen);
 
         screen1.addEntity(triangle1);
         screen1.addEntity(triangle2);
@@ -106,7 +108,7 @@ public class World {
         screen2.addEntity(triangle4);
         screen3.addEntity(triangle5);
         screen4.addEntity(triangle6);
-        // screen4.addEntity(triangleBoss);
+        bossScreen.addEntity(triangleBoss);
 
         screen1.setUp(screen3);
         screen1.setRight(screen2);
@@ -119,11 +121,15 @@ public class World {
 
         screen4.setDown(screen2);
         screen4.setLeft(screen3);
+        screen4.setRight(bossScreen);
+
+        bossScreen.setLeft(screen4);
 
         level1.addScreen(screen1);
         level1.addScreen(screen2);
         level1.addScreen(screen3);
         level1.addScreen(screen4);
+        level1.addScreen(bossScreen);
 
         return level1;
     }
@@ -132,7 +138,7 @@ public class World {
 
     public void updateView(){
         try{for (Entity entity: displayCurrentEntities()){
-            if (! (entity instanceof Player)){
+            if (! (entity instanceof Player)&&!isPaused){
             entity.performMovement();
             }
         }
@@ -144,7 +150,14 @@ public class World {
     }
 
     public void updatePlayer(){
-        getPlayer().performMovement();
+        if(getPlayer()!=null&&!isPaused)
+        {
+            getPlayer().performMovement();
+        }
+        else
+        {
+            
+        }
     }
 
 
@@ -169,7 +182,8 @@ public class World {
         {  // SaveGame.dat
             writer.writeInt(this.currentLevel);
             writer.writeInt(this.difficulty);
-            getCurrentLevel().serialize(writer);
+            Level lvl = getCurrentLevel();
+            lvl.serialize(writer);
 
             
         }
