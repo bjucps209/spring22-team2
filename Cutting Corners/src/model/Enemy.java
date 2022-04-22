@@ -122,7 +122,7 @@ public class Enemy extends Entity{
                 }
             }
             case attacking: {
-                if(attackCount==50)
+                if(attackCount==1)
                 {
                     performAttack();
                 }
@@ -246,7 +246,6 @@ public class Enemy extends Entity{
 
     @Override
     public void takeDamage(int damage, Direction direction){
-        System.out.println('b');
         stats.subHealth(damage);
         state=EnemyState.stunned;
         if(currentImage!="Standing")

@@ -263,29 +263,25 @@ public class Player extends Entity {
                 {
                     if(getMouseDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.up);
-                        System.out.println("Hit!");
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.down);
                         SWORD_HIT.play();
                         continue;
                     }
                     else if(getMouseDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.down);
-                        System.out.println("Hit!");
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.up);
                         SWORD_HIT.play();
                         continue;
                     }
                     if(getMouseDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.left);
-                        System.out.println("Hit!");
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.right);
                         SWORD_HIT.play();
                         continue;
                     }
                     else if(getMouseDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.right);
-                        System.out.println("Hit!");
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.left);
                         SWORD_HIT.play();
                         continue;
                     }
