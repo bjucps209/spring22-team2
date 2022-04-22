@@ -16,8 +16,8 @@ public class DimensionMan {
     protected static double screenheight = screensizescalar * heightConstant;
     
     //Screen Dimensions applied to cell grid
-    protected static Vector gridDimensionRef = DataManager.DaMan().gridDimensions;
-    protected static double panetoGridRatio = (widthConstant / heightConstant) / (gridDimensionRef.getX()/ gridDimensionRef.getY());
+    protected static Vector gridDimensionRef;
+    protected static double panetoGridRatio;
     protected SideWithMargin sideWithMargin;
 
     private double cellLength;
@@ -31,12 +31,12 @@ public class DimensionMan {
         int gridY = 0; int gridX = 0;
         switch (sideWithMargin) {
             case WIDTH:
-                gridX = (int)((x - sideMargin) / cellLength) + 1;
-                gridY = (int)(y / cellLength) + 1;
+                gridX = (int)(Math.floor((x - sideMargin) / cellLength) + 1);
+                gridY = (int)(Math.floor((y / cellLength) + 1));
                 break;
             case HEIGHT:
-                gridY = (int)((y - sideMargin) / cellLength) + 1;
-                gridX = (int)(x / cellLength) + 1;
+                gridY = (int)Math.floor(((y - sideMargin) / cellLength) + 1);
+                gridX = (int)Math.floor((x / cellLength) + 1);
                 break;
         }
         return new Vector(gridY, gridX);
@@ -46,11 +46,11 @@ public class DimensionMan {
         double coordY = 0; double coordX = 0;
         switch (sideWithMargin) {
             case WIDTH:
-                coordX = sideMargin + cellLength * topleftcorner.getX();
+                coordX = sideMargin + (cellLength * topleftcorner.getX());
                 coordY = cellLength * topleftcorner.getY();
                 break;
             case HEIGHT:
-                coordY = sideMargin + cellLength * topleftcorner.getY();
+                coordY = sideMargin + (cellLength * topleftcorner.getY());
                 coordX = cellLength * topleftcorner.getX();
                 break;
         }
@@ -59,6 +59,9 @@ public class DimensionMan {
 
     //Singleton
     private DimensionMan() {
+        gridDimensionRef = DataManager.DaMan().gridDimensions;
+        panetoGridRatio = gridDimensionRef.getY() * widthConstant / gridDimensionRef.getX() / heightConstant;
+
         if (panetoGridRatio > 1) {
             sideWithMargin = SideWithMargin.WIDTH; 
         } else {
