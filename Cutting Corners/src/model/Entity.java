@@ -13,6 +13,7 @@ public class Entity {
     private Image image;
     private imageObserver imgObserver;
     private imageFlipper imgFlipper;
+    private EntityObserver observer;
 
     public Entity(int xCoord, int yCoord, Image image, int size){
         coords = new Coordinates(xCoord, yCoord);
@@ -26,12 +27,21 @@ public class Entity {
         this.size = size;
     }
 
-    public void setObserver(imageObserver observer, imageFlipper flipper){
+    public void setEventObservers(imageObserver observer, imageFlipper flipper){
         imgObserver = observer;
         imgFlipper = flipper;
     }
+    public void setObserver(EntityObserver o)
+    {
+        observer=o;
+    }
 
-    public imageObserver getObserver(){
+    public EntityObserver getObserver(){
+        return observer;
+    }
+
+    public imageObserver getEObserver()
+    {
         return imgObserver;
     }
 

@@ -2,8 +2,8 @@ Some questions to ask:
     Does importing an entire package (ie javafx.scene.layout.*) actually
     negatively impact anything.
 
-
-     :O
-    | 4/20/22 | 5:32 pm - 6:15 pm
-    6:44 pm - 9:35 pm
-    10:20 pm - 
+    4/21/22
+    9:03 am - 10:43 am
+    1:15 pm - 3:04 pm
+    11:15 pm - 12:09 am
+    Check DimensionMan and object place (if not empty part)

@@ -5,27 +5,25 @@
 package Model;
 
 
-public abstract class LvLObject {
+public class LvLObject {
     protected String name;
+    protected ObjType objType; // New system to replace Entity.java, Obstacle.java, etc
     protected Vector topLeftCell;
     protected Vector dimensions;
-    protected int id; //   Null should crash system ___
+    protected int id; //   Null should crash system ___Maybe
 
-    public LvLObject(String name, int id,Vector dimensions, Vector topleftcell) {
+    public LvLObject(String name, int id, ObjType objType, Vector dimensions, Vector topleftcell) {
         this.name = name;
+        this.objType = objType;
         topLeftCell = topleftcell;
         this.dimensions = dimensions;
         this.id  = id;
     }
 
-    //Differs between Object types
+    //May not use
     public Vector moveLocation(Vector newLoc) {
         topLeftCell = newLoc;
         return newLoc;
-    }
-
-    public Vector getLTopLeftCell() {
-        return topLeftCell;
     }
 
     public void setID(int newID) {
@@ -67,4 +65,13 @@ public abstract class LvLObject {
     public void setId(int id) {
         this.id = id;
     }
+
+    public ObjType getObjType() {
+        return objType;
+    }
+
+    public void setObjType(ObjType objType) {
+        this.objType = objType;
+    }
+    
 }

@@ -12,28 +12,28 @@ public class Screen {
     private int[] IDSeries;
     private Screen[] adjacentScreens; // N S E W Up Down
     
-    private LvLObject[][] objectLocations; // y then x
+    private ObjType[][] objectLocations; // y then x
     private ArrayList<LvLObject> objectList;
     private static int currentObjID;
 
     public Screen(int x, int y, int z, Vector gridDim) {
         IDSeries = new int[] {x, y, z};
         adjacentScreens = new Screen[6];
-        objectLocations = new LvLObject[gridDim.getY()][gridDim.getX()];
+        objectList = new ArrayList<LvLObject>();
+        objectLocations = new ObjType[gridDim.getY()][gridDim.getX()];
     }
 
  /*    public LvLObject attemptCreateObject(String name, ) {
 
     } */
 
-    public LvLObject createObject(String name, Cell celltype, Vector topleftcell, Vector dimensions) {
+    public LvLObject createObject(String name, ObjType celltype, Vector topleftcell, Vector dimensions) {
         currentObjID++; //increment object id of screen
-        LvLObject newobject = new Entity(null, 0, null, null);
+        LvLObject newobject = new LvLObject(null, 0, null, null, null);
         switch (celltype) { //defines newobject based on type
             case Player:
-                newobject = new Entity(name, currentObjID, dimensions, topleftcell);
-                break;
-            default:
+                newobject = new LvLObject(name, currentObjID, ObjType.Player, dimensions, topleftcell);
+                DataManager.DaMan().setPlayerScrID(this.getStrID());
                 break;
         }
         objectList.add(newobject);
@@ -55,13 +55,13 @@ public class Screen {
         return true;
     }
 
-    //fills area with objectFiller references (can be null)
-    public void fillArea(LvLObject an_object, LvLObject objectFiller) {
-        Vector tlc = an_object.getLTopLeftCell();
+    //fills area with objType references (can be null)
+    public void fillArea(LvLObject an_object, ObjType theType) {
+        Vector tlc = an_object.getTopLeftCell();
         Vector dim = an_object.getDimensions();
-        for (int yy = tlc.getY(); yy < tlc.getY() + dim.getY() - 1; yy++) {
-            for (int xx = tlc.getX(); xx < tlc.getX() + dim.getX() - 1; xx++) {
-                objectLocations[yy][xx] = an_object;
+        for (int yy = tlc.getY(); yy < tlc.getY() + dim.getY(); yy++) {
+            for (int xx = tlc.getX(); xx < tlc.getX() + dim.getX(); xx++) {
+                objectLocations[yy][xx] = theType;
             }
         }
     }
@@ -71,7 +71,7 @@ public class Screen {
     }
     //fills area with an_object
     public void populateArea(LvLObject an_object) { 
-        fillArea(an_object, an_object);
+        fillArea(an_object, an_object.getObjType());
     }
 
     public String getStrID() {
