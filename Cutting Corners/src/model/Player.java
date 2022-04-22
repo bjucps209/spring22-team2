@@ -29,7 +29,7 @@ public class Player extends Entity {
     ArrayList<Entity> enemies;
     Direction facing = Direction.left;
     PlayerState previousState = PlayerState.standing;
-    double totalHealth = 4;
+    double totalHealth = 15;
     int walkingStep = 0;
 
     public Player(int xCoord, int yCoord){

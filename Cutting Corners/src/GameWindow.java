@@ -96,10 +96,11 @@ public class GameWindow {
                 gameWindow.getChildren().add(weaponImage);
 
                 ProgressBar playerHealth = new ProgressBar();
-                playerHealth.setProgress(player.getStats().getHealth() /
-                                                           player.getTotalHealth());
-                playerHealth.setScaleX(player.getTotalHealth() / 3);
+                playerHealth.progressProperty().bind(player.getStats().healthProperty()
+                                                           .divide(player.getTotalHealth()));
+                playerHealth.setScaleX(player.getTotalHealth() / 8);
                 playerHealth.relocate(1200*ratioHeight, 100*ratioWidth);
+                playerHealth.toFront();
                 gameWindow.getChildren().add(playerHealth);
             }
             if (entity instanceof Enemy){
