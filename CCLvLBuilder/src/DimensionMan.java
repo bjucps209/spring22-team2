@@ -17,7 +17,7 @@ public class DimensionMan {
     
     //Screen Dimensions applied to cell grid
     protected static Vector gridDimensionRef;
-    protected static double panetoGridRatio;
+    protected static double gridtoPaneRatio;
     protected SideWithMargin sideWithMargin;
 
     private double cellLength;
@@ -29,16 +29,18 @@ public class DimensionMan {
 
     public Vector coordstoGrid(double y, double x) {
         int gridY = 0; int gridX = 0;
+        int eh = 0;
         switch (sideWithMargin) {
             case WIDTH:
-                gridX = (int)(Math.floor((x - sideMargin) / cellLength) + 1);
-                gridY = (int)(Math.floor((y / cellLength) + 1));
+                gridX = (int)(Math.floor((x - sideMargin) / cellLength) + eh);
+                gridY = (int)(Math.floor((y / cellLength)) + eh);
                 break;
             case HEIGHT:
-                gridY = (int)Math.floor(((y - sideMargin) / cellLength) + 1);
-                gridX = (int)Math.floor((x / cellLength) + 1);
+                gridY = (int)Math.floor(((y - sideMargin) / cellLength) + eh);
+                gridX = (int)Math.floor((x / cellLength) + eh);
                 break;
         }
+        System.out.println(gridX + " " + gridY);
         return new Vector(gridY, gridX);
     }
 
@@ -46,23 +48,25 @@ public class DimensionMan {
         double coordY = 0; double coordX = 0;
         switch (sideWithMargin) {
             case WIDTH:
-                coordX = sideMargin + (cellLength * topleftcorner.getX());
+                coordX = ((topleftcorner.getX()) * cellLength) + sideMargin;
                 coordY = cellLength * topleftcorner.getY();
                 break;
             case HEIGHT:
-                coordY = sideMargin + (cellLength * topleftcorner.getY());
+                coordY =  ((topleftcorner.getY()) * cellLength) + sideMargin;
                 coordX = cellLength * topleftcorner.getX();
                 break;
         }
+        Vector test = coordstoGrid(coordY, coordX);
+        System.out.println(test.getX() + " " + test.getY());
         return new double[] {coordY, coordX};
     }
 
     //Singleton
     private DimensionMan() {
         gridDimensionRef = DataManager.DaMan().gridDimensions;
-        panetoGridRatio = gridDimensionRef.getY() * widthConstant / gridDimensionRef.getX() / heightConstant;
+        gridtoPaneRatio = gridDimensionRef.getY() * widthConstant / gridDimensionRef.getX() / heightConstant;
 
-        if (panetoGridRatio > 1) {
+        if (gridtoPaneRatio > 1) {
             sideWithMargin = SideWithMargin.WIDTH; 
         } else {
             sideWithMargin = SideWithMargin.HEIGHT;

@@ -4,15 +4,18 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class Stats {
     private int strength;
     private int speed;
-    private int health;
+    private IntegerProperty health = new SimpleIntegerProperty();
     
     public Stats(int strength, int speed, int health) {
         this.strength = strength;
         this.speed = speed;
-        this.health = health;
+        this.health.set(health);
     }
 
     public int getStrength() {
@@ -32,33 +35,42 @@ public class Stats {
     }
 
     public int getHealth() {
-        return health;
+        return health.get();
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health.set(health);
+    }
+
+    public void addHealth(int addition) {
+        health.set(health.get() + addition);
     }
 
     public void subHealth(int damage) {
-        health -= damage;
+        health.set(health.get() - damage);
+    }
+
+    public IntegerProperty healthProperty(){
+        return health;
     }
 
     public void ApplyBuffs(Item item){
         strength += item.buffs.strength;
-        health += item.buffs.health;
+        addHealth(item.buffs.getHealth());
         speed += item.buffs.speed;
     }
 
     public void unApplyBuffs(Item item){
         strength -= item.buffs.strength;
-        health -= item.buffs.health;
+        subHealth(item.buffs.getHealth());
         speed -= item.buffs.speed;
     }
 
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(strength);
         file.writeInt(speed);
-        file.writeInt(health);
+        //changed to health.get()
+        file.writeInt(health.get());
     }
 
     

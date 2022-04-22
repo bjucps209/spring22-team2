@@ -61,7 +61,6 @@ public class Screen {
         Vector dim = an_object.getDimensions();
         for (int yy = tlc.getY(); yy < tlc.getY() + dim.getY(); yy++) {
             for (int xx = tlc.getX(); xx < tlc.getX() + dim.getX(); xx++) {
-                System.out.println("insidefillarea");
                 objectLocations[yy][xx] = theType;
             }
         }
