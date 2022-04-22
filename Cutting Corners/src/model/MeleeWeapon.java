@@ -12,10 +12,10 @@ public class MeleeWeapon extends Equipment{
     private Direction direction;
     private int damage;
     private int speed;
-    private Image image;
+    private String image;
     private ArrayList<Entity> enemies;
 
-    public MeleeWeapon(String name, double cooldown, int Strength, int Health, int Speed, int range, Image image){
+    public MeleeWeapon(String name, double cooldown, int Strength, int Health, int Speed, int range, String image){
         super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Health, Speed));
         this.range = range;
         this.image = image;
@@ -38,11 +38,11 @@ public class MeleeWeapon extends Equipment{
         this.direction = direction;
     }
 
-    public Image getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -97,7 +97,7 @@ public class MeleeWeapon extends Equipment{
         int damage = file.readInt();
         int arc = file.readInt();
 
-        Image image = new Image("basecase.png");
+        String image ="basecase.png";
         
         MeleeWeapon m = new MeleeWeapon(name, cooldown, Strength, Health, Speed, range, image);
         return m;

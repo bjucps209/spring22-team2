@@ -13,7 +13,7 @@ public class Projectile extends Entity{
     private int width;
     private int direction;
 
-    public Projectile(int damage, int speed, int startX, int startY, int range, Image image, int width, int direction, int size){
+    public Projectile(int damage, int speed, int startX, int startY, int range, String image, int width, int direction, int size){
         super(startX, startY, image, size);
         this.speed = speed;
         this.damage = damage;
@@ -95,7 +95,7 @@ public class Projectile extends Entity{
         int width = file.readInt();
         int direction = file.readInt();
 
-        Image image = new Image("basecase.png");
+        String image = "basecase.png";
 
         Projectile p = new Projectile(damage, speed, x, y, range, image, width, direction, size);
         return p;
