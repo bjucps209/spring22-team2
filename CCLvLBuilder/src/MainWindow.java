@@ -149,8 +149,8 @@ public class MainWindow implements LevelObserver {
 
     @FXML void onPaneClicked(MouseEvent event) {
         if (currObjButton == null) { return; }
-        double xx = event.getSceneX();
-        double yy = event.getSceneY();
+        double xx = event.getX(); event.getSceneX(); //event.getSceneX();
+        double yy = event.getY(); //event.getSceneY()
         Vector topleftcell = DimensionMan.DiMan().coordstoGrid(yy, xx);
         DataManager.DaMan().createObject(currObjButton.getName(), currObjButton.getObjType(), topleftcell, currObjButton.getDimensions());
     }
@@ -161,8 +161,8 @@ public class MainWindow implements LevelObserver {
     public void createScreen(String StrID) { //Needs work
         currentScreen = new Pane();
         thePanes.add(currentScreen);
-        currentScreen.setMinSize(16 * DimensionMan.screensizescalar, 9 * DimensionMan.screensizescalar);
-        currentScreen.setMaxSize(16 * DimensionMan.screensizescalar, 9 * DimensionMan.screensizescalar);
+        currentScreen.setMinSize(DimensionMan.screenwidth, DimensionMan.screenheight);
+        currentScreen.setMaxSize(DimensionMan.screenwidth, DimensionMan.screenheight);
         currentScreen.setStyle("-fx-background-color: lightgray");
         currentScreen.setUserData(StrID);
         currentScreen.setOnMouseClicked(this::onPaneClicked);
