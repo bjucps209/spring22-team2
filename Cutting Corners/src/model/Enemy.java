@@ -15,17 +15,17 @@ public class Enemy extends Entity{
     private double totalHealth;
     private Enemy type;
     private Direction direction = Direction.left;
-    private Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, new Image("media/Player/swordwalk.gif"));
+    private Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, "media/Player/swordwalk.gif");
     private EnemyState state = EnemyState.patrolling;
     private int size;
     private int stunCount;
     private int knockback;
     private int attackCount=50;
-    private static Image walking;
-    private static Image attacking;
+    private static String walking;
+    private static String attacking;
     private String currentImage = "Standing";
 
-    public Enemy(int sides, int size, int col, int row, Image image, Screen homeScreen, int vision, Equipment weapon, Stats stats,Image walking,Image attacking, double totalHealth){
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking, double totalHealth){
         super(col*100, row*100, image, size);
         this.homeScreen = homeScreen;
         this.vision = vision;
@@ -367,6 +367,8 @@ public class Enemy extends Entity{
         stats.serialize(file);
         //added one for totalHealth
         file.writeDouble(totalHealth);
+
+        file.writeUTF(getImage());
     }
 
     public static Enemy deserialize(DataInputStream file) throws IOException {
@@ -381,7 +383,8 @@ public class Enemy extends Entity{
         //added one for totalHealth
         double totalHealth = file.readDouble();
 
-        Image image = new Image("basecase.png");
+        String image = file.readUTF();
+
 
         Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking, totalHealth);
         return enemy;

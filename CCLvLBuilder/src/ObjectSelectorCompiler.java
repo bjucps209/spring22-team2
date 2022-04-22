@@ -41,9 +41,13 @@ public class ObjectSelectorCompiler {
 
     public void compileSpecial() {
         Image playerimage = new Image("TempImages/Cirkyle v1.png");
-        CustomButton newbutton = new CustomButton("Cirkyle v1" , playerimage, ObjType.Player, BtnImgSize, new Vector(1, 1));
+        CustomButton newbutton = new CustomButton("Cirkyle v1" , playerimage, ObjType.Player, BtnImgSize, new Vector(2, 1));
         newbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
         specialSet.addCButton(newbutton);
+
+        CustomButton anotherbutton = new CustomButton("Cirkyle v1" , playerimage, ObjType.Player, BtnImgSize, new Vector(1,1));
+        anotherbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
+        specialSet.addCButton(anotherbutton);
     }
 
     public void pushCurrentBtnSet() {

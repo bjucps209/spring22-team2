@@ -10,12 +10,12 @@ import javafx.scene.image.Image;
 public class Entity {
     private int size;
     private Coordinates coords;
-    private Image image;
+    private String image;
     private imageObserver imgObserver;
     private imageFlipper imgFlipper;
     private EntityObserver observer;
 
-    public Entity(int xCoord, int yCoord, Image image, int size){
+    public Entity(int xCoord, int yCoord, String image, int size){
         coords = new Coordinates(xCoord, yCoord);
         this.image = image;
     }
@@ -65,7 +65,7 @@ public class Entity {
         return coords.getYProperty();
     }
 
-    public Image getImage(){
+    public String getImage(){
         return image;
     }
 
@@ -78,7 +78,7 @@ public class Entity {
         this.coords = coords;
     }
 
-    public void setImage(Image image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

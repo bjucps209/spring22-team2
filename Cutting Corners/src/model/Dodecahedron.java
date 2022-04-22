@@ -3,7 +3,7 @@ package model;
 import javafx.scene.image.Image;
 
 public class Dodecahedron extends Boss{
-    static Image image = new Image("Dodecahedron.png");
+    static String image = "Dodecahedron.png";
 
     public Dodecahedron(int size, int xCoord, int yCoord, Screen homeScreen){
         super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 11), 11);

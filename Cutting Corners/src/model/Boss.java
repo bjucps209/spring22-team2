@@ -6,7 +6,7 @@ public class Boss extends Enemy{
     int attackCooldown;
     int hitX = 640;
     int hitY = 700;
-    public Boss(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Stats stats, double totalHealth){
+    public Boss(int sides, int size, int xCoord, int yCoord, String image, Screen homeScreen, int vision, Stats stats, double totalHealth){
         super(sides, size, xCoord, yCoord, image, homeScreen, vision, null, stats,image,image, totalHealth);
     }
     @Override

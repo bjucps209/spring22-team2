@@ -18,7 +18,7 @@ public class DimensionMan {
     //Screen Dimensions applied to cell grid
     protected static Vector gridDimensionRef;
     protected static double gridtoPaneRatio;
-    protected SideWithMargin sideWithMargin;
+    protected SideWithMargin sideWithMargin; // Which side does the grid not fully fit
 
     private double cellLength;
     private double sideMargin;
@@ -40,7 +40,7 @@ public class DimensionMan {
                 gridX = (int)Math.floor((x / cellLength) + eh);
                 break;
         }
-        System.out.println(gridX + " " + gridY);
+        System.out.println( "coords to grid " + gridX + " " + gridY);
         return new Vector(gridY, gridX);
     }
 
@@ -57,7 +57,7 @@ public class DimensionMan {
                 break;
         }
         Vector test = coordstoGrid(coordY, coordX);
-        System.out.println(test.getX() + " " + test.getY());
+        System.out.println( "grid to coords "+ test.getX() + " " + test.getY());
         return new double[] {coordY, coordX};
     }
 
