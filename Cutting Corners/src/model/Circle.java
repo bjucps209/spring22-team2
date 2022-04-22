@@ -1,6 +1,4 @@
 package model;
-
-
 public class Circle extends Boss{
     static String image = "Circle.png";
 

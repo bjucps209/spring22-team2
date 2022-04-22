@@ -1,7 +1,5 @@
 package model;
 
-import javafx.scene.image.Image;
-
 public class Dodecahedron extends Boss{
     static String image = "Dodecahedron.png";
 

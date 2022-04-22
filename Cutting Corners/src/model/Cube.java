@@ -1,7 +1,5 @@
 package model;
 
-import javafx.scene.image.Image;
-
 public class Cube extends Boss{
     static String image = "Cube.png";
 

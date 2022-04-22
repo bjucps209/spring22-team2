@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import javafx.scene.image.Image;
-
 public class Enemy extends Entity{
     private Screen homeScreen;
     private Cell cellWithin;
@@ -25,7 +23,8 @@ public class Enemy extends Entity{
     private static String attacking;
     private String currentImage = "Standing";
 
-    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking, double totalHealth){
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth)
+    {
         super(col*100, row*100, image, size);
         this.homeScreen = homeScreen;
         this.vision = vision;
@@ -44,7 +43,7 @@ public class Enemy extends Entity{
         return stats;
     }
     public void generateEnemy(int xCoord, int yCoord){
-        type = new Triangle(super.getSize(), xCoord, yCoord, homeScreen);
+        //type = new Triangle(super.getSize(), xCoord, yCoord, homeScreen);
         // switch (sides) {
         //     case 3:{type = new Triangle(size);}
         //     default: break;
@@ -381,12 +380,12 @@ public class Enemy extends Entity{
         Equipment weapon = Equipment.deserialize(file);
         Stats stats = Stats.deserialize(file);
         //added one for totalHealth
-        double totalHealth = file.readDouble();
+        int totalHealth = file.readInt();
 
         String image = file.readUTF();
 
 
-        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking, totalHealth);
+        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking,totalHealth);
         return enemy;
     }
 

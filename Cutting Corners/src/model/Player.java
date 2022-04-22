@@ -22,7 +22,6 @@ public class Player extends Entity {
     Equipment armor;
     Stats stats = new Stats(2, 5, 15);
     static String playerImage = "media/Player/Cirkyle v1.png";
-
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Coordinates mouseCoordinates = new Coordinates(0, 0);
     PlayerState state = PlayerState.standing;

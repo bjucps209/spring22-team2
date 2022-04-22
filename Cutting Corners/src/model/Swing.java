@@ -24,36 +24,36 @@ public class Swing extends Entity{
         this.swinger = swinger;
     }
 
-    public void checkIfHit(ArrayList<Entity> enemies, Direction direction){
-        for(int i=0;i<enemies.size();i++)
-            {
+    // public void checkIfHit(ArrayList<Entity> enemies, Direction direction){
+    //     for(int i=0;i<enemies.size();i++)
+    //         {
                 
-                    if(direction==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
-                    {
-                        enemies.get(i).takeDamage(damage);
-                        System.out.println("Hit!");
-                        continue;
-                    }
-                    else if(direction==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
-                    {
-                        enemies.get(i).takeDamage(damage);
-                        System.out.println("Hit!");
-                        continue;
-                    }
-                    if(direction==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
-                    {
-                        enemies.get(i).takeDamage(damage);
-                        System.out.println("Hit!");
-                        continue;
-                    }
-                    else if(direction==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
-                    {
-                        enemies.get(i).takeDamage(damage);
-                        System.out.println("Hit!");
-                        continue;
-                    }
+    //                 if(direction==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
+    //                 {
+    //                     enemies.get(i).takeDamage(damage);
+    //                     System.out.println("Hit!");
+    //                     continue;
+    //                 }
+    //                 else if(direction==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
+    //                 {
+    //                     enemies.get(i).takeDamage(damage);
+    //                     System.out.println("Hit!");
+    //                     continue;
+    //                 }
+    //                 if(direction==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
+    //                 {
+    //                     enemies.get(i).takeDamage(damage);
+    //                     System.out.println("Hit!");
+    //                     continue;
+    //                 }
+    //                 else if(direction==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
+    //                 {
+    //                     enemies.get(i).takeDamage(damage);
+    //                     System.out.println("Hit!");
+    //                     continue;
+    //                 }
                 
-            }
+    //         }
         // double slope = direction;
 
         // double yIntercept = super.getY() - (slope * super.getX());
@@ -95,7 +95,7 @@ public class Swing extends Entity{
             //     hitEntities.add(entity);
             // }
         // }
-    }
+    //}
 
 
 

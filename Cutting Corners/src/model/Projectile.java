@@ -97,7 +97,6 @@ public class Projectile extends Entity{
         int width = file.readInt();
         int direction = file.readInt();
 
-
         Projectile p = new Projectile(damage, speed, x, y, range, image, width, direction, size);
         return p;
     }

@@ -24,7 +24,7 @@ public class MeleeWeapon extends Equipment{
     @Override
     public void performAction(Entity user){
         Swing swing = new Swing(direction, damage, range, user);
-        swing.checkIfHit(enemies, direction);
+        //swing.checkIfHit(enemies, direction);
     }
 
 
