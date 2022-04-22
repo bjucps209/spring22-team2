@@ -69,13 +69,13 @@ public class Equipment extends Item {
     public static Equipment deserialize(DataInputStream file) throws IOException {
         String equipmentType = file.readUTF();
         if (equipmentType.equals("Ranged")) {
-            Equipment e = RangedWeapon.deserialize(file);
+            RangedWeapon e = RangedWeapon.deserialize(file);
             return e;
         } else if (equipmentType.equals("Melee")) {
-            Equipment e = MeleeWeapon.deserialize(file);
+            MeleeWeapon e = MeleeWeapon.deserialize(file);
             return e;
         } else {
-            Equipment e = Armor.deserialize(file);
+            Armor e = Armor.deserialize(file);
             return e;
         }
     }
