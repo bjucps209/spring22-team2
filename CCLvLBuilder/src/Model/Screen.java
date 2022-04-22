@@ -41,7 +41,17 @@ public class Screen {
         return newobject;
     }
 
-    
+    public void moveObject(LvLObject theObj, Vector newGrid) {
+        purgeArea(theObj);
+        theObj.setTopLeftCell(newGrid);
+        populateArea(theObj);
+    }
+
+    public void deleteObject(int id) {
+        LvLObject curobj = findObject(id);
+        purgeArea(curobj);
+        objectList.remove(curobj);
+    }
 
     //Checks if area in objectlocations is empty
     public boolean areaIsEmpty(Vector topLeftCell, Vector dimensions) {
@@ -131,4 +141,12 @@ public class Screen {
         return objectList;
     }
 
+    public LvLObject findObject(int id) {
+        for (LvLObject obj : objectList) {
+            if (obj.getId() == id) {
+                return obj;
+            }
+        }
+        return null;
+    }
 }

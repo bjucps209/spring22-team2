@@ -33,23 +33,48 @@
         <HBox> <Label text="Randomized stuff here" /> </HBox>
     </VBox>
     
+    <VBox>
 
-    <VBox fx:id="vboxScreenNav">
-        <HBox>
-            <Button fx:id="btnCreate" text="Create" onAction="#onCreateClicked" />
-            <Button fx:id="btnDelete" text="Delete" onAction="#onDeleteClicked" />
-        </HBox>
-        <HBox>
-            <Button fx:id="btnNorth" onAction="#onNavButtonClicked" text="North" />
-            <Button fx:id="btnUp" onAction="#onNavButtonClicked" text="Up" />
-        </HBox> 
-        <HBox>
-            <Button fx:id="btnSouth" onAction="#onNavButtonClicked" text="South" />
-            <Button fx:id="btnDown" onAction="#onNavButtonClicked" text="Down" />
-        </HBox> 
-        <HBox>
-            <Button fx:id="btnWest" onAction="#onNavButtonClicked" text="West" />
-            <Button fx:id="btnEast" onAction="#onNavButtonClicked" text="East" />
-        </HBox> 
+        <VBox>
+
+            <HBox>
+                <Label text="Name: " />
+                <Label fx:id="lblcoName"/>
+            </HBox>
+            <HBox>
+                <Label text="ID: " />
+                <Label fx:id="lblcoID" />
+            </HBox>
+            <HBox>
+                <Label text="Type: " />
+                <Label fx:id="lblcoType" />
+            </HBox>
+            <HBox>
+                <Label text="GridLoc: "/>
+                <Label fx:id="lblcoCoord"/>
+            </HBox>
+
+            <Button text="Delete" fx:id="btnDeleteCurrentObj" onAction="#onDeleteObjClicked" />
+        </VBox>
+
+        <VBox fx:id="vboxScreenNav">
+            <HBox>
+                <Button fx:id="btnCreate" text="Create" onAction="#onCreateClicked" />
+                <Button fx:id="btnDelete" text="Delete" onAction="#onDeleteClicked" />
+            </HBox>
+            <HBox>
+                <Button fx:id="btnNorth" onAction="#onNavButtonClicked" text="North" />
+                <Button fx:id="btnUp" onAction="#onNavButtonClicked" text="Up" />
+            </HBox> 
+            <HBox>
+                <Button fx:id="btnSouth" onAction="#onNavButtonClicked" text="South" />
+                <Button fx:id="btnDown" onAction="#onNavButtonClicked" text="Down" />
+            </HBox> 
+            <HBox>
+                <Button fx:id="btnWest" onAction="#onNavButtonClicked" text="West" />
+                <Button fx:id="btnEast" onAction="#onNavButtonClicked" text="East" />
+            </HBox> 
+        </VBox>
+
     </VBox>
 </HBox>

@@ -6,4 +6,12 @@ Some questions to ask:
     9:03 am - 10:43 am
     1:15 pm - 3:04 pm
     11:15 pm - 12:09 am
+
+
+    4/22/22
+    40 min (fixed placement issue mostly, works fine on normal size)
+    4:21 pm - 5:45 pm   -- 20 min
+    6:22 pm - 7:54 pm Finished basic object control
+
+
     Check DimensionMan and object place (if not empty part)

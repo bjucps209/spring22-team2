@@ -20,10 +20,8 @@ public class DataManager {
     public void load(String pathway, String fileName) { return; } //Or is it? :O
                                    //Nope
 
-    //TODO:
-    //public void placeObject(LvLObject blah) {} (LvLObject comes from a clone of prefabricated objects)
+    ///Object stuff
     //
-
     //Checks if object is within bounds, sends error if not
     //Makes currentScreen do the rest (Besides observers)
     public void createObject(String name, ObjType objtype, Vector topLeftCell, Vector dimensions) {
@@ -46,6 +44,48 @@ public class DataManager {
         }
     }
 
+    public void moveObject(int id, Vector newGrid) {
+        LvLObject curObject = currentScreen.findObject(id);
+        if (outOfBounds(newGrid, curObject.getDimensions())) {
+            if(mrObserver != null) { 
+                mrObserver.updateActionStatement("Out of Bounds");
+                mrObserver.moveLvLObject(curObject);
+            }
+            return;        
+        }
+        if (!currentScreen.areaIsEmpty(newGrid, curObject.getDimensions())) {
+            if(mrObserver != null) { 
+                mrObserver.moveLvLObject(curObject); //Moves it back
+                mrObserver.updateActionStatement("Area Occupied");
+            }
+            return;
+        }
+        currentScreen.moveObject(curObject, newGrid);
+        if (mrObserver != null) {
+            mrObserver.moveLvLObject(curObject);
+            mrObserver.updateActionStatement("Moved to: " + curObject.getTopLeftCell().getX() + "," + curObject.getTopLeftCell().getY());
+        }
+    }
+
+    //User shouldn't be able to cause an error in here
+    public void deleteObject(int id) {
+        currentScreen.deleteObject(id);
+        if (mrObserver != null) {
+            mrObserver.deleteLvLObject(id);
+            mrObserver.updateActionStatement("Object Deleted");
+        }
+    }
+
+    private boolean outOfBounds(Vector gridloc, Vector dimensions) {
+        if (gridloc.getY() < 0 || gridloc.getY() + dimensions.getY() - 1 >= gridDimensions.getY()) {
+            if(mrObserver != null) { mrObserver.updateActionStatement("Out of Bounds");}
+            return true;
+        } if (gridloc.getX() < 0 || gridloc.getX() + dimensions.getX() - 1 >= gridDimensions.getX()) {
+            if(mrObserver != null) {  mrObserver.updateActionStatement("Out of Bounds"); }
+            return true;
+        }
+        return false;
+    }
 
     /// Screen Methods ///
     ///

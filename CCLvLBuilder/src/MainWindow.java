@@ -1,6 +1,8 @@
 import Model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -37,6 +39,12 @@ public class MainWindow implements LevelObserver {
     @FXML Label lblCurScreenID;
     protected ScreenNavPanelState navPanelState = ScreenNavPanelState.MOVE;
 
+    //Current Object Stuff
+    protected Node currentObj;
+    @FXML Label lblcoName; @FXML Label lblcoID;
+    @FXML Label lblcoType; @FXML Label lblcoCoord;
+    @FXML Button btnDeleteCurrentObj;
+
     //Nav Panel
     @FXML Button btnCreate; @FXML Button btnDelete;
     @FXML Button btnNorth; @FXML Button btnSouth;
@@ -58,6 +66,7 @@ public class MainWindow implements LevelObserver {
         
         disableNavButtons();
         btnDelete.setDisable(true);
+        btnDeleteCurrentObj.setDisable(true);
     }
 
     ///Screen Control System
@@ -118,7 +127,7 @@ public class MainWindow implements LevelObserver {
                         System.out.println("MWonNavButtonCLicked, DELETE section accessed (not good)");
                 }
             }
-            } 
+        } 
     }
 
     //Disables appropriate navigation buttons (btnNorth, btnEast, btnDelete...)
@@ -155,6 +164,35 @@ public class MainWindow implements LevelObserver {
         DataManager.DaMan().createObject(currObjButton.getName(), currObjButton.getObjType(), topleftcell, currObjButton.getDimensions());
     }
 
+    @FXML void onDeleteObjClicked(ActionEvent event) {
+        DataManager.DaMan().deleteObject((int)currentObj.getUserData());
+    }
+
+    void updateCurrentObject(Node newNode){
+        if (currentObj != null) {
+            currentObj.getStyleClass().clear(); 
+        }
+        currentObj = newNode;
+        if (currentObj != null) {
+            currentObj.getStyleClass().add("current");
+            btnDeleteCurrentObj.setDisable(false);
+        } else {
+            btnDeleteCurrentObj.setDisable(true);
+        }
+    }
+
+    void updateCurrentObjectInfo(LvLObject obj) {
+        if (obj != null) {
+
+        lblcoName.setText(obj.getName());
+        lblcoID.setText(String.valueOf(obj.getId()));
+        lblcoType.setText(String.valueOf(obj.getObjType()));
+        lblcoCoord.setText(String.valueOf(obj.getTopLeftCell().getX()) +", " + String.valueOf(obj.getTopLeftCell().getY()));
+        } else {
+            lblcoName.setText(""); lblcoID.setText(""); lblcoType.setText(""); lblcoCoord.setText(""); 
+        }
+    }
+
     ///Observer functions
     //
     @Override
@@ -174,6 +212,8 @@ public class MainWindow implements LevelObserver {
         if (navPanelState == ScreenNavPanelState.CREATE) {
             onCreateClicked(null);
         }
+        updateCurrentObject(null);
+        updateCurrentObjectInfo(null);
     }
 
     @Override
@@ -188,6 +228,8 @@ public class MainWindow implements LevelObserver {
             }
         }
         disableNavButtons();
+        updateCurrentObject(null);
+        updateCurrentObjectInfo(null);
     }
 
     public enum ScreenNavPanelState {
@@ -206,6 +248,9 @@ public class MainWindow implements LevelObserver {
         }
         movetoScreen(newStrID);
         thePanes.remove(delPane);
+
+        updateCurrentObject(null);
+        updateCurrentObjectInfo(null);
     }
 
     @Override
@@ -215,11 +260,37 @@ public class MainWindow implements LevelObserver {
         double[] coord = DimensionMan.DiMan().gridtoCoords((theObject.getTopLeftCell()));
 
         ImageView newObj = new ImageView(currObjButton.getImg());
+        newObj.setUserData(theObject.getId());
         newObj.setFitWidth(imgwidth); newObj.setFitHeight(imgheight);
         newObj.setLayoutY(coord[0]); newObj.setLayoutX(coord[1]);
         currentScreen.getChildren().add(newObj);
+
+        makeInteractive(newObj);
     }
 
+    @Override
+    public void moveLvLObject(LvLObject theObject) {
+        Node curObj = findObjectOnScreen(theObject.getId());
+        double[] blah = DimensionMan.DiMan().gridtoCoords(theObject.getTopLeftCell());
+        curObj.relocate(blah[1], blah[0]);
+
+        updateCurrentObjectInfo(theObject);
+    }
+
+    @Override
+    public void deleteLvLObject(int id) {
+        currentScreen.getChildren().remove(currentObj);
+        updateCurrentObject(null);
+        updateCurrentObjectInfo(null);
+    }
+
+    //Finds Node with id
+    private Node findObjectOnScreen(int id) {
+        return currentScreen.getChildren()
+        .stream()
+        .filter(cr -> (int)cr.getUserData() == id)
+        .findFirst().get();
+    }
 
     @Override
     public void updateActionStatement(String statementMsg) {
@@ -227,5 +298,40 @@ public class MainWindow implements LevelObserver {
     }
 
 
-    ///The big one
+    ///Borrowed from Dr. Schaub again because I didn't feel like remembering how
+    // From https://stackoverflow.com/questions/17312734/how-to-make-a-draggable-node-in-javafx-2-0/46696687,
+    // with modifications by S. Schaub
+    private void makeInteractive(Node node) {
+        final Delta dragDelta = new Delta();
+
+        node.setOnMouseEntered(me -> node.getScene().setCursor(Cursor.HAND) );
+        node.setOnMouseExited(me -> node.getScene().setCursor(Cursor.DEFAULT) );
+        node.setOnMousePressed(me -> {
+            dragDelta.x = me.getX();
+            dragDelta.y = me.getY();
+            node.getScene().setCursor(Cursor.MOVE);
+
+            updateCurrentObject(node);
+            updateCurrentObjectInfo(DataManager.DaMan().getCurrentScreen().findObject((int)node.getUserData()));
+        });
+        node.setOnMouseDragged(me -> {
+            node.setLayoutX(node.getLayoutX() + me.getX() - dragDelta.x);
+            node.setLayoutY(node.getLayoutY() + me.getY() - dragDelta.y);
+            node.getScene().setCursor(Cursor.MOVE);
+        });
+        node.setOnMouseReleased(me -> { 
+            node.getScene().setCursor(Cursor.HAND);
+            DataManager.DaMan().moveObject((int)node.getUserData(), DimensionMan.DiMan().objCenterCoordstoGrid(node.getLayoutY(), node.getLayoutX()));
+         } );
+
+        // Prevent mouse clicks on img from propagating to the pane and
+        // resulting in creation of a new image
+        node.setOnMouseClicked(me -> me.consume());
+    }
+
+    private class Delta {
+        public double x;
+        public double y;
+    }
+
 }
