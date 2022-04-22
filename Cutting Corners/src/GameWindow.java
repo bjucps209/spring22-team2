@@ -33,6 +33,7 @@ public class GameWindow {
     Image background = new Image("media/terrain/medieval/medievalfourway.png");
     ImageView backgroundView = new ImageView(background);
     ArrayList<Character> keysPressed = new ArrayList<Character>();
+    
 
     @FXML
     void onGreetClicked(ActionEvent event) {
@@ -96,8 +97,9 @@ public class GameWindow {
                 gameWindow.getChildren().add(weaponImage);
 
                 ProgressBar playerHealth = new ProgressBar();
-                playerHealth.progressProperty().bind(player.getStats().healthProperty()
-                                                           .divide(player.getTotalHealth()));
+                playerHealth.setProgress(player.getStats().getHealth() /
+                                                           player.getTotalHealth());
+                playerHealth.setScaleX(player.getTotalHealth() / 3);
                 playerHealth.relocate(1200*ratioHeight, 100*ratioWidth);
                 gameWindow.getChildren().add(playerHealth);
             }
