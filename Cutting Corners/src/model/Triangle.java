@@ -1,10 +1,5 @@
 package model;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import javafx.scene.image.Image;
 
 public class Triangle extends Enemy{
     static Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, "media/Player/swordwalk.gif");

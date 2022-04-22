@@ -23,7 +23,7 @@ public class Enemy extends Entity{
     private static String attacking;
     private String currentImage = "Standing";
 
-    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking)
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth)
     {
         super(col*100, row*100, image, size);
         this.homeScreen = homeScreen;
@@ -43,7 +43,7 @@ public class Enemy extends Entity{
         return stats;
     }
     public void generateEnemy(int xCoord, int yCoord){
-        type = new Triangle(super.getSize(), xCoord, yCoord, homeScreen);
+        //type = new Triangle(super.getSize(), xCoord, yCoord, homeScreen);
         // switch (sides) {
         //     case 3:{type = new Triangle(size);}
         //     default: break;
@@ -367,6 +367,8 @@ public class Enemy extends Entity{
         stats.serialize(file);
         //added one for totalHealth
         file.writeDouble(totalHealth);
+
+        file.writeUTF(getImage());
     }
 
     public static Enemy deserialize(DataInputStream file) throws IOException {
@@ -381,10 +383,10 @@ public class Enemy extends Entity{
         //added one for totalHealth
         int totalHealth = file.readInt();
 
-        String image ="basecase.png";
+        String image = file.readUTF();
 
-        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking);
-        enemy.setTotalHealth(totalHealth);
+
+        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking,totalHealth);
         return enemy;
     }
 

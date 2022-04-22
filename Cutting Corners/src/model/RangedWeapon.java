@@ -44,6 +44,7 @@ public class RangedWeapon extends Equipment{
         file.writeUTF(getName());
         file.writeDouble(getCooldown());
         getBuffs().serialize(file);
+        
         file.writeInt(range);
         projectile.serialize(file);
     }
@@ -51,10 +52,12 @@ public class RangedWeapon extends Equipment{
     public static RangedWeapon deserialize(DataInputStream file) throws IOException {
         String name = file.readUTF();
         int cooldown = file.readInt();
+
         Stats buffs = Stats.deserialize(file);
         int Strength = buffs.getStrength();
         int Health = buffs.getHealth();
         int Speed = buffs.getSpeed();
+
         int range = file.readInt();
 
         Projectile projectile = Projectile.deserialize(file);

@@ -140,6 +140,26 @@ public class Screen {
     public void setDown(Screen down) {
         this.down = down;
     }
+    
+    public void setGridSquare(int row, int col, String cellType) {
+        switch (cellType) {
+            case "empty": {
+                this.grid[row][col] = Cell.empty;             
+            }
+            case "rock": {
+                this.grid[row][col] = Cell.rock;
+            }
+            case "tree": {
+                this.grid[row][col] = Cell.tree;
+            }
+            case "plant": {
+                this.grid[row][col] = Cell.plant;
+            }
+            case "enemy": {
+                this.grid[row][col] = Cell.enemy;
+            }
+        }
+    }
 
 
     public void serialize(DataOutputStream file) throws IOException {
@@ -164,33 +184,17 @@ public class Screen {
         int col = file.readInt();
         int level = file.readInt();
         String filename = file.readUTF();
-        Screen s = new Screen(row, col, level,filename);
+        Screen s = new Screen(row, col, level, filename);
 
         int numEntities = file.readInt();
         for (int i = 0; i < numEntities; ++i) {
             Entity e = Entity.deserialize(file);
-            s.getEntities().add(e);
+            s.addEntity(e);
         }
         for (int r = 0; r < 7; ++r) {
             for (int c = 0; c < 13; ++c) {
                 String cellType = file.readUTF();
-                switch (cellType) {
-                    case "empty": {
-                        s.getGrid()[r][c] = Cell.empty;
-                    }
-                    case "rock": {
-                        s.getGrid()[r][c] = Cell.rock;
-                    }
-                    case "tree": {
-                        s.getGrid()[r][c] = Cell.tree;
-                    }
-                    case "plant": {
-                        s.getGrid()[r][c] = Cell.plant;
-                    }
-                    case "enemy": {
-                        s.getGrid()[row][col] = Cell.enemy;
-                    }
-                }
+                s.setGridSquare(row, col, cellType);
             }
         }
 
