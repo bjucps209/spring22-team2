@@ -65,8 +65,9 @@ public class GameWindow {
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         ratioImage(backgroundView);
         for (Entity entity: entities){
-            entity.setObserver(this::changeImage, this::flipImage);
-            ImageView entityImage = new ImageView(entity.getImage());
+            entity.setEventObservers(this::changeImage, this::flipImage);
+            EntityImageView entityImage = new EntityImageView(entity.getImage());
+            entity.setObserver(entityImage);
             entityImage.setX(entity.getX());
             entityImage.setY(entity.getY());
             entityImage.xProperty().bind(entity.getXProperty());
@@ -81,7 +82,9 @@ public class GameWindow {
             gameWindow.getChildren().add(entityImage);
             if(entity instanceof Player)
             {
-                ImageView weaponImage=new ImageView(new Image("media/Player/swordwalk.gif"));
+                EntityImageView weaponImage=new EntityImageView(new Image("media/Player/swordwalk.gif"));
+                ((Player) entity).setWeaponImage(new Image("media/Player/swordwalk.gif"));
+                ((Player) entity).setWeaponObserver(weaponImage);
                 weaponImage.setX(entity.getX());
                 weaponImage.setY(entity.getY());
                 weaponImage.xProperty().bind(entity.getXProperty());
@@ -95,10 +98,28 @@ public class GameWindow {
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         for (Obstacle obstacle: currentScreen.findObstacles()){
-            ImageView obstacleImage = new ImageView(new Image("media/terrain/medieval/rock.png"));
+            ImageView obstacleImage = new ImageView();
+            if(currentScreen.getFilename().contains("medieval"))
+            {
+                obstacleImage.setImage(new Image("media/terrain/medieval/rock.png"));
+            }
+            if(currentScreen.getFilename().contains("desert"))
+            {
+                obstacleImage.setImage(new Image("media/terrain/egypt/cactus.png"));
+            }
+            if(currentScreen.getFilename().contains("caveman"))
+            {
+                obstacleImage.setImage(new Image("media/terrain/caveman/deadbush.png"));
+                obstacleImage.setFitWidth(70);
+            }
+            if(currentScreen.getFilename().contains("secret")||currentScreen.getFilename().contains("boss"))
+            {
+                obstacleImage.setImage(new Image("media/terrain/secret&boss/lantern.png"));
+                obstacleImage.setFitWidth(100);
+            }
             obstacleImage.setX(obstacle.getX());
             obstacleImage.setY(obstacle.getY());
-            obstacleImage.prefWidth(200);
+            obstacleImage.prefWidth(100);
             obstacleImage.setPreserveRatio(true);
             gameWindow.getChildren().add(obstacleImage);
         }

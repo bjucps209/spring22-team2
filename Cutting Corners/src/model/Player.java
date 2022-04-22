@@ -17,9 +17,10 @@ public class Player extends Entity {
 
     ArrayList<Item> inventory;
     Image weaponImage = new Image ("media/Player/swordwalk.gif");
+    private EntityObserver weaponObserver;
     Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, weaponImage);
     Equipment armor;
-    Stats stats = new Stats(2, 5, 4);
+    Stats stats = new Stats(2, 5, 15);
     static Image playerImage = new Image("media/Player/Cirkyle v1.png");
     static Image[] walkingGif = {new Image("media/Player/Cirkyle Walking/Frame1.png"),
                                  new Image("media/Player/Cirkyle Walking/Frame2.png"),
@@ -108,16 +109,16 @@ public class Player extends Entity {
             case standing: {
                 if (previousState == PlayerState.walking){
                     walkingStep = 0;
-                    super.getObserver().changeImage(playerImage, this);
+                    super.getObserver().changeImage(playerImage,false);
                     previousState = PlayerState.standing;
                 }
-                super.getObserver().changeImage(playerImage, this);;
-                if (keys.size() > 0){state = PlayerState.walking;}
+                super.getObserver().changeImage(playerImage,false);
+                if (keys.size() > 0){state = PlayerState.walking;super.getObserver().changeImage(new Image("media/Player/basewalk.gif"),false);}
                 break;
             }
             case walking: {
                 walkingStep = (walkingStep + 1) % 50;
-                super.getObserver().changeImage(walkingGif[(int) walkingStep / 10], this);
+                //super.getObserver().changeImage(walkingGif[(int) walkingStep / 10], this);
                 if (keys.size() == 0){state = PlayerState.standing;}
                 if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
                 
@@ -189,7 +190,9 @@ public class Player extends Entity {
                 super.getCoords().subXCoord(stats.getSpeed());
                 if (facing == Direction.right){
                     facing = Direction.left;
-                    super.getFlipper().flipImage(this);
+                    super.getObserver().changeImage(new Image("media/Player/basewalk.gif"), false);
+                    weaponObserver.changeImage(weaponImage, false);
+                    //super.getFlipper().flipImage(this);
                 }
             }
             if (super.getCoords().getxCoord() < 0){super.getCoords().addXCoord(stats.getSpeed());}
@@ -199,6 +202,7 @@ public class Player extends Entity {
                 if (keys.size() > index + 1){KeyPressed((index + 1));} 
             if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
             if (super.getCoords().getyCoord() > 700){super.getCoords().subYCoord(stats.getSpeed());}
+            
                 break;
             }
             case D: {
@@ -207,7 +211,9 @@ public class Player extends Entity {
                 super.getCoords().addXCoord(stats.getSpeed());
                 if (facing == Direction.left){
                     facing = Direction.right;
-                    super.getFlipper().flipImage(this);
+                    super.getObserver().changeImage(new Image("media/Player/basewalk.gif"), true);
+                    weaponObserver.changeImage(weaponImage, true);
+                    //super.getFlipper().flipImage(this);
                 }
             }
             if (super.getCoords().getxCoord() > 1200){super.getCoords().subXCoord(stats.getSpeed());}
@@ -387,7 +393,11 @@ public class Player extends Entity {
         if (stats.getHealth() <= 0){super.performDie();}
     }
     // Getters and Setters -----------------------
-  
+   public void setWeaponObserver(EntityObserver img)
+   {
+       weaponObserver=img;
+   } 
+    
     public ArrayList<Item> getInventory() {
         return inventory;
     }

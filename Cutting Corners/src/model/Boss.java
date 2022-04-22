@@ -7,7 +7,7 @@ public class Boss extends Enemy{
     int hitX = 640;
     int hitY = 700;
     public Boss(int sides, int size, int xCoord, int yCoord, Image image, Screen homeScreen, int vision, Stats stats){
-        super(sides, size, xCoord, yCoord, image, homeScreen, vision, null, stats);
+        super(sides, size, xCoord, yCoord, image, homeScreen, vision, null, stats,image,image);
     }
     @Override
     public void performMovement()
