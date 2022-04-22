@@ -67,7 +67,7 @@ public class GameWindow {
         ratioImage(backgroundView);
         for (Entity entity: entities){
             entity.setEventObservers(this::changeImage, this::flipImage);
-            EntityImageView entityImage = new EntityImageView(entity.getImage());
+            EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
             entity.setObserver(entityImage);
             entityImage.setX(entity.getX());
             entityImage.setY(entity.getY());
@@ -85,7 +85,7 @@ public class GameWindow {
             {
                 Player player = (Player) entity;
                 EntityImageView weaponImage=new EntityImageView(new Image("media/Player/swordwalk.gif"));
-                ((Player) entity).setWeaponImage(new Image("media/Player/swordwalk.gif"));
+                ((Player) entity).setWeaponImage("media/Player/swordwalk.gif");
                 ((Player) entity).setWeaponObserver(weaponImage);
                 weaponImage.setX(entity.getX());
                 weaponImage.setY(entity.getY());
@@ -97,10 +97,11 @@ public class GameWindow {
                 gameWindow.getChildren().add(weaponImage);
 
                 ProgressBar playerHealth = new ProgressBar();
-                playerHealth.setProgress(player.getStats().getHealth() /
-                                                           player.getTotalHealth());
-                playerHealth.setScaleX(player.getTotalHealth() / 3);
+                playerHealth.progressProperty().bind(player.getStats().healthProperty()
+                                                           .divide(player.getTotalHealth()));
+                playerHealth.setScaleX(player.getTotalHealth() / 8);
                 playerHealth.relocate(1200*ratioHeight, 100*ratioWidth);
+                playerHealth.toFront();
                 gameWindow.getChildren().add(playerHealth);
             }
             if (entity instanceof Enemy){
@@ -178,7 +179,7 @@ public class GameWindow {
                 ImageView imageview = (ImageView) node;
                 if (imageview.getUserData() == null) continue;
                 if (imageview.getUserData().equals(entity)){
-                    Image image = entity.getImage();
+                    Image image = new Image(entity.getImage());
                     int width = (int) image.getWidth();
                     int height = (int) image.getHeight();
                     BufferedImage bImage = new BufferedImage
