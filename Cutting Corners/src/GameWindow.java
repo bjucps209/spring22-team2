@@ -81,6 +81,7 @@ public class GameWindow {
             gameWindow.getChildren().add(entityImage);
             if(entity instanceof Player)
             {
+                Player player = (Player) entity;
                 EntityImageView weaponImage=new EntityImageView(new Image("media/Player/swordwalk.gif"));
                 ((Player) entity).setWeaponImage("media/Player/swordwalk.gif");
                 ((Player) entity).setWeaponObserver(weaponImage);
@@ -92,6 +93,20 @@ public class GameWindow {
                 weaponImage.setFitWidth(entity.getSize());
                 weaponImage.setPreserveRatio(true);
                 gameWindow.getChildren().add(weaponImage);
+
+                ProgressBar playerHealth = new ProgressBar();
+                playerHealth.progressProperty().bind(player.getStats().healthProperty()
+                                                           .divide(player.getTotalHealth()));
+                playerHealth.relocate(1200*ratioHeight, 100*ratioWidth);
+                gameWindow.getChildren().add(playerHealth);
+            }
+            if (entity instanceof Enemy){
+                Enemy enemy = (Enemy) entity;
+                ProgressBar healthBar = new ProgressBar();
+                healthBar.progressProperty().bind(enemy.getStats().healthProperty().divide(enemy.getTotalHealth()));
+                healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2));
+                healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2));
+                gameWindow.getChildren().add(healthBar);
             }
         }
 

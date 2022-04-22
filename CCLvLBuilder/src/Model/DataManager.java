@@ -27,10 +27,10 @@ public class DataManager {
     //Checks if object is within bounds, sends error if not
     //Makes currentScreen do the rest (Besides observers)
     public void createObject(String name, ObjType objtype, Vector topLeftCell, Vector dimensions) {
-        if (topLeftCell.getY() < 0 || topLeftCell.getY() + dimensions.getY() >= gridDimensions.getY()) {
+        if (topLeftCell.getY() < 0 || topLeftCell.getY() + dimensions.getY() - 1 >= gridDimensions.getY()) {
             if(mrObserver != null) { mrObserver.updateActionStatement("Out of Bounds");}
             return;
-        } if (topLeftCell.getX() < 0 || topLeftCell.getX() + dimensions.getX() >= gridDimensions.getX()) {
+        } if (topLeftCell.getX() < 0 || topLeftCell.getX() + dimensions.getX() - 1 >= gridDimensions.getX()) {
             if(mrObserver != null) {  mrObserver.updateActionStatement("Out of Bounds"); }
             return;
         }

@@ -10,6 +10,7 @@ public class Enemy extends Entity{
     private int vision;
     private int sides;
     private Stats stats;
+    private double totalHealth;
     private Enemy type;
     private Direction direction = Direction.left;
     private Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, "media/Player/swordwalk.gif");
@@ -22,7 +23,8 @@ public class Enemy extends Entity{
     private static String attacking;
     private String currentImage = "Standing";
 
-    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking){
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking)
+    {
         super(col*100, row*100, image, size);
         this.homeScreen = homeScreen;
         this.vision = vision;
@@ -30,6 +32,7 @@ public class Enemy extends Entity{
         this.weapon = weapon;
         this.stats = stats;
         this.size = size;
+        this.totalHealth = totalHealth;
         this.walking=walking;
         this.attacking=attacking;
         cellWithin = cellWithin(col, row);
@@ -71,7 +74,7 @@ public class Enemy extends Entity{
         PlayerRelation relation = PlayerInVision();
         if(relation!=null)
         {
-            if(relation.getDistance()<=((MeleeWeapon) weapon).getRange())
+            if(relation.getDistance()<=((MeleeWeapon) weapon).getRange()&&state!=EnemyState.stunned)
             {
                 state=EnemyState.attacking;
                 if(currentImage!="Attacking")
@@ -84,6 +87,10 @@ public class Enemy extends Entity{
         switch (state){
             case stunned:
                 stunCount--;
+                if (knockback > 0){
+                    simpleMovement(10);
+                    knockback--;
+                }
                 if(stunCount<=0)
                 {
                     state=EnemyState.patrolling;
@@ -144,15 +151,25 @@ public class Enemy extends Entity{
                 weapon.setSpeed((int) getStats().getSpeed() / 2);
                 if(p.getDistance()<=weapon.getRange())
                     {
+                        if(p.getDirection()==Direction.up)
+                        {
+                            p.getPlayer().takeDamage(weapon.getDamage(), Direction.down);
+                            System.out.println("Enemy Hit!");
+                        }
+                        else if(p.getDirection()==Direction.down)
+                        {
+                            p.getPlayer().takeDamage(weapon.getDamage(), Direction.up);
+                            System.out.println("Enemy Hit!");
+                        }
                         if(p.getDirection()==Direction.left)
                         {
-                            p.getPlayer().takeDamage(weapon.getDamage());
+                            p.getPlayer().takeDamage(weapon.getDamage(), Direction.right);
                             super.getObserver().changeImage(attacking, false);
                             System.out.println("Enemy Hit!");
                         }
                         else
                         {
-                            p.getPlayer().takeDamage(weapon.getDamage());
+                            p.getPlayer().takeDamage(weapon.getDamage(), Direction.left);
                             super.getObserver().changeImage(attacking, true);
                             System.out.println("Enemy Hit!");
                         }
@@ -198,6 +215,21 @@ public class Enemy extends Entity{
             }
         }
     }
+
+    public void simpleMovement(int speed){
+        int xSpeed = 0;
+        int ySpeed = 0;
+
+        switch (direction){
+            case up: ySpeed = -1 * speed;
+            case down: ySpeed = speed;
+            case left: xSpeed = -1 * speed;
+            case right: xSpeed = speed;
+        }
+
+        super.getCoords().setxCoord(super.getX() + xSpeed);
+        super.getCoords().setyCoord(super.getY() + ySpeed);
+    }
     
     public void changeDirection(PlayerRelation relation){
         if (Math.abs(relation.xDifference) < Math.abs(relation.yDifference)){
@@ -213,7 +245,8 @@ public class Enemy extends Entity{
     public boolean obstacleInPath(){return false;}
 
     @Override
-    public void takeDamage(int damage){
+    public void takeDamage(int damage, Direction direction){
+        System.out.println('b');
         stats.subHealth(damage);
         state=EnemyState.stunned;
         if(currentImage!="Standing")
@@ -222,6 +255,7 @@ public class Enemy extends Entity{
             currentImage="Standing";
         }
         knockback=10;
+        this.direction = direction;
         if(stunCount<=0)
         {
             stunCount=50;
@@ -277,6 +311,14 @@ public class Enemy extends Entity{
         this.type = type;
     }
 
+    public void setTotalHealth(int totalHealth){
+        this.totalHealth = totalHealth;
+    }
+
+    public double getTotalHealth(){
+        return totalHealth;
+    }
+
     public Direction getDirection() {
         return direction;
     }
@@ -323,7 +365,8 @@ public class Enemy extends Entity{
         // direction ??
         weapon.serialize(file);
         stats.serialize(file);
-    
+        //added one for totalHealth
+        file.writeDouble(totalHealth);
     }
 
     public static Enemy deserialize(DataInputStream file) throws IOException {
@@ -335,10 +378,13 @@ public class Enemy extends Entity{
         int sides = file.readInt();
         Equipment weapon = Equipment.deserialize(file);
         Stats stats = Stats.deserialize(file);
+        //added one for totalHealth
+        int totalHealth = file.readInt();
 
         String image ="basecase.png";
 
         Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking);
+        enemy.setTotalHealth(totalHealth);
         return enemy;
     }
 

@@ -65,4 +65,13 @@ public class LvLObject {
     public void setId(int id) {
         this.id = id;
     }
+
+    public ObjType getObjType() {
+        return objType;
+    }
+
+    public void setObjType(ObjType objType) {
+        this.objType = objType;
+    }
+    
 }

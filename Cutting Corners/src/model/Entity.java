@@ -83,7 +83,7 @@ public class Entity {
     }
 
 
-    public void takeDamage(int damage){
+    public void takeDamage(int damage, Direction direction){
     }
 
     public void performDie(){
