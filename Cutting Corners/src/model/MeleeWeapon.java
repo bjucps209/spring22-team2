@@ -12,10 +12,10 @@ public class MeleeWeapon extends Equipment{
     private Direction direction;
     private int damage;
     private int speed;
-    private Image image;
+    private String image;
     private ArrayList<Entity> enemies;
 
-    public MeleeWeapon(String name, double cooldown, int Strength, int Health, int Speed, int range, Image image){
+    public MeleeWeapon(String name, double cooldown, int Strength, int Health, int Speed, int range, String image){
         super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Health, Speed));
         this.range = range;
         this.image = image;
@@ -38,11 +38,11 @@ public class MeleeWeapon extends Equipment{
         this.direction = direction;
     }
 
-    public Image getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -80,24 +80,28 @@ public class MeleeWeapon extends Equipment{
         file.writeUTF(getName());
         file.writeDouble(getCooldown());
         getBuffs().serialize(file);
+
         file.writeInt(range);
-        //file.writeDouble(direction);
+        // file.writeDouble(direction);
         file.writeInt(damage);
+        file.writeInt(speed);
+        file.writeUTF(image);
     }
 
     public static MeleeWeapon deserialize(DataInputStream file) throws IOException {
         String name = file.readUTF();
         int cooldown = file.readInt();
+
         Stats buffs = Stats.deserialize(file);
         int Strength = buffs.getStrength();
         int Health = buffs.getHealth();
         int Speed = buffs.getSpeed();
-        int range = file.readInt();
-        double direction = file.readDouble();
-        int damage = file.readInt();
-        int arc = file.readInt();
 
-        Image image = new Image("basecase.png");
+        int range = file.readInt();
+        // double direction = file.readDouble();
+        int damage = file.readInt();
+        int speed = file.readInt();
+        String image = file.readUTF();
         
         MeleeWeapon m = new MeleeWeapon(name, cooldown, Strength, Health, Speed, range, image);
         return m;

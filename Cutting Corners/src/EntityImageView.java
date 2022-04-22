@@ -9,9 +9,9 @@ public class EntityImageView extends ImageView implements EntityObserver{
         super(img);
         this.setRotationAxis(Rotate.Y_AXIS);
     }
-    public void changeImage(Image i,boolean flip)
+    public void changeImage(String i,boolean flip)
     {
-        super.setImage(i);
+        super.setImage(new Image(i));
         if(flip)
         {
             this.setRotate(180);
