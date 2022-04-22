@@ -20,7 +20,7 @@ public class Player extends Entity {
     private EntityObserver weaponObserver;
     Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, weaponImage);
     Equipment armor;
-    Stats stats = new Stats(2, 5, 4);
+    Stats stats = new Stats(2, 5, 15);
     static Image playerImage = new Image("media/Player/Cirkyle v1.png");
     static Image[] walkingGif = {new Image("media/Player/Cirkyle Walking/Frame1.png"),
                                  new Image("media/Player/Cirkyle Walking/Frame2.png"),
