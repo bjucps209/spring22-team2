@@ -25,7 +25,7 @@ public class Enemy extends Entity{
     private static String attacking;
     private String currentImage = "Standing";
 
-    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,Image walking,Image attacking, double totalHealth){
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking, double totalHealth){
         super(col*100, row*100, image, size);
         this.homeScreen = homeScreen;
         this.vision = vision;
