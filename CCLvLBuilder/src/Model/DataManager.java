@@ -40,7 +40,7 @@ public class DataManager {
         LvLObject newObject = currentScreen.createObject(name, objtype, topLeftCell, dimensions);
         if (mrObserver != null) {
              mrObserver.addLvLObject(newObject); 
-             mrObserver.updateActionStatement("Placed at: " + newObject.getTopLeftCell().getX() + "," + newObject.getTopLeftCell().getY());
+             mrObserver.updateActionStatement(name + "placed at " + newObject.getTopLeftCell().getX() + "," + newObject.getTopLeftCell().getY() + " on " + currentScreen.getStrID());
         }
     }
 
@@ -63,7 +63,7 @@ public class DataManager {
         currentScreen.moveObject(curObject, newGrid);
         if (mrObserver != null) {
             mrObserver.moveLvLObject(curObject);
-            mrObserver.updateActionStatement("Moved to: " + curObject.getTopLeftCell().getX() + "," + curObject.getTopLeftCell().getY());
+            mrObserver.updateActionStatement(curObject.getName() + " moved to " + curObject.getTopLeftCell().getX() + "," + curObject.getTopLeftCell().getY() + " on " + currentScreen.getStrID());
         }
     }
 
@@ -72,7 +72,7 @@ public class DataManager {
         currentScreen.deleteObject(id);
         if (mrObserver != null) {
             mrObserver.deleteLvLObject(id);
-            mrObserver.updateActionStatement("Object Deleted");
+            mrObserver.updateActionStatement( currentScreen.findObject(id).getName() + " deleted on " + currentScreen.getStrID());
         }
     }
 
@@ -118,7 +118,6 @@ public class DataManager {
     //Attempts to create a screen from the current screen depending on the given direction
     public void attemptCreateScreen(Direction direction) {
         int[] tempID = getAdjacentID(direction, currentScreen.getIDSeries());
-        System.out.println(Screen.ConvertToStrID(tempID));//________________
 
         //Check if Screen already exists (Won't need later) -----------------------------------------------------
         String moveID = Screen.ConvertToStrID(tempID[0], tempID[1], tempID[2]);

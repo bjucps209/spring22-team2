@@ -11,16 +11,19 @@ import java.util.ArrayList;
 public class Screen {
     private int[] IDSeries;
     private Screen[] adjacentScreens; // N S E W Up Down
-    
+    private String backgroundPathName;
+   
     private ObjType[][] objectLocations; // y then x
     private ArrayList<LvLObject> objectList;
-    private static int currentObjID;
 
+    private static int currentObjID; 
+    
     public Screen(int x, int y, int z, Vector gridDim) {
         IDSeries = new int[] {x, y, z};
         adjacentScreens = new Screen[6];
         objectList = new ArrayList<LvLObject>();
         objectLocations = new ObjType[gridDim.getY()][gridDim.getX()];
+        backgroundPathName = "";
     }
 
  /*    public LvLObject attemptCreateObject(String name, ) {
@@ -100,6 +103,15 @@ public class Screen {
     //Normal getters and setters
     public int[] getIDSeries() {
         return IDSeries;
+    }
+
+
+    public String getBackgroundPathName() {
+        return backgroundPathName;
+    }
+
+    public void setBackgroundPathName(String backgroundPathName) {
+        this.backgroundPathName = backgroundPathName;
     }
 
     /// Adjacent Screen manipulation

@@ -8,14 +8,14 @@
     
     <VBox>
         <HBox>
-            <Button text="Prev" />
-            <Label text="List name here" />
-            <Button text="Next" />
+            <Button text="Prev" onAction="#onListGroupPrevClicked" />
+            <Label fx:id="lblBtnListSetName" />
+            <Button text="Next" onAction="#onListGroupNextClicked" />
         </HBox>
         <HBox>
-            <Button text="Prev" />
-            <Label text="blah of blah" />
-            <Button text="Next" />
+            <Button text="Prev" onAction="#onListPrevClicked" />
+            <Label fx:id="lblBtnSetCount" />
+            <Button text="Next" onAction="#onListNextClicked" />
         </HBox>
         <VBox fx:id="VBObjectBtnLocation">
            

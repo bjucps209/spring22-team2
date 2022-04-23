@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -52,6 +55,8 @@ public class MainWindow implements LevelObserver {
     @FXML Button btnUp; @FXML Button btnDown;
 
     //Other Stuff
+    @FXML Label lblBtnListSetName; //For ObjBtn Layout Navigation
+    @FXML Label lblBtnSetCount;    //
     @FXML Label lblErrorMsg;
 
     @FXML
@@ -59,14 +64,49 @@ public class MainWindow implements LevelObserver {
         DataManager.DaMan().setMrObserver(this);
         DimensionMan.DiMan(); // initialize 
         objectBtnCompiler = new ObjectSelectorCompiler(VBObjectBtnLocation, this);
-        objectBtnCompiler.compileStuff();
+        objectBtnCompiler.compileLists();
         objectBtnCompiler.pushCurrentBtnSet();
         thePanes = new ArrayList<Pane>();
-        createScreen("0,0,0"); /// Try to manage this with DaMan ---------------- no
+        createScreen("0,0,0");
         
         disableNavButtons();
         btnDelete.setDisable(true);
         btnDeleteCurrentObj.setDisable(true);
+    }
+
+    /// Misc
+    //
+    @FXML void onListGroupPrevClicked(ActionEvent event) {
+        objectBtnCompiler.prevObjectSet().pushCurrentBtnSet();
+        lblBtnListSetName.setText(objectBtnCompiler.getCurrentListSet().getGroupName());
+    }
+    @FXML void onListGroupNextClicked(ActionEvent event) {
+        objectBtnCompiler.nextObjectSet();
+        objectBtnCompiler.pushCurrentBtnSet();
+        lblBtnListSetName.setText(objectBtnCompiler.getCurrentListSet().getGroupName());
+    }
+    @FXML void onListPrevClicked(ActionEvent event) {
+        objectBtnCompiler.prevObjectPage();
+        objectBtnCompiler.pushCurrentBtnSet();
+        var cls = objectBtnCompiler.getCurrentListSet();
+        lblBtnSetCount.setText(String.valueOf(cls.getCurrentVBoxIndex() + 1) + " of " + cls.getListSet().size());
+    }
+    @FXML void onListNextClicked(ActionEvent event) {
+        objectBtnCompiler.nextObjectPage();
+        objectBtnCompiler.pushCurrentBtnSet();
+        var cls = objectBtnCompiler.getCurrentListSet();
+        lblBtnSetCount.setText(String.valueOf(cls.getCurrentVBoxIndex() + 1) + " of " + cls.getListSet().size());
+    }
+
+    @FXML
+    void onBackgroundBtnClicked(ActionEvent event) {
+        CustomButton btn = (CustomButton)event.getSource();
+        DataManager.DaMan().getCurrentScreen().setBackgroundPathName(btn.getName());
+
+        BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
+        BackgroundImage thing = new BackgroundImage(btn.getImg(), null, null, null, what); //Does another thing
+        Background bg = new Background(thing); //idk
+        currentScreen.setBackground(bg); //Byeas
     }
 
     ///Screen Control System
@@ -219,7 +259,6 @@ public class MainWindow implements LevelObserver {
     @Override
     public void movetoScreen(String StrID) { 
         for (Pane aPane : thePanes) {
-            System.out.println(aPane.getUserData());
             if (aPane.getUserData().equals(StrID)) {
                 screenBox.getChildren().clear();
                 screenBox.getChildren().add(aPane);
@@ -295,8 +334,9 @@ public class MainWindow implements LevelObserver {
     @Override
     public void updateActionStatement(String statementMsg) {
         lblErrorMsg.setText(statementMsg);
+        System.out.println(statementMsg);
     }
-
+    
 
     ///Borrowed from Dr. Schaub again because I didn't feel like remembering how
     // From https://stackoverflow.com/questions/17312734/how-to-make-a-draggable-node-in-javafx-2-0/46696687,

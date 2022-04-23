@@ -1,4 +1,3 @@
-import Model.Cell;
 import Model.ObjType;
 import Model.Vector;
 import javafx.scene.control.Button;
@@ -12,7 +11,7 @@ public class CustomButton extends Button{
     private ObjType objType;
     private Vector dimensions;
 
-    public CustomButton(String name, Image img, ObjType ot, int imgsize, Vector dimensions) {
+    public CustomButton(String name, boolean showname, Image img, ObjType ot, int imgwidth, int imgheight, Vector dimensions) {
         super();
         this.name = name;
         Img = img;
@@ -21,8 +20,9 @@ public class CustomButton extends Button{
 
         var imgv = new ImageView(img);
         setGraphic(imgv);
-        setText(name);
-        imgv.setFitWidth(imgsize); imgv.setFitHeight(imgsize);
+        
+        if (showname) {setText(name);}
+        imgv.setFitWidth(imgwidth); imgv.setFitHeight(imgheight);
     }
 
     ///G&S
