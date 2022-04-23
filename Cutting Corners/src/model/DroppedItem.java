@@ -7,4 +7,8 @@ public class DroppedItem extends Entity{
         super(xCoord, yCoord, image, size);
         this.unDroppedItem = unDroppedItem;
     }
+
+    public void pickUp(Player pickerUpper){
+        pickerUpper.addItem(unDroppedItem);
+    }
 }

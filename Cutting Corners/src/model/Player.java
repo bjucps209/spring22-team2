@@ -1,12 +1,15 @@
 package model;
 
+import java.beans.Expression;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.security.Key;
 import java.util.*;
 
+import javax.naming.spi.DirStateFactory;
 import javax.print.attribute.standard.DialogOwner;
+import javax.swing.tree.ExpandVetoException;
 
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -25,12 +28,14 @@ public class Player extends Entity {
     ArrayList<KeyCode> keys = new ArrayList<KeyCode>();
     Coordinates mouseCoordinates = new Coordinates(0, 0);
     PlayerState state = PlayerState.standing;
-    int attackCount = 50;
+    int attackCount = 25;
     ArrayList<Entity> enemies;
     Direction facing = Direction.left;
     PlayerState previousState = PlayerState.standing;
     double totalHealth = 15;
     int walkingStep = 0;
+    int experience;
+    int score;
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -112,6 +117,22 @@ public class Player extends Entity {
                 if (keys.size() > 0){state = PlayerState.walking;super.getObserver().changeImage("media/Player/basewalk.gif",false);}
                 break;
             }
+            case attacking: {
+                if (attackCount < 25){
+                    state = PlayerState.resting; 
+                    break;
+                }
+                performAttack();
+                state = PlayerState.resting;
+            }
+            case resting:{
+                attackCount--;
+                if (attackCount == 0){
+                    state = PlayerState.standing; 
+                    attackCount = 25;
+                }
+                break;
+            }
             case walking: {
                 walkingStep = (walkingStep + 1) % 50;
                 //super.getObserver().changeImage(walkingGif[(int) walkingStep / 10], this);
@@ -139,22 +160,6 @@ public class Player extends Entity {
                 catch(IndexOutOfBoundsException i){}
                 break;
             }
-            case attacking: {
-                if (attackCount <50){
-                    state = PlayerState.resting; 
-                    break;
-                }
-                performAttack();
-                state = PlayerState.resting;
-            }
-            case resting:{
-                attackCount--;
-                if (attackCount == 0){
-                    state = PlayerState.standing; 
-                    attackCount = 50;
-                }
-                break;
-            }
         }
     }
 
@@ -176,12 +181,18 @@ public class Player extends Entity {
                 return;
             case W: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
+            if (keys.contains(KeyCode.S)){return;}
             if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
-            if (super.getCoords().getyCoord() < 0){super.getCoords().addYCoord(stats.getSpeed());}
+
+            int newY = super.getY() - stats.getSpeed();
+            if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
+                super.getCoords().addYCoord(stats.getSpeed());
+            }
                 break;
             }
             case A: {
                 if (keys.size() > index + 1){KeyPressed((index + 1)); }
+            if (keys.contains(KeyCode.D)){return;}
             if (direction != Direction.left){
                 super.getCoords().subXCoord(stats.getSpeed());
                 if (facing == Direction.right){
@@ -191,18 +202,27 @@ public class Player extends Entity {
                     //super.getFlipper().flipImage(this);
                 }
             }
-            if (super.getCoords().getxCoord() < 0){super.getCoords().addXCoord(stats.getSpeed());}
+            int newX = super.getX() - stats.getSpeed();
+            if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
+                super.getCoords().addXCoord(stats.getSpeed());
+            }
                 break;
             }
             case S: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));} 
+            if (keys.contains(KeyCode.W)){return;}
             if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
-            if (super.getCoords().getyCoord() > 700){super.getCoords().subYCoord(stats.getSpeed());}
+
+            int newY = super.getY() + stats.getSpeed();
+            if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
+                super.getCoords().subYCoord(stats.getSpeed());
+            }
             
                 break;
             }
             case D: {
                 if (keys.size() > index + 1){KeyPressed((index + 1));}
+            if (keys.contains(KeyCode.A)){return;}
             if (direction != Direction.right){
                 super.getCoords().addXCoord(stats.getSpeed());
                 if (facing == Direction.left){
@@ -212,7 +232,10 @@ public class Player extends Entity {
                     //super.getFlipper().flipImage(this);
                 }
             }
-            if (super.getCoords().getxCoord() > 1200){super.getCoords().subXCoord(stats.getSpeed());}
+            int newX = super.getX() + stats.getSpeed();
+            if (super.getX() > 1200 || obstacleInPath(newX, super.getY())){
+                super.getCoords().subXCoord(stats.getSpeed());
+            }
                 break;
             }
         }
@@ -259,17 +282,17 @@ public class Player extends Entity {
             weapon.setSpeed((int) stats.getSpeed() / 2);
             for(int i=0;i<enemies.size();i++)
             {
-                if(attackCount==50&&Math.sqrt(Math.pow(enemies.get(i).getCoords().getxCoord()-super.getX(), 2)+Math.pow(enemies.get(i).getCoords().getyCoord()-super.getY(), 2))<=weapon.getRange())
+                if(attackCount==25&&Math.sqrt(Math.pow(enemies.get(i).getCoords().getxCoord()-super.getX(), 2)+Math.pow(enemies.get(i).getCoords().getyCoord()-super.getY(), 2))<=weapon.getRange())
                 {
                     if(getMouseDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.down);
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.up);
                         SWORD_HIT.play();
                         continue;
                     }
                     else if(getMouseDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.up);
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.down);
                         SWORD_HIT.play();
                         continue;
                     }
@@ -384,6 +407,33 @@ public class Player extends Entity {
         stats.subHealth(damage);
         if (stats.getHealth() <= 0){super.performDie();}
     }
+
+    public Cell cellWithin(int row, int col){
+        Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
+        return cell;
+    }
+
+    public boolean obstacleInPath(int xCoord, int yCoord){
+        int row = yCoord / 100;
+        int col = xCoord / 100;
+        
+
+        for (int i = -1; i < 1; i++){
+            for (int j = 0; j < 2; j++){
+                if (cellWithin(row + i, col + j) != Cell.empty){
+                    switch(cellWithin(row + i, col + j)){
+                        case tree: if (i != 0 || j != 0){return false;}
+                        case plant: if (i != -1 || j != 0){return false;}
+                        case rock: if (i == -1){return false;}
+                        default: return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     // Getters and Setters -----------------------
    public void setWeaponObserver(EntityObserver img)
    {
@@ -466,6 +516,41 @@ public class Player extends Entity {
         return totalHealth;
     }
 
+    public void setExperience(int experience){
+        this.experience = experience;
+    }
+
+    public void addExperience(int addition){
+        experience += addition;
+    }
+
+    public int getExperience(){
+        return experience;
+    }
+
+    public void setScore(int score){
+        this.score = score;
+    }
+
+    public void addScore(int addition){
+        score += addition;
+    }
+
+    public void subScore(int difference){
+        score -= difference;
+    }
+
+    public int getScore(){
+        return score;
+    }
+
+    public void addItem(Item item){
+        inventory.add(item);
+    }
+
+    public void dropItem(Item item){
+        inventory.remove(item);
+    }
 
 
     @Override

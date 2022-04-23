@@ -38,11 +38,20 @@ public class Screen {
     public void addEntity(Entity entity){entities.add(entity);}
 
     public void randomize(){
-        for (int i = 0; i < 7; i++){
-            for (int j = 0; j < 13; j++){
+        fillGrid();
+        for (int i = 1; i < 6; i++){
+            for (int j = 1; j < 12; j++){
                 int random = rand.nextInt(40);
                 if (random == 39){grid[i][j] = Cell.rock;}
                 else{grid[i][j] = Cell.empty;}
+            }
+        }
+    }
+
+    public void fillGrid(){
+        for (int i = 0; i < 7; i++){
+            for (int j = 0; j < 13; j++){
+                grid[i][j] = Cell.empty;
             }
         }
     }

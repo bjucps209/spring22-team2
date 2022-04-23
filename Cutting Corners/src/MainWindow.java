@@ -442,7 +442,7 @@ public class MainWindow {
                 if(World.instance().getPlayer()!=null)
                 {
                     World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
-                    World.instance().getPlayer().performAttack();
+                    World.instance().getPlayer().setState(PlayerState.attacking);
                 }
 
                 // World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());

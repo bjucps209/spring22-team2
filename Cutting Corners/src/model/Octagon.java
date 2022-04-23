@@ -7,7 +7,7 @@ public class Octagon extends Enemy{
     static String attacking = "media/Enemies/octagonattack.gif";
 
     public Octagon(int size, int xCoord, int yCoord, Screen homeScreen,int totalHealth){
-        super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,totalHealth);
+        super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,totalHealth,size*5);
     }
 
     public static Stats sizeToStats(int size){

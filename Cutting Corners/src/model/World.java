@@ -94,12 +94,12 @@ public class World {
         Screen screen4 = new Screen(1, 1, 1,"media/terrain/medieval/medievalthreewaydown.png");
         Screen bossScreen = new Screen(1, 2, 1,"media/terrain/secret&boss/bossroom.png");
 
-        Triangle triangle1 = new Triangle(1, 1, 1, screen1,5);
-        Triangle triangle2 = new Triangle(2, 2, 6, screen1,5);
-        Triangle triangle3 = new Triangle(3, 7, 1, screen2,5);
-        Triangle triangle4 = new Triangle(4, 3, 6, screen2,5);
-        Triangle triangle5 = new Triangle(5, 4, 6, screen3,5);
-        Triangle triangle6 = new Triangle(6, 2, 6, screen4,100);
+        Triangle triangle1 = new Triangle(2, 1, 1, screen1);
+        Triangle triangle2 = new Triangle(2, 2, 6, screen1);
+        Triangle triangle3 = new Triangle(3, 7, 1, screen2);
+        Triangle triangle4 = new Triangle(4, 3, 6, screen2);
+        Triangle triangle5 = new Triangle(5, 4, 6, screen3);
+        Triangle triangle6 = new Triangle(6, 2, 6, screen4);
         //Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
 
         screen1.addEntity(triangle1);
