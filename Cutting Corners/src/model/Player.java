@@ -298,13 +298,13 @@ public class Player extends Entity {
                     }
                     if(getMouseDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.right);
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.left);
                         SWORD_HIT.play();
                         continue;
                     }
                     else if(getMouseDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.left);
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.right);
                         SWORD_HIT.play();
                         continue;
                     }

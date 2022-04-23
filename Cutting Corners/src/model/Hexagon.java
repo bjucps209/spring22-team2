@@ -6,8 +6,8 @@ public class Hexagon extends Enemy{
     static String walking = "media/Enemies/hexagonwalk.gif";
     static String attacking = "media/Enemies/hexagonattack.gif";
 
-    public Hexagon(int size, int xCoord, int yCoord, Screen homeScreen, int totalHealth){
-        super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,totalHealth,size*6);
+    public Hexagon(int size, int xCoord, int yCoord, Screen homeScreen){
+        super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,size*2,size*6);
     }
 
     public static Stats sizeToStats(int size){
@@ -15,7 +15,7 @@ public class Hexagon extends Enemy{
         //int speed = (int) 30 / size;
         int speed = 5;
         int strength = (int) size / 2;
-        int health = (int) size;
+        int health = (int) size*2;
         return new Stats(strength, speed, health);
     }
 }

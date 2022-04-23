@@ -2,6 +2,7 @@ import java.awt.event.KeyListener;
 import java.util.*;
 
 import javax.swing.JFrame;
+import javax.swing.border.StrokeBorder;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -115,8 +116,18 @@ public class GameWindow {
     }
 
     @FXML
-    void displayInventory(){
-
+    void displayInventory(Player player){
+        HBox inventorySlots = new HBox();
+        for (int i = 0; i < 5; i++){
+            if (player.getInventory().size() > i){
+                Item displayed = player.getInventory().get(i);
+                ImageView itemImage = new ImageView(new Image(displayed.getImage()));
+                inventorySlots.getChildren().add(itemImage);
+            }
+        }
+        inventorySlots.relocate(ratioWidth*500, ratioHeight*600);
+        inventorySlots.getStyleClass().add("inventory");
+        gameWindow.getChildren().add(inventorySlots);
     }
 
     @FXML
@@ -171,6 +182,7 @@ public class GameWindow {
         healthBar.progressProperty().bind(enemy.getStats().healthProperty().divide(enemy.getTotalHealth()));
         healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2));
         healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2));
+        healthBar.setScaleX(enemy.getTotalHealth() / 3);
         gameWindow.getChildren().add(healthBar);
     }
 
