@@ -20,5 +20,4 @@ public class Triangle extends Enemy{
         return new Stats(strength, speed, health);
     }
 
-
 }
