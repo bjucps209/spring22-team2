@@ -19,9 +19,10 @@ public class Enemy extends Entity{
     private int stunCount;
     private int knockback;
     private int attackCount=50;
-    private static String walking;
-    private static String attacking;
+    private String walking;
+    private String attacking;
     private String currentImage = "Standing";
+    private Direction facing = Direction.left;
 
     public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth)
     {
@@ -179,7 +180,6 @@ public class Enemy extends Entity{
     public void complexMovement(PlayerRelation relation){
         int xSpeed = 0;
         int ySpeed = 0;
-
         switch (direction){
             case up: ySpeed = -1 * stats.getSpeed();
             case down: ySpeed = stats.getSpeed();
@@ -205,12 +205,20 @@ public class Enemy extends Entity{
             }
             case left: {
                 super.getCoords().subXCoord(stats.getSpeed());
-                super.getObserver().changeImage(walking, true);
+                if(facing==Direction.right)
+                {
+                    super.getObserver().changeImage(walking, true);
+                    facing=Direction.left;
+                }
                 break;
             }
             case right: {
                 super.getCoords().addXCoord(stats.getSpeed());
-                super.getObserver().changeImage(walking, false);
+                if(facing==Direction.left)
+                {
+                    super.getObserver().changeImage(walking, false);
+                    facing=Direction.right;
+                }
                 break;
             }
         }
@@ -372,6 +380,8 @@ public class Enemy extends Entity{
 
     public static Enemy deserialize(DataInputStream file) throws IOException {
         int size = file.readInt();
+        String walking = "media/enemies/trianglewalk.gif";
+        String attacking = "media/enemies/triangleattack.gif";
         int x = file.readInt();
         int y = file.readInt();
         Screen homeScreen = Screen.deserialize(file);

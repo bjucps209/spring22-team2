@@ -88,7 +88,7 @@ public class World {
         // return emptyLevel;
         Level level1 = new Level(1);
 
-        Screen screen1 = new Screen(0, 0, 1,"media/terrain/medieval/medievalonewayright.png");
+        Screen screen1 = new Screen(0, 0, 1,"media/terrain/egypt/desertonewayright.png");
         Screen screen2 = new Screen(0, 1, 1,"media/terrain/egypt/desertthreewayleft.png");
         Screen screen3 = new Screen(1, 0, 1,"media/terrain/caveman/cavemanonewayright.png");
         Screen screen4 = new Screen(1, 1, 1,"media/terrain/medieval/medievalthreewaydown.png");
@@ -98,16 +98,18 @@ public class World {
         Triangle triangle2 = new Triangle(2, 2, 6, screen1,5);
         Triangle triangle3 = new Triangle(3, 7, 1, screen2,5);
         Triangle triangle4 = new Triangle(4, 3, 6, screen2,5);
-        Triangle triangle5 = new Triangle(5, 4, 6, screen3,5);
-        Triangle triangle6 = new Triangle(6, 2, 6, screen4,100);
+        Square square1 = new Square(5, 4, 6, screen3,5);
+        Hexagon hex1 = new Hexagon(6, 2, 6, screen4,100);
+        Octagon octagon1 = new Octagon(6, 6, 4, bossScreen, 100);
         //Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
 
         screen1.addEntity(triangle1);
         screen1.addEntity(triangle2);
         screen2.addEntity(triangle3);
         screen2.addEntity(triangle4);
-        screen3.addEntity(triangle5);
-        screen4.addEntity(triangle6);
+        screen3.addEntity(square1);
+        screen4.addEntity(hex1);
+        bossScreen.addEntity(octagon1);
         //bossScreen.addEntity(triangleBoss);
 
         screen1.setUp(screen3);

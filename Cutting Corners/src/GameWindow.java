@@ -67,12 +67,13 @@ public class GameWindow {
         ratioImage(backgroundView);
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
-            entity.setObserver(entityImage);
+            entityImage.setImage(new Image(entity.getImage()));
             entityImage.setX(entity.getX());
             entityImage.setY(entity.getY());
             entityImage.xProperty().bind(entity.getXProperty());
             entityImage.yProperty().bind(entity.getYProperty());
             entityImage.setUserData(entity);
+            entity.setObserver(entityImage);
             //entityImage.setFitWidth(entity.getSize()*200*ratioWidth);
             entityImage.setPreserveRatio(true);
             if(entity instanceof Boss)
@@ -110,6 +111,7 @@ public class GameWindow {
                 healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2));
                 healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2));
                 gameWindow.getChildren().add(healthBar);
+                entityImage.setImage(new Image(enemy.getImage()));
             }
         }
 
