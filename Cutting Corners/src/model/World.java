@@ -193,15 +193,17 @@ public class World {
      * opens a file and calls the deserialize methods for each object to load the game
      * @param filename - the saved file
      */
-    public void load(String filename) throws IOException {
+    public static Level load(String filename) throws IOException {
 
         try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) 
         {   
 
-            this.currentLevel = reader.readInt();
-            this.difficulty = reader.readInt();
+            World.instance().setCurrentLevel(reader.readInt());
+            World.instance().setDifficulty(reader.readInt());
 
             Level lvl = Level.deserialize(reader);
+
+            return lvl;
 
         }
     }
