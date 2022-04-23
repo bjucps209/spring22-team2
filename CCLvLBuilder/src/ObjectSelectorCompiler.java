@@ -6,15 +6,18 @@
 //----------------------------------------------------------- 
 import java.util.ArrayList;
 
-import Model.Cell;
 import Model.ObjType;
 import Model.Vector;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 
 
 public class ObjectSelectorCompiler {
     MainWindow theWindow; //can do probably
+    Label lblBtnListSetNameCtrl;
+    Label lblBtnSetCountCtrl;
+
     VBox setLocation;
     SelectorListSet specialSet, backgroundSet;
 
@@ -29,9 +32,11 @@ public class ObjectSelectorCompiler {
 
     private static final int BtnImgSize = 100;
     
-    public ObjectSelectorCompiler(VBox btnlocation, MainWindow mw) {
+    public ObjectSelectorCompiler(VBox btnlocation, MainWindow mw, Label lblbtnlsnc, Label lblbtnscc) {
         setLocation = btnlocation;
         theWindow = mw;
+        lblBtnListSetNameCtrl = lblbtnlsnc;
+        lblBtnSetCountCtrl = lblbtnscc;
 
         specialSet = new SelectorListSet("Special");
         backgroundSet = new SelectorListSet("Backgrounds");
@@ -51,11 +56,11 @@ public class ObjectSelectorCompiler {
 
     private void compileSpecial() {
         Image playerimage = new Image("TempImages/Cirkyle v1.png");
-        CustomButton newbutton = new CustomButton("Cirkyle v1", true, playerimage, ObjType.Player, BtnImgSize, BtnImgSize, new Vector(2, 1));
+        CustomButton newbutton = new CustomButton("Cirkyle v1", "TempImages/Cirkyle v1.png", true, playerimage, ObjType.Player, BtnImgSize, BtnImgSize, new Vector(2, 1));
         newbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
         specialSet.addCButton(newbutton);
 
-        CustomButton anotherbutton = new CustomButton("Cirkyle v1", true, playerimage, ObjType.Player, BtnImgSize, BtnImgSize, new Vector(1,1));
+        CustomButton anotherbutton = new CustomButton("Cirkyle v1", "TempImages/Cirkyle v1.png", true, playerimage, ObjType.Player, BtnImgSize, BtnImgSize, new Vector(1,1));
         anotherbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
         specialSet.addCButton(anotherbutton);
     }
@@ -66,7 +71,7 @@ public class ObjectSelectorCompiler {
             for (String bgName : backgroundNames[list]) {
                 String imgPath = "media/Terrain/" + blah[list] + "/" + bgName + ".png";
                 var backgroundimage = new Image(imgPath);
-                var newbutton = new CustomButton(imgPath, false, backgroundimage, null, 160, 90, null);
+                var newbutton = new CustomButton(imgPath, imgPath, false, backgroundimage, null, 160, 90, null);
                 newbutton.setOnAction((e) -> theWindow.onBackgroundBtnClicked(e));
                 backgroundSet.addCButton(newbutton);        
             }
@@ -77,6 +82,8 @@ public class ObjectSelectorCompiler {
         VBox curBox = getCurrentListSet().getCurrentVBox();
         setLocation.getChildren().clear();
         setLocation.getChildren().add(curBox);
+        lblBtnListSetNameCtrl.setText(getCurrentListSet().getGroupName());
+        lblBtnSetCountCtrl.setText(   String.valueOf(getCurrentListSet().getCurrentVBoxIndex() + 1) + " of " + getCurrentListSet().getListSet().size());
     }
 
     public void nextObjectSet() {

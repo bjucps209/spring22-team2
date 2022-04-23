@@ -7,13 +7,15 @@ import javafx.scene.image.ImageView;
 
 public class CustomButton extends Button{
     private String name; //Used for obj creation
+    private String imgPath;
     private Image Img; //In case I have issues with ImageView duplication
     private ObjType objType;
     private Vector dimensions;
 
-    public CustomButton(String name, boolean showname, Image img, ObjType ot, int imgwidth, int imgheight, Vector dimensions) {
+    public CustomButton(String name, String imgPath,boolean showname, Image img, ObjType ot, int imgwidth, int imgheight, Vector dimensions) {
         super();
         this.name = name;
+        this.imgPath = imgPath;
         Img = img;
         objType = ot;
         this.dimensions = dimensions;
@@ -69,6 +71,14 @@ public class CustomButton extends Button{
 
     public void setDimensions(Vector dimensions) {
         this.dimensions = dimensions;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
 }

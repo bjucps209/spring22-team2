@@ -7,13 +7,15 @@ package Model;
 
 public class LvLObject {
     protected String name;
+    protected String imgPath;
     protected ObjType objType; // New system to replace Entity.java, Obstacle.java, etc
     protected Vector topLeftCell;
     protected Vector dimensions;
     protected int id; //   Null should crash system ___Maybe
 
-    public LvLObject(String name, int id, ObjType objType, Vector dimensions, Vector topleftcell) {
+    public LvLObject(String name, String imgPath, int id, ObjType objType, Vector dimensions, Vector topleftcell) {
         this.name = name;
+        this.imgPath = imgPath;
         this.objType = objType;
         topLeftCell = topleftcell;
         this.dimensions = dimensions;
@@ -64,6 +66,14 @@ public class LvLObject {
 
     public void setObjType(ObjType objType) {
         this.objType = objType;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
     
 }

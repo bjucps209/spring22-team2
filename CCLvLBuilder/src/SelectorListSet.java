@@ -20,7 +20,7 @@ public class SelectorListSet {
         lastBoxBtnCount++;
         if (lastBoxBtnCount > 5) {
             listSet.add(new VBox());
-            lastBoxBtnCount = 0;
+            lastBoxBtnCount = 1;
         }
         listSet.get(listSet.size() - 1).getChildren().add(newbtn);
     }

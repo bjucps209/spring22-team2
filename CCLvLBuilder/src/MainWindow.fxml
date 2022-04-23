@@ -26,11 +26,20 @@
         <HBox>
             <Label text = "Screen ID: " />
             <Label fx:id="lblCurScreenID" />
-            <Label text = "                Level Name Here                    " />
+            <Label text="                Level Name Here                    " />
             <Label fx:id="lblErrorMsg" />
         </HBox>
+
         <HBox fx:id="screenBox"></HBox>
-        <HBox> <Label text="Randomized stuff here" /> </HBox>
+        
+        <HBox> 
+            <Label text="File Name: " />
+            <TextField fx:id="txtFileName" text="" />
+            <Button text="load" onAction="#onLoadFileClicked" />
+            <Button text="save" onAction="#onSaveFileClicked" />
+            <Label fx:id="lblslOutcome" />
+        </HBox>
+
     </VBox>
     
     <VBox>

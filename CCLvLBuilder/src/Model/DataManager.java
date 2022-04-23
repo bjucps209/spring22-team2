@@ -5,26 +5,35 @@
 //----------------------------------------------------------- 
 package Model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DataManager {
     LevelObserver mrObserver; //LevelObserver
     private Level theLevel;
-    public final Vector gridDimensions = new Vector(7, 13); 
+    public static final Vector gridDimensions = new Vector(7, 13); 
 
     private Screen currentScreen;
-    private String playerScrStrID;
     //private ArrayList<Screen> Screens;
 
-    public void save(String pathway, String fileName) { return; } //For show
-    public void load(String pathway, String fileName) { return; } //Or is it? :O
-                                   //Nope
+    ///Save and Load
+    //
+
+    public void load(String fileName) throws FileNotFoundException, IOException { 
+        String bleh = CCLvLFileReader.load(theLevel, fileName);
+        
+    }
+
+    public String save(String fileName, boolean currentWork) throws FileNotFoundException, IOException {
+         return CCLvLFileReader.save(theLevel, fileName, false);
+    } 
 
     ///Object stuff
     //
     //Checks if object is within bounds, sends error if not
     //Makes currentScreen do the rest (Besides observers)
-    public void createObject(String name, ObjType objtype, Vector topLeftCell, Vector dimensions) {
+    public void createObject(String name, String imgPath,ObjType objtype, Vector topLeftCell, Vector dimensions) {
         if (topLeftCell.getY() < 0 || topLeftCell.getY() + dimensions.getY() - 1 >= gridDimensions.getY()) {
             if(mrObserver != null) { mrObserver.updateActionStatement("Out of Bounds");}
             return;
@@ -37,10 +46,10 @@ public class DataManager {
             return;
         }
 
-        LvLObject newObject = currentScreen.createObject(name, objtype, topLeftCell, dimensions);
+        LvLObject newObject = currentScreen.createObject(name, imgPath, objtype, topLeftCell, dimensions);
         if (mrObserver != null) {
              mrObserver.addLvLObject(newObject); 
-             mrObserver.updateActionStatement(name + "placed at " + newObject.getTopLeftCell().getX() + "," + newObject.getTopLeftCell().getY() + " on " + currentScreen.getStrID());
+             mrObserver.updateActionStatement(name + " placed at " + newObject.getTopLeftCell().getX() + "," + newObject.getTopLeftCell().getY() + " on " + currentScreen.getStrID());
         }
     }
 
@@ -218,10 +227,25 @@ public class DataManager {
     }
 
     public void setPlayerScrID(String StrID) {
-        playerScrStrID = StrID;
+        theLevel.setScreenWithPlayer(StrID);
     }
 
-    public String getPlayerScrID(String StrID) {
-        return playerScrStrID;
+    public String getPlayerScrID() {
+        return theLevel.getScreenWithPlayer();
     }
+
+    public Level getTheLevel() {
+        return theLevel;
+    }
+    
+    public void setTheLevel(Level theLevel) {
+        this.theLevel = theLevel;
+    }
+
+
+
+    
+    /// Save/Load methods
+    //
+
 }
