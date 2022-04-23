@@ -11,7 +11,7 @@ public class DimensionMan {
     //Screen Dimensions
     protected static final int widthConstant = 16;
     protected static final int heightConstant = 9;
-    protected static final double screensizescalar = 65;
+    protected static final double screensizescalar = 50;
     protected static double screenwidth = screensizescalar * widthConstant; 
     protected static double screenheight = screensizescalar * heightConstant;
     
@@ -40,7 +40,6 @@ public class DimensionMan {
                 gridX = (int)Math.floor((x / cellLength) + eh);
                 break;
         }
-        System.out.println( "coords to grid " + gridX + " " + gridY);
         return new Vector(gridY, gridX);
     }
 
@@ -56,9 +55,11 @@ public class DimensionMan {
                 coordX = cellLength * topleftcorner.getX();
                 break;
         }
-        Vector test = coordstoGrid(coordY, coordX);
-        System.out.println( "grid to coords "+ test.getX() + " " + test.getY());
         return new double[] {coordY, coordX};
+    }
+
+    public Vector objCenterCoordstoGrid(double y, double x) {
+         return coordstoGrid((cellLength / 2) + y, (cellLength / 2) + x);
     }
 
     //Singleton

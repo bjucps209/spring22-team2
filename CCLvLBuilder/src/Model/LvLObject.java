@@ -26,14 +26,6 @@ public class LvLObject {
         return newLoc;
     }
 
-    public void setID(int newID) {
-        id = newID;
-    }
-
-    public int getID() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }

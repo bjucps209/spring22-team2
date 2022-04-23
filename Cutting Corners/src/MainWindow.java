@@ -223,7 +223,8 @@ public class MainWindow {
         startView.setOnMouseReleased(me -> {try{onStartClicked();}catch(IOException i){}
                                             startView.setImage(START_BUTTON);});
         loadView.setOnMousePressed(me -> loadView.setImage(LOAD_BUTTON_PRESSED));
-        loadView.setOnMouseReleased(me -> loadView.setImage(LOAD_BUTTON));
+        loadView.setOnMouseReleased(me -> { //try{onLoadClicked();}catch(IOException i){} // Adding load button
+                                            loadView.setImage(LOAD_BUTTON);}); 
         aboutView.setOnMousePressed(me -> aboutView.setImage(ABOUT_BUTTON_PRESSED));
         aboutView.setOnMouseReleased(me -> {aboutView.setImage(ABOUT_BUTTON);
                                                 state="ABOUT";
@@ -451,6 +452,7 @@ public class MainWindow {
             }
         });
     }
+
     @FXML
     void diffSliderPressed(ImageView view)
     {
