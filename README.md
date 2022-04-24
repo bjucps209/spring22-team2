@@ -37,7 +37,7 @@
 * Serialization has a few minor bugs in the saving of the entities
 ## Recording
 * [Screen Recording: Title Screen](https://youtu.be/pOgFQCrmpjg)
-* [Screen Recording: Gameplay](https://youtu.be/7v2Vsq_bCF0)
+* [Screen Recording: Gameplay](https://youtu.be/HDGT9HjBVqo)
 ## Expenses
 |Name|Username|Ownership Area|Hours Completed|Remaining Hours|Journal|
 |---|---|---|---|----|---|
