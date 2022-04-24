@@ -74,7 +74,6 @@ public class GameWindow {
 
         World.instance().getCurrentLevel().setObserver(this::Initialize);
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
-        ratioImage(backgroundView);
         for (Entity entity: entities){
             displayEntity(entity);
             if(entity instanceof Player)
@@ -92,6 +91,8 @@ public class GameWindow {
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         displayObstacles(currentScreen);
+        
+        ratioImage(backgroundView);
     }
 
     @FXML
@@ -121,6 +122,25 @@ public class GameWindow {
                 }
             }
         }
+    }
+
+    @FXML
+    void displayDamage(Entity entity, int damage, int time){
+        Label damageIndicator = new Label("- " + String.valueOf(damage));
+        damageIndicator.layoutXProperty().bind(entity.getXProperty().subtract(5));
+        damageIndicator.layoutYProperty().bind(entity.getYProperty().add(25));
+        damageIndicator.getStyleClass().add("achievements");
+        damageIndicator.getStyleClass().add("health");
+        gameWindow.getChildren().add(damageIndicator);
+
+        KeyFrame frames = new KeyFrame(Duration.millis(time), me -> unDisplayDamage(damageIndicator));
+        Timeline damageTimer = new Timeline(frames);
+        damageTimer.play();
+    }
+
+    @FXML
+    void unDisplayDamage(Label damageIndicator){
+        gameWindow.getChildren().remove(damageIndicator);
     }
 
     @FXML
@@ -175,6 +195,7 @@ public class GameWindow {
 
     @FXML
     void displayPlayerHealthBar(Player player){
+        player.setIndicator(this::displayDamage);
         ProgressBar playerHealth = new ProgressBar();
         playerHealth.progressProperty().bind(player.getStats().healthProperty()
                                                     .divide(player.getTotalHealth()));
@@ -182,16 +203,30 @@ public class GameWindow {
         playerHealth.relocate(1000*ratioWidth, 100*ratioHeight);
         playerHealth.toFront();
         gameWindow.getChildren().add(playerHealth);
+
+        Label healthLabel = new Label();
+        healthLabel.getStyleClass().add("health");
+        healthLabel.textProperty().bind(player.getStats().healthProperty().asString());
+        healthLabel.relocate(900*ratioWidth, 100*ratioHeight);
+        gameWindow.getChildren().add(healthLabel);
     }
 
     @FXML
     void displayEnemyHealthBars(Enemy enemy){
+        enemy.setIndicator(this::displayDamage);
         ProgressBar healthBar = new ProgressBar();
         healthBar.progressProperty().bind(enemy.getStats().healthProperty().divide(enemy.getTotalHealth()));
         healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2));
         healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2));
         healthBar.setScaleX(enemy.getTotalHealth() / 3);
         gameWindow.getChildren().add(healthBar);
+
+        Label healthLabel = new Label();
+        healthLabel.textProperty().bind(enemy.getStats().healthProperty().asString());
+        healthLabel.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2));
+        healthLabel.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2));
+        healthLabel.getStyleClass().add("health");
+        gameWindow.getChildren().add(healthLabel);
     }
 
     @FXML
@@ -235,8 +270,8 @@ public class GameWindow {
             obstacleImage.setY(obstacle.getY());
             obstacleImage.prefWidth(100);
             obstacleImage.setPreserveRatio(true);
-            obstacleImage.toBack();
             gameWindow.getChildren().add(obstacleImage);
+            obstacleImage.toBack();
         }
     }
     
@@ -256,6 +291,7 @@ public class GameWindow {
         view.setFitHeight(view.getFitHeight()*ratioHeight);
         view.setFitWidth(view.getFitWidth()*ratioWidth);
         gameWindow.getChildren().add(view);
+        view.toBack();
     }
 
     
