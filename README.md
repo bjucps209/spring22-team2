@@ -30,8 +30,7 @@
 * The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
 * Level Builder does not compile
 * Death does not load from last save-point
-* Serialization has a few minor bugs in the saving of either the entities or items
-
+* Serialization has a few minor bugs in the saving of the entities
 ## Recording
 * [Screen Recording: Title Screen](https://youtu.be/pOgFQCrmpjg)
 * [Screen Recording: Gameplay](https://youtu.be/7v2Vsq_bCF0)
