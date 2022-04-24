@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import javafx.scene.image.Image;
-
 public class Projectile extends Entity{
     private int damage;
     private int speed;

@@ -1,3 +1,4 @@
+package model;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -6,8 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-//I am aware that we were not supposed to implement the methods as part of the design step, but I had the time to do so, and I need to make the most of the time
-//I have to make sure everything gets done
 public class HighScoreManager {
     private HighScore[] scores = new HighScore[5];
     public HighScoreManager()

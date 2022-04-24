@@ -31,6 +31,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Coordinates;
+import model.Direction;
+import model.HighScoreManager;
 import model.PlayerState;
 import model.World;
 import java.awt.*;
@@ -185,7 +187,8 @@ public class MainWindow {
         "Title Music:        Magic Tavern - Alexander Nakarada\nCaveman Level:  Little World - Nul Tiel Records\nEgypt Level:\t    Reverie - Nul"+
         " Tiel Records\nMedieval Level:  Fairy of the Forest - Alexander Nakarada\nSecret Level:\t    Lurking in the Shadows - Scott Holmes Music\n\n"+
         "Sound Effects\n\nBow Shoot:\t\t\t\tK6EQG35-bow-arrow-shot\nSword Attack:\t\t\t\tmixkit-dagger-woosh-1487\nSword Hit:\t\t\t\t"+
-        "mixkit-swift-sword-strike-2166\nMace Hit:\t\t\t\tmixkit-sword-pierces-armor-2761\nWand Shoot:\t\t\t\tmixkit-wizard-fire-woosh-1326\n\n\n\n\t"+
+        "mixkit-swift-sword-strike-2166\nMace Hit:\t\t\t\tmixkit-sword-pierces-armor-2761\nWand Shoot:\t\t\t\tmixkit-wizard-fire-woosh-1326\nPlayer Hurt:"+
+        "\t\t\t\tMinecrat Damage Sound\n\n\n\n\t"+
         "    The story of this game, all names, characters,\n    and incidents portrayed in this production are fictitious.\n  No identification with"+
         " actual persons (living or deceased),\n\t    places, buildings,and products is intended\n\t\t\t    or should be inferred.\n\n\n\n\t\tNo animals,"+
         " pies or sentient shapes were\n\t\t    harmed in the making of this game\n\n\n\n\n\t\tThis game was brought to you in part by\n\t\t"+
@@ -379,11 +382,7 @@ public class MainWindow {
     void onStartClicked() throws IOException{
         startView.setImage(START_BUTTON);
         var loader = new FXMLLoader(getClass().getResource("GameWindow.fxml"));
-        
         var scene = new Scene(loader.load());
-
-        
-
         var stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Cutting Corners Beta");
@@ -395,8 +394,6 @@ public class MainWindow {
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
         gameWindow.updater();
-        // Thread movingThread = new Thread(() -> gameWindow.playerUpdater());
-        // movingThread.start();
         gameWindow.playerUpdater();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
@@ -438,17 +435,12 @@ public class MainWindow {
             
             @Override
             public void handle(MouseEvent event){
-                // Thread t = new Thread(() -> {World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());World.instance().getPlayer().performAttack();});
-                // t.start();
                 if(World.instance().getPlayer()!=null)
                 {
                     World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
                     World.instance().getPlayer().setState(PlayerState.attacking);
+                    System.out.println(World.instance().getPlayer().getCoords().getxCoord());
                 }
-
-                // World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
-                
-                // World.instance().getPlayer().setState(PlayerState.attacking);
             }
         });
     }
