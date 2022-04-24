@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.security.Key;
 import java.util.*;
 
+import javax.naming.directory.InitialDirContext;
 import javax.naming.spi.DirStateFactory;
 import javax.print.attribute.standard.DialogOwner;
 import javax.swing.tree.ExpandVetoException;
@@ -36,6 +37,9 @@ public class Player extends Entity {
     int walkingStep = 0;
     int experience;
     int score;
+    int knockedCount;
+    KeyCode keyPressed;
+    damageIndicator indicator;
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -52,6 +56,14 @@ public class Player extends Entity {
 
     public ArrayList<KeyCode> getKeys(){
         return keys;
+    }
+
+    public void setIndicator(damageIndicator indicator){
+        this.indicator = indicator;
+    }
+
+    public damageIndicator getIndicator(){
+        return indicator;
     }
 
     public void setEquippedItem(Item equippedItem){
@@ -184,9 +196,13 @@ public class Player extends Entity {
             if (keys.contains(KeyCode.S)){return;}
             if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
 
+            
             int newY = super.getY() - stats.getSpeed();
             if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
                 super.getCoords().addYCoord(stats.getSpeed());
+            }
+            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                super.getCoords().subYCoord(stats.getSpeed());
             }
                 break;
             }
@@ -202,9 +218,13 @@ public class Player extends Entity {
                     //super.getFlipper().flipImage(this);
                 }
             }
+            
             int newX = super.getX() - stats.getSpeed();
             if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
                 super.getCoords().addXCoord(stats.getSpeed());
+            }
+            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                super.getCoords().subXCoord(stats.getSpeed());
             }
                 break;
             }
@@ -216,6 +236,9 @@ public class Player extends Entity {
             int newY = super.getY() + stats.getSpeed();
             if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
                 super.getCoords().subYCoord(stats.getSpeed());
+            }
+            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                super.getCoords().addYCoord(stats.getSpeed());
             }
             
                 break;
@@ -232,9 +255,14 @@ public class Player extends Entity {
                     //super.getFlipper().flipImage(this);
                 }
             }
+            
             int newX = super.getX() + stats.getSpeed();
             if (super.getX() > 1200 || obstacleInPath(newX, super.getY())){
                 super.getCoords().subXCoord(stats.getSpeed());
+            }
+
+            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                super.getCoords().addXCoord(stats.getSpeed());
             }
                 break;
             }
@@ -286,13 +314,13 @@ public class Player extends Entity {
                 {
                     if(getMouseDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.up);
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.down);
                         SWORD_HIT.play();
                         continue;
                     }
                     else if(getMouseDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.down);
+                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.up);
                         SWORD_HIT.play();
                         continue;
                     }
@@ -405,6 +433,16 @@ public class Player extends Entity {
     public void takeDamage(int damage, Direction direction)
     {
         stats.subHealth(damage);
+        int time = damage * 100 + 500;
+        indicator.displayDamage(this, damage, time);
+
+        switch (direction){
+            case up: super.getCoords().addYCoord(100);
+            case down: super.getCoords().subYCoord(100);
+            case left: super.getCoords().subXCoord(100);
+            case right: super.getCoords().addXCoord(100);
+        }
+
         if (stats.getHealth() <= 0){super.performDie();}
     }
 
