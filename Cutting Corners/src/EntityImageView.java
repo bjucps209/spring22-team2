@@ -1,6 +1,7 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Rotate;
+import model.Direction;
 import model.EntityObserver;
 
 public class EntityImageView extends ImageView implements EntityObserver{
@@ -9,10 +10,10 @@ public class EntityImageView extends ImageView implements EntityObserver{
         super(img);
         this.setRotationAxis(Rotate.Y_AXIS);
     }
-    public void changeImage(String i,boolean flip)
+    public void changeImage(String i,Direction d)
     {
         super.setImage(new Image(i));
-        if(flip)
+        if(d==Direction.right)
         {
             this.setRotate(180);
         }

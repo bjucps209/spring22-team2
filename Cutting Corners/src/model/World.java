@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
 
@@ -91,28 +90,26 @@ public class World {
         Level level1 = new Level(1);
 
         Screen screen1 = new Screen(0, 0, 1,"media/terrain/egypt/desertonewayright.png");
-        Screen screen2 = new Screen(0, 1, 1,"media/terrain/egypt/desertthreewayleft.png");
+        Screen screen2 = new Screen(0, 1, 1,"media/terrain/medieval/medievalthreewayleft.png");
         Screen screen3 = new Screen(1, 0, 1,"media/terrain/caveman/cavemanonewayright.png");
-        Screen screen4 = new Screen(1, 1, 1,"media/terrain/medieval/medievalthreewaydown.png");
+        Screen screen4 = new Screen(1, 1, 1,"media/terrain/secret&boss/secretthreewaydown.png");
         Screen bossScreen = new Screen(1, 2, 1,"media/terrain/secret&boss/bossroom.png");
 
         Triangle triangle1 = new Triangle(1, 1, 1, screen1);
         Triangle triangle2 = new Triangle(2, 2, 6, screen1);
-        Triangle triangle3 = new Triangle(3, 7, 1, screen2);
-        Triangle triangle4 = new Triangle(4, 3, 6, screen2);
+        Hexagon hex1 = new Hexagon(3, 7, 1, screen2);
+        Hexagon hex2 = new Hexagon(4, 3, 6, screen2);
         Square square1 = new Square(5, 4, 6, screen3);
-        Hexagon hex1 = new Hexagon(6, 2, 6, screen4);
-        Octagon octagon1 = new Octagon(6, 6, 4, bossScreen);
-        //Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
+        Octagon octagon1 = new Octagon(6, 6, 4, screen4);
+        Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
 
         screen1.addEntity(triangle1);
         screen1.addEntity(triangle2);
-        screen2.addEntity(triangle3);
-        screen2.addEntity(triangle4);
+        screen2.addEntity(hex1);
+        screen2.addEntity(hex2);
         screen3.addEntity(square1);
-        screen4.addEntity(hex1);
-        bossScreen.addEntity(octagon1);
-        //bossScreen.addEntity(triangleBoss);
+        screen4.addEntity(octagon1);
+        bossScreen.addEntity(triangleBoss);
 
         screen1.setUp(screen3);
         screen1.setRight(screen2);
@@ -141,26 +138,16 @@ public class World {
     
 
     public void updateView(){
-        try{for (Entity entity: displayCurrentEntities()){
-            if (! (entity instanceof Player)&&!isPaused){
-            entity.performMovement();
-            }
-        }
-        if(observer!=null)
+        if(!isPaused)
         {
             observer.Initialize(isLoaded);
         }
-        }catch(ConcurrentModificationException c){return;}
     }
 
     public void updatePlayer(){
         if(getPlayer()!=null&&!isPaused)
         {
             getPlayer().performMovement();
-        }
-        else
-        {
-            
         }
     }
 

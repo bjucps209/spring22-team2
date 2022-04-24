@@ -49,7 +49,7 @@ public class GameWindow {
     
 
     @FXML
-    public void Initialize(boolean isLoaded) throws IOException {
+    public void Initialize(boolean isLoaded) throws IOException{
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -90,6 +90,8 @@ public class GameWindow {
                 displayPlayerWeapon(player);
                 displayPlayerHealthBar(player);
                 displayScoreAndExperience(player);
+                    player.getObserver().changeImage(player.getImage(), player.getFacing());
+                    player.getWeaponObserver().changeImage(player.getWeaponImage(), player.getFacing());
             }
             if (entity instanceof Enemy){
                 Enemy enemy = (Enemy) entity;
@@ -117,19 +119,6 @@ public class GameWindow {
         Timeline timer = new Timeline(frames);
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
-    }
-
-    @FXML 
-    void changeImage(Image image, Entity entity){
-        for (Node node: gameWindow.getChildren()){
-            if (node instanceof ImageView){
-                ImageView imageview = (ImageView) node;
-                if (imageview.getUserData() == null) continue;
-                if (imageview.getUserData().equals(entity)){
-                    imageview.setImage(image);
-                }
-            }
-        }
     }
 
     @FXML

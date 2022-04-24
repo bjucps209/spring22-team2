@@ -40,6 +40,7 @@ public class SerializeTest {
         World.reset();
         World.instance();
         assertEquals(0, World.instance().currentLevel);
+        World.instance().currentLevel = 1;
 
         try {
             World.instance().load("savegame.dat");

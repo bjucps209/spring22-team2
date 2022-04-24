@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import javax.swing.tree.ExpandVetoException;
-
 public class Enemy extends Entity{
     private Screen homeScreen;
     private Cell cellWithin;
@@ -85,7 +83,7 @@ public class Enemy extends Entity{
                 state=EnemyState.attacking;
                 if(currentImage!="Attacking")
                 {
-                    super.getObserver().changeImage(attacking,false);
+                    super.getObserver().changeImage(attacking,Direction.left);
                     currentImage="Attacking";
                 }
             }
@@ -103,7 +101,7 @@ public class Enemy extends Entity{
                     state=EnemyState.patrolling;
                     if(currentImage!="Standing")
                     {
-                        super.getObserver().changeImage(super.getImage(),false);
+                        super.getObserver().changeImage(super.getImage(),Direction.left);
                         currentImage="Standing";
                     }
                 }
@@ -115,7 +113,7 @@ public class Enemy extends Entity{
                         state = EnemyState.seeking; 
                         if(currentImage!="Walking")
                         {
-                            super.getObserver().changeImage(walking,false);
+                            super.getObserver().changeImage(walking,Direction.left);
                             currentImage="Walking";
                         }
                     }
@@ -139,7 +137,7 @@ public class Enemy extends Entity{
                     attackCount=50;
                     if(currentImage!="Walking")
                     {
-                        super.getObserver().changeImage(walking,false);
+                        super.getObserver().changeImage(walking,Direction.left);
                         currentImage="Walking";
                     }
                 }
@@ -171,13 +169,13 @@ public class Enemy extends Entity{
                         if(p.getDirection()==Direction.left)
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.right);
-                            super.getObserver().changeImage(attacking, false);
+                            super.getObserver().changeImage(attacking, Direction.left);
                             System.out.println("Enemy Hit!");
                         }
                         else
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.left);
-                            super.getObserver().changeImage(attacking, true);
+                            super.getObserver().changeImage(attacking, Direction.right);
                             System.out.println("Enemy Hit!");
                         }
                     }
@@ -224,7 +222,7 @@ public class Enemy extends Entity{
                 super.getCoords().subXCoord(stats.getSpeed());
                 if(facing==Direction.right)
                 {
-                    super.getObserver().changeImage(walking, true);
+                    super.getObserver().changeImage(walking, Direction.right);
                     facing=Direction.left;
                 }
                 break;
@@ -233,7 +231,7 @@ public class Enemy extends Entity{
                 super.getCoords().addXCoord(stats.getSpeed());
                 if(facing==Direction.left)
                 {
-                    super.getObserver().changeImage(walking, false);
+                    super.getObserver().changeImage(walking, Direction.left);
                     facing=Direction.right;
                 }
                 break;
@@ -294,7 +292,7 @@ public class Enemy extends Entity{
         state=EnemyState.stunned;
         if(currentImage!="Standing")
         {
-            super.getObserver().changeImage(super.getImage(),false);
+            super.getObserver().changeImage(super.getImage(),Direction.left);
             currentImage="Standing";
         }
         knockback=10;

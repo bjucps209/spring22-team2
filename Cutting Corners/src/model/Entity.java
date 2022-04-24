@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.scene.image.Image;
 
 public class Entity {
     private int size;

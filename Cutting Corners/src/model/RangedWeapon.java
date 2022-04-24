@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.w3c.dom.ranges.Range;
-
 public class RangedWeapon extends Equipment{
     private int range;
     private Projectile projectile;

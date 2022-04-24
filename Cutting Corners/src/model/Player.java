@@ -1,20 +1,11 @@
 package model;
 
-import java.beans.Expression;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.security.Key;
 import java.util.*;
 
-import javax.naming.directory.InitialDirContext;
-import javax.naming.spi.DirStateFactory;
-import javax.print.attribute.standard.DialogOwner;
-import javax.swing.tree.ExpandVetoException;
-
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.media.AudioClip;
 
 public class Player extends Entity {
@@ -122,52 +113,49 @@ public class Player extends Entity {
             case standing: {
                 if (previousState == PlayerState.walking){
                     walkingStep = 0;
-                    super.getObserver().changeImage(playerImage,false);
+                    super.getObserver().changeImage(playerImage,facing);
+                        weaponObserver.changeImage(weaponImage, facing);
                     previousState = PlayerState.standing;
                 }
-                super.getObserver().changeImage(playerImage,false);
-                if (keys.size() > 0){state = PlayerState.walking;super.getObserver().changeImage("media/Player/basewalk.gif",false);}
+                super.getObserver().changeImage(playerImage,facing);
+                        weaponObserver.changeImage(weaponImage, facing);
+                if (keys.size() > 0){
+                    state = PlayerState.walking;
+                    super.getObserver().changeImage("media/Player/basewalk.gif",facing);
+                    weaponObserver.changeImage("media/player/swordwalk.gif", facing);
+                }
                 break;
             }
             case attacking: {
-                if (attackCount < 25){
+                if (attackCount==25)
+                {
+                    performAttack();
+                    state =PlayerState.resting;
+                }
+                else
+                {
+                    weaponObserver.changeImage("media/player/swordwalk.gif", facing);
                     state = PlayerState.resting; 
                     break;
                 }
-                performAttack();
-                state = PlayerState.resting;
             }
             case resting:{
                 attackCount--;
                 if (attackCount == 0){
                     state = PlayerState.standing; 
+                    weaponObserver.changeImage("media/player/swordwalk.gif", Direction.left);
+                    if(facing==Direction.right)
+                    {
+                        weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
+                    }
                     attackCount = 25;
                 }
                 break;
             }
             case walking: {
                 walkingStep = (walkingStep + 1) % 50;
-                //super.getObserver().changeImage(walkingGif[(int) walkingStep / 10], this);
                 if (keys.size() == 0){state = PlayerState.standing;}
                 if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
-                
-            // case walking: {
-            //     if (keys.size() == 0&&state!=PlayerState.attacking){state = PlayerState.standing;}
-//                 if (previousState == PlayerState.walking){
-
-//                     super.getObserver().changeImage(playerImage, this);
-//                     previousState = PlayerState.standing;
-//                 }
-//                 super.getObserver().changeImage(playerImage, this);;
-//                 if (keys.size() > 0){state = PlayerState.walking;}
-//                 break;
-//             }
-//             case walking: {
-//                 if (previousState == PlayerState.standing){
-//                     super.getObserver().changeImage(walkingImage, this);
-//                     previousState = PlayerState.walking;
-//                 }
-//                 if (keys.size() == 0){state = PlayerState.standing;}
                 try{KeyPressed(0);}
                 catch(IndexOutOfBoundsException i){}
                 break;
@@ -213,9 +201,8 @@ public class Player extends Entity {
                 super.getCoords().subXCoord(stats.getSpeed());
                 if (facing == Direction.right){
                     facing = Direction.left;
-                    super.getObserver().changeImage("media/Player/basewalk.gif", false);
-                    weaponObserver.changeImage(weaponImage, false);
-                    //super.getFlipper().flipImage(this);
+                    super.getObserver().changeImage("media/Player/basewalk.gif", Direction.left);
+                    weaponObserver.changeImage(weaponImage, Direction.left);
                 }
             }
             
@@ -250,9 +237,8 @@ public class Player extends Entity {
                 super.getCoords().addXCoord(stats.getSpeed());
                 if (facing == Direction.left){
                     facing = Direction.right;
-                    super.getObserver().changeImage("media/Player/basewalk.gif", true);
-                    weaponObserver.changeImage(weaponImage, true);
-                    //super.getFlipper().flipImage(this);
+                    super.getObserver().changeImage("media/Player/basewalk.gif", Direction.right);
+                    weaponObserver.changeImage(weaponImage, Direction.right);
                 }
             }
             
@@ -302,6 +288,14 @@ public class Player extends Entity {
     public void performAttack(){
         
         if (equippedItem instanceof MeleeWeapon){
+            if(facing==Direction.right)
+            {
+                weaponObserver.changeImage("media/player/swordattack.gif",Direction.left);
+            }
+            else
+            {
+                weaponObserver.changeImage("media/player/swordattack.gif",Direction.right);
+            }
             AudioClip SWORD_ATTACK = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/SwordAttack.mp3").toString());
             AudioClip SWORD_HIT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/SwordHit.mp3").toString());
             SWORD_ATTACK.play();
@@ -310,98 +304,48 @@ public class Player extends Entity {
             weapon.setSpeed((int) stats.getSpeed() / 2);
             for(int i=0;i<enemies.size();i++)
             {
-                if(attackCount==25&&Math.sqrt(Math.pow(enemies.get(i).getCoords().getxCoord()-super.getX(), 2)+Math.pow(enemies.get(i).getCoords().getyCoord()-super.getY(), 2))<=weapon.getRange())
+                if(!(enemies.get(i) instanceof Boss))
                 {
-                    if(getMouseDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
+                    if(attackCount==25&&Math.sqrt(Math.pow(enemies.get(i).getCoords().getxCoord()-super.getX(), 2)+Math.pow(enemies.get(i).getCoords().getyCoord()-super.getY(), 2))<=weapon.getRange())
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.down);
-                        SWORD_HIT.play();
-                        continue;
+                        if(getMouseDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
+                        {
+                            enemies.get(i).takeDamage(weapon.getDamage(), Direction.up);
+                            SWORD_HIT.play();
+                            continue;
+                        }
+                        else if(getMouseDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
+                        {
+                            enemies.get(i).takeDamage(weapon.getDamage(), Direction.down);
+                            SWORD_HIT.play();
+                            continue;
+                        }
+                        if(getMouseDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
+                        {
+                            enemies.get(i).takeDamage(weapon.getDamage(), Direction.left);
+                            SWORD_HIT.play();
+                            continue;
+                        }
+                        else if(getMouseDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
+                        {
+                            enemies.get(i).takeDamage(weapon.getDamage(), Direction.right);
+                            SWORD_HIT.play();
+                            continue;
+                        }
                     }
-                    else if(getMouseDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
+                }
+                else
+                {
+                    if(((Enemy)enemies.get(i)).getState()==EnemyState.patrolling)
                     {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.up);
-                        SWORD_HIT.play();
-                        continue;
-                    }
-                    if(getMouseDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
-                    {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.left);
-                        SWORD_HIT.play();
-                        continue;
-                    }
-                    else if(getMouseDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
-                    {
-                        enemies.get(i).takeDamage(weapon.getDamage(), Direction.right);
-                        SWORD_HIT.play();
-                        continue;
+                        if(super.getX()>500&&super.getX()<750)
+                        {
+                            enemies.get(i).takeDamage(weapon.getDamage(), facing);
+                        }
                     }
                 }
             }
-
-            // weapon.setDirection(getMouseDirection());
-            // weapon.setEnemies(enemies);
-            // for(int i=0;i<enemies.size();i++)
-            // {
-            //     if(attackCount==50)
-            //     {
-            //         if(getMouseDirection()==Direction.up&&enemies.get(i).getCoords().getyCoord()>super.getY())
-            //         {
-            //             enemies.get(i).takeDamage(weapon.getDamage());
-            //             System.out.println("Hit!");
-            //             continue;
-            //         }
-            //         else if(getMouseDirection()==Direction.down&&enemies.get(i).getCoords().getyCoord()<super.getY())
-            //         {
-            //             enemies.get(i).takeDamage(weapon.getDamage());
-            //             System.out.println("Hit!");
-            //             continue;
-            //         }
-            //         if(getMouseDirection()==Direction.left&&enemies.get(i).getCoords().getxCoord()>super.getX())
-            //         {
-            //             enemies.get(i).takeDamage(weapon.getDamage());
-            //             System.out.println("Hit!");
-            //             continue;
-            //         }
-            //         else if(getMouseDirection()==Direction.right&&enemies.get(i).getCoords().getxCoord()<super.getX())
-            //         {
-            //             enemies.get(i).takeDamage(weapon.getDamage());
-            //             System.out.println("Hit!");
-            //             continue;
-            //         }
-            //     }
-            // }
-            
-
-            // System.out.println(mouseCoordinates.getxCoord() - super.getX());
-            // System.out.println(mouseCoordinates.getyCoord() - super.getY());
-            
-            // double slope = -1 * (mouseCoordinates.getyCoord() - super.getY() - 100) /
-            //                (mouseCoordinates.getxCoord() - super.getX() - 100);
-
-
-            // double direction = Math.atan(slope);
-
-            // if (mouseCoordinates.getyCoord() - super.getY() > 100 && 
-            //     mouseCoordinates.getxCoord() - super.getX() > 100){
-            //         direction += 2 * Math.PI;
-            //     }
-            // System.out.print(slope);
-            // else if (mouseCoordinates.getyCoord() - super.getY() > 100 && 
-            //     mouseCoordinates.getxCoord() - super.getX() < 100){
-            //         direction += Math.PI;
-            // }
-
-            // else if (mouseCoordinates.getyCoord() - super.getY() < 100 && 
-            //     mouseCoordinates.getxCoord() - super.getX() < 100){
-            //         direction += Math.PI;
-            
-
-            // weapon.setDirection(direction);
         }
-        // if (attackCount == 50){equippedItem.performAction(this);}
-        
-        //equippedItem.performAction(this);
     }
     public Direction getMouseDirection()
     {
@@ -433,6 +377,9 @@ public class Player extends Entity {
     public void takeDamage(int damage, Direction direction)
     {
         stats.subHealth(damage);
+        AudioClip PLAYER_HURT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/playerhurt.mp3").toString());
+        PLAYER_HURT.play();
+        if (stats.getHealth() <= 0){performDie();}
         int time = damage * 100 + 500;
         indicator.displayDamage(this, damage, time);
 
@@ -446,6 +393,27 @@ public class Player extends Entity {
         if (stats.getHealth() <= 0){super.performDie();}
     }
 
+    @Override
+    public void performDie()
+    {
+        World.instance().displayCurrentEntities().remove(this);
+        World.instance().getCurrentLevel().getObserver().Initialize();
+        HighScoreManager scores = new HighScoreManager();
+        try
+        {
+            scores.load();
+            if(score>scores.get(0).getScore())
+            {
+                scores.addScore(new HighScore(score, "Player"));
+                scores.save();
+            }
+        }
+        catch(IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        
+    }
     public Cell cellWithin(int row, int col){
         Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
         return cell;
@@ -477,6 +445,16 @@ public class Player extends Entity {
    {
        weaponObserver=img;
    } 
+
+   public EntityObserver getWeaponObserver()
+   {
+       return weaponObserver;
+   }
+
+   public Direction getFacing()
+   {
+       return facing;
+   }
     
     public ArrayList<Item> getInventory() {
         return inventory;

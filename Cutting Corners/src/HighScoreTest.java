@@ -4,6 +4,9 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 
 import org.junit.Test;
+
+import model.HighScore;
+import model.HighScoreManager;
 public class HighScoreTest {
     public HighScoreManager scores = new HighScoreManager();
     HighScoreManager tempScores = new HighScoreManager();

@@ -1,7 +1,5 @@
 package model;
 
-import javafx.scene.image.Image;
-
 public class Boss extends Enemy{
     int attackCooldown;
     int hitX = 640;
@@ -38,4 +36,10 @@ public class Boss extends Enemy{
     public void performAttack2(){}
 
     public void performAttack3(){}
+    @Override
+    public void takeDamage(int damage,Direction d)
+    {
+        super.getStats().subHealth(damage);
+        if (super.getStats().getHealth() <= 0){performDie();}
+    }
 }

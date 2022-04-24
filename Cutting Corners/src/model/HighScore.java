@@ -1,3 +1,4 @@
+package model;
 public class HighScore implements Comparable {
     private int score;
     private String name;

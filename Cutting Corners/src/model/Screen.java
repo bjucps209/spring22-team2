@@ -39,11 +39,14 @@ public class Screen {
 
     public void randomize(){
         fillGrid();
-        for (int i = 1; i < 6; i++){
-            for (int j = 1; j < 12; j++){
-                int random = rand.nextInt(40);
-                if (random == 39){grid[i][j] = Cell.rock;}
-                else{grid[i][j] = Cell.empty;}
+        if(!filename.contains("bossroom"))
+        {
+            for (int i = 1; i < 6; i++){
+                for (int j = 1; j < 12; j++){
+                    int random = rand.nextInt(40);
+                    if (random == 39){grid[i][j] = Cell.rock;}
+                    else{grid[i][j] = Cell.empty;}
+                }
             }
         }
     }

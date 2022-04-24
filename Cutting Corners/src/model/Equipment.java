@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import javax.swing.plaf.metal.MetalLabelUI;
-
 public class Equipment extends Item {
     private EquipmentType type;
     private Stats buffs;
