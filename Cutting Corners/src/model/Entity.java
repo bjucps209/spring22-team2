@@ -31,6 +31,7 @@ public class Entity {
         imgObserver = observer;
         imgFlipper = flipper;
     }
+    
     public void setObserver(EntityObserver o)
     {
         observer=o;

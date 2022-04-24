@@ -4,13 +4,15 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javafx.scene.image.Image;
+
 public class UsableItem extends Item{
     private int useCount;
     private int duration;
     private Stats buffs;
 
-    public UsableItem(String name, int cooldown, int useCount, int duration, int Strength, int Health, int Speed){
-        super(name, cooldown, new Stats(Strength, Health, Speed));
+    public UsableItem(String name, int cooldown, int useCount, int duration, int Strength, int Health, int Speed, String Image){
+        super(name, cooldown, new Stats(Strength, Health, Speed), Image);
         this.useCount = useCount;
         this.duration = duration;
     }
@@ -78,6 +80,7 @@ public class UsableItem extends Item{
         buffs.serialize(file);
         file.writeInt(useCount);
         file.writeInt(duration);
+        file.writeUTF(super.getImage());
     }
 
 
@@ -90,8 +93,9 @@ public class UsableItem extends Item{
         int strength = buffs.getStrengthBuff();
         int health = buffs.getHealthBuff();
         int speed = buffs.getSpeedBuff();
+        String image = file.readUTF();
 
-        UsableItem item = new UsableItem(name, cooldown, useCount, duration, strength, health, speed);
+        UsableItem item = new UsableItem(name, cooldown, useCount, duration, strength, health, speed, image);
         return item;
     }
 }

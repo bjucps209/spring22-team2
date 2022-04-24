@@ -16,7 +16,7 @@ public class MeleeWeapon extends Equipment{
     private ArrayList<Entity> enemies;
 
     public MeleeWeapon(String name, double cooldown, int Strength, int Health, int Speed, int range, String image){
-        super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Health, Speed));
+        super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Health, Speed), image);
         this.range = range;
         this.image = image;
     }

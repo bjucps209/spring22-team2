@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javax.swing.tree.ExpandVetoException;
+
 public class Enemy extends Entity{
     private Screen homeScreen;
     private Cell cellWithin;
@@ -19,11 +21,13 @@ public class Enemy extends Entity{
     private int stunCount;
     private int knockback;
     private int attackCount=50;
-    private static String walking;
-    private static String attacking;
+    private String walking;
+    private String attacking;
     private String currentImage = "Standing";
+    private int experience;
+    private Direction facing = Direction.left;
 
-    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth)
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth, int experience)
     {
         super(col*100, row*100, image, size);
         this.homeScreen = homeScreen;
@@ -36,6 +40,7 @@ public class Enemy extends Entity{
         this.walking=walking;
         this.attacking=attacking;
         cellWithin = cellWithin(col, row);
+        this.experience = experience;
         //this.coords = new Corrdinates(WIDTH, HEIGHT);
     }
     public Stats getStats()
@@ -63,10 +68,10 @@ public class Enemy extends Entity{
         return null;
     }
 
-    public Cell cellWithin(int col, int row){
-
-        Cell cell = homeScreen.getGrid()[row][col];
+    public Cell cellWithin(int row, int col){
+        try{Cell cell = homeScreen.getGrid()[row][col];
         return cell;
+        }catch(IndexOutOfBoundsException i){return Cell.empty;}
     }
 
     @Override
@@ -93,6 +98,7 @@ public class Enemy extends Entity{
                 }
                 if(stunCount<=0)
                 {
+                    attackCount=50;
                     state=EnemyState.patrolling;
                     if(currentImage!="Standing")
                     {
@@ -179,7 +185,6 @@ public class Enemy extends Entity{
     public void complexMovement(PlayerRelation relation){
         int xSpeed = 0;
         int ySpeed = 0;
-
         switch (direction){
             case up: ySpeed = -1 * stats.getSpeed();
             case down: ySpeed = stats.getSpeed();
@@ -190,9 +195,20 @@ public class Enemy extends Entity{
         int newX = super.getX() + xSpeed;
         int newY = super.getY() + ySpeed;
 
+        if (obstacleInPath(newX, newY)){
+            switch (direction){
+                case up: direction = Direction.left;
+                case down: direction = Direction.right;
+                case left: direction = Direction.down;
+                case right: direction = Direction.up;
+            }
+            simpleMovement(stats.getSpeed());
+            return;
+        }
+        
         if (super.getX() % 100 > newX % 100){changeDirection(relation);}
         if (super.getY() % 100 > newY % 100){changeDirection(relation);}
-
+        
 
         switch (direction){
             case up: {
@@ -205,12 +221,20 @@ public class Enemy extends Entity{
             }
             case left: {
                 super.getCoords().subXCoord(stats.getSpeed());
-                super.getObserver().changeImage(walking, true);
+                if(facing==Direction.right)
+                {
+                    super.getObserver().changeImage(walking, true);
+                    facing=Direction.left;
+                }
                 break;
             }
             case right: {
                 super.getCoords().addXCoord(stats.getSpeed());
-                super.getObserver().changeImage(walking, false);
+                if(facing==Direction.left)
+                {
+                    super.getObserver().changeImage(walking, false);
+                    facing=Direction.right;
+                }
                 break;
             }
         }
@@ -242,7 +266,26 @@ public class Enemy extends Entity{
         }
     }
 
-    public boolean obstacleInPath(){return false;}
+    public boolean obstacleInPath(int xCoord, int yCoord){
+        int row = yCoord / 100;
+        int col = xCoord / 100;
+        
+
+        for (int i = -1; i < 1; i++){
+            for (int j = 0; j < 2; j++){
+                if (cellWithin(row + i, col + j) != Cell.empty){
+                    switch(cellWithin(row + i, col + j)){
+                        case tree: if (i != 0 || j != 0){return false;}
+                        case plant: if (i != -1 || j != 0){return false;}
+                        case rock: if (i == -1){return false;}
+                        default: return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 
     @Override
     public void takeDamage(int damage, Direction direction){
@@ -259,10 +302,15 @@ public class Enemy extends Entity{
         {
             stunCount=50;
         }
-        if (stats.getHealth() <= 0){super.performDie();}
+        if (stats.getHealth() <= 0){performDie();}
     }
 
-
+    @Override
+    public void performDie(){
+        World.instance().getPlayer().addExperience(experience);
+        World.instance().getPlayer().addScore(experience);
+        super.performDie();
+    }
     
     // Getters and Setters ---------------
 
@@ -368,10 +416,13 @@ public class Enemy extends Entity{
         file.writeDouble(totalHealth);
 
         file.writeUTF(getImage());
+        file.writeInt(experience);
     }
 
     public static Enemy deserialize(DataInputStream file) throws IOException {
         int size = file.readInt();
+        String walking = "media/enemies/trianglewalk.gif";
+        String attacking = "media/enemies/triangleattack.gif";
         int x = file.readInt();
         int y = file.readInt();
         Screen homeScreen = Screen.deserialize(file);
@@ -383,9 +434,10 @@ public class Enemy extends Entity{
         int totalHealth = file.readInt();
 
         String image = file.readUTF();
+        int experience = file.readInt();
 
 
-        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking,totalHealth);
+        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking,totalHealth, experience);
         return enemy;
     }
 

@@ -20,9 +20,10 @@ public class DataManager {
     ///Save and Load
     //
 
-    public void load(String fileName) throws FileNotFoundException, IOException { 
+    public String load(String fileName) throws FileNotFoundException, IOException { 
         String bleh = CCLvLFileReader.load(theLevel, fileName);
-        
+        if (mrObserver != null) mrObserver.populateScreens(theLevel.getScreens());
+        return bleh;
     }
 
     public String save(String fileName, boolean currentWork) throws FileNotFoundException, IOException {

@@ -8,8 +8,9 @@ public class Item {
     private String name;
     private double cooldown;
     Stats buffs;
+    private String Image;
 
-    public Item(String name, double cooldown, Stats buffs){
+    public Item(String name, double cooldown, Stats buffs, String Image){
         this.name = name;
         this.cooldown = cooldown;
         this.buffs = buffs;
@@ -35,6 +36,22 @@ public class Item {
         this.cooldown = cooldown;
     }
 
+    public void setBuffs(Stats buffs){
+        this.buffs = buffs;
+    }
+
+    public Stats getBuffs(){
+        return buffs;
+    }
+
+    public void setImage(String Image){
+        this.Image = Image;
+    }
+
+    public String getImage(){
+        return Image;
+    }
+    
 
     public void serialize(DataOutputStream file) throws IOException {
         //method overridden by children

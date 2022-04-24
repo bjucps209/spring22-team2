@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class Armor extends Equipment{
 
-    public Armor(String name, int Strength, int Health, int Speed){
-        super(name, 0, EquipmentType.ARMOR, new Stats(Strength, Health, Speed));
+    public Armor(String name, int Strength, int Health, int Speed, String image){
+        super(name, 0, EquipmentType.ARMOR, new Stats(Strength, Health, Speed), image);
     }
 
     @Override
@@ -15,6 +15,7 @@ public class Armor extends Equipment{
         file.writeUTF("Armor");
         file.writeUTF(getName());
         getBuffs().serialize(file);
+        file.writeUTF(super.getImage());
     }
 
     public static Armor deserialize(DataInputStream file) throws IOException {
@@ -23,8 +24,9 @@ public class Armor extends Equipment{
         int Strength = buffs.getStrength();
         int Health = buffs.getHealth();
         int Speed = buffs.getSpeed();
+        String image = file.readUTF();
 
-        Armor a = new Armor(name, Strength, Health, Speed);
+        Armor a = new Armor(name, Strength, Health, Speed, image);
         return a;
     }
 }

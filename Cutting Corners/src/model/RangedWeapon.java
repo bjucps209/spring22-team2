@@ -10,8 +10,8 @@ public class RangedWeapon extends Equipment{
     private int range;
     private Projectile projectile;
 
-    public RangedWeapon(String name, int cooldown, int Strength, int Health, int Speed, int range, Projectile projectile){
-        super(name, cooldown, EquipmentType.RANGED_WEAPON, new Stats(Strength, Health, Speed));
+    public RangedWeapon(String name, int cooldown, int Strength, int Health, int Speed, int range, Projectile projectile, String image){
+        super(name, cooldown, EquipmentType.RANGED_WEAPON, new Stats(Strength, Health, Speed), image);
         this.range = range;
         this.projectile = projectile;
     }
@@ -47,6 +47,7 @@ public class RangedWeapon extends Equipment{
         
         file.writeInt(range);
         projectile.serialize(file);
+        file.writeUTF(super.getImage());
     }
 
     public static RangedWeapon deserialize(DataInputStream file) throws IOException {
@@ -62,7 +63,9 @@ public class RangedWeapon extends Equipment{
 
         Projectile projectile = Projectile.deserialize(file);
 
-        RangedWeapon r = new RangedWeapon(name, cooldown, Strength, Health, Speed, range, projectile);
+        String image = file.readUTF();
+
+        RangedWeapon r = new RangedWeapon(name, cooldown, Strength, Health, Speed, range, projectile, image);
         return r;
     }
 }

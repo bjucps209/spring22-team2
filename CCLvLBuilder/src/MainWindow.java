@@ -120,7 +120,8 @@ public class MainWindow implements LevelObserver {
     void onLoadFileClicked(ActionEvent event) throws FileNotFoundException, IOException {
         String filename = txtFileName.getText();
 
-        DataManager.DaMan().load(filename);
+        String msg = DataManager.DaMan().load(filename);
+        lblslOutcome.setText(msg);
     }
     @FXML
     void onSaveFileClicked(ActionEvent event) throws Exception {
@@ -415,7 +416,8 @@ public class MainWindow implements LevelObserver {
 
     @Override
     public void populateScreens(ArrayList<Screen> screens) {
-        thePanes = new ArrayList<Pane>();
+        System.out.println("MW populateScreens");
+        thePanes.clear();
         Pane paneWithPlayer = null;
         boolean playerfound = false;
         for (Screen scr : screens) {
