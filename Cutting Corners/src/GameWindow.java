@@ -47,7 +47,7 @@ public class GameWindow {
     
 
     @FXML
-    public void Initialize() {
+    public void Initialize(boolean isLoaded) {
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -63,7 +63,15 @@ public class GameWindow {
         gameWindow.setMinWidth(size.getWidth());
         gameWindow.setMinHeight(size.getHeight());
         gameWindow.getChildren().clear();
+
+
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
+        //check if loading from save file
+        if (isLoaded) {
+            World.instance().load("savegame.dat");
+            entities = World.instance().displayCurrentEntities();
+        }
+
         World.instance().getCurrentLevel().setObserver(this::Initialize);
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         ratioImage(backgroundView);
