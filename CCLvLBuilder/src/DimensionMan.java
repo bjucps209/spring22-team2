@@ -11,7 +11,7 @@ public class DimensionMan {
     //Screen Dimensions
     protected static final int widthConstant = 16;
     protected static final int heightConstant = 9;
-    protected static final double screensizescalar = 50;
+    protected static final double screensizescalar = 60;
     protected static double screenwidth = screensizescalar * widthConstant; 
     protected static double screenheight = screensizescalar * heightConstant;
     

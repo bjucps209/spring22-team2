@@ -79,6 +79,7 @@ public class MainWindow implements LevelObserver {
         disableNavButtons();
         btnDelete.setDisable(true);
         btnDeleteCurrentObj.setDisable(true);
+        lblErrorMsg.setText("Adjust pane dimensions in DimensionMan");
     }
 
     /// Misc
