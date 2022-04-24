@@ -66,6 +66,7 @@ public class GameWindow {
 
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
+        
         //check if loading from save file
         if (isLoaded) {
             World.instance().load("savegame.dat");
@@ -74,7 +75,7 @@ public class GameWindow {
 
         World.instance().getCurrentLevel().setObserver(this::Initialize);
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
-        
+
         for (Entity entity: entities){
             displayEntity(entity);
             if(entity instanceof Player)
