@@ -21,6 +21,7 @@
 
 ### Serialization
 * Serialization methods are implemented for each class and for World.java
+* Unit tests are working and testing the first few lines of savegame.dat
 
 ### Level Builder
 * Background work has been completed
