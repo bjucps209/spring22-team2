@@ -390,7 +390,9 @@ public class MainWindow {
         stage.show();
 
         GameWindow gameWindow = loader.getController();
-        gameWindow.Initialize();
+        //gameWindow.Initialize();
+        gameWindow.Initialize(userCampaign);
+        // gameWindow.Initialize(defaultCampaign);
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
         gameWindow.updater();

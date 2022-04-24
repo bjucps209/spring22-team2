@@ -88,7 +88,7 @@ public class Entity {
 
     public void performDie(){
         World.instance().displayCurrentEntities().remove(this);
-        World.instance().getCurrentLevel().getObserver().Initialize();
+        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
 
     public void performAttack(){}

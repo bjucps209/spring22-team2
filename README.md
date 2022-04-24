@@ -18,13 +18,18 @@
 * Enemies move toward the player when in range
 * Enemies die when attacked
 * Multi-screen movement is functional (ie the player can move to different segments of the level)
+* Multiple enemies are present
+* The Pyramid boss is present
+* Health for both enemies and players is displayed
+* Score is tracked
 
 ### Serialization
 * Serialization methods are implemented for each class and for World.java
 * Unit tests are working and testing the first few lines of savegame.dat
 
 ### Level Builder
-* Background work has been completed
+* GUI is functional
+* Game Files are being saved properly
 
 ## Known Issues
 * The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
@@ -32,7 +37,7 @@
 * Serialization has a few minor bugs in the saving of the entities
 ## Recording
 * [Screen Recording: Title Screen](https://youtu.be/pOgFQCrmpjg)
-* [Screen Recording: Gameplay](https://youtu.be/7v2Vsq_bCF0)
+* [Screen Recording: Gameplay](https://youtu.be/HDGT9HjBVqo)
 ## Expenses
 |Name|Username|Ownership Area|Hours Completed|Remaining Hours|Journal|
 |---|---|---|---|----|---|
