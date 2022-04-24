@@ -74,7 +74,7 @@ public class ObjectSelectorCompiler {
 
     private void compileSpecial() {
         //Player
-        Image playerimage = new Image("TempImages/Cirkyle v1.png");
+        Image playerimage = new Image("media/Player/Cirkyle v1.png");
         CustomButton anotherbutton = new CustomButton("Cirkyle v1", "TempImages/Cirkyle v1.png", true, playerimage, ObjType.Player, BtnImgSize, BtnImgSize, new Vector(1,1));
         anotherbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
         specialSet.addCButton(anotherbutton);
