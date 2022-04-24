@@ -41,4 +41,4 @@
 |Ethan Collins|EthanCollins02|Auxiliary Screens|34hrs 40min|15hrs 20min|[Ethan's Journal](https://github.com/bjucps209/spring22-team2/wiki/EthanJournal)|
 |Paul Alger|PaulAlger05|Serialization|19hrs 15|30hrs 45min|[Paul's Journal](https://github.com/bjucps209/spring22-team2/wiki/PaulJournal)|
 |Seth Meyer|smeye584|Level Builder|38 hrs|12 hrs|[Seth's Journal](https://github.com/bjucps209/spring22-team2/wiki/SethJournal)|
-|Tripp Lawrence|Tripp|Basic Game Play|36 hrs 15min|13hrs 45min|[Tripp's Journal](https://github.com/bjucps209/spring22-team2/wiki/TrippJournal)|
+|Tripp Lawrence|Tripp312|Basic Game Play|36 hrs 15min|13hrs 45min|[Tripp's Journal](https://github.com/bjucps209/spring22-team2/wiki/TrippJournal)|
