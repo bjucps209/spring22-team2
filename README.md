@@ -30,7 +30,7 @@
 * The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
 * Attacks currently hit all enemies on screen
 * Level Builder does not compile
-* Serialization Unit Tests are unable to access the world singleton
+* Serialization has a few minor bugs in the saving of either the entities or items
 
 ## Recording
 * [Screen Recording: Title Screen](https://youtu.be/pOgFQCrmpjg)
