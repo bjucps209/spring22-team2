@@ -1,5 +1,5 @@
 package model;
 
 public interface ScreenObserver {
-    void Initialize();
+    void Initialize(boolean isLoaded);
 }

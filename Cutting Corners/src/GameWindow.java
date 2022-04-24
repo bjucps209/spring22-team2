@@ -11,6 +11,8 @@ import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import java.awt.image.*;
+import java.io.IOException;
+
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -47,7 +49,7 @@ public class GameWindow {
     
 
     @FXML
-    public void Initialize(boolean isLoaded) {
+    public void Initialize(boolean isLoaded) throws IOException {
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -73,7 +75,11 @@ public class GameWindow {
             entities = World.instance().displayCurrentEntities();
         }
 
-        World.instance().getCurrentLevel().setObserver( this::Initialize );
+        World.instance().getCurrentLevel().setObserver( me -> {
+            try {
+                Initialize(isLoaded);
+            } catch (IOException e) {}
+        } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
 
         for (Entity entity: entities){
@@ -202,6 +208,7 @@ public class GameWindow {
         playerHealth.progressProperty().bind(player.getStats().healthProperty()
                                                     .divide(player.getTotalHealth()));
         playerHealth.setScaleX(player.getTotalHealth() / 4);
+        playerHealth.setScaleY(1.5);
         playerHealth.relocate(1000*ratioWidth, 100*ratioHeight);
         playerHealth.toFront();
         gameWindow.getChildren().add(playerHealth);
@@ -209,7 +216,7 @@ public class GameWindow {
         Label healthLabel = new Label();
         healthLabel.getStyleClass().add("health");
         healthLabel.textProperty().bind(player.getStats().healthProperty().asString());
-        healthLabel.relocate(900*ratioWidth, 100*ratioHeight);
+        healthLabel.relocate(875*ratioWidth, 95*ratioHeight);
         gameWindow.getChildren().add(healthLabel);
     }
 
@@ -218,9 +225,10 @@ public class GameWindow {
         enemy.setIndicator(this::displayDamage);
         ProgressBar healthBar = new ProgressBar();
         healthBar.progressProperty().bind(enemy.getStats().healthProperty().divide(enemy.getTotalHealth()));
-        healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2));
-        healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2));
+        healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+        healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 - 50));
         healthBar.setScaleX(enemy.getTotalHealth() / 3);
+        healthBar.setScaleY(1.5);
         gameWindow.getChildren().add(healthBar);
 
         Label healthLabel = new Label();

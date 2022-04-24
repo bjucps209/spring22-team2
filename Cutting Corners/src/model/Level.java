@@ -76,7 +76,7 @@ public class Level {
             currentScreen = currentScreen.getLeft();
             currentScreen.addEntity(player);
             currentCol--;
-            observer.Initialize();
+            observer.Initialize(World.instance().isLoaded());
         }
     }
 
@@ -87,7 +87,7 @@ public class Level {
             currentScreen = currentScreen.getRight();
             currentScreen.addEntity(player);
             currentCol++;
-            observer.Initialize();
+            observer.Initialize(World.instance().isLoaded());
         }
     }
 
@@ -98,7 +98,7 @@ public class Level {
             currentScreen = currentScreen.getUp();
             currentScreen.addEntity(player);
             currentRow--;
-            observer.Initialize();
+            observer.Initialize(World.instance().isLoaded());
         }
     }
 
@@ -109,7 +109,7 @@ public class Level {
             currentScreen = currentScreen.getDown();
             currentScreen.addEntity(player);
             currentRow++;
-            observer.Initialize();
+            observer.Initialize(World.instance().isLoaded());
         }
     }
 

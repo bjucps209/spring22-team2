@@ -202,7 +202,7 @@ public class Player extends Entity {
                 super.getCoords().addYCoord(stats.getSpeed());
             }
             if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-                super.getCoords().subYCoord(stats.getSpeed());
+                super.getCoords().subYCoord(100);
             }
                 break;
             }
@@ -221,10 +221,10 @@ public class Player extends Entity {
             
             int newX = super.getX() - stats.getSpeed();
             if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
-                super.getCoords().addXCoord(stats.getSpeed());
+                super.getCoords().addXCoord(100);
             }
             if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-                super.getCoords().subXCoord(stats.getSpeed());
+                super.getCoords().subXCoord(100);
             }
                 break;
             }
@@ -238,7 +238,7 @@ public class Player extends Entity {
                 super.getCoords().subYCoord(stats.getSpeed());
             }
             if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-                super.getCoords().addYCoord(stats.getSpeed());
+                super.getCoords().addYCoord(100);
             }
             
                 break;

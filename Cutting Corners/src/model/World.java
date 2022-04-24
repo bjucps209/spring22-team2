@@ -21,6 +21,7 @@ public class World {
     private static World world;
     ScreenObserver observer;
     boolean isPaused = false;
+    private boolean isLoaded = false;
 
 
 
@@ -147,7 +148,7 @@ public class World {
         }
         if(observer!=null)
         {
-            observer.Initialize();
+            observer.Initialize(isLoaded);
         }
         }catch(ConcurrentModificationException c){return;}
     }
@@ -175,6 +176,13 @@ public class World {
         this.currentLevel = currentLevel;
     }
 
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
+    public void setLoaded(boolean isLoaded) {
+        this.isLoaded = isLoaded;
+    }
 
     /**
      * opens a file and calls the serialize methods for each object to write to the file
