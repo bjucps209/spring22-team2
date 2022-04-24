@@ -32,7 +32,6 @@
 * Game Files are being saved properly
 
 ## Known Issues
-* The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
 * Death does not load from last save-point
 * Serialization has a few minor bugs in the saving of the entities
 ## Recording
