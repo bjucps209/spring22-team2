@@ -11,12 +11,12 @@ public class CCLvLFileReaderTest {
     public void test_ReaderTest_TestLoad(){
         DM.resetDaMan();
 
-        DM.load("Pathway", "/SuperSecretMagicLevel.dat");
+        DM.load("Pathway");
         
         assertEquals( 9, DM.getScreens().size()); ///
         assert DM.getCurrentScreen() != null; ///
 
-        //String playerLoc = DM.getPlayerLoc(); //Not implemented yet (Could switch to Screen from StrID)
+        String playerLoc = DM.getPlayerLoc(); //Not implemented yet (Could switch to Screen from StrID)
         int incr = 0;
         for (Screen sc : DM.getScreens()) {
 
