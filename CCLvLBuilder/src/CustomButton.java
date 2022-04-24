@@ -1,4 +1,3 @@
-import Model.Cell;
 import Model.ObjType;
 import Model.Vector;
 import javafx.scene.control.Button;
@@ -8,21 +7,24 @@ import javafx.scene.image.ImageView;
 
 public class CustomButton extends Button{
     private String name; //Used for obj creation
+    private String imgPath;
     private Image Img; //In case I have issues with ImageView duplication
     private ObjType objType;
     private Vector dimensions;
 
-    public CustomButton(String name, Image img, ObjType ot, int imgsize, Vector dimensions) {
+    public CustomButton(String name, String imgPath,boolean showname, Image img, ObjType ot, int imgwidth, int imgheight, Vector dimensions) {
         super();
         this.name = name;
+        this.imgPath = imgPath;
         Img = img;
         objType = ot;
         this.dimensions = dimensions;
 
         var imgv = new ImageView(img);
         setGraphic(imgv);
-        setText(name);
-        imgv.setFitWidth(imgsize); imgv.setFitHeight(imgsize);
+        
+        if (showname) {setText(name);}
+        imgv.setFitWidth(imgwidth); imgv.setFitHeight(imgheight);
     }
 
     ///G&S
@@ -69,6 +71,14 @@ public class CustomButton extends Button{
 
     public void setDimensions(Vector dimensions) {
         this.dimensions = dimensions;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
 }

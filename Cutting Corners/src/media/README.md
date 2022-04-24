@@ -4,6 +4,7 @@
 * Caveman (Little World) - https://freemusicarchive.org/genre/Ambient?sort=date&d=0&pageSize=20&page=3
 * Egypt (Reverie) - https://freemusicarchive.org/genre/Ambient
 * Secret Level (Surrounded) - https://www.free-stock-music.com/hayden-folker-surrounded.html
+* Player Hurt (Minecraft Damage Oof Sound Effect) - https://djlunatique.com/minecraft-damage-oof-sound-effect/
 
 
 # Used under the following:

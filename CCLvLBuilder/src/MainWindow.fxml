@@ -8,14 +8,14 @@
     
     <VBox>
         <HBox>
-            <Button text="Prev" />
-            <Label text="List name here" />
-            <Button text="Next" />
+            <Button text="Prev" onAction="#onListGroupPrevClicked" />
+            <Label fx:id="lblBtnListSetName" />
+            <Button text="Next" onAction="#onListGroupNextClicked" />
         </HBox>
         <HBox>
-            <Button text="Prev" />
-            <Label text="blah of blah" />
-            <Button text="Next" />
+            <Button text="Prev" onAction="#onListPrevClicked" />
+            <Label fx:id="lblBtnSetCount" />
+            <Button text="Next" onAction="#onListNextClicked" />
         </HBox>
         <VBox fx:id="VBObjectBtnLocation">
            
@@ -26,11 +26,20 @@
         <HBox>
             <Label text = "Screen ID: " />
             <Label fx:id="lblCurScreenID" />
-            <Label text = "                Level Name Here                    " />
+            <Label text="                Level Name Here                    " />
             <Label fx:id="lblErrorMsg" />
         </HBox>
+
         <HBox fx:id="screenBox"></HBox>
-        <HBox> <Label text="Randomized stuff here" /> </HBox>
+        
+        <HBox> 
+            <Label text="File Name: " />
+            <TextField fx:id="txtFileName" text="" />
+            <Button text="load" onAction="#onLoadFileClicked" />
+            <Button text="save" onAction="#onSaveFileClicked" />
+            <Label fx:id="lblslOutcome" />
+        </HBox>
+
     </VBox>
     
     <VBox>

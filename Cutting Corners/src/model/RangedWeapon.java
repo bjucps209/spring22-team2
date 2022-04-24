@@ -36,7 +36,7 @@ public class RangedWeapon extends Equipment{
 
 
 
-    
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Ranged");
         file.writeUTF(getName());

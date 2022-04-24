@@ -180,9 +180,9 @@ public class Screen {
         file.writeInt(location.getLevel());
         file.writeUTF(filename);
         file.writeInt(entities.size());
-        for (Entity e : entities) {
-            e.serialize(file);
-        }
+        // for (Entity e : entities) {
+        //     e.serialize(file);
+        // }
         for (int row = 0; row < 7; ++row) {
             for (int col = 0; col < 13; ++col) {
                 file.writeUTF(grid[row][col].toString());
@@ -199,10 +199,10 @@ public class Screen {
         Screen s = new Screen(row, col, level, filename);
 
         int numEntities = file.readInt();
-        for (int i = 0; i < numEntities; ++i) {
-            Entity e = Entity.deserialize(file);
-            s.addEntity(e);
-        }
+        // for (int i = 0; i < numEntities; ++i) {
+        //     Entity e = Entity.deserialize(file);
+        //     s.addEntity(e);
+        // }
         for (int r = 0; r < 7; ++r) {
             for (int c = 0; c < 13; ++c) {
                 String cellType = file.readUTF();

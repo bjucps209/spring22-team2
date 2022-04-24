@@ -41,3 +41,8 @@
   .inventory{
     border: 3px black;
   }
+
+  .health{
+    -fx-text-fill: red;
+    -fx-font-size: 20px;
+  }

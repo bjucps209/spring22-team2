@@ -28,6 +28,9 @@ public class Player extends Entity {
     int walkingStep = 0;
     int experience;
     int score;
+    int knockedCount;
+    KeyCode keyPressed;
+    damageIndicator indicator;
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -44,6 +47,14 @@ public class Player extends Entity {
 
     public ArrayList<KeyCode> getKeys(){
         return keys;
+    }
+
+    public void setIndicator(damageIndicator indicator){
+        this.indicator = indicator;
+    }
+
+    public damageIndicator getIndicator(){
+        return indicator;
     }
 
     public void setEquippedItem(Item equippedItem){
@@ -173,9 +184,13 @@ public class Player extends Entity {
             if (keys.contains(KeyCode.S)){return;}
             if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
 
+            
             int newY = super.getY() - stats.getSpeed();
             if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
                 super.getCoords().addYCoord(stats.getSpeed());
+            }
+            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                super.getCoords().subYCoord(stats.getSpeed());
             }
                 break;
             }
@@ -190,9 +205,13 @@ public class Player extends Entity {
                     weaponObserver.changeImage(weaponImage, Direction.left);
                 }
             }
+            
             int newX = super.getX() - stats.getSpeed();
             if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
                 super.getCoords().addXCoord(stats.getSpeed());
+            }
+            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                super.getCoords().subXCoord(stats.getSpeed());
             }
                 break;
             }
@@ -204,6 +223,9 @@ public class Player extends Entity {
             int newY = super.getY() + stats.getSpeed();
             if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
                 super.getCoords().subYCoord(stats.getSpeed());
+            }
+            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                super.getCoords().addYCoord(stats.getSpeed());
             }
             
                 break;
@@ -219,9 +241,14 @@ public class Player extends Entity {
                     weaponObserver.changeImage(weaponImage, Direction.right);
                 }
             }
+            
             int newX = super.getX() + stats.getSpeed();
             if (super.getX() > 1200 || obstacleInPath(newX, super.getY())){
                 super.getCoords().subXCoord(stats.getSpeed());
+            }
+
+            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                super.getCoords().addXCoord(stats.getSpeed());
             }
                 break;
             }
@@ -353,6 +380,17 @@ public class Player extends Entity {
         AudioClip PLAYER_HURT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/playerhurt.mp3").toString());
         PLAYER_HURT.play();
         if (stats.getHealth() <= 0){performDie();}
+        int time = damage * 100 + 500;
+        indicator.displayDamage(this, damage, time);
+
+        switch (direction){
+            case up: super.getCoords().addYCoord(100);
+            case down: super.getCoords().subYCoord(100);
+            case left: super.getCoords().subXCoord(100);
+            case right: super.getCoords().addXCoord(100);
+        }
+
+        if (stats.getHealth() <= 0){super.performDie();}
     }
 
     @Override

@@ -24,6 +24,7 @@ public class Enemy extends Entity{
     private String currentImage = "Standing";
     private int experience;
     private Direction facing = Direction.left;
+    private damageIndicator indicator;
 
     public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth, int experience)
     {
@@ -300,6 +301,8 @@ public class Enemy extends Entity{
         {
             stunCount=50;
         }
+        int time = damage * 100 + 500;
+        indicator.displayDamage(this, damage, time);
         if (stats.getHealth() <= 0){performDie();}
     }
 
@@ -318,6 +321,14 @@ public class Enemy extends Entity{
 
     public void setHomeScreen(Screen homeScreen) {
         this.homeScreen = homeScreen;
+    }
+
+    public damageIndicator getIndicator() {
+        return indicator;
+    }
+
+    public void setIndicator(damageIndicator indicator) {
+        this.indicator = indicator;
     }
 
     public Cell getCellWithin() {
@@ -398,7 +409,7 @@ public class Enemy extends Entity{
     
 
 
-
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Enemy");
         file.writeInt(size);

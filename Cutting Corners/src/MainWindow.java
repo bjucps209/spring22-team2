@@ -68,7 +68,7 @@ public class MainWindow {
     Timeline timer = new Timeline(keyFrame);
     KeyFrame keyFrameCredits = new KeyFrame(Duration.millis(10),e->rollCredits());
     Timeline timerCredits = new Timeline(keyFrameCredits);
-    Boolean defaultCamapign = true;
+    Boolean defaultCampaign = true;
     Boolean cheatMode = false;
     int difficulty = 2;
     Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
@@ -390,7 +390,7 @@ public class MainWindow {
         stage.show();
 
         GameWindow gameWindow = loader.getController();
-        gameWindow.Initialize();
+        gameWindow.Initialize(defaultCampaign);
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
         gameWindow.updater();
@@ -402,6 +402,10 @@ public class MainWindow {
                 if(World.instance().getPlayer()!=null)
                 {
                     World.instance().getPlayer().removeKey(event.getCode());
+                    if (World.instance().getPlayer().getKeys().contains(event.getCode())){
+                        handle(event);
+                        return;
+                    }
                     World.instance().getPlayer().addKey(event.getCode());
                 }
             }
@@ -482,14 +486,14 @@ public class MainWindow {
     @FXML
     void campaignSliderPressed(ImageView view)
     {
-        if(defaultCamapign)
+        if(defaultCampaign)
         {
-            defaultCamapign=false;
+            defaultCampaign=false;
             campaignView.setImage(USER_CAMPAIGN);
         }
         else
         {
-            defaultCamapign=true;
+            defaultCampaign=true;
             campaignView.setImage(DEFAULT_CAMPAIGN);
         }
         if(view==campaignSliderLeft)
