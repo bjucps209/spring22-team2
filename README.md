@@ -28,8 +28,8 @@
 
 ## Known Issues
 * The gifs used for displaying controls on the Help Screen do not appear. The Code for this is functional with other gifs for unknown reasons
-* Attacks currently hit all enemies on screen
 * Level Builder does not compile
+* Death does not load from last save-point
 * Serialization has a few minor bugs in the saving of either the entities or items
 
 ## Recording
@@ -38,7 +38,7 @@
 ## Expenses
 |Name|Username|Ownership Area|Hours Completed|Remaining Hours|Journal|
 |---|---|---|---|----|---|
-|Ethan Collins|EthanCollins02|Auxiliary Screens|25hrs 20min|24hrs 40min|[Ethan's Journal](https://github.com/bjucps209/spring22-team2/wiki/EthanJournal)|
+|Ethan Collins|EthanCollins02|Auxiliary Screens|34hrs 40min|15hrs 20min|[Ethan's Journal](https://github.com/bjucps209/spring22-team2/wiki/EthanJournal)|
 |Paul Alger|PaulAlger05|Serialization|19hrs 15|30hrs 45min|[Paul's Journal](https://github.com/bjucps209/spring22-team2/wiki/PaulJournal)|
-|Seth Meyer|smeye584|Level Builder|~9-10hrs|~40-41hrs|[Seth's Journal](https://github.com/bjucps209/spring22-team2/wiki/SethJournal)|
-|Tripp Lawrence|Tripp|Basic Game Play|18hrs 45min|31hrs 15min|[Tripp's Journal](https://github.com/bjucps209/spring22-team2/wiki/TrippJournal)|
+|Seth Meyer|smeye584|Level Builder|38 hrs|12 hrs|[Seth's Journal](https://github.com/bjucps209/spring22-team2/wiki/SethJournal)|
+|Tripp Lawrence|Tripp|Basic Game Play|36 hrs 15min|13hrs 45min|[Tripp's Journal](https://github.com/bjucps209/spring22-team2/wiki/TrippJournal)|
