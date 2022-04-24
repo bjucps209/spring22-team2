@@ -276,6 +276,7 @@ public class GameWindow {
     void onSaveClicked(ActionEvent event) {
 
     }
+    
     @FXML
     void ratioImage(ImageView view)
     {

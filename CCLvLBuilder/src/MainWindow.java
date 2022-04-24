@@ -5,12 +5,20 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /* 
@@ -52,25 +60,80 @@ public class MainWindow implements LevelObserver {
     @FXML Button btnUp; @FXML Button btnDown;
 
     //Other Stuff
+    @FXML Label lblBtnListSetName; //For ObjBtn Layout Navigation
+    @FXML Label lblBtnSetCount;    //
     @FXML Label lblErrorMsg;
+    @FXML TextField txtFileName;
+    @FXML Label lblslOutcome;
 
     @FXML
     void initialize() {
         DataManager.DaMan().setMrObserver(this);
         DimensionMan.DiMan(); // initialize 
-        objectBtnCompiler = new ObjectSelectorCompiler(VBObjectBtnLocation, this);
-        objectBtnCompiler.compileStuff();
+        objectBtnCompiler = new ObjectSelectorCompiler(VBObjectBtnLocation, this, lblBtnListSetName, lblBtnSetCount);
+        objectBtnCompiler.compileLists();
         objectBtnCompiler.pushCurrentBtnSet();
         thePanes = new ArrayList<Pane>();
-        createScreen("0,0,0"); /// Try to manage this with DaMan ---------------- no
+        createScreen("0,0,0");
         
         disableNavButtons();
         btnDelete.setDisable(true);
         btnDeleteCurrentObj.setDisable(true);
     }
 
-    ///Screen Control System
+    /// Misc
     //
+    @FXML void onListGroupPrevClicked(ActionEvent event) {
+        objectBtnCompiler.prevObjectSet().pushCurrentBtnSet();
+    }
+    @FXML void onListGroupNextClicked(ActionEvent event) {
+        objectBtnCompiler.nextObjectSet();
+        objectBtnCompiler.pushCurrentBtnSet();
+    }
+    @FXML void onListPrevClicked(ActionEvent event) {
+        objectBtnCompiler.prevObjectPage();
+        objectBtnCompiler.pushCurrentBtnSet();
+    }
+    @FXML void onListNextClicked(ActionEvent event) {
+        objectBtnCompiler.nextObjectPage();
+        objectBtnCompiler.pushCurrentBtnSet();
+    }
+
+    @FXML
+    void onBackgroundBtnClicked(ActionEvent event) {
+        CustomButton btn = (CustomButton)event.getSource();
+        DataManager.DaMan().getCurrentScreen().setBackgroundPathName(btn.getName());
+
+        BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
+        BackgroundImage thing = new BackgroundImage(btn.getImg(), null, null, null, what); //Does another thing
+        Background bg = new Background(thing); //idk
+        currentScreen.setBackground(bg); //Byeas
+    }
+
+    @FXML
+    void onLoadFileClicked(ActionEvent event) throws FileNotFoundException, IOException {
+        String filename = txtFileName.getText();
+
+        String msg = DataManager.DaMan().load(filename);
+        lblslOutcome.setText(msg);
+    }
+    @FXML
+    void onSaveFileClicked(ActionEvent event) throws Exception {
+        String filename = txtFileName.getText();
+        try {
+            if (filename != null | filename != "") {
+               String outcome = DataManager.DaMan().save(filename, false);
+               lblslOutcome.setText(outcome);
+            }
+        }
+        catch (Exception e) {
+            lblslOutcome.setText("Filename is invalid");
+            System.out.println(e);
+        }
+    }
+
+    ///Screen Control System
+    
     @FXML
     void onCreateClicked(ActionEvent event) {
         switch (navPanelState) {
@@ -153,7 +216,7 @@ public class MainWindow implements LevelObserver {
             currObjButton.setText(currObjButton.getName());
         }
         currObjButton = btnClicked;
-        btnClicked.setText(btnClicked.getName() + "/n" + "Selected");
+        btnClicked.setText(btnClicked.getName() + " <--");
     }
 
     @FXML void onPaneClicked(MouseEvent event) {
@@ -161,7 +224,10 @@ public class MainWindow implements LevelObserver {
         double xx = event.getX(); event.getSceneX(); //event.getSceneX();
         double yy = event.getY(); //event.getSceneY()
         Vector topleftcell = DimensionMan.DiMan().coordstoGrid(yy, xx);
-        DataManager.DaMan().createObject(currObjButton.getName(), currObjButton.getObjType(), topleftcell, currObjButton.getDimensions());
+        DataManager.DaMan().createObject(currObjButton.getName(), currObjButton.getImgPath(), currObjButton.getObjType(), topleftcell, currObjButton.getDimensions());
+
+        currObjButton.setText(currObjButton.getName());
+        currObjButton = null;
     }
 
     @FXML void onDeleteObjClicked(ActionEvent event) {
@@ -197,7 +263,7 @@ public class MainWindow implements LevelObserver {
     //
     @Override
     public void createScreen(String StrID) { //Needs work
-        currentScreen = new Pane();
+        currentScreen = new Pane();          //         no... :00
         thePanes.add(currentScreen);
         currentScreen.setMinSize(DimensionMan.screenwidth, DimensionMan.screenheight);
         currentScreen.setMaxSize(DimensionMan.screenwidth, DimensionMan.screenheight);
@@ -219,7 +285,6 @@ public class MainWindow implements LevelObserver {
     @Override
     public void movetoScreen(String StrID) { 
         for (Pane aPane : thePanes) {
-            System.out.println(aPane.getUserData());
             if (aPane.getUserData().equals(StrID)) {
                 screenBox.getChildren().clear();
                 screenBox.getChildren().add(aPane);
@@ -254,18 +319,29 @@ public class MainWindow implements LevelObserver {
     }
 
     @Override
-    public void addLvLObject(LvLObject theObject) {
+    public void addLvLObject(LvLObject theObject) { //Rework ___________________________________________________________________________
         double imgwidth = theObject.getDimensions().getX() * DimensionMan.DiMan().getCellLength();
         double imgheight = theObject.getDimensions().getY() * DimensionMan.DiMan().getCellLength();
         double[] coord = DimensionMan.DiMan().gridtoCoords((theObject.getTopLeftCell()));
 
-        ImageView newObj = new ImageView(currObjButton.getImg());
-        newObj.setUserData(theObject.getId());
-        newObj.setFitWidth(imgwidth); newObj.setFitHeight(imgheight);
-        newObj.setLayoutY(coord[0]); newObj.setLayoutX(coord[1]);
-        currentScreen.getChildren().add(newObj);
+        try {
+            Image img = new Image(theObject.getImgPath());
+            ImageView newObj = new ImageView(img);
+            newObj.setUserData(theObject.getId());
+            newObj.setFitWidth(imgwidth); newObj.setFitHeight(imgheight);
+            newObj.setLayoutY(coord[0]); newObj.setLayoutX(coord[1]);
+            currentScreen.getChildren().add(newObj);
 
-        makeInteractive(newObj);
+            makeInteractive(newObj);
+        } catch (IllegalArgumentException e) {
+            ImageView newObj = new ImageView(new Image("uhohstinky.png"));
+            newObj.setUserData(theObject.getId());
+            newObj.setFitWidth(imgwidth); newObj.setFitHeight(imgheight);
+            newObj.setLayoutY(coord[0]); newObj.setLayoutX(coord[1]);
+            currentScreen.getChildren().add(newObj);
+
+            makeInteractive(newObj);
+        }
     }
 
     @Override
@@ -293,10 +369,32 @@ public class MainWindow implements LevelObserver {
     }
 
     @Override
-    public void updateActionStatement(String statementMsg) {
-        lblErrorMsg.setText(statementMsg);
+    public void populateScreens(ArrayList<Screen> screens) {
+        thePanes = new ArrayList<Pane>();
+
+        for (Screen scr : screens) {
+            createScreen(scr.getStrID());
+            try {
+                BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
+                BackgroundImage thing = new BackgroundImage( new Image(scr.getBackgroundPathName()), null, null, null, what); //Does another thing
+                Background bg = new Background(thing); //idk
+                currentScreen.setBackground(bg); //Byeas
+            } catch (Exception e) {}
+            for(LvLObject obj : scr.getObjects()) {
+                addLvLObject(obj);
+            }
+        }
+
+        movetoScreen(DataManager.DaMan().getCurrentScreen().getStrID());
     }
 
+
+    @Override
+    public void updateActionStatement(String statementMsg) {
+        lblErrorMsg.setText(statementMsg);
+        System.out.println(statementMsg);
+    }
+    
 
     ///Borrowed from Dr. Schaub again because I didn't feel like remembering how
     // From https://stackoverflow.com/questions/17312734/how-to-make-a-draggable-node-in-javafx-2-0/46696687,
@@ -318,6 +416,9 @@ public class MainWindow implements LevelObserver {
             node.setLayoutX(node.getLayoutX() + me.getX() - dragDelta.x);
             node.setLayoutY(node.getLayoutY() + me.getY() - dragDelta.y);
             node.getScene().setCursor(Cursor.MOVE);
+
+            Screen curscr = DataManager.DaMan().getCurrentScreen();
+            curscr.purgeArea(curscr.findObject((int)node.getUserData()));
         });
         node.setOnMouseReleased(me -> { 
             node.getScene().setCursor(Cursor.HAND);

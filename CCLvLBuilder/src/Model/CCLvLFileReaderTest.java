@@ -7,7 +7,7 @@ import org.junit.Test;
 public class CCLvLFileReaderTest {
     DataManager DM = DataManager.DaMan();
 
-    @Test
+/*     @Test
     public void test_ReaderTest_TestLoad(){
         DM.resetDaMan();
 
@@ -33,5 +33,5 @@ public class CCLvLFileReaderTest {
             incr += sc.getObjects().size();
         }
         assertEquals(14, incr); ///
-    }
+    } */
 }

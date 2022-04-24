@@ -5,26 +5,46 @@
 //----------------------------------------------------------- 
 package Model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DataManager {
     LevelObserver mrObserver; //LevelObserver
     private Level theLevel;
-    public final Vector gridDimensions = new Vector(7, 13); 
+    public static final Vector gridDimensions = new Vector(7, 13); 
 
     private Screen currentScreen;
-    private String playerScrStrID;
     //private ArrayList<Screen> Screens;
 
-    public void save(String pathway, String fileName) { return; } //For show
-    public void load(String pathway, String fileName) { return; } //Or is it? :O
-                                   //Nope
+    ///Save and Load
+    //
+
+
+    public String load(String fileName) throws FileNotFoundException, IOException { 
+        Object[] bleh = CCLvLFileReader.load(fileName);
+
+        if (bleh[1] != null) theLevel = (Level)bleh[1];
+        else return (String)bleh[0];
+        for (Screen scr : theLevel.getScreens()) {
+            for (LvLObject obj : scr.getObjects()) {
+                if (obj.getObjType() == ObjType.Player) currentScreen = scr;
+            }
+        }
+        if (currentScreen == null) currentScreen = theLevel.getScreens().get(0);
+        if (mrObserver != null) mrObserver.populateScreens(theLevel.getScreens());
+        return (String)bleh[0];
+    }
+
+    public String save(String fileName, boolean currentWork) throws FileNotFoundException, IOException {
+         return CCLvLFileReader.save(theLevel, fileName, false);
+    } 
 
     ///Object stuff
     //
     //Checks if object is within bounds, sends error if not
     //Makes currentScreen do the rest (Besides observers)
-    public void createObject(String name, ObjType objtype, Vector topLeftCell, Vector dimensions) {
+    public void createObject(String name, String imgPath,ObjType objtype, Vector topLeftCell, Vector dimensions) {
         if (topLeftCell.getY() < 0 || topLeftCell.getY() + dimensions.getY() - 1 >= gridDimensions.getY()) {
             if(mrObserver != null) { mrObserver.updateActionStatement("Out of Bounds");}
             return;
@@ -37,10 +57,10 @@ public class DataManager {
             return;
         }
 
-        LvLObject newObject = currentScreen.createObject(name, objtype, topLeftCell, dimensions);
+        LvLObject newObject = currentScreen.createObject(name, imgPath, objtype, topLeftCell, dimensions);
         if (mrObserver != null) {
              mrObserver.addLvLObject(newObject); 
-             mrObserver.updateActionStatement("Placed at: " + newObject.getTopLeftCell().getX() + "," + newObject.getTopLeftCell().getY());
+             mrObserver.updateActionStatement(name + " placed at " + newObject.getTopLeftCell().getX() + "," + newObject.getTopLeftCell().getY() + " on " + currentScreen.getStrID());
         }
     }
 
@@ -63,17 +83,19 @@ public class DataManager {
         currentScreen.moveObject(curObject, newGrid);
         if (mrObserver != null) {
             mrObserver.moveLvLObject(curObject);
-            mrObserver.updateActionStatement("Moved to: " + curObject.getTopLeftCell().getX() + "," + curObject.getTopLeftCell().getY());
+            mrObserver.updateActionStatement(curObject.getName() + " moved to " + curObject.getTopLeftCell().getX() + "," + curObject.getTopLeftCell().getY() + " on " + currentScreen.getStrID());
         }
     }
 
     //User shouldn't be able to cause an error in here
     public void deleteObject(int id) {
-        currentScreen.deleteObject(id);
+        String objname = currentScreen.findObject(id).getName();
+        currentScreen.deleteObject(id);    
         if (mrObserver != null) {
             mrObserver.deleteLvLObject(id);
-            mrObserver.updateActionStatement("Object Deleted");
+            mrObserver.updateActionStatement( objname + " deleted on " + currentScreen.getStrID());
         }
+
     }
 
     private boolean outOfBounds(Vector gridloc, Vector dimensions) {
@@ -118,7 +140,6 @@ public class DataManager {
     //Attempts to create a screen from the current screen depending on the given direction
     public void attemptCreateScreen(Direction direction) {
         int[] tempID = getAdjacentID(direction, currentScreen.getIDSeries());
-        System.out.println(Screen.ConvertToStrID(tempID));//________________
 
         //Check if Screen already exists (Won't need later) -----------------------------------------------------
         String moveID = Screen.ConvertToStrID(tempID[0], tempID[1], tempID[2]);
@@ -219,10 +240,25 @@ public class DataManager {
     }
 
     public void setPlayerScrID(String StrID) {
-        playerScrStrID = StrID;
+        theLevel.setScreenWithPlayer(StrID);
     }
 
-    public String getPlayerScrID(String StrID) {
-        return playerScrStrID;
+    public String getPlayerScrID() {
+        return theLevel.getScreenWithPlayer();
     }
+
+    public Level getTheLevel() {
+        return theLevel;
+    }
+    
+    public void setTheLevel(Level theLevel) {
+        this.theLevel = theLevel;
+    }
+
+
+
+    
+    /// Save/Load methods
+    //
+
 }
