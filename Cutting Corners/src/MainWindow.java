@@ -391,7 +391,7 @@ public class MainWindow {
         stage.show();
 
         GameWindow gameWindow = loader.getController();
-        gameWindow.Initialize();
+        gameWindow.Initialize(defaultCamapign);
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
         gameWindow.updater();
