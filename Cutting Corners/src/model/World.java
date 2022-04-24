@@ -2,6 +2,7 @@ package model;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -180,8 +181,9 @@ public class World {
      * @param filename - the file that will hold the saved game
      */
     public void save(String filename) throws IOException {
-        try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))) 
+        try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename)))
         {  // SaveGame.dat
+            
             writer.writeInt(this.currentLevel);
             writer.writeInt(this.difficulty);
             Level lvl = getCurrentLevel();
