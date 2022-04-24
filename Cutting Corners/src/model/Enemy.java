@@ -411,7 +411,7 @@ public class Enemy extends Entity{
     
 
 
-
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Enemy");
         file.writeInt(size);

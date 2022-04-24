@@ -73,7 +73,7 @@ public class GameWindow {
             entities = World.instance().displayCurrentEntities();
         }
 
-        World.instance().getCurrentLevel().setObserver(this::Initialize);
+        World.instance().getCurrentLevel().setObserver( this::Initialize );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
 
         for (Entity entity: entities){

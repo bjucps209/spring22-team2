@@ -74,7 +74,7 @@ public class MeleeWeapon extends Equipment{
     }
 
 
-    
+    @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Melee");
         file.writeUTF(getName());
