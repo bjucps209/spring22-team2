@@ -397,7 +397,7 @@ public class Player extends Entity {
     public void performDie()
     {
         World.instance().displayCurrentEntities().remove(this);
-        World.instance().getCurrentLevel().getObserver().Initialize();
+        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
         HighScoreManager scores = new HighScoreManager();
         try
         {
