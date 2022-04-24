@@ -85,24 +85,18 @@ public class MainWindow implements LevelObserver {
     //
     @FXML void onListGroupPrevClicked(ActionEvent event) {
         objectBtnCompiler.prevObjectSet().pushCurrentBtnSet();
-        //lblBtnListSetName.setText(objectBtnCompiler.getCurrentListSet().getGroupName());
     }
     @FXML void onListGroupNextClicked(ActionEvent event) {
         objectBtnCompiler.nextObjectSet();
         objectBtnCompiler.pushCurrentBtnSet();
-        //lblBtnListSetName.setText(objectBtnCompiler.getCurrentListSet().getGroupName());
     }
     @FXML void onListPrevClicked(ActionEvent event) {
         objectBtnCompiler.prevObjectPage();
         objectBtnCompiler.pushCurrentBtnSet();
-        //var cls = objectBtnCompiler.getCurrentListSet();
-        //lblBtnSetCount.setText(String.valueOf(cls.getCurrentVBoxIndex() + 1) + " of " + cls.getListSet().size());
     }
     @FXML void onListNextClicked(ActionEvent event) {
         objectBtnCompiler.nextObjectPage();
         objectBtnCompiler.pushCurrentBtnSet();
-        //var cls = objectBtnCompiler.getCurrentListSet();
-       // lblBtnSetCount.setText(String.valueOf(cls.getCurrentVBoxIndex() + 1) + " of " + cls.getListSet().size());
     }
 
     @FXML
@@ -222,7 +216,7 @@ public class MainWindow implements LevelObserver {
             currObjButton.setText(currObjButton.getName());
         }
         currObjButton = btnClicked;
-        btnClicked.setText(btnClicked.getName() + "/n" + "Selected");
+        btnClicked.setText(btnClicked.getName() + " <--");
     }
 
     @FXML void onPaneClicked(MouseEvent event) {
@@ -231,6 +225,9 @@ public class MainWindow implements LevelObserver {
         double yy = event.getY(); //event.getSceneY()
         Vector topleftcell = DimensionMan.DiMan().coordstoGrid(yy, xx);
         DataManager.DaMan().createObject(currObjButton.getName(), currObjButton.getImgPath(), currObjButton.getObjType(), topleftcell, currObjButton.getDimensions());
+
+        currObjButton.setText(currObjButton.getName());
+        currObjButton = null;
     }
 
     @FXML void onDeleteObjClicked(ActionEvent event) {
@@ -372,6 +369,27 @@ public class MainWindow implements LevelObserver {
     }
 
     @Override
+    public void populateScreens(ArrayList<Screen> screens) {
+        thePanes = new ArrayList<Pane>();
+
+        for (Screen scr : screens) {
+            createScreen(scr.getStrID());
+            try {
+                BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
+                BackgroundImage thing = new BackgroundImage( new Image(scr.getBackgroundPathName()), null, null, null, what); //Does another thing
+                Background bg = new Background(thing); //idk
+                currentScreen.setBackground(bg); //Byeas
+            } catch (Exception e) {}
+            for(LvLObject obj : scr.getObjects()) {
+                addLvLObject(obj);
+            }
+        }
+
+        movetoScreen(DataManager.DaMan().getCurrentScreen().getStrID());
+    }
+
+
+    @Override
     public void updateActionStatement(String statementMsg) {
         lblErrorMsg.setText(statementMsg);
         System.out.println(statementMsg);
@@ -398,6 +416,9 @@ public class MainWindow implements LevelObserver {
             node.setLayoutX(node.getLayoutX() + me.getX() - dragDelta.x);
             node.setLayoutY(node.getLayoutY() + me.getY() - dragDelta.y);
             node.getScene().setCursor(Cursor.MOVE);
+
+            Screen curscr = DataManager.DaMan().getCurrentScreen();
+            curscr.purgeArea(curscr.findObject((int)node.getUserData()));
         });
         node.setOnMouseReleased(me -> { 
             node.getScene().setCursor(Cursor.HAND);
@@ -412,34 +433,6 @@ public class MainWindow implements LevelObserver {
     private class Delta {
         public double x;
         public double y;
-    }
-
-    @Override
-    public void populateScreens(ArrayList<Screen> screens) {
-        System.out.println("MW populateScreens");
-        thePanes.clear();
-        Pane paneWithPlayer = null;
-        boolean playerfound = false;
-        for (Screen scr : screens) {
-            createScreen(scr.getStrID());
-            try {
-                BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
-                BackgroundImage thing = new BackgroundImage( new Image(scr.getBackgroundPathName()), null, null, null, what); //Does another thing
-                Background bg = new Background(thing); //idk
-                currentScreen.setBackground(bg); //Byeas
-            } catch (Exception e) {}
-            for(LvLObject obj : scr.getObjects()) {
-                if (obj.getObjType() == ObjType.Player) {
-                    paneWithPlayer = currentScreen;
-                    playerfound = true;
-                }
-                addLvLObject(obj);
-            }
-        }
-        if (playerfound) { 
-            currentScreen = paneWithPlayer;
-            movetoScreen((String)paneWithPlayer.getUserData());
-        }
     }
 
 }

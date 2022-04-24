@@ -20,10 +20,20 @@ public class DataManager {
     ///Save and Load
     //
 
+
     public String load(String fileName) throws FileNotFoundException, IOException { 
-        String bleh = CCLvLFileReader.load(theLevel, fileName);
+        Object[] bleh = CCLvLFileReader.load(fileName);
+
+        if (bleh[1] != null) theLevel = (Level)bleh[1];
+        else return (String)bleh[0];
+        for (Screen scr : theLevel.getScreens()) {
+            for (LvLObject obj : scr.getObjects()) {
+                if (obj.getObjType() == ObjType.Player) currentScreen = scr;
+            }
+        }
+        if (currentScreen == null) currentScreen = theLevel.getScreens().get(0);
         if (mrObserver != null) mrObserver.populateScreens(theLevel.getScreens());
-        return bleh;
+        return (String)bleh[0];
     }
 
     public String save(String fileName, boolean currentWork) throws FileNotFoundException, IOException {
@@ -79,11 +89,13 @@ public class DataManager {
 
     //User shouldn't be able to cause an error in here
     public void deleteObject(int id) {
-        currentScreen.deleteObject(id);
+        String objname = currentScreen.findObject(id).getName();
+        currentScreen.deleteObject(id);    
         if (mrObserver != null) {
             mrObserver.deleteLvLObject(id);
-            mrObserver.updateActionStatement( currentScreen.findObject(id).getName() + " deleted on " + currentScreen.getStrID());
+            mrObserver.updateActionStatement( objname + " deleted on " + currentScreen.getStrID());
         }
+
     }
 
     private boolean outOfBounds(Vector gridloc, Vector dimensions) {

@@ -68,14 +68,14 @@ public class CCLvLFileReader {
 
     }
 
-    //Do not use the FileNotFound with this for anything
-    public static String load(Level lvlRef, String fileName) throws FileNotFoundException, IOException {
+    // returns String msg then the level
+    public static Object[] load(String fileName) throws FileNotFoundException, IOException {
         fileName = pathWay + cleanFileIdentifier(fileName);
         int Directions = 6;
-        lvlRef = new Level();
+        Level lvlRef = new Level();
 
         try (DataInputStream reader = new DataInputStream(new FileInputStream(fileName))) {
-            reader.readUTF();
+            lvlRef.setScreenWithPlayer(reader.readUTF());
 
             var screenQuantity = reader.readInt(); //Amount of screens
             String[][] adjStrIDCollection = new String[screenQuantity][Directions];
@@ -114,9 +114,9 @@ public class CCLvLFileReader {
             }
 
 
-            return lvlRef + " loaded";
+            return new Object[] { fileName + " loaded" , lvlRef};
         } catch (FileNotFoundException e) {
-            return "File does not exist";
+            return new Object[] { "File does not exist", null};
         }
     }
     

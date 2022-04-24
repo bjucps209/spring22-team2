@@ -2,14 +2,6 @@ Some questions to ask:
     Does importing an entire package (ie javafx.scene.layout.*) actually
     negatively impact anything.
 
-    4/22/22
-    40 min (fixed placement issue mostly, works fine on normal size)
-    4:21 pm - 5:45 pm   -- 20 min
-    6:22 pm - 7:54 pm Finished basic object control
-    9:25 pm - 11:28 pm finished smthn idk
-
 4/23/22
-    12:23 pm - 5:27 pm
-    5:42 pm - 6:40 pm
 
     Check DimensionMan and object place (if not empty part)

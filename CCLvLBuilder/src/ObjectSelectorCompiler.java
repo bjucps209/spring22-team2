@@ -2,7 +2,7 @@
 //File:   .java
 //Desc:   Compiles a list of buttons created from the
 //        list of pictures.
-//          Currently in test version
+//          Currently in I don't care anymore version
 //----------------------------------------------------------- 
 import java.util.ArrayList;
 
@@ -14,12 +14,12 @@ import javafx.scene.layout.VBox;
 
 
 public class ObjectSelectorCompiler {
-    MainWindow theWindow; //can do probably
+    MainWindow theWindow; //Okay to do probably
     Label lblBtnListSetNameCtrl;
     Label lblBtnSetCountCtrl;
 
     VBox setLocation;
-    SelectorListSet specialSet, backgroundSet;
+    SelectorListSet specialSet, entitySet, obstacleSet, itemSet ,backgroundSet;
 
     static final String[] backgroundNamesFirst = new String[] {"medievalfourway", "medievalonewaydown", "medievalonewayleft", "medievalonewayright", "medievalonewayup", "medievalthreewaydown", "medievalthreewayleft", "medievalthreewayright", "medievalthreewayup", "medievaltwowayhorizontal", "medievaltwowayvertical" };
     static final String[] backgroundNamesSecond = new String[] {"desertfourway", "desertonewaydown", "desertonewayleft", "desertonewayright", "desertonewayup", "desertthreewaydown", "desertthreewayleft", "desertthreewayright", "desertthreewayup", "deserttwowayhorizontal", "deserttwowayvertical" };
@@ -27,11 +27,20 @@ public class ObjectSelectorCompiler {
     static final String[] backgroundNamesFourth = new String[] {"Bossroom", "secretfourway", "secretonewaydown", "secretonewayleft", "secretonewayright", "secretonewayup", "secretthreewaydown", "secretthreewayleft", "secretthreewayright", "secretthreewayup", "secrettwowayhorizontal", "secrettwowayvertical"};
     static final String[][] backgroundNames = new String[][] {backgroundNamesFirst, backgroundNamesSecond, backgroundNamesThird, backgroundNamesFourth};
 
+    static final String[] entityNamesFirst = new String[] { "evil", "triangle", "square", "hexagon", "octagon"};
+    static final String[] entityNamesBosses = new String[] {"pyramidboss", "cube", "dodeca"};
+
+    static final String[] obstacleNames = new String[] { "Medieval/rock", "Medieval/tree", "Egypt/cactus", "Egypt/pyramid", "Caveman/boulder", "Caveman/deadbush", "Secret&Boss/lantern"};
+
+    static final String[] itemNames = new String[] { "Bow", "Arrow", "Fireball", "Mace", "Cirkyle's Sword"};
+
     ArrayList<SelectorListSet> setList; //List of all the Sets
     private int currentSelectorSet; //Current set index
 
     private static final int BtnImgSize = 100;
-    
+
+
+
     public ObjectSelectorCompiler(VBox btnlocation, MainWindow mw, Label lblbtnlsnc, Label lblbtnscc) {
         setLocation = btnlocation;
         theWindow = mw;
@@ -39,30 +48,76 @@ public class ObjectSelectorCompiler {
         lblBtnSetCountCtrl = lblbtnscc;
 
         specialSet = new SelectorListSet("Special");
+        entitySet = new SelectorListSet("Entities");
+        obstacleSet = new SelectorListSet("Obstacles");
+        itemSet = new SelectorListSet("Items");
         backgroundSet = new SelectorListSet("Backgrounds");
 
         setList = new ArrayList<SelectorListSet>();
-        setList.add(backgroundSet);
+        //Determines the order of the lists
         setList.add(specialSet);
-
+        setList.add(entitySet);
+        setList.add(obstacleSet);
+        setList.add(itemSet);
+        setList.add(backgroundSet);
 
         currentSelectorSet = 0;
     }
 
     public void compileLists() {
-        compileBackground();
         compileSpecial();
+        compileEntity();
+        compileObstacle();
+        compileItem();   
+        compileBackground();
     }
 
     private void compileSpecial() {
+        //Player
         Image playerimage = new Image("TempImages/Cirkyle v1.png");
-        CustomButton newbutton = new CustomButton("Cirkyle v1", "TempImages/Cirkyle v1.png", true, playerimage, ObjType.Player, BtnImgSize, BtnImgSize, new Vector(2, 1));
-        newbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
-        specialSet.addCButton(newbutton);
-
         CustomButton anotherbutton = new CustomButton("Cirkyle v1", "TempImages/Cirkyle v1.png", true, playerimage, ObjType.Player, BtnImgSize, BtnImgSize, new Vector(1,1));
         anotherbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
         specialSet.addCButton(anotherbutton);
+
+    }
+
+    private void compileEntity() {
+        String sharedpath = "media/Enemies/";
+        for (String name : entityNamesFirst) {
+            String imgPath = sharedpath + name + ".png";   
+            var newbutton = new CustomButton(name, imgPath, true, new Image(imgPath), ObjType.Entity, BtnImgSize, BtnImgSize, new Vector(1, 1));
+            newbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
+            entitySet.addCButton(newbutton);
+        }
+
+
+        
+        for (String name : entityNamesBosses) {
+            String imgPath = sharedpath + name + ".png";
+            var newbutton = new CustomButton(name, imgPath, true, new Image(imgPath), ObjType.Boss, BtnImgSize, BtnImgSize, new Vector(3, 7));
+            newbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
+            entitySet.addCButton(newbutton);
+        }
+    }
+
+    public void compileObstacle() {
+        String sharedpath = "media/Terrain/";
+        for (String obstName : obstacleNames) {
+            String imgPath = sharedpath + obstName + ".png";   
+            var newbutton = new CustomButton(  obstName.split("/")[1], imgPath, true, new Image(imgPath), ObjType.Obstacle, BtnImgSize, BtnImgSize, new Vector(1, 1));
+            newbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
+            obstacleSet.addCButton(newbutton);
+        }
+    }
+
+    public void compileItem() {
+        String sharedpath = "media/Player/";
+        for (String name : itemNames) {
+            String imgPath = sharedpath + name + ".png";   
+            var newbutton = new CustomButton(name, imgPath, true, new Image(imgPath), ObjType.Item, BtnImgSize, BtnImgSize, new Vector(1, 1));
+            newbutton.setOnAction((e) -> theWindow.onObjectBtnClicked(e));
+            itemSet.addCButton(newbutton);
+        }
     }
 
     private void compileBackground() {

@@ -6,11 +6,11 @@
 package Model;
 
 public enum ObjType {
-    Obstacle, Entity, Item, Player;
+    Obstacle, Entity, Item, Player, Boss;
 
 
 
-    public ObjType absOf(String fromStr) {
+/*     public ObjType absOf(String fromStr) {
         switch (fromStr) {
             case "Obstacle":
                 return Obstacle;
@@ -23,5 +23,5 @@ public enum ObjType {
             default:
                 return null;
         }
-    }
+    } */
 }
