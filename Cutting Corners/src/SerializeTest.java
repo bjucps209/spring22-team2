@@ -44,7 +44,7 @@ public class SerializeTest {
         World.instance().currentLevel = 0;
         World.instance().setDifficulty(6);
         World.instance().getCurrentLevel().setCurrentLevel(5);
-        // World.instance().getPlayer().getStats().setHealth(5);
+        World.instance().getPlayer().getStats().setHealth(5);
 
         try {
             World.instance().save("savegame.dat");
@@ -67,7 +67,7 @@ public class SerializeTest {
         assertEquals(0, World.instance().currentLevel);
         assertEquals(6, World.instance().getDifficulty());
         assertEquals(5, World.instance().getCurrentLevel().getCurrentLevel());
-        // assertEquals(World.instance().getPlayer().getStats().getHealth(), 5);
+        assertEquals(World.instance().getPlayer().getStats().getHealth(), 5);
 
     }
 }
