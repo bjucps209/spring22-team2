@@ -22,6 +22,7 @@ public class World {
     ScreenObserver observer;
     boolean isPaused = false;
     private boolean isLoaded = false;
+    private static Player Cirkyle = new Player(0, 0);
 
 
 
@@ -34,16 +35,17 @@ public class World {
     public static World instance(){
         if (world == null){
             world = new World();
-            Level currentLev = populate();
-            currentLev.setCurrentScreen(currentLev.findScreen(0, 0));
-            world.campaign.add(currentLev);
-            Player Cirkyle = new Player(100, 100);
-            currentLev.placeEntity(0, 0, Cirkyle);
+            populate();
+            
         }
         return world;
     }
 
-    public void passLevel(){currentLevel++;}
+    public void passLevel(){
+        currentLevel++;
+        campaign.get(currentLevel).placeEntity(0, 0, Cirkyle);
+
+    }
 
     public Level getCurrentLevel(){
         Level current = campaign.get(currentLevel);
@@ -62,7 +64,7 @@ public class World {
         return null;
     }
 
-    public static Level populate(){
+    public static void populate(){
     //     int colCount = 0;
     //     int rowCount = -1;
 
@@ -92,27 +94,25 @@ public class World {
 
         Screen screen1 = new Screen(0, 0, 1,"media/terrain/egypt/desertonewayright.png");
         Screen screen2 = new Screen(0, 1, 1,"media/terrain/egypt/desertthreewayleft.png");
-        Screen screen3 = new Screen(1, 0, 1,"media/terrain/caveman/cavemanonewayright.png");
-        Screen screen4 = new Screen(1, 1, 1,"media/terrain/medieval/medievalthreewaydown.png");
+        Screen screen3 = new Screen(1, 0, 1,"media/terrain/egypt/desertonewayright.png");
+        Screen screen4 = new Screen(1, 1, 1,"media/terrain/egypt/desertthreewaydown.png");
         Screen bossScreen = new Screen(1, 2, 1,"media/terrain/secret&boss/bossroom.png");
 
         Triangle triangle1 = new Triangle(1, 1, 1, screen1);
-        Triangle triangle2 = new Triangle(2, 2, 6, screen1);
-        Triangle triangle3 = new Triangle(3, 7, 1, screen2);
-        Triangle triangle4 = new Triangle(4, 3, 6, screen2);
-        Square square1 = new Square(5, 4, 6, screen3);
-        Hexagon hex1 = new Hexagon(6, 2, 6, screen4);
-        Octagon octagon1 = new Octagon(6, 6, 4, bossScreen);
-        //Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
+        Triangle triangle2 = new Triangle(2, 2, 6, screen3);
+        Triangle triangle3 = new Triangle(1, 1, 1, screen2);
+        Triangle triangle4 = new Triangle(2, 2, 6, screen2);
+        Triangle triangle5 = new Triangle(1, 1, 1, screen4);
+        Triangle triangle6 = new Triangle(2, 2, 6, screen4);
+        Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
 
         screen1.addEntity(triangle1);
-        screen1.addEntity(triangle2);
+        screen2.addEntity(triangle2);
         screen2.addEntity(triangle3);
-        screen2.addEntity(triangle4);
-        screen3.addEntity(square1);
-        screen4.addEntity(hex1);
-        bossScreen.addEntity(octagon1);
-        //bossScreen.addEntity(triangleBoss);
+        screen3.addEntity(triangle4);
+        screen4.addEntity(triangle5);
+        screen4.addEntity(triangle6);
+        bossScreen.addEntity(triangleBoss);
 
         screen1.setUp(screen3);
         screen1.setRight(screen2);
@@ -134,8 +134,30 @@ public class World {
         level1.addScreen(screen3);
         level1.addScreen(screen4);
         level1.addScreen(bossScreen);
+        level1.setCurrentScreen(level1.findScreen(0, 0));
+        world.campaign.add(level1);
 
-        return level1;
+        Level level2 = new Level(2);
+
+        Screen screen5 = new Screen(0, 1, 2, "media/terrain/caveman/cavemanonewayup.png");
+        Screen screen6 = new Screen(1, 1, 2, "media/terrain/caveman/cavemanthreewaydown.png");
+        Screen screen7 = new Screen(1, 0, 2, "media/terrain/caveman/cavemanthreewayright.png");
+        Screen screen8 = new Screen(1, 2, 2, "media/terrain/caveman/cavemanthreewayleft.png");
+        Screen screen9 = new Screen(0, 0, 2, "media/terrain/caveman/cavemanonewayup.png");
+        Screen screen10 = new Screen(0, 2, 2, "media/terrain/caveman/cavemanonewayup.png");
+        Screen screen11 = new Screen(2, 0, 2, "media/terrain/caveman/cavemantwowayvertical.png");
+        Screen screen12 = new Screen(2, 2, 2, "media/terrain/caveman/cavemantwowayvertical.png");
+        Screen screen13 = new Screen(3, 0, 2, "media/terrain/caveman/cavemanonewaydown.png");
+        Screen screen14 = new Screen(3, 2, 2, "media/terrain/secrets&boss/bossroom.png");
+
+        screen5.setUp(screen6);
+
+        screen6.setDown(screen5);
+        screen6.setLeft(screen7);
+        screen6.setRight(screen8);
+
+        Cirkyle = new Player(100, 100);
+        level1.placeEntity(0, 0, Cirkyle);
     }
 
     
@@ -157,10 +179,6 @@ public class World {
         if(getPlayer()!=null&&!isPaused)
         {
             getPlayer().performMovement();
-        }
-        else
-        {
-            
         }
     }
 
