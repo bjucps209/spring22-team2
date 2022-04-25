@@ -42,4 +42,11 @@ public class Boss extends Enemy{
         super.getStats().subHealth(damage);
         if (super.getStats().getHealth() <= 0){performDie();}
     }
+    @Override
+    public void performDie()
+    {
+        World.instance().displayCurrentEntities().remove(this);
+        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+        World.instance().passLevel();
+    }
 }
