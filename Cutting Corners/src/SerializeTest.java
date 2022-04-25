@@ -19,15 +19,16 @@ public class SerializeTest {
         World.instance();
         assertEquals(0, World.instance().currentLevel);
         World.instance().currentLevel = 0;
-        World.instance().setDifficulty(0);
-        World.instance().getPlayer().getStats().setHealth(5);
+        World.instance().setDifficulty(6);
+        World.instance().getCurrentLevel().setCurrentLevel(5);
+        // World.instance().getPlayer().getStats().setHealth(5);
 
         World.instance().save("savegame.dat");
-        World.instance().currentLevel = 1;
 
-        try (DataInputStream reader = new DataInputStream(new FileInputStream("SaveGame.dat"))) {
+        try (DataInputStream reader = new DataInputStream(new FileInputStream("savegame.dat"))) {
             assertEquals(0, reader.readInt()); //currentLevel
-            assertEquals(0, reader.readInt()); //difficulty
+            assertEquals(6, reader.readInt()); //difficulty
+            assertEquals(5, reader.readInt()); //this level
         } catch (IOException e) {
             fail();
         }
@@ -40,14 +41,32 @@ public class SerializeTest {
         World.reset();
         World.instance();
         assertEquals(0, World.instance().currentLevel);
-        World.instance().currentLevel = 1;
+        World.instance().currentLevel = 0;
+        World.instance().setDifficulty(6);
+        World.instance().getCurrentLevel().setCurrentLevel(5);
+        // World.instance().getPlayer().getStats().setHealth(5);
+
+        try {
+            World.instance().save("savegame.dat");
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        World.instance().setDifficulty(1);
+        World.instance().setCurrentLevel(5);
 
         try {
             World.instance().load("savegame.dat");
         } catch (IOException e) {
-            fail();
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+
+
         assertEquals(0, World.instance().currentLevel);
+        assertEquals(6, World.instance().getDifficulty());
+        assertEquals(5, World.instance().getCurrentLevel().getCurrentLevel());
         // assertEquals(World.instance().getPlayer().getStats().getHealth(), 5);
 
     }

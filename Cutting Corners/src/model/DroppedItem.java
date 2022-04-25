@@ -1,5 +1,8 @@
 package model;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class DroppedItem extends Entity{
     Item unDroppedItem;
 
@@ -10,5 +13,11 @@ public class DroppedItem extends Entity{
 
     public void pickUp(Player pickerUpper){
         pickerUpper.addItem(unDroppedItem);
+    }
+
+
+    @Override
+    public void serialize(DataOutputStream file) throws IOException {
+        unDroppedItem.serialize(file);
     }
 }

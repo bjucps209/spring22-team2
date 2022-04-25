@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Equipment extends Item {
+public abstract class Equipment extends Item {
     private EquipmentType type;
     private Stats buffs;
 
@@ -61,8 +61,7 @@ public class Equipment extends Item {
     }
 
 
-    public void serialize(DataOutputStream file) throws IOException {
-    }
+    public abstract void serialize(DataOutputStream file) throws IOException;
 
     public static Equipment deserialize(DataInputStream file) throws IOException {
         String equipmentType = file.readUTF();

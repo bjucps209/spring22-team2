@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javafx.beans.property.IntegerProperty;
 
-public class Entity {
+public abstract class Entity {
     private int size;
     private Coordinates coords;
     private String image;
@@ -94,7 +94,7 @@ public class Entity {
     public void performAttack(){}
 
     //methods overridden by children
-    public void serialize(DataOutputStream file) throws IOException {}
+    public abstract void serialize(DataOutputStream file) throws IOException;
 
     public static Entity deserialize(DataInputStream file) throws IOException {
         String type = file.readUTF();
