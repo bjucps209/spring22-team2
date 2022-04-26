@@ -37,6 +37,7 @@ public class GameWindow {
     Image background = new Image("media/terrain/medieval/medievalfourway.png");
     ImageView backgroundView = new ImageView(background);
     ArrayList<Character> keysPressed = new ArrayList<Character>();
+    HBox effectBox = new HBox();
     
 
     @FXML
@@ -89,6 +90,8 @@ public class GameWindow {
             } catch (IOException e) {}
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
+        
+        effectBox.relocate(950*ratioWidth, 200*ratioHeight);
 
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
@@ -175,10 +178,47 @@ public class GameWindow {
 
     @FXML
     void Notify(String text, DroppedItem item){
+        if (text == null){unNotify(item);}
         Label notification = new Label(text);
+        notification.setUserData("Notification");
         notification.setLayoutX(item.getX());
         notification.setLayoutY(item.getY() + 50);
         gameWindow.getChildren().add(notification);
+    }
+
+    @FXML
+    void unNotify(DroppedItem item){
+        for (Node node: gameWindow.getChildren()){
+            if (node.getUserData() != null && node.getUserData().equals("Notification")){
+                gameWindow.getChildren().remove(node);
+            }
+        }
+    }
+
+    @FXML
+    void showEffectTimer(int time, String effectName, String icon){
+        VBox effectDropdown = new VBox();
+        Label effectTitle = new Label(effectName);
+        Image image = new Image(icon);
+        ImageView imageview = new ImageView(image);
+        Label duration = new Label();
+
+        KeyFrame frames = new KeyFrame(Duration.seconds(1), me -> countdown(duration));
+        Timeline timer = new Timeline(frames);
+        timer.setCycleCount(time);
+
+        effectDropdown.getChildren().add(effectTitle);
+        HBox row2 = new HBox(imageview, duration);
+        effectDropdown.getChildren().add(row2);
+        effectBox.getChildren().add(effectDropdown);
+    }
+
+    @FXML
+    void countdown(Label duration){
+        String text = duration.getText();
+        int time = Integer.parseInt(text);
+
+        duration.setText(time - 1 + "");
     }
 
     @FXML

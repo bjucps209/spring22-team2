@@ -1,7 +1,9 @@
 package model;
 
+import javafx.util.Duration;
+
 public class Octagon extends Enemy{
-    static Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, "media/Player/swordwalk.gif");
+    static Equipment weapon = new MeleeWeapon("Basic Sword", Duration.seconds(1), 1, 0, 0, 150, "media/Player/swordwalk.gif");
     static String image = "media/Enemies/octagon.png";
     static String walking = "media/Enemies/octagonwalk.gif";
     static String attacking = "media/Enemies/octagonattack.gif";
