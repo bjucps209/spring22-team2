@@ -184,6 +184,17 @@ public class Screen {
         for (Entity e : entities) {
             e.serialize(file);
         }
+        int cellsTaken = 0;
+        for (int row = 0; row < 7; ++row) {
+            for (int col = 0; col < 13; ++col) {
+                if (grid[row][col] != Cell.empty) {
+                    cellsTaken++;
+                }
+            }
+        }
+
+        file.writeInt(cellsTaken);
+
         for (int row = 0; row < 7; ++row) {
             for (int col = 0; col < 13; ++col) {
                 if (grid[row][col] != Cell.empty) {
@@ -208,13 +219,16 @@ public class Screen {
             Entity e = Entity.deserialize(file, screen);
             screen.addEntity(e);
         }
+        int cellsTaken = file.readInt();
+        for (int i = 0; i < cellsTaken; ++i) {
+            String cellType = file.readUTF();
+            int cellRow = file.readInt();
+            int cellCol = file.readInt();
+            if (cellType != "empty") {
+                screen.setGridSquare(cellRow, cellCol, cellType);
+            } 
+        }
 
-        String cellType = file.readUTF();
-        int cellRow = file.readInt();
-        int cellCol = file.readInt();
-        if (cellType != "empty") {
-            screen.setGridSquare(cellRow, cellCol, cellType);
-        }    
 
         return screen; 
     }
