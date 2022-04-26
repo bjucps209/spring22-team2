@@ -15,8 +15,8 @@ public class MeleeWeapon extends Equipment{
     private String image;
     private ArrayList<Entity> enemies;
 
-    public MeleeWeapon(String name, double cooldown, int Strength, int Health, int Speed, int range, String image){
-        super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Health, Speed), image);
+    public MeleeWeapon(String name, double cooldown, int Strength, int Speed, int Health, int range, String image){
+        super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Speed, Health), image);
         this.range = range;
         this.image = image;
     }
@@ -79,10 +79,12 @@ public class MeleeWeapon extends Equipment{
         file.writeUTF("Melee");
         file.writeUTF(getName());
         file.writeDouble(getCooldown());
-        getBuffs().serialize(file);
+
+        file.writeInt(this.getBuffs().getStrength());
+        file.writeInt(this.getBuffs().getSpeed());
+        file.writeInt(this.getBuffs().getHealth());
 
         file.writeInt(range);
-        // file.writeDouble(direction);
         file.writeInt(damage);
         file.writeInt(speed);
         file.writeUTF(image);
@@ -92,13 +94,11 @@ public class MeleeWeapon extends Equipment{
         String name = file.readUTF();
         int cooldown = file.readInt();
 
-        Stats buffs = Stats.deserialize(file);
-        int Strength = buffs.getStrength();
-        int Health = buffs.getHealth();
-        int Speed = buffs.getSpeed();
+        int Strength = file.readInt();
+        int Speed = file.readInt();        
+        int Health = file.readInt();
 
         int range = file.readInt();
-        // double direction = file.readDouble();
         int damage = file.readInt();
         int speed = file.readInt();
         String image = file.readUTF();

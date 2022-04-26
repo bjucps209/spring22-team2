@@ -23,12 +23,14 @@ public class Enemy extends Entity{
     private String attacking;
     private String currentImage = "Standing";
     private int experience;
+    private int score;
     private Direction facing = Direction.left;
     private damageIndicator indicator;
 
-    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth, int experience)
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth, int experience, int score)
     {
         super(col*100, row*100, image, size);
+        this.score = score;
         this.homeScreen = homeScreen;
         this.vision = vision;
         this.sides = sides;
@@ -69,6 +71,7 @@ public class Enemy extends Entity{
 
     public Cell cellWithin(int row, int col){
         try{Cell cell = homeScreen.getGrid()[row][col];
+            if (cell == null){cell = Cell.empty;}
         return cell;
         }catch(IndexOutOfBoundsException i){return Cell.empty;}
     }
@@ -309,7 +312,7 @@ public class Enemy extends Entity{
     @Override
     public void performDie(){
         World.instance().getPlayer().addExperience(experience);
-        World.instance().getPlayer().addScore(experience);
+        World.instance().getPlayer().addScore(score);
         super.performDie();
     }
     
@@ -337,6 +340,10 @@ public class Enemy extends Entity{
 
     public void setCellWithin(Cell cellWithin) {
         this.cellWithin = cellWithin;
+    }
+    public int getScore()
+    {
+        return score;
     }
 
     public int getVision() {
@@ -406,48 +413,11 @@ public class Enemy extends Entity{
     public void setSize(int size) {
         this.size = size;
     }
-    
 
 
-    @Override
+
     public void serialize(DataOutputStream file) throws IOException {
-        file.writeUTF("Enemy");
-        file.writeInt(size);
-        file.writeInt(this.getX());
-        file.writeInt(this.getY());
-        homeScreen.serialize(file);
-        file.writeInt(vision);
-        file.writeInt(sides);
-        // direction ??
-        weapon.serialize(file);
-        stats.serialize(file);
-        //added one for totalHealth
-        file.writeDouble(totalHealth);
-
-        file.writeUTF(getImage());
-        file.writeInt(experience);
-    }
-
-    public static Enemy deserialize(DataInputStream file) throws IOException {
-        int size = file.readInt();
-        String walking = "media/enemies/trianglewalk.gif";
-        String attacking = "media/enemies/triangleattack.gif";
-        int x = file.readInt();
-        int y = file.readInt();
-        Screen homeScreen = Screen.deserialize(file);
-        int vision = file.readInt();
-        int sides = file.readInt();
-        Equipment weapon = Equipment.deserialize(file);
-        Stats stats = Stats.deserialize(file);
-        //added one for totalHealth
-        int totalHealth = file.readInt();
-
-        String image = file.readUTF();
-        int experience = file.readInt();
-
-
-        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking,totalHealth, experience);
-        return enemy;
+        // TODO Auto-generated method stub
     }
 
     

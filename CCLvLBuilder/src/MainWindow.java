@@ -104,11 +104,14 @@ public class MainWindow implements LevelObserver {
     void onBackgroundBtnClicked(ActionEvent event) {
         CustomButton btn = (CustomButton)event.getSource();
         DataManager.DaMan().getCurrentScreen().setBackgroundPathName(btn.getName());
-        layBackground(btn.getImg());
-        
+        //layBackground(btn.getImg());
+        layBackground(new Image( DataManager.DaMan().getCurrentScreen().getBackgroundPathName()));
     }
 
+<<<<<<< HEAD
     @FXML
+=======
+>>>>>>> 9bf39950547462966ef5446d3b7c11b049995aa1
     void layBackground(Image placeImg) {
         BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
         BackgroundImage thing = new BackgroundImage(placeImg, null, null, null, what); //Does another thing
@@ -296,15 +299,15 @@ public class MainWindow implements LevelObserver {
                 screenBox.getChildren().add(aPane);
                 currentScreen = aPane;
                 lblCurScreenID.setText(StrID);
+                break;
             }
-        }
-        if(DataManager.DaMan().getCurrentScreen().getBackgroundPathName() != null) {
-            System.out.println("WHWHWH");
-            layBackground(new Image(DataManager.DaMan().getCurrentScreen().getBackgroundPathName()));
         }
         disableNavButtons();
         updateCurrentObject(null);
         updateCurrentObjectInfo(null);
+        if(DataManager.DaMan().getCurrentScreen().getBackgroundPathName() != null) {
+            layBackground(new Image(DataManager.DaMan().getCurrentScreen().getBackgroundPathName()));
+        }        
     }
 
     public enum ScreenNavPanelState {

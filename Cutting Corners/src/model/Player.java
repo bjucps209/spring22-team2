@@ -31,6 +31,7 @@ public class Player extends Entity {
     int knockedCount;
     KeyCode keyPressed;
     damageIndicator indicator;
+    ArrayList<DroppedItem> itemsNearby = new ArrayList<DroppedItem>();
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -47,6 +48,10 @@ public class Player extends Entity {
 
     public ArrayList<KeyCode> getKeys(){
         return keys;
+    }
+
+    public void addItem(DroppedItem item){
+        itemsNearby.add(item);
     }
 
     public void setIndicator(damageIndicator indicator){
@@ -108,6 +113,7 @@ public class Player extends Entity {
 
     @Override
     public void performMovement(){
+        itemsNearby.clear();
 
         switch (state) {
             case standing: {
@@ -189,9 +195,9 @@ public class Player extends Entity {
             if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
                 super.getCoords().addYCoord(stats.getSpeed());
             }
-            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-                super.getCoords().subYCoord(100);
-            }
+            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+            //     super.getCoords().subYCoord(100);
+            // }
                 break;
             }
             case A: {
@@ -208,11 +214,11 @@ public class Player extends Entity {
             
             int newX = super.getX() - stats.getSpeed();
             if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
-                super.getCoords().addXCoord(100);
+                super.getCoords().addXCoord(stats.getSpeed());
             }
-            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-                super.getCoords().subXCoord(100);
-            }
+            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+            //     super.getCoords().subXCoord(100);
+            // }
                 break;
             }
             case S: {
@@ -224,9 +230,9 @@ public class Player extends Entity {
             if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
                 super.getCoords().subYCoord(stats.getSpeed());
             }
-            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-                super.getCoords().addYCoord(100);
-            }
+            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+            //     super.getCoords().addYCoord(100);
+            // }
             
                 break;
             }
@@ -247,10 +253,18 @@ public class Player extends Entity {
                 super.getCoords().subXCoord(stats.getSpeed());
             }
 
-            if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-                super.getCoords().addXCoord(stats.getSpeed());
-            }
+            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+            //     super.getCoords().addXCoord(stats.getSpeed());
+            // }
                 break;
+            }
+            case SPACE: {
+                if (itemsNearby.size() > 0){
+                    DroppedItem item = itemsNearby.get(0);
+                    item.pickUp(this);
+                    // super.getObserver().changeImage(i, d);
+                    break;
+                }
             }
         }
     }
@@ -336,11 +350,13 @@ public class Player extends Entity {
                 }
                 else
                 {
-                    if(((Enemy)enemies.get(i)).getState()==EnemyState.patrolling)
+                    if(((Boss)enemies.get(i)).getState()==EnemyState.patrolling)
                     {
+                        System.out.println(((Boss)enemies.get(i)).getState());
                         if(super.getX()>500&&super.getX()<750)
                         {
                             enemies.get(i).takeDamage(weapon.getDamage(), facing);
+                            SWORD_HIT.play();
                         }
                     }
                 }
@@ -376,21 +392,24 @@ public class Player extends Entity {
     @Override
     public void takeDamage(int damage, Direction direction)
     {
-        stats.subHealth(damage);
+        if(!World.instance().getCheatMode())
+        {
+            stats.subHealth(damage);
+            int time = damage * 100 + 500;
+            indicator.displayDamage(this, damage, time);
+
+            switch (direction){
+                case up: super.getCoords().addYCoord(100);
+                case down: super.getCoords().subYCoord(100);
+                case left: super.getCoords().subXCoord(100);
+                case right: super.getCoords().addXCoord(100);
+            }
+
+            if (stats.getHealth() <= 0){super.performDie();}
+        }
         AudioClip PLAYER_HURT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/playerhurt.mp3").toString());
         PLAYER_HURT.play();
-        if (stats.getHealth() <= 0){performDie();}
-        int time = damage * 100 + 500;
-        indicator.displayDamage(this, damage, time);
-
-        switch (direction){
-            case up: super.getCoords().addYCoord(100);
-            case down: super.getCoords().subYCoord(100);
-            case left: super.getCoords().subXCoord(100);
-            case right: super.getCoords().addXCoord(100);
-        }
-
-        if (stats.getHealth() <= 0){super.performDie();}
+        
     }
 
     @Override
@@ -416,6 +435,7 @@ public class Player extends Entity {
     }
     public Cell cellWithin(int row, int col){
         Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
+        if (cell == null){cell = Cell.empty;}
         return cell;
     }
 
