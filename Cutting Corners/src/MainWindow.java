@@ -406,10 +406,7 @@ public class MainWindow {
                 if(World.instance().getPlayer()!=null)
                 {
                     World.instance().getPlayer().removeKey(event.getCode());
-                    if (World.instance().getPlayer().getKeys().contains(event.getCode())){
-                        handle(event);
-                        return;
-                    }
+                    
                     World.instance().getPlayer().addKey(event.getCode());
                 }
             }

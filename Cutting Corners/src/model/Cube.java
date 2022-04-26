@@ -7,7 +7,8 @@ public class Cube extends Boss{
     private int currentAttack =0;
 
     public Cube(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30);
+
+super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30, 150);
     }
     public void performMovement()
     {
@@ -101,6 +102,7 @@ public class Cube extends Boss{
     {
         if(World.instance().getPlayer().getCoords().getyCoord()<700)
         {
+            //The Math on this one doesn't work currently
             if(attackCount>195)
             {
                 if(World.instance().getPlayer().getCoords().getxCoord()-(((attackCount-195)/30)*640)<10)

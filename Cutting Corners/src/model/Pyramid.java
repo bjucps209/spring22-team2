@@ -7,7 +7,7 @@ public class Pyramid extends Boss{
     private int currentAttack=0;
 
     public Pyramid(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 25), 25);
+        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 25), 25, 100);
     }
     @Override
     public void performMovement()

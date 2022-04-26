@@ -23,12 +23,14 @@ public class Enemy extends Entity{
     private String attacking;
     private String currentImage = "Standing";
     private int experience;
+    private int score;
     private Direction facing = Direction.left;
     private damageIndicator indicator;
 
-    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth, int experience)
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth, int experience, int score)
     {
         super(col*100, row*100, image, size);
+        this.score = score;
         this.homeScreen = homeScreen;
         this.vision = vision;
         this.sides = sides;
@@ -69,6 +71,7 @@ public class Enemy extends Entity{
 
     public Cell cellWithin(int row, int col){
         try{Cell cell = homeScreen.getGrid()[row][col];
+            if (cell == null){cell = Cell.empty;}
         return cell;
         }catch(IndexOutOfBoundsException i){return Cell.empty;}
     }
@@ -309,7 +312,7 @@ public class Enemy extends Entity{
     @Override
     public void performDie(){
         World.instance().getPlayer().addExperience(experience);
-        World.instance().getPlayer().addScore(experience);
+        World.instance().getPlayer().addScore(score);
         super.performDie();
     }
     
@@ -426,6 +429,7 @@ public class Enemy extends Entity{
 
         file.writeUTF(getImage());
         file.writeInt(experience);
+        file.writeInt(score);
     }
 
     public static Enemy deserialize(DataInputStream file) throws IOException {
@@ -444,9 +448,10 @@ public class Enemy extends Entity{
 
         String image = file.readUTF();
         int experience = file.readInt();
+        int score = file.readInt();
 
 
-        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking,totalHealth, experience);
+        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking,totalHealth, experience, score);
         return enemy;
     }
 

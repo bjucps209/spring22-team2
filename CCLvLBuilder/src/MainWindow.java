@@ -104,9 +104,13 @@ public class MainWindow implements LevelObserver {
     void onBackgroundBtnClicked(ActionEvent event) {
         CustomButton btn = (CustomButton)event.getSource();
         DataManager.DaMan().getCurrentScreen().setBackgroundPathName(btn.getName());
+        //layBackground(btn.getImg());
+        layBackground(new Image( DataManager.DaMan().getCurrentScreen().getBackgroundPathName()));
+    }
 
+    void layBackground(Image placeImg) {
         BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
-        BackgroundImage thing = new BackgroundImage(btn.getImg(), null, null, null, what); //Does another thing
+        BackgroundImage thing = new BackgroundImage(placeImg, null, null, null, what); //Does another thing
         Background bg = new Background(thing); //idk
         currentScreen.setBackground(bg); //Byeas
     }
@@ -291,11 +295,15 @@ public class MainWindow implements LevelObserver {
                 screenBox.getChildren().add(aPane);
                 currentScreen = aPane;
                 lblCurScreenID.setText(StrID);
+                break;
             }
         }
         disableNavButtons();
         updateCurrentObject(null);
         updateCurrentObjectInfo(null);
+        if(DataManager.DaMan().getCurrentScreen().getBackgroundPathName() != null) {
+            layBackground(new Image(DataManager.DaMan().getCurrentScreen().getBackgroundPathName()));
+        }        
     }
 
     public enum ScreenNavPanelState {
@@ -379,6 +387,7 @@ public class MainWindow implements LevelObserver {
                 BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
                 BackgroundImage thing = new BackgroundImage( new Image(scr.getBackgroundPathName()), null, null, null, what); //Does another thing
                 Background bg = new Background(thing); //idk
+                currentScreen.getStyleClass().clear();
                 currentScreen.setBackground(bg); //Byeas
             } catch (Exception e) {}
             for(LvLObject obj : scr.getObjects()) {

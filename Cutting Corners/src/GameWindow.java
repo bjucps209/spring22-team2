@@ -114,6 +114,10 @@ public class GameWindow {
                 Enemy enemy = (Enemy) entity;
                 displayEnemyHealthBars(enemy);
             }
+            if (entity instanceof DroppedItem){
+                DroppedItem item = (DroppedItem) entity;
+                showItem(item);
+            }
         }
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
@@ -155,6 +159,19 @@ public class GameWindow {
     @FXML
     void unDisplayDamage(Label damageIndicator){
         gameWindow.getChildren().remove(damageIndicator);
+    }
+
+    @FXML
+    void showItem(DroppedItem item){
+        item.setInformant(this::Notify);
+    }
+
+    @FXML
+    void Notify(String text, DroppedItem item){
+        Label notification = new Label(text);
+        notification.setLayoutX(item.getX());
+        notification.setLayoutY(item.getY() + 50);
+        gameWindow.getChildren().add(notification);
     }
 
     @FXML
@@ -201,7 +218,6 @@ public class GameWindow {
         playerHealth.setScaleX(player.getTotalHealth() / 4);
         playerHealth.setScaleY(1.5);
         playerHealth.relocate(1000*ratioWidth, 100*ratioHeight);
-        playerHealth.toFront();
         gameWindow.getChildren().add(playerHealth);
 
         Label healthLabel = new Label();
