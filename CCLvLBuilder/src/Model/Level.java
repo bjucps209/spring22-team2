@@ -6,7 +6,6 @@ package Model;
 
 import java.util.ArrayList;
 
-//TODO: move over Screens from DaMan
 public class Level {
     private String screenWithPlayer;
 
