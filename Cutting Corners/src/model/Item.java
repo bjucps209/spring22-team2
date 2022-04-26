@@ -8,11 +8,11 @@ import javafx.util.Duration;
 
 public abstract class Item {
     private String name;
-    private Duration cooldown;
+    private int cooldown;
     Stats buffs;
     private String Image;
 
-    public Item(String name, Duration cooldown, Stats buffs, String Image){
+    public Item(String name, int cooldown, Stats buffs, String Image){
         this.name = name;
         this.cooldown = cooldown;
         this.buffs = buffs;
@@ -30,11 +30,11 @@ public abstract class Item {
         this.name = name;
     }
 
-    public Duration getCooldown() {
+    public int getCooldown() {
         return cooldown;
     }
 
-    public void setCooldown(Duration cooldown) {
+    public void setCooldown(int cooldown) {
         this.cooldown = cooldown;
     }
 
