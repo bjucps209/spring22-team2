@@ -11,6 +11,14 @@ import model.*;
 
 public class SerializeTest {
 
+    @Test
+    public void randomSaveGameToLoad() throws IOException {
+        World.reset();
+        World.instance();
+        World.instance().currentLevel = 1;
+        World.instance().save("savegame.dat");
+    }
+
 
 
     @Test
