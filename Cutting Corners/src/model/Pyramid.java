@@ -8,7 +8,6 @@ public class Pyramid extends Boss{
     private static String image = "media/Enemies/pyramidboss.png";
     private EnemyState state = EnemyState.patrolling;
     private int attackCount = 150;
-    private int experience = 100;
     private int currentAttack=0;
 
     public Pyramid(int size, int xCoord, int yCoord, Screen homeScreen){
@@ -147,15 +146,6 @@ public class Pyramid extends Boss{
                 World.instance().getPlayer().takeDamage(5, Direction.up);
             }
         }
-    }
-
-    @Override
-    public void performDie()
-    {
-        System.out.println("Dead");
-        World.instance().getPlayer().addExperience(experience);
-        World.instance().getPlayer().addScore(experience);
-        super.performDie();
     }
 
 
