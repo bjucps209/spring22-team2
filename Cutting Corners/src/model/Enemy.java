@@ -341,6 +341,10 @@ public class Enemy extends Entity{
     public void setCellWithin(Cell cellWithin) {
         this.cellWithin = cellWithin;
     }
+    public int getScore()
+    {
+        return score;
+    }
 
     public int getVision() {
         return vision;

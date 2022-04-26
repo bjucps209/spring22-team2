@@ -131,7 +131,6 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
         }
     }
 
-
     
     @Override
     public void serialize(DataOutputStream file) throws IOException {
