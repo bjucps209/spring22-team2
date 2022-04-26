@@ -69,7 +69,6 @@ public class Stats {
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(strength);
         file.writeInt(speed);
-        //changed to health.get()
         file.writeInt(health.get());
     }
 

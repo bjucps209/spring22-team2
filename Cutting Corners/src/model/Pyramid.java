@@ -1,11 +1,17 @@
 package model;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Pyramid extends Boss{
     private static String image = "media/Enemies/pyramidboss.png";
     private EnemyState state = EnemyState.patrolling;
     private int attackCount = 150;
+    private int currentAttack=0;
 
     public Pyramid(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 11), 11, 100);
+        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 25), 25, 100);
     }
     @Override
     public void performMovement()
@@ -14,6 +20,7 @@ public class Pyramid extends Boss{
         {
             state=EnemyState.patrolling;
             super.getObserver().changeImage(image, Direction.left);
+            currentAttack=0;
         }
         attackCount--;
         switch(state)
@@ -35,20 +42,37 @@ public class Pyramid extends Boss{
                             super.getObserver().changeImage("media/enemies/pyramidfloat2.gif", Direction.left);
                             attackCount=300;
                             state=EnemyState.stunned;
+                            currentAttack=1;
                             break;
                         case 2:
                             performAttack2();
                             super.getObserver().changeImage("media/enemies/pyramidspike2.gif", Direction.left);
                             attackCount=225;
                             state=EnemyState.stunned;
+                            currentAttack=2;
                             break;
                         case 3:
                             performAttack3();
                             super.getObserver().changeImage("media/enemies/pyramidbounce2.gif", Direction.left);
                             state=EnemyState.stunned;
                             attackCount=350;
+                            currentAttack=3;
                             break;
                     }
+                }
+                break;
+                case stunned:
+                switch(currentAttack)
+                {
+                    case 1:
+                        performAttack1();
+                        break;
+                    case 2:
+                        performAttack2();
+                        break;
+                    case 3:
+                        performAttack3();
+                        break;
                 }
                 break;
         }
@@ -122,5 +146,23 @@ public class Pyramid extends Boss{
                 World.instance().getPlayer().takeDamage(5, Direction.up);
             }
         }
+    }
+
+
+    @Override
+    public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Pyramid");
+        file.writeInt(getSize());
+        file.writeInt(getX());
+        file.writeInt(getY());
+    }
+
+    public static Pyramid deserialize(DataInputStream file, Screen homeScreen) throws IOException {
+        int size = file.readInt();
+        int x = file.readInt();
+        int y = file.readInt();
+
+        Pyramid t = new Pyramid(size, x, y, homeScreen);
+        return t;
     }
 }

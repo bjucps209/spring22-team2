@@ -44,8 +44,22 @@ public class Boss extends Enemy{
     @Override
     public void performDie()
     {
+        System.out.println("Dead");
+        World.instance().getPlayer().addExperience(super.getScore());
+        World.instance().getPlayer().addScore(super.getScore());
         World.instance().displayCurrentEntities().remove(this);
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
-        World.instance().passLevel();
+        World.instance().setActiveBoss(false);
+        if(!World.instance().getCamapign())
+        {
+            if(World.instance().getCurrentLevel().getCurrentLevel()!=World.instance().getNumLevels()-1)
+            {
+                World.instance().passLevel();
+            }
+            else
+            {
+                World.finishGame();
+            }
+        }
     }
 }

@@ -343,6 +343,10 @@ public class Enemy extends Entity{
     public void setCellWithin(Cell cellWithin) {
         this.cellWithin = cellWithin;
     }
+    public int getScore()
+    {
+        return score;
+    }
 
     public int getVision() {
         return vision;
@@ -411,50 +415,11 @@ public class Enemy extends Entity{
     public void setSize(int size) {
         this.size = size;
     }
-    
 
 
-    @Override
+
     public void serialize(DataOutputStream file) throws IOException {
-        file.writeUTF("Enemy");
-        file.writeInt(size);
-        file.writeInt(this.getX());
-        file.writeInt(this.getY());
-        homeScreen.serialize(file);
-        file.writeInt(vision);
-        file.writeInt(sides);
-        // direction ??
-        weapon.serialize(file);
-        stats.serialize(file);
-        //added one for totalHealth
-        file.writeDouble(totalHealth);
-
-        file.writeUTF(getImage());
-        file.writeInt(experience);
-        file.writeInt(score);
-    }
-
-    public static Enemy deserialize(DataInputStream file) throws IOException {
-        int size = file.readInt();
-        String walking = "media/enemies/trianglewalk.gif";
-        String attacking = "media/enemies/triangleattack.gif";
-        int x = file.readInt();
-        int y = file.readInt();
-        Screen homeScreen = Screen.deserialize(file);
-        int vision = file.readInt();
-        int sides = file.readInt();
-        Equipment weapon = Equipment.deserialize(file);
-        Stats stats = Stats.deserialize(file);
-        //added one for totalHealth
-        int totalHealth = file.readInt();
-
-        String image = file.readUTF();
-        int experience = file.readInt();
-        int score = file.readInt();
-
-
-        Enemy enemy = new Enemy(sides, size, x, y, image, homeScreen, vision, weapon, stats, walking, attacking,totalHealth, experience, score);
-        return enemy;
+        // TODO Auto-generated method stub
     }
 
     

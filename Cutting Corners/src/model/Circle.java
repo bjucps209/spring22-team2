@@ -1,4 +1,9 @@
 package model;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Circle extends Boss{
     static String image = "Circle.png";
 
@@ -14,5 +19,24 @@ public class Circle extends Boss{
 
     @Override
     public void performAttack3(){}
+
+
+
+    @Override
+    public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Circle");
+        file.writeInt(getSize());
+        file.writeInt(getX());
+        file.writeInt(getY());
+    }
+
+    public static Circle deserialize(DataInputStream file, Screen homeScreen) throws IOException {
+        int size = file.readInt();
+        int x = file.readInt();
+        int y = file.readInt();
+
+        Circle t = new Circle(size, x, y, homeScreen);
+        return t;
+    }
 }
 

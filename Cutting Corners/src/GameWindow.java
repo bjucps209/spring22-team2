@@ -1,16 +1,10 @@
-import java.awt.event.KeyListener;
 import java.util.*;
 
-import javax.swing.JFrame;
-import javax.swing.border.StrokeBorder;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import java.awt.image.*;
 import java.io.IOException;
 
 import javafx.scene.Node;
@@ -19,8 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import model.*;
@@ -50,7 +42,7 @@ public class GameWindow {
     
 
     @FXML
-    public void Initialize(boolean isLoaded) throws IOException{
+    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode) throws IOException{
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -86,13 +78,16 @@ public class GameWindow {
         // });
         World.instance().getCurrentLevel().setObserver( me -> {
             try {
-                Initialize(isLoaded);
+                Initialize(isLoaded,userCampaign,cheatMode);
             } catch (IOException e) {}
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         
         effectBox.relocate(950*ratioWidth, 200*ratioHeight);
 
+        World.instance().setLoaded(isLoaded);
+        World.instance().setCheatMode(cheatMode);
+        World.instance().setCampaign(userCampaign);
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
         entityImage.setImage(new Image(entity.getImage()));
@@ -279,8 +274,16 @@ public class GameWindow {
         enemy.setIndicator(this::displayDamage);
         ProgressBar healthBar = new ProgressBar();
         healthBar.progressProperty().bind(enemy.getStats().healthProperty().divide(enemy.getTotalHealth()));
-        healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
-        healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 - 50));
+        if(!(enemy instanceof Boss))
+        {
+            healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 50));
+        }
+        else
+        {
+            healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 640));
+        }
         healthBar.setScaleX(enemy.getTotalHealth() / 3);
         healthBar.setScaleY(1.5);
         gameWindow.getChildren().add(healthBar);
@@ -352,8 +355,8 @@ public class GameWindow {
     @FXML
     void ratioImage(ImageView view)
     {
-        view.setFitHeight(view.getFitHeight()*ratioHeight);
-        view.setFitWidth(view.getFitWidth()*ratioWidth);
+        view.setFitHeight(800);
+        view.setFitWidth(1280);
         gameWindow.getChildren().add(view);
         view.toBack();
     }

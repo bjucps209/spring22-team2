@@ -108,6 +108,7 @@ public class MainWindow implements LevelObserver {
         layBackground(new Image( DataManager.DaMan().getCurrentScreen().getBackgroundPathName()));
     }
 
+    @FXML
     void layBackground(Image placeImg) {
         BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
         BackgroundImage thing = new BackgroundImage(placeImg, null, null, null, what); //Does another thing
