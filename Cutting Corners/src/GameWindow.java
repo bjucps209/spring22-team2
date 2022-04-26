@@ -1,26 +1,17 @@
-import java.awt.event.KeyListener;
 import java.util.*;
 
-import javax.swing.JFrame;
-import javax.swing.border.StrokeBorder;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import java.awt.image.*;
 import java.io.IOException;
 
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import model.*;
@@ -49,7 +40,7 @@ public class GameWindow {
     
 
     @FXML
-    public void Initialize(boolean isLoaded) throws IOException{
+    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode) throws IOException{
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -85,11 +76,13 @@ public class GameWindow {
         // });
         World.instance().getCurrentLevel().setObserver( me -> {
             try {
-                Initialize(isLoaded);
+                Initialize(isLoaded,userCampaign,cheatMode);
             } catch (IOException e) {}
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
-
+        World.instance().setLoaded(isLoaded);
+        World.instance().setCheatMode(cheatMode);
+        World.instance().setCampaign(userCampaign);
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
         entityImage.setImage(new Image(entity.getImage()));
@@ -120,6 +113,10 @@ public class GameWindow {
             if (entity instanceof Enemy){
                 Enemy enemy = (Enemy) entity;
                 displayEnemyHealthBars(enemy);
+            }
+            if (entity instanceof DroppedItem){
+                DroppedItem item = (DroppedItem) entity;
+                showItem(item);
             }
         }
 
@@ -162,6 +159,19 @@ public class GameWindow {
     @FXML
     void unDisplayDamage(Label damageIndicator){
         gameWindow.getChildren().remove(damageIndicator);
+    }
+
+    @FXML
+    void showItem(DroppedItem item){
+        item.setInformant(this::Notify);
+    }
+
+    @FXML
+    void Notify(String text, DroppedItem item){
+        Label notification = new Label(text);
+        notification.setLayoutX(item.getX());
+        notification.setLayoutY(item.getY() + 50);
+        gameWindow.getChildren().add(notification);
     }
 
     @FXML
@@ -208,7 +218,6 @@ public class GameWindow {
         playerHealth.setScaleX(player.getTotalHealth() / 4);
         playerHealth.setScaleY(1.5);
         playerHealth.relocate(1000*ratioWidth, 100*ratioHeight);
-        playerHealth.toFront();
         gameWindow.getChildren().add(playerHealth);
 
         Label healthLabel = new Label();
@@ -223,8 +232,16 @@ public class GameWindow {
         enemy.setIndicator(this::displayDamage);
         ProgressBar healthBar = new ProgressBar();
         healthBar.progressProperty().bind(enemy.getStats().healthProperty().divide(enemy.getTotalHealth()));
-        healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
-        healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 - 50));
+        if(!(enemy instanceof Boss))
+        {
+            healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 50));
+        }
+        else
+        {
+            healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 640));
+        }
         healthBar.setScaleX(enemy.getTotalHealth() / 3);
         healthBar.setScaleY(1.5);
         gameWindow.getChildren().add(healthBar);
@@ -296,8 +313,8 @@ public class GameWindow {
     @FXML
     void ratioImage(ImageView view)
     {
-        view.setFitHeight(view.getFitHeight()*ratioHeight);
-        view.setFitWidth(view.getFitWidth()*ratioWidth);
+        view.setFitHeight(800);
+        view.setFitWidth(1280);
         gameWindow.getChildren().add(view);
         view.toBack();
     }

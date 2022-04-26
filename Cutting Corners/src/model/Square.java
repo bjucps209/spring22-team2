@@ -11,7 +11,7 @@ public class Square extends Enemy{
     static String attacking = "media/Enemies/squareattack.gif";
 
     public Square(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(4, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,(int)(size*1.5),size*4);
+        super(4, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,(int)(size*1.5),size*4, 15);
     }
 
     public static Stats sizeToStats(int size){

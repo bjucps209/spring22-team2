@@ -4,6 +4,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 public class UsableItem extends Item{
     private int useCount;
     private int duration;
@@ -38,7 +42,12 @@ public class UsableItem extends Item{
     }
 
     @Override
-    public void performAction(Entity user){}
+    public void performAction(Entity user){
+        applyBuffs(user);
+        KeyFrame frames = new KeyFrame(Duration.millis(duration), me -> unApplyBuffs(user));
+        Timeline duration = new Timeline(frames);
+        duration.play();
+    }
 
 
     // Getters and Setters---------------------------

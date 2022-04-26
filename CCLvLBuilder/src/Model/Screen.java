@@ -23,7 +23,7 @@ public class Screen {
         adjacentScreens = new Screen[6];
         objectList = new ArrayList<LvLObject>();
         objectLocations = new ObjType[gridDim.getY()][gridDim.getX()];
-        backgroundPathName = "";
+        backgroundPathName = null;
     }
 
  /*    public LvLObject attemptCreateObject(String name, ) {
