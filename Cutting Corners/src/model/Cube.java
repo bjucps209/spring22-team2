@@ -109,21 +109,37 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
             //The Math on this one doesn't work currently
             if(attackCount>195)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()-(((attackCount-195)/30)*640)<10)
+                double temp = attackCount-195;
+                double divide = temp/30;
+                double percent = divide*640;
+                double pos = World.instance().getPlayer().getCoords().getxCoord();
+                double distance = Math.abs(pos-percent);
+                if(distance<10)
                 {
                     World.instance().getPlayer().takeDamage(2, Direction.up);
                 }
             }
             if(attackCount<195&&attackCount>170)
             {
-                if(Math.abs(World.instance().getPlayer().getCoords().getxCoord()-(1280-(((attackCount-170)/25)*1280)))<10)
+                double temp = attackCount-170;
+                double divide = temp/25;
+                double percent = divide*1280;
+                double dispalce = 1280-percent;
+                double pos = World.instance().getPlayer().getCoords().getxCoord();
+                double distance = Math.abs(pos-dispalce);
+                if(distance<10)
                 {
                     World.instance().getPlayer().takeDamage(2, Direction.up);
                 }
             }
             if(attackCount<170&&attackCount>150)
             {
-                if(Math.abs(World.instance().getPlayer().getCoords().getxCoord()-(2*(((attackCount-150)/20)*1280)))<10)
+                double temp = attackCount-150;
+                double divide = temp/20;
+                double percent = 2*divide*1280;
+                double pos = World.instance().getPlayer().getCoords().getxCoord();
+                double distance = Math.abs(pos-percent);
+                if(distance<10)
                 {
                     World.instance().getPlayer().takeDamage(2, Direction.up);
                 }

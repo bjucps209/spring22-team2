@@ -276,6 +276,7 @@ public class World {
     }
 
     public static void finishGame() {
+        World.instance().isPaused=true;
         HighScoreManager scores = new HighScoreManager();
         try
         {
