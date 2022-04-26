@@ -55,6 +55,7 @@ public class SerializeTest {
 
         World.instance().setDifficulty(1);
         World.instance().setCurrentLevel(5);
+        // World.instance().getPlayer().getStats().setHealth(1);
 
         try {
             World.instance().load("savegame.dat");
