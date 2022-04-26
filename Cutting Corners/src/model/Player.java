@@ -336,11 +336,13 @@ public class Player extends Entity {
                 }
                 else
                 {
-                    if(((Enemy)enemies.get(i)).getState()==EnemyState.patrolling)
+                    if(((Boss)enemies.get(i)).getState()==EnemyState.patrolling)
                     {
+                        System.out.println(((Boss)enemies.get(i)).getState());
                         if(super.getX()>500&&super.getX()<750)
                         {
                             enemies.get(i).takeDamage(weapon.getDamage(), facing);
+                            SWORD_HIT.play();
                         }
                     }
                 }
@@ -376,21 +378,24 @@ public class Player extends Entity {
     @Override
     public void takeDamage(int damage, Direction direction)
     {
-        stats.subHealth(damage);
+        if(!World.instance().getCheatMode())
+        {
+            stats.subHealth(damage);
+            int time = damage * 100 + 500;
+            indicator.displayDamage(this, damage, time);
+
+            switch (direction){
+                case up: super.getCoords().addYCoord(100);
+                case down: super.getCoords().subYCoord(100);
+                case left: super.getCoords().subXCoord(100);
+                case right: super.getCoords().addXCoord(100);
+            }
+
+            if (stats.getHealth() <= 0){super.performDie();}
+        }
         AudioClip PLAYER_HURT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/playerhurt.mp3").toString());
         PLAYER_HURT.play();
-        if (stats.getHealth() <= 0){performDie();}
-        int time = damage * 100 + 500;
-        indicator.displayDamage(this, damage, time);
-
-        switch (direction){
-            case up: super.getCoords().addYCoord(100);
-            case down: super.getCoords().subYCoord(100);
-            case left: super.getCoords().subXCoord(100);
-            case right: super.getCoords().addXCoord(100);
-        }
-
-        if (stats.getHealth() <= 0){super.performDie();}
+        
     }
 
     @Override

@@ -47,6 +47,17 @@ public class Boss extends Enemy{
     {
         World.instance().displayCurrentEntities().remove(this);
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
-        World.instance().passLevel();
+        World.instance().setActiveBoss(false);
+        if(!World.instance().getCamapign())
+        {
+            if(World.instance().getCurrentLevel().getCurrentLevel()!=World.instance().getNumLevels()-1)
+            {
+                World.instance().passLevel();
+            }
+            else
+            {
+                World.finishGame();
+            }
+        }
     }
 }

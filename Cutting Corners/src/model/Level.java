@@ -70,44 +70,60 @@ public class Level {
     // }
 
     public void goLeft(){
-        if (currentScreen.getLeft() != null){
+        if (currentScreen.getLeft() != null&&!World.instance().isActiveBoss()){
             Player player = currentScreen.removePlayer();
             player.getCoords().setxCoord(950);
             currentScreen = currentScreen.getLeft();
             currentScreen.addEntity(player);
+            if(currentScreen.getFilename().contains("bossroom"))
+            {
+                World.instance().setActiveBoss(true);
+            }
             currentCol--;
             observer.Initialize(World.instance().isLoaded());
         }
     }
 
     public void goRight(){
-        if (currentScreen.getRight() != null){
+        if (currentScreen.getRight() != null&&!World.instance().isActiveBoss()){
             Player player = currentScreen.removePlayer();
             player.getCoords().setxCoord(5);
             currentScreen = currentScreen.getRight();
             currentScreen.addEntity(player);
+            if(currentScreen.getFilename().contains("bossroom"))
+            {
+                World.instance().setActiveBoss(true);
+            }
             currentCol++;
             observer.Initialize(World.instance().isLoaded());
         }
     }
 
     public void goUp(){
-        if (currentScreen.getUp() != null){
+        if (currentScreen.getUp() != null&&!World.instance().isActiveBoss()){
             Player player = currentScreen.removePlayer();
             player.getCoords().setyCoord(695);
             currentScreen = currentScreen.getUp();
             currentScreen.addEntity(player);
+            if(currentScreen.getFilename().contains("bossroom"))
+            {
+                World.instance().setActiveBoss(true);
+            }
             currentRow--;
             observer.Initialize(World.instance().isLoaded());
         }
     }
 
     public void goDown(){
-        if (currentScreen.getDown() != null){
+        if (currentScreen.getDown() != null&&!World.instance().isActiveBoss()){
             Player player = currentScreen.removePlayer();
             player.getCoords().setyCoord(5);
             currentScreen = currentScreen.getDown();
             currentScreen.addEntity(player);
+            if(currentScreen.getFilename().contains("bossroom"))
+            {
+                World.instance().setActiveBoss(true);
+            }
             currentRow++;
             observer.Initialize(World.instance().isLoaded());
         }
