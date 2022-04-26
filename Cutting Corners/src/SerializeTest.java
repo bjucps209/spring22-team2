@@ -12,7 +12,7 @@ import model.*;
 public class SerializeTest {
 
     @Test
-    public void randomSaveGameToLoad() throws IOException {
+    public void saveRandomGameToLoad() throws IOException {
         World.reset();
         World.instance();
         World.instance().currentLevel = 1;
