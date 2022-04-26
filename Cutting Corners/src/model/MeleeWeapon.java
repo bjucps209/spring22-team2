@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
+import javafx.util.Duration;
 
 public class MeleeWeapon extends Equipment{
     private int range;
@@ -103,7 +104,7 @@ public class MeleeWeapon extends Equipment{
         int speed = file.readInt();
         String image = file.readUTF();
         
-        MeleeWeapon m = new MeleeWeapon(name, cooldown, Strength, Health, Speed, range, image);
+        MeleeWeapon m = new MeleeWeapon(name, Duration.seconds(cooldown), Strength, Health, Speed, range, image);
         return m;
     }
 }

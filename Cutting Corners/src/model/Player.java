@@ -7,13 +7,14 @@ import java.util.*;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
+import javafx.util.Duration;
 
 public class Player extends Entity {
 
     ArrayList<Item> inventory;
     String weaponImage = "media/Player/swordwalk.gif";
     private EntityObserver weaponObserver;
-    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, weaponImage);
+    Item equippedItem = new MeleeWeapon("Basic Sword", Duration.seconds(1), 1, 0, 0, 150, weaponImage);
     Equipment armor;
     Stats stats = new Stats(2, 5, 15);
     static String playerImage = "media/Player/Cirkyle v1.png";
@@ -32,6 +33,7 @@ public class Player extends Entity {
     KeyCode keyPressed;
     damageIndicator indicator;
     ArrayList<DroppedItem> itemsNearby = new ArrayList<DroppedItem>();
+    ArrayList<Effect> effects = new ArrayList<Effect>();
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -52,6 +54,14 @@ public class Player extends Entity {
 
     public void addItem(DroppedItem item){
         itemsNearby.add(item);
+    }
+
+    public void removeItem(DroppedItem item){
+        itemsNearby.remove(item);
+    }
+
+    public ArrayList<DroppedItem> getScreenItems(){
+        return itemsNearby;
     }
 
     public void setIndicator(damageIndicator indicator){
@@ -113,7 +123,10 @@ public class Player extends Entity {
 
     @Override
     public void performMovement(){
-        itemsNearby.clear();
+        if (effects.size() > 0){
+            applyBuffs();
+        }
+        inObstacle();
 
         switch (state) {
             case standing: {
@@ -166,6 +179,14 @@ public class Player extends Entity {
                 catch(IndexOutOfBoundsException i){}
                 break;
             }
+        }
+    }
+
+    public void applyBuffs(){
+        for (int i = 0; i < effects.size(); i++){
+            Effect effect = effects.get(i);
+            effect.giveEffect(this);
+            effects.remove(i);
         }
     }
 
@@ -263,8 +284,8 @@ public class Player extends Entity {
                     DroppedItem item = itemsNearby.get(0);
                     item.pickUp(this);
                     // super.getObserver().changeImage(i, d);
-                    break;
                 }
+                break;
             }
         }
     }
@@ -389,6 +410,12 @@ public class Player extends Entity {
         }
     }
 
+    public void inObstacle(){
+        if (obstacleInPath(super.getX(), super.getY())){
+            super.getCoords().setxCoord(super.getX() + 100);
+        }
+    }
+
     @Override
     public void takeDamage(int damage, Direction direction)
     {
@@ -434,9 +461,10 @@ public class Player extends Entity {
         
     }
     public Cell cellWithin(int row, int col){
-        Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
+        try{Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
         if (cell == null){cell = Cell.empty;}
-        return cell;
+        return cell;}
+        catch(Exception i){return Cell.empty;}
     }
 
     public boolean obstacleInPath(int xCoord, int yCoord){
@@ -486,6 +514,18 @@ public class Player extends Entity {
 
     public String getWeaponImage() {
         return weaponImage;
+    }
+
+    public ArrayList<Effect> getEffects() {
+        return effects;
+    }
+
+    public void addEffects(Effect effect) {
+        effects.add(effect);
+    }
+
+    public void removeEffects(Effect effect) {
+        effects.remove(effect);
     }
 
     public void setWeaponImage(String weaponImage) {
