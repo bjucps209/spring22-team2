@@ -93,20 +93,49 @@ public abstract class Entity {
 
     public void performAttack(){}
 
-    //methods overridden by children
+
     public abstract void serialize(DataOutputStream file) throws IOException;
 
-    public static Entity deserialize(DataInputStream file) throws IOException {
+    public static Entity deserialize(DataInputStream file, Screen homeScreen) throws IOException {
         String type = file.readUTF();
-        if (type.equals("Enemy")) {
-            Entity e = Enemy.deserialize(file);
-            return e;
-        } else if (type.equals("Projectile")) {
-            Entity p = Projectile.deserialize(file);
-            return p;
-        } else {
-            Entity player = Player.deserialize(file);
+
+        // Player-----
+        if (type.equals("Player")) {
+            Player player = Player.deserialize(file);
             return player;
+
+        // Projectile-----
+        } else if (type.equals("Projectile")) {
+            Projectile p = Projectile.deserialize(file);
+            return p;
+
+        // Enemies-----
+        } else if (type.equals("Triangle")) {
+            Triangle t = Triangle.deserialize(file, homeScreen);
+            return t;
+        } else if (type.equals("Square")) {
+            Square s = Square.deserialize(file, homeScreen);
+            return s;
+        } else if (type.equals("Hexagon")) {
+            Hexagon h = Hexagon.deserialize(file, homeScreen);
+            return h;
+        } else if (type.equals("Octagon")) {
+            Octagon o = Octagon.deserialize(file, homeScreen);
+            return o;
+
+        // Bosses-----
+        } else if (type.equals("Pyramid")) {
+            Pyramid p = Pyramid.deserialize(file, homeScreen);
+            return p;
+        } else if (type.equals("Cube")) {
+            Cube c = Cube.deserialize(file, homeScreen);
+            return c;
+        } else if (type.equals("Dodecahedron")) {
+            Dodecahedron d = Dodecahedron.deserialize(file, homeScreen);
+            return d;
+        } else {                         // Circle
+            Circle o = Circle.deserialize(file, homeScreen);
+            return o;
         }
     }
 }

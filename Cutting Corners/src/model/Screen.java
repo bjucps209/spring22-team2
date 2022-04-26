@@ -178,12 +178,12 @@ public class Screen {
         file.writeInt(location.getRow());
         file.writeInt(location.getCol());
         file.writeInt(location.getLevel());
-        file.writeUTF(filename);
+        file.writeUTF(filename);  // Background image
 
         file.writeInt(entities.size());
-        // for (Entity e : entities) {
-        //     e.serialize(file);
-        // }
+        for (Entity e : entities) {
+            e.serialize(file);
+        }
         for (int row = 0; row < 7; ++row) {
             for (int col = 0; col < 13; ++col) {
                 if (grid[row][col] != Cell.empty) {
@@ -200,23 +200,23 @@ public class Screen {
         int row = file.readInt();
         int col = file.readInt();
         int level = file.readInt();
-        String filename = file.readUTF();
-        Screen s = new Screen(row, col, level, filename);
+        String filename = file.readUTF(); // Background image
+        Screen screen = new Screen(row, col, level, filename);
 
         int numEntities = file.readInt();
-        // for (int i = 0; i < numEntities; ++i) {
-        //     Entity e = Entity.deserialize(file);
-        //     s.addEntity(e);
-        // }
+        for (int i = 0; i < numEntities; ++i) {
+            Entity e = Entity.deserialize(file, screen);
+            screen.addEntity(e);
+        }
 
         String cellType = file.readUTF();
         int cellRow = file.readInt();
         int cellCol = file.readInt();
         if (cellType != "empty") {
-            s.setGridSquare(cellRow, cellCol, cellType);
+            screen.setGridSquare(cellRow, cellCol, cellType);
         }    
 
-        return s; 
+        return screen; 
     }
 
     

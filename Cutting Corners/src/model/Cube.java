@@ -1,5 +1,9 @@
 package model;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Cube extends Boss{
     static String image = "Cube.png";
 
@@ -15,5 +19,24 @@ public class Cube extends Boss{
 
     @Override
     public void performAttack3(){}
+
+
+
+    @Override
+    public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Cube");
+        file.writeInt(getSize());
+        file.writeInt(getX());
+        file.writeInt(getY());
+    }
+
+    public static Cube deserialize(DataInputStream file, Screen homeScreen) throws IOException {
+        int size = file.readInt();
+        int x = file.readInt();
+        int y = file.readInt();
+
+        Cube t = new Cube(size, x, y, homeScreen);
+        return t;
+    }
 }
 

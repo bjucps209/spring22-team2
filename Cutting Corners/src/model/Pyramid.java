@@ -1,4 +1,9 @@
 package model;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Pyramid extends Boss{
     private static String image = "media/Enemies/pyramidboss.png";
     private EnemyState state = EnemyState.patrolling;
@@ -122,5 +127,24 @@ public class Pyramid extends Boss{
                 World.instance().getPlayer().takeDamage(5, Direction.up);
             }
         }
+    }
+
+
+
+    @Override
+    public void serialize(DataOutputStream file) throws IOException {
+        file.writeUTF("Pyramid");
+        file.writeInt(getSize());
+        file.writeInt(getX());
+        file.writeInt(getY());
+    }
+
+    public static Pyramid deserialize(DataInputStream file, Screen homeScreen) throws IOException {
+        int size = file.readInt();
+        int x = file.readInt();
+        int y = file.readInt();
+
+        Pyramid t = new Pyramid(size, x, y, homeScreen);
+        return t;
     }
 }
