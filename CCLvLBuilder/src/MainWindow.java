@@ -301,8 +301,9 @@ public class MainWindow implements LevelObserver {
         disableNavButtons();
         updateCurrentObject(null);
         updateCurrentObjectInfo(null);
-        if(DataManager.DaMan().getCurrentScreen().getBackgroundPathName() != null) {
-            layBackground(new Image(DataManager.DaMan().getCurrentScreen().getBackgroundPathName()));
+        String blah = DataManager.DaMan().getCurrentScreen().getBackgroundPathName();
+        if(blah != null && !blah.equals("")) {
+            layBackground(new Image(blah));
         }        
     }
 

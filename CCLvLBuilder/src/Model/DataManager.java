@@ -15,10 +15,6 @@ public class DataManager {
     public static final Vector gridDimensions = new Vector(7, 13); 
 
     private Screen currentScreen;
-    //private ArrayList<Screen> Screens;
-
-    ///Save and Load
-    //
 
 
     public String load(String fileName) throws FileNotFoundException, IOException { 

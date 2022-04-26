@@ -86,10 +86,12 @@ public class CCLvLFileReader {
                 var scr = new Screen(curScrSeries[0], curScrSeries[1], curScrSeries[2], DataManager.gridDimensions);
                 lvlRef.addScreen(scr);
 
-                scr.setBackgroundPathName(reader.readUTF()); //Screen Background path
+                String backgroundPath = reader.readUTF();
+                if (!backgroundPath.equals("null")) scr.setBackgroundPathName(backgroundPath); //Screen Background path
 
                 for (int dir = 0; dir < Directions; dir++) {//collects all adjStrID's for later 
-                    adjStrIDCollection[scrIdx][dir] = reader.readUTF();
+                    String idthing = reader.readUTF();
+                    if (!idthing.equals("null")) adjStrIDCollection[scrIdx][dir] = idthing;
                 }
 
                 int objQuantity = reader.readInt(); //Amount of objects
