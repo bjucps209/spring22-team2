@@ -62,11 +62,11 @@ public class GameWindow {
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         
-        //check if loading from save file
-        // if (isLoaded) {
-        //     World.instance().load("savegame.dat");
-        //     entities = World.instance().displayCurrentEntities();
-        // }
+        // check if loading from save file
+        if (isLoaded) {
+            World.instance().load("savegame.dat");
+            entities = World.instance().displayCurrentEntities();
+        }
 
 
         World.instance().getCurrentLevel().setObserver( me -> {
