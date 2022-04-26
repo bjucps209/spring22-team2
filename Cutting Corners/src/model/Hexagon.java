@@ -7,7 +7,7 @@ public class Hexagon extends Enemy{
     static String attacking = "media/Enemies/hexagonattack.gif";
 
     public Hexagon(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,size*2,size*6);
+        super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,size*2,size*6, 20);
     }
 
     public static Stats sizeToStats(int size){
