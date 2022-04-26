@@ -68,14 +68,7 @@ public class GameWindow {
         //     entities = World.instance().displayCurrentEntities();
         // }
 
-        // World.instance().getCurrentLevel().setObserver(() -> {
-        //     try {
-        //         Initialize();
-        //     } catch (IOException e) {
-        //         // TODO Auto-generated catch block
-        //         e.printStackTrace();
-        //     }
-        // });
+
         World.instance().getCurrentLevel().setObserver( me -> {
             try {
                 Initialize(isLoaded,userCampaign,cheatMode);

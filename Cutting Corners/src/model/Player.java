@@ -641,7 +641,6 @@ public class Player extends Entity {
         file.writeInt(this.getX());
         file.writeInt(this.getY());
         
-        // file.writeInt(inventory.size()); // how many items are in the inventory
 
         equippedItem.serialize(file);
         armor.serialize(file);
@@ -653,8 +652,6 @@ public class Player extends Entity {
         int x = file.readInt();
         int y = file.readInt();
         Player player = new Player(x, y);
-
-        // int numItems = file.readInt();
 
         player.setEquippedItem(Item.deserialize(file));
         player.setArmor(Armor.deserialize(file));
