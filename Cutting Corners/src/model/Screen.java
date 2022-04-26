@@ -179,13 +179,18 @@ public class Screen {
         file.writeInt(location.getCol());
         file.writeInt(location.getLevel());
         file.writeUTF(filename);
+
         file.writeInt(entities.size());
         // for (Entity e : entities) {
         //     e.serialize(file);
         // }
         for (int row = 0; row < 7; ++row) {
             for (int col = 0; col < 13; ++col) {
-                file.writeUTF(grid[row][col].toString());
+                if (grid[row][col] != Cell.empty) {
+                    file.writeUTF(grid[row][col].toString());
+                    file.writeInt(row);
+                    file.writeInt(col);
+                }
             }
         }
     
@@ -203,12 +208,13 @@ public class Screen {
         //     Entity e = Entity.deserialize(file);
         //     s.addEntity(e);
         // }
-        for (int r = 0; r < 7; ++r) {
-            for (int c = 0; c < 13; ++c) {
-                String cellType = file.readUTF();
-                s.setGridSquare(row, col, cellType);
-            }
-        }
+
+        String cellType = file.readUTF();
+        int cellRow = file.readInt();
+        int cellCol = file.readInt();
+        if (cellType != "empty") {
+            s.setGridSquare(cellRow, cellCol, cellType);
+        }    
 
         return s; 
     }

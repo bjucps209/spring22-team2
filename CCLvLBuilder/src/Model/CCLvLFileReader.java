@@ -20,6 +20,7 @@ public class CCLvLFileReader {
     public CCLvLFileReader(){}
 
     public static String save(Level savelvl, String fileName, boolean saveCurrentWork) throws FileNotFoundException, IOException {
+        
         fileName = pathWay + cleanFileIdentifier(fileName);
         var playerscn = savelvl.getScreenWithPlayer();
         if (playerscn == null && !saveCurrentWork) return "Player Obj required to save";

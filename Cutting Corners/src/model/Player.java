@@ -589,11 +589,10 @@ public class Player extends Entity {
         file.writeUTF("Player");
         file.writeInt(this.getX());
         file.writeInt(this.getY());
-        file.writeInt(inventory.size()); // how many items are in the inventory
-        for (Item i : inventory) {
-            i.serialize(file);
-        }
-        // equippedItem.serialize(file);
+        
+        // file.writeInt(inventory.size()); // how many items are in the inventory
+
+        equippedItem.serialize(file);
         armor.serialize(file);
         stats.serialize(file);
     }
@@ -604,12 +603,9 @@ public class Player extends Entity {
         int y = file.readInt();
         Player player = new Player(x, y);
 
-        int numItems = file.readInt();
-        for (int i = 0; i < numItems; ++i) {
-            Item item = Item.deserialize(file);
-            player.getInventory().add(item);
-        }
-        // p.setEquippedItem(Item.deserialize(file);
+        // int numItems = file.readInt();
+
+        player.setEquippedItem(Item.deserialize(file));
         player.setArmor(Armor.deserialize(file));
         player.setStats(Stats.deserialize(file));
 

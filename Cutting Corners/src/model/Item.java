@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Item {
+public abstract class Item {
     private String name;
     private double cooldown;
     Stats buffs;
@@ -53,9 +53,7 @@ public class Item {
     }
     
 
-    public void serialize(DataOutputStream file) throws IOException {
-        //method overridden by children
-    }
+    public abstract void serialize(DataOutputStream file) throws IOException;
 
     public static Item deserialize(DataInputStream file) throws IOException {
         String type = file.readUTF();

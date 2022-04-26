@@ -195,7 +195,6 @@ public class Level {
         for (Screen s : screens) {
             s.serialize(file);
         }
-        // currentScreen ?
         file.writeInt(currentRow);
         file.writeInt(currentCol);
     
@@ -215,7 +214,6 @@ public class Level {
             Screen s = Screen.deserialize(file);
             lvl.getScreens().add(s);
         }
-        // currentScreen ??
         lvl.setCurrentRow(file.readInt());
         lvl.setCurrentCol(file.readInt());
 

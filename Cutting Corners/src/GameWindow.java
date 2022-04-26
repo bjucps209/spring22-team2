@@ -70,11 +70,19 @@ public class GameWindow {
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         
         //check if loading from save file
-        if (isLoaded) {
-            World.instance().load("savegame.dat");
-            entities = World.instance().displayCurrentEntities();
-        }
+        // if (isLoaded) {
+        //     World.instance().load("savegame.dat");
+        //     entities = World.instance().displayCurrentEntities();
+        // }
 
+        // World.instance().getCurrentLevel().setObserver(() -> {
+        //     try {
+        //         Initialize();
+        //     } catch (IOException e) {
+        //         // TODO Auto-generated catch block
+        //         e.printStackTrace();
+        //     }
+        // });
         World.instance().getCurrentLevel().setObserver( me -> {
             try {
                 Initialize(isLoaded);
@@ -83,7 +91,23 @@ public class GameWindow {
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
 
         for (Entity entity: entities){
-            displayEntity(entity);
+            EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
+        entityImage.setImage(new Image(entity.getImage()));
+        entityImage.setX(entity.getX());
+        entityImage.setY(entity.getY());
+        entityImage.xProperty().bind(entity.getXProperty());
+        entityImage.yProperty().bind(entity.getYProperty());
+        entityImage.setUserData(entity);
+        entity.setObserver(entityImage);
+        //entityImage.setFitWidth(entity.getSize()*200*ratioWidth);
+        entityImage.setPreserveRatio(true);
+        if(entity instanceof Boss)
+        {
+            entityImage.setFitWidth(1280);
+        }
+            
+        gameWindow.getChildren().add(entityImage);
+            //displayEntity(entity);
             if(entity instanceof Player)
             {
                 Player player = (Player) entity;
@@ -174,22 +198,7 @@ public class GameWindow {
 
     @FXML
     void displayEntity(Entity entity){
-        EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
-        entityImage.setImage(new Image(entity.getImage()));
-        entityImage.setX(entity.getX());
-        entityImage.setY(entity.getY());
-        entityImage.xProperty().bind(entity.getXProperty());
-        entityImage.yProperty().bind(entity.getYProperty());
-        entityImage.setUserData(entity);
-        entity.setObserver(entityImage);
-        //entityImage.setFitWidth(entity.getSize()*200*ratioWidth);
-        entityImage.setPreserveRatio(true);
-        if(entity instanceof Boss)
-        {
-            entityImage.setFitWidth(1280);
-        }
-            
-        gameWindow.getChildren().add(entityImage);
+        
     }
 
     @FXML

@@ -1,6 +1,7 @@
 package model;
 
-import javax.net.ssl.HostnameVerifier;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class DroppedItem extends Entity{
     Item unDroppedItem;
@@ -48,5 +49,11 @@ public class DroppedItem extends Entity{
             }
         }
         return null;
+    }
+
+
+    @Override
+    public void serialize(DataOutputStream file) throws IOException {
+        unDroppedItem.serialize(file);
     }
 }
