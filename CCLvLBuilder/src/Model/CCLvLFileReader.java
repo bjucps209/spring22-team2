@@ -77,7 +77,6 @@ public class CCLvLFileReader {
 
         try (DataInputStream reader = new DataInputStream(new FileInputStream(fileName))) {
             lvlRef.setScreenWithPlayer(reader.readUTF());
-            System.out.println(lvlRef.getScreenWithPlayer());
 
             var screenQuantity = reader.readInt(); //Amount of screens
             String[][] adjStrIDCollection = new String[screenQuantity][Directions];
