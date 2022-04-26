@@ -150,6 +150,19 @@ public class World {
             screen7.setDown(screen9);
             screen7.setUp(screen11);
 
+        UsableItem item1 = new UsableItem("Health Potion", 2, 1, 9999999, 0, 5, 0, "media/Player/Bow.png");
+        
+        DroppedItem item = new DroppedItem(200, 500, item1, "media/Player/Bow.png", 100, screen3);
+
+        screen1.addEntity(triangle1);
+        screen2.addEntity(triangle2);
+        screen2.addEntity(triangle3);
+        screen3.addEntity(triangle4);
+        screen3.addEntity(item);
+        screen4.addEntity(triangle5);
+        screen4.addEntity(triangle6);
+        bossScreen.addEntity(triangleBoss);
+
             screen8.setLeft(screen6);
             screen8.setDown(screen10);
             screen8.setUp(screen12);

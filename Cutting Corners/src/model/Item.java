@@ -4,13 +4,15 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javafx.util.Duration;
+
 public abstract class Item {
     private String name;
-    private double cooldown;
+    private Duration cooldown;
     Stats buffs;
     private String Image;
 
-    public Item(String name, double cooldown, Stats buffs, String Image){
+    public Item(String name, Duration cooldown, Stats buffs, String Image){
         this.name = name;
         this.cooldown = cooldown;
         this.buffs = buffs;
@@ -28,11 +30,11 @@ public abstract class Item {
         this.name = name;
     }
 
-    public double getCooldown() {
+    public Duration getCooldown() {
         return cooldown;
     }
 
-    public void setCooldown(int cooldown) {
+    public void setCooldown(Duration cooldown) {
         this.cooldown = cooldown;
     }
 

@@ -26,7 +26,7 @@ public class CCLvLFileReader {
         if (playerscn == null && !saveCurrentWork) return "Player Obj required to save";
 
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(fileName))) {
-
+            System.out.println(savelvl.getScreenWithPlayer());
             writer.writeUTF(savelvl.getScreenWithPlayer()); // Player Scr
 
             //writer.writeUTF("scr");
@@ -77,6 +77,7 @@ public class CCLvLFileReader {
 
         try (DataInputStream reader = new DataInputStream(new FileInputStream(fileName))) {
             lvlRef.setScreenWithPlayer(reader.readUTF());
+            System.out.println(lvlRef.getScreenWithPlayer());
 
             var screenQuantity = reader.readInt(); //Amount of screens
             String[][] adjStrIDCollection = new String[screenQuantity][Directions];
@@ -86,10 +87,13 @@ public class CCLvLFileReader {
                 var scr = new Screen(curScrSeries[0], curScrSeries[1], curScrSeries[2], DataManager.gridDimensions);
                 lvlRef.addScreen(scr);
 
-                scr.setBackgroundPathName(reader.readUTF()); //Screen Background path
+                String pathname = reader.readUTF();
+                if (!pathname.equals("null")) scr.setBackgroundPathName(reader.readUTF()); //Screen Background path
+                else pathname = null;
 
                 for (int dir = 0; dir < Directions; dir++) {//collects all adjStrID's for later 
-                    adjStrIDCollection[scrIdx][dir] = reader.readUTF();
+                    String thing = reader.readUTF();
+                    if (!thing.equals("null")) adjStrIDCollection[scrIdx][dir] = reader.readUTF();
                 }
 
                 int objQuantity = reader.readInt(); //Amount of objects
