@@ -14,7 +14,7 @@ public class Player extends Entity {
     ArrayList<Item> inventory;
     String weaponImage = "media/Player/swordwalk.gif";
     private EntityObserver weaponObserver;
-    Item equippedItem = new MeleeWeapon("Basic Sword", Duration.seconds(1), 1, 0, 0, 150, weaponImage);
+    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, weaponImage);
     Equipment armor;
     Stats stats = new Stats(2, 5, 15);
     static String playerImage = "media/Player/Cirkyle v1.png";
@@ -179,8 +179,22 @@ public class Player extends Entity {
                 catch(IndexOutOfBoundsException i){}
                 break;
             }
+            case drinking: {
+                if (itemsNearby.size() > 0){
+                    DroppedItem item = itemsNearby.get(0);
+                    item.pickUp(this);
+
+                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
+                }
+                if (attackCount <= 0) {
+                    state = PlayerState.standing;
+                    weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
+                }
+                attackCount--;
+            }
         }
     }
+    
 
     public void applyBuffs(){
         for (int i = 0; i < effects.size(); i++){
@@ -277,14 +291,6 @@ public class Player extends Entity {
             // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
             //     super.getCoords().addXCoord(stats.getSpeed());
             // }
-                break;
-            }
-            case SPACE: {
-                if (itemsNearby.size() > 0){
-                    DroppedItem item = itemsNearby.get(0);
-                    item.pickUp(this);
-                    // super.getObserver().changeImage(i, d);
-                }
                 break;
             }
         }

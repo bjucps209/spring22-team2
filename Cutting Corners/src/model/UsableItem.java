@@ -12,11 +12,11 @@ import javafx.util.Duration;
 
 public class UsableItem extends Item{
     private int useCount;
-    private Duration duration;
+    private int duration;
     private Stats buffs;
     private effectCountdown countdown;
 
-    public UsableItem(String name, Duration cooldown, int useCount, Duration duration, int Strength, int Health, int Speed, String Image){
+    public UsableItem(String name, int cooldown, int useCount, int duration, int Strength, int Health, int Speed, String Image){
         super(name, cooldown, new Stats(Strength, Speed, Health), Image);
         this.useCount = useCount;
         this.duration = duration;
@@ -53,11 +53,12 @@ public class UsableItem extends Item{
     public void performAction(Entity user){
         applyBuffs(user);
         if (countdown != null){
-            countdown.showEffectTimer((int)duration.toSeconds(), super.getName(), super.getImage());
+            countdown.showEffectTimer(duration, super.getName(), super.getImage());
         }
-        KeyFrame frames = new KeyFrame(duration, me -> unApplyBuffs(user));
-        Timeline duration = new Timeline(frames);
-        duration.play();
+        if (duration <= 0){
+            unApplyBuffs(user);
+        }
+        duration--;
     }
 
 
@@ -71,11 +72,11 @@ public class UsableItem extends Item{
         this.useCount = useCount;
     }
 
-    public Duration getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
@@ -102,10 +103,10 @@ public class UsableItem extends Item{
         file.writeUTF("UsableItem"); //type of item
         file.writeUTF(this.getName());
         // file.writeInt(this.getCooldown());
-        file.writeInt((int)this.getCooldown().toSeconds());
+        file.writeInt(getCooldown());
         buffs.serialize(file);
         file.writeInt(useCount);
-        file.writeDouble(duration.toSeconds());
+        file.writeInt(duration);
         file.writeUTF(super.getImage());
     }
 
@@ -114,14 +115,14 @@ public class UsableItem extends Item{
         String name = file.readUTF();
         int cooldown = file.readInt();
         int useCount = file.readInt();
-        double duration = file.readDouble();
+        int duration = file.readInt();
         Buffs buffs = Buffs.deserialize(file);
         int strength = buffs.getStrengthBuff();
         int health = buffs.getHealthBuff();
         int speed = buffs.getSpeedBuff();
         String image = file.readUTF();
 
-        UsableItem item = new UsableItem(name, Duration.seconds(cooldown), useCount, Duration.seconds(duration), strength, health, speed, image);
+        UsableItem item = new UsableItem(name, cooldown, useCount, duration, strength, health, speed, image);
         return item;
     }
 }

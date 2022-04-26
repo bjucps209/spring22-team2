@@ -9,7 +9,7 @@ import javafx.util.Duration;
 public class Armor extends Equipment{
 
     public Armor(String name, int Strength, int Health, int Speed, String image){
-        super(name, Duration.seconds(0), EquipmentType.ARMOR, new Stats(Strength, Health, Speed), image);
+        super(name, 0, EquipmentType.ARMOR, new Stats(Strength, Health, Speed), image);
     }
 
     @Override

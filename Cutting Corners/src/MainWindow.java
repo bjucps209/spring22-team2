@@ -405,9 +405,15 @@ public class MainWindow {
             public void handle(KeyEvent event){
                 if(World.instance().getPlayer()!=null)
                 {
-                    World.instance().getPlayer().removeKey(event.getCode());
-                    
-                    World.instance().getPlayer().addKey(event.getCode());
+                    KeyCode keyPressed = event.getCode();
+                    if (keyPressed == KeyCode.SPACE){
+                        World.instance().getPlayer().setState(PlayerState.drinking);
+                    }
+                    else{
+                        World.instance().getPlayer().removeKey(event.getCode());
+                        
+                        World.instance().getPlayer().addKey(event.getCode());
+                    }
                 }
             }
         });
