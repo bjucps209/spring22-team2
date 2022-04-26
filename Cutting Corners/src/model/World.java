@@ -327,9 +327,6 @@ public class World {
             Level lvl = Level.deserialize(reader);
             lvl.setCurrentScreen(lvl.findScreen(0, 0));
 
-            Cirkyle = new Player(100, 100);
-            lvl.placeEntity(0, 0, Cirkyle);
-
             World.campaign.set(currentLevel, lvl);
 
 
