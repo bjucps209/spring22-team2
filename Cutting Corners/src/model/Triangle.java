@@ -11,11 +11,7 @@ public class Triangle extends Enemy{
     static String attacking = "media/Enemies/triangleattack.gif";
 
     public Triangle(int size, int xCoord, int yCoord, Screen homeScreen){
-<<<<<<< HEAD
-        super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size), walking, attacking, size, size*3);
-=======
         super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,size,size*3, 10);
->>>>>>> 0dfcdc4c269c9de3bdfb35d902ec2fb10409f85c
     }
 
     public static Stats sizeToStats(int size){

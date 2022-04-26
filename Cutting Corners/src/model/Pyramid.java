@@ -148,8 +148,15 @@ public class Pyramid extends Boss{
             }
         }
     }
-<<<<<<< HEAD
 
+    @Override
+    public void performDie()
+    {
+        System.out.println("Dead");
+        World.instance().getPlayer().addExperience(experience);
+        World.instance().getPlayer().addScore(experience);
+        super.performDie();
+    }
 
 
     @Override
@@ -167,14 +174,5 @@ public class Pyramid extends Boss{
 
         Pyramid t = new Pyramid(size, x, y, homeScreen);
         return t;
-=======
-    @Override
-    public void performDie()
-    {
-        System.out.println("Dead");
-        World.instance().getPlayer().addExperience(experience);
-        World.instance().getPlayer().addScore(experience);
-        super.performDie();
->>>>>>> 0dfcdc4c269c9de3bdfb35d902ec2fb10409f85c
     }
 }
