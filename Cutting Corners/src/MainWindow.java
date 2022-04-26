@@ -70,6 +70,7 @@ public class MainWindow {
     Timeline timerCredits = new Timeline(keyFrameCredits);
     Boolean userCampaign = false;
     Boolean cheatMode = false;
+    Boolean isLoaded = false;
     int difficulty = 2;
     Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
     double ratioWidth = size.getWidth()/1280;
@@ -183,7 +184,7 @@ public class MainWindow {
         credits.setText("Credits\n\nBasic Gameplay:\t\t\t\tTripp Lawrence, Ethan Collins\nLevel Builder:\t\t\t\t\t\t\t\t"+
         "Seth Meyer\nSerialization:\t\t\t\t\t\t\t\tPaul Alger\nAuxillary Screens:\t\t\t\t\t\t\tEthan Collins\nNarative Lead:\t\t\t\t\t\t\t"+
         "Ethan Collins\n\n\nMedia\n\nCharacter Sprites:\t\t\t\t\t\t\tEthan Collins\nEnemy Sprites:\t\t\t\t\t\t\tEthan Collins\nBoss Sprites:"+
-        "\t\t\t\t\t\t\t\tEthan Collins\nTerrain:\t\t\t\t\t\t\t\t\tEthan Collins\nInterface Visuals:\t\t\t\t\t\t\tEthan Collins\n\nMusic\n\n"+
+        "\t\t\t\t\t\t\t\tEthan Collins\nTerrain:\t\t\t\t\t\t\t\t\tEthan Collins\nInterface Visuals:\t\t\t\t\t\t\tEthan Collins\n\nStaring Cirkyle as himself\n\nMusic\n\n"+
         "Title Music:        Magic Tavern - Alexander Nakarada\nCaveman Level:  Little World - Nul Tiel Records\nEgypt Level:\t    Reverie - Nul"+
         " Tiel Records\nMedieval Level:  Fairy of the Forest - Alexander Nakarada\nSecret Level:\t    Lurking in the Shadows - Scott Holmes Music\n\n"+
         "Sound Effects\n\nBow Shoot:\t\t\t\tK6EQG35-bow-arrow-shot\nSword Attack:\t\t\t\tmixkit-dagger-woosh-1487\nSword Hit:\t\t\t\t"+
@@ -226,7 +227,8 @@ public class MainWindow {
         startView.setOnMouseReleased(me -> {try{onStartClicked();}catch(IOException i){}
                                             startView.setImage(START_BUTTON);});
         loadView.setOnMousePressed(me -> loadView.setImage(LOAD_BUTTON_PRESSED));
-        loadView.setOnMouseReleased(me -> { //try{onLoadClicked();}catch(IOException i){} // Adding load button
+        loadView.setOnMouseReleased(me -> { isLoaded=true;
+                                            try{onStartClicked();}catch(IOException i){} // Adding load button
                                             loadView.setImage(LOAD_BUTTON);}); 
         aboutView.setOnMousePressed(me -> aboutView.setImage(ABOUT_BUTTON_PRESSED));
         aboutView.setOnMouseReleased(me -> {aboutView.setImage(ABOUT_BUTTON);
@@ -391,7 +393,7 @@ public class MainWindow {
 
         GameWindow gameWindow = loader.getController();
         //gameWindow.Initialize();
-        gameWindow.Initialize(userCampaign);
+        gameWindow.Initialize(isLoaded, userCampaign,cheatMode);
         // gameWindow.Initialize(defaultCampaign);
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
@@ -403,12 +405,15 @@ public class MainWindow {
             public void handle(KeyEvent event){
                 if(World.instance().getPlayer()!=null)
                 {
-                    World.instance().getPlayer().removeKey(event.getCode());
-                    if (World.instance().getPlayer().getKeys().contains(event.getCode())){
-                        handle(event);
-                        return;
+                    KeyCode keyPressed = event.getCode();
+                    if (keyPressed == KeyCode.SPACE){
+                        World.instance().getPlayer().setState(PlayerState.drinking);
                     }
-                    World.instance().getPlayer().addKey(event.getCode());
+                    else{
+                        World.instance().getPlayer().removeKey(event.getCode());
+                        
+                        World.instance().getPlayer().addKey(event.getCode());
+                    }
                 }
             }
         });

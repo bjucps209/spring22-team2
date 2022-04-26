@@ -4,5 +4,6 @@ public enum PlayerState {
     walking,
     standing,
     attacking,
-    resting
+    resting,
+    drinking
 }

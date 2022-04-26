@@ -4,9 +4,8 @@ public class Boss extends Enemy{
     int attackCooldown;
     int hitX = 640;
     int hitY = 700;
-    public Boss(int sides, int size, int xCoord, int yCoord, String image, Screen homeScreen, int vision, Stats stats, int totalHealth){
-        super(sides, size, xCoord, yCoord, image, homeScreen, vision, null, stats,image,image, totalHealth, 100);
-
+    public Boss(int sides, int size, int xCoord, int yCoord, String image, Screen homeScreen, int vision, Stats stats, int totalHealth, int score){
+        super(sides, size, xCoord, yCoord, image, homeScreen, vision, null, stats,image,image, totalHealth, 100, score);
     }
     @Override
     public void performMovement()
@@ -45,8 +44,22 @@ public class Boss extends Enemy{
     @Override
     public void performDie()
     {
+        System.out.println("Dead");
+        World.instance().getPlayer().addExperience(super.getScore());
+        World.instance().getPlayer().addScore(super.getScore());
         World.instance().displayCurrentEntities().remove(this);
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
-        World.instance().passLevel();
+        World.instance().setActiveBoss(false);
+        if(!World.instance().getCamapign())
+        {
+            if(World.instance().getCurrentLevel().getCurrentLevel()!=World.instance().getNumLevels()-1)
+            {
+                World.instance().passLevel();
+            }
+            else
+            {
+                World.finishGame();
+            }
+        }
     }
 }

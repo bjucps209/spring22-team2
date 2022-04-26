@@ -54,22 +54,21 @@ public class Stats {
         return health;
     }
 
-    public void ApplyBuffs(Item item){
-        strength += item.buffs.strength;
-        addHealth(item.buffs.getHealth());
-        speed += item.buffs.speed;
+    public void ApplyBuffs(Stats buffs){
+        strength += buffs.strength;
+        addHealth(buffs.getHealth());
+        speed += buffs.speed;
     }
 
-    public void unApplyBuffs(Item item){
-        strength -= item.buffs.strength;
-        subHealth(item.buffs.getHealth());
-        speed -= item.buffs.speed;
+    public void unApplyBuffs(Stats buffs){
+        strength -= buffs.strength;
+        subHealth(buffs.getHealth());
+        speed -= buffs.speed;
     }
 
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(strength);
         file.writeInt(speed);
-        //changed to health.get()
         file.writeInt(health.get());
     }
 

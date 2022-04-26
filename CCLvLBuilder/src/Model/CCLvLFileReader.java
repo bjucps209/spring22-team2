@@ -26,7 +26,7 @@ public class CCLvLFileReader {
         if (playerscn == null && !saveCurrentWork) return "Player Obj required to save";
 
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(fileName))) {
-
+            System.out.println(savelvl.getScreenWithPlayer());
             writer.writeUTF(savelvl.getScreenWithPlayer()); // Player Scr
 
             //writer.writeUTF("scr");
@@ -77,6 +77,7 @@ public class CCLvLFileReader {
 
         try (DataInputStream reader = new DataInputStream(new FileInputStream(fileName))) {
             lvlRef.setScreenWithPlayer(reader.readUTF());
+            System.out.println(lvlRef.getScreenWithPlayer());
 
             var screenQuantity = reader.readInt(); //Amount of screens
             String[][] adjStrIDCollection = new String[screenQuantity][Directions];
