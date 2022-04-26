@@ -8,7 +8,6 @@ import javafx.util.Duration;
 
 public abstract class Equipment extends Item {
     private EquipmentType type;
-    private Stats buffs;
 
     public Equipment(String name, int cooldown, EquipmentType type, Stats buffs, String image){
         super(name, cooldown, buffs, image);
@@ -53,14 +52,6 @@ public abstract class Equipment extends Item {
 
     public void setType(EquipmentType type) {
         this.type = type;
-    }
-
-    public Stats getBuffs() {
-        return buffs;
-    }
-
-    public void setBuffs(Stats buffs) {
-        this.buffs = buffs;
     }
 
 

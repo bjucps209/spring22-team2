@@ -16,7 +16,7 @@ public class Armor extends Equipment{
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Armor");
         file.writeUTF(getName());
-        getBuffs().serialize(file);
+        super.getBuffs().serialize(file);
         file.writeUTF(super.getImage());
     }
 

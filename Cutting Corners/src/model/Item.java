@@ -9,7 +9,7 @@ import javafx.util.Duration;
 public abstract class Item {
     private String name;
     private int cooldown;
-    Stats buffs;
+    private Stats buffs;
     private String Image;
 
     public Item(String name, int cooldown, Stats buffs, String Image){
