@@ -260,7 +260,36 @@ public class World {
         this.isLoaded = isLoaded;
     }
 
-    /**
+    public void setCheatMode(Boolean cheatMode) 
+    {
+        this.cheatMode=cheatMode;
+    }
+
+    public boolean getCheatMode()
+    {
+        return cheatMode;
+    }
+
+    public void setCampaign(Boolean userCampaign)
+    {
+        this.userCampaign=userCampaign;
+    }
+
+    public static void finishGame() {
+        HighScoreManager scores = new HighScoreManager();
+        try
+        {
+            scores.load();
+            scores.addScore(new HighScore(World.getPlayer().getScore(),"Player"));
+        }
+        catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+        /**
      * opens a file and calls the serialize methods for each object to write to the file
      * @param filename - the file that will hold the saved game
      */
@@ -295,33 +324,6 @@ public class World {
             World.campaign.set(currentLevel, lvl);
 
 
-        }
-    }
-    public void setCheatMode(Boolean cheatMode) 
-    {
-        this.cheatMode=cheatMode;
-    }
-
-    public boolean getCheatMode()
-    {
-        return cheatMode;
-    }
-
-    public void setCampaign(Boolean userCampaign)
-    {
-        this.userCampaign=userCampaign;
-    }
-
-    public static void finishGame() {
-        HighScoreManager scores = new HighScoreManager();
-        try
-        {
-            scores.load();
-            scores.addScore(new HighScore(World.getPlayer().getScore(),"Player"));
-        }
-        catch (IOException e)
-        {
-            System.out.println(e.getMessage());
         }
     }
 }
