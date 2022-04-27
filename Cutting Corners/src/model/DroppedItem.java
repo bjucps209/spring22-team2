@@ -8,6 +8,7 @@ public class DroppedItem extends Entity{
     playerInformer informant;
     Screen homeScreen;
     String text;
+    boolean used = false;
 
     public DroppedItem(int xCoord, int yCoord, UsableItem unDroppedItem, String image, int size, Screen homeScreen){
         super(xCoord, yCoord, image, size);
@@ -17,6 +18,8 @@ public class DroppedItem extends Entity{
     }
 
     public void pickUp(Player pickerUpper){
+        if (used){return;}
+        used = true;
         // pickerUpper.addItem(unDroppedItem);
         World.instance().displayCurrentEntities().remove(this);
         unDroppedItem.performAction(pickerUpper);
@@ -34,6 +37,10 @@ public class DroppedItem extends Entity{
 
     public void setUnDroppedCountdown(effectCountdown countdown){
         unDroppedItem.setCountdown(countdown);
+    }
+
+    public void setHomeScreen(Screen homeScreen){
+        this.homeScreen = homeScreen;
     }
 
     @Override

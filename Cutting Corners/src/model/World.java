@@ -10,7 +10,7 @@ import java.util.*;
 public class World {
     private static ArrayList<Level> campaign = new ArrayList<Level>();
     public static int currentLevel = 1;
-    private int difficulty =2;
+    private int difficulty = 2;
     private static World world;
     private ScreenObserver observer;
     private boolean isPaused = false;
@@ -635,7 +635,6 @@ public class World {
 
     public void setDifficulty(int difficulty) {
         world.difficulty = difficulty;
-        System.out.println(difficulty);
     }
     public int getDifficulty() {
         return world.difficulty;

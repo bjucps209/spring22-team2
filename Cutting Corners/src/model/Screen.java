@@ -35,7 +35,17 @@ public class Screen {
         for (Enemy enemy: group){entities.add(enemy);}
     }
 
-    public void addEntity(Entity entity){entities.add(entity);}
+    public void addEntity(Entity entity){
+        entities.add(entity);
+        if (entity instanceof Enemy){
+            Enemy enemy = (Enemy) entity;
+            enemy.setHomeScreen(this);
+        }
+        else if (entity instanceof DroppedItem){
+            DroppedItem item = (DroppedItem) entity;
+            item.setHomeScreen(this);
+        }
+    }
 
     public void randomize(){
         fillGrid();

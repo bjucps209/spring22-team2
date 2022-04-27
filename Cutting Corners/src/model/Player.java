@@ -14,7 +14,7 @@ public class Player extends Entity {
     ArrayList<Item> inventory;
     String weaponImage = "media/Player/swordwalk.gif";
     private EntityObserver weaponObserver;
-    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, weaponImage);
+    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 200, weaponImage);
     Equipment armor;
     Stats stats = new Stats(2, 5, 15);
     static String playerImage = "media/Player/Cirkyle v1.png";
@@ -189,7 +189,7 @@ public class Player extends Entity {
                     // attackCount=0;
                     DroppedItem item = findClosestItem();
                     item.pickUp(this);
-                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
+                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.left);
                 }
                 if (attackCount <= 0) {
                     attackCount = 25;
@@ -323,14 +323,14 @@ public class Player extends Entity {
                 // }
                     break;
                 }
-                case SPACE: {
-                    if (itemsNearby.size() > 0){
-                        DroppedItem item = itemsNearby.get(0);
-                        item.pickUp(this);
-                        // super.getObserver().changeImage(i, d);
-                        break;
-                    }
-                }
+                // case SPACE: {
+                //     if (itemsNearby.size() > 0){
+                //         DroppedItem item = itemsNearby.get(0);
+                //         item.pickUp(this);
+                //         // super.getObserver().changeImage(i, d);
+                //         break;
+                //     }
+                // }
                 
                 case ESCAPE:
                     if(!World.instance().getIsPaused())

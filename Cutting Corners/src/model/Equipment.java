@@ -21,7 +21,6 @@ public abstract class Equipment extends Item {
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            System.out.println(super.getBuffs()==null);
             player.getStats().ApplyBuffs(super.getBuffs());
         }
     }

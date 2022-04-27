@@ -85,21 +85,21 @@ public class Pyramid extends Boss{
         {
             if(attackCount==250)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>100)
+                if(World.instance().getPlayer().getCoords().getxCoord()<200)
                 {
                     World.instance().getPlayer().takeDamage(5, Direction.left);
                 }
             }
             if(attackCount==200)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()<1000)
+                if(World.instance().getPlayer().getCoords().getxCoord()>1000)
                 {
                     World.instance().getPlayer().takeDamage(5, Direction.right);
                 }
             }
             if(attackCount==150)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
                 {
                     World.instance().getPlayer().takeDamage(5, Direction.up);
                 }
@@ -114,9 +114,9 @@ public class Pyramid extends Boss{
         {
             if(attackCount==185)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
                 {
-                    World.instance().getPlayer().takeDamage(10, Direction.up);
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
                 }
             }
         }
@@ -129,30 +129,30 @@ public class Pyramid extends Boss{
         {
             if(attackCount==300)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>100)
+                if(World.instance().getPlayer().getCoords().getxCoord()<200)
                 {
-                    World.instance().getPlayer().takeDamage(5, Direction.left);
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.left);
                 }
             }
             if(attackCount==250)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
                 {
-                    World.instance().getPlayer().takeDamage(5, Direction.up);
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
                 }
             }
             if(attackCount==200)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()<1000)
+                if(World.instance().getPlayer().getCoords().getxCoord()>1000)
                 {
-                    World.instance().getPlayer().takeDamage(5, Direction.right);
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.right);
                 }
             }
             if(attackCount==150)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
                 {
-                    World.instance().getPlayer().takeDamage(5, Direction.up);
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
                 }
             }
         }

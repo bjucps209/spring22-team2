@@ -251,7 +251,7 @@ public class GameWindow {
     void showEffectTimer(Effect effect, String effectName, String icon){
         // gameWindow.getChildren().remove(effectBox);
         // effectBox.relocate(950*ratioWidth, 200*ratioHeight);
-
+        
         VBox effectDropdown = new VBox();
         Label effectTitle = new Label(effectName);
 
