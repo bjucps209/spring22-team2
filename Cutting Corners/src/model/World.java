@@ -321,11 +321,18 @@ public class World {
             UsableItem item1 = new UsableItem("Health Potion", 2, 1, 5, 0, 5, 0, "media/Player/Effects/health.png");
             UsableItem item2 = new UsableItem("Strength Potion", 2, 1, 60, 3, 0, 0, "media/Player/Effects/strength.png");
             UsableItem item3 = new UsableItem("Rage Potion", 2, 1, 45, 3, 0, 2, "media/Player/Effects/rage.png");
-            UsableItem item4 = new UsableItem("Rage Potion II", 2, 1, 30, 5, 0, 3, "media/Player/Effects/rage.png");
+            UsableItem item4 = new UsableItem("Rage Potion II", 2, 1, 30, 5, -2, 3, "media/Player/Effects/rage.png");
+            UsableItem item5 = new UsableItem("Ultimate Potion", 2, 1, 30, 2, 10, 3, "media/Player/Effects/ultimate.png");
+            UsableItem item6 = new UsableItem("Speed Potion", 2, 1, 45, 0, 0, 4, "media/Player/Effects/speed.png");
+            UsableItem item7 = new UsableItem("Stamina Potion", 2, 1, 5, 5, 62, 3, "media/Player/Effects/health.png");
+            UsableItem item8 = new UsableItem("Rage Potion IV", 2, 1, 25, 8, -4, 4, "media/Player/Effects/rage.png");
+            UsableItem item9 = new UsableItem("Ultimate Potion II", 2, 1, 30, 4, 12, 3, "media/Player/Effects/ultimate.png");
 
+            
             DroppedItem itemA = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, screen3);
             DroppedItem itemB = new DroppedItem(300, 600, item2, "media/Player/Item.png", 100, screen1);
             DroppedItem itemC = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, bossScreen);
+            
 
             screen1.addEntity(triangle1);
             screen3.addEntity(triangle2);
