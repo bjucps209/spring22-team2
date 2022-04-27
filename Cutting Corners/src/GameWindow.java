@@ -121,7 +121,6 @@ public class GameWindow {
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         displayObstacles(currentScreen);
-        // displaySaveButton();
         ratioImage(backgroundView);
     }
 
@@ -334,15 +333,6 @@ public class GameWindow {
             gameWindow.getChildren().add(obstacleImage);
             obstacleImage.toBack();
         }
-    }
-
-    @FXML
-    void displaySaveButton() {
-        Button btnSave = new Button("Save");
-        btnSave.setFocusTraversable(false);
-        btnSave.relocate(950*ratioWidth, 150*ratioHeight);
-
-        gameWindow.getChildren().add(btnSave);
     }
     
     @FXML
