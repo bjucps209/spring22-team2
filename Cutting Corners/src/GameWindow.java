@@ -3,10 +3,14 @@ import java.util.*;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+
 import java.io.IOException;
 
+import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -15,6 +19,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
 import java.awt.*;
@@ -30,20 +35,21 @@ public class GameWindow {
     Image background = new Image("media/terrain/medieval/medievalfourway.png");
     ImageView backgroundView = new ImageView(background);
     ArrayList<Character> keysPressed = new ArrayList<Character>();
+    Image PAUSE_BACKGROUND = new Image("media/titlescreen.png");
+    Image RESUME_BTN = new Image("media/buttons/resumebtn.png");
+    Image SAVE_BTN = new Image("media/buttons/savebtn.png");
+    Image SAVEEXIT_BTN = new Image("media/buttons/saveexitbtn.png");
+    Image EXIT_BTN = new Image("media/buttons/exitbtn.png");
+    ImageView pauseView = new ImageView(PAUSE_BACKGROUND);
+    ImageView resumeView = new ImageView(RESUME_BTN);
+    ImageView saveView = new ImageView(SAVE_BTN);
+    ImageView saveExitView = new ImageView(SAVEEXIT_BTN);
+    ImageView exitView = new ImageView(EXIT_BTN);
     VBox effectBox = new VBox();
     
 
     @FXML
-    void onGreetClicked(ActionEvent event) {
-        var alert = new Alert(AlertType.INFORMATION, "Hello, world!");
-        alert.setHeaderText(null);
-        alert.show();
-
-    }
-    
-
-    @FXML
-    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode) throws IOException{
+    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,int difficulty) throws IOException{
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -59,6 +65,7 @@ public class GameWindow {
         gameWindow.setMinWidth(size.getWidth());
         gameWindow.setMinHeight(size.getHeight());
         gameWindow.getChildren().clear();
+        
 
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
@@ -74,7 +81,7 @@ public class GameWindow {
 
         World.instance().getCurrentLevel().setObserver( me -> {
             try {
-                Initialize(isLoaded,userCampaign,cheatMode);
+                Initialize(isLoaded,userCampaign,cheatMode,difficulty);
             } catch (IOException e) {}
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
@@ -83,6 +90,7 @@ public class GameWindow {
         World.instance().setLoaded(isLoaded);
         World.instance().setCheatMode(cheatMode);
         World.instance().setCampaign(userCampaign);
+        World.instance().setDifficulty(difficulty);
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
         entityImage.setImage(new Image(entity.getImage()));
@@ -96,7 +104,10 @@ public class GameWindow {
         entityImage.setPreserveRatio(true);
         if(entity instanceof Boss)
         {
-            entityImage.setFitWidth(1280);
+            if(!(((Boss)entity) instanceof Circle))
+            {
+                entityImage.setFitWidth(1280);
+            }
         }
             
         gameWindow.getChildren().add(entityImage);
@@ -121,8 +132,59 @@ public class GameWindow {
         }
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
-        displayObstacles(currentScreen);
+            displayObstacles(currentScreen);
+        
         ratioImage(backgroundView);
+        pauseView.relocate(0, 0);
+        resumeView.relocate(40, 50);
+        saveView.relocate(40, 300);
+        saveExitView.relocate(640, 50);
+        exitView.relocate(640, 300);
+        resumeView.setOnMouseClicked(e->{World.instance().setIsPaused(false);World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());});
+        saveView.setOnMouseClicked(e->{
+            try {
+                World.instance().save("savegame.dat");
+            } catch (IOException e1) {
+                System.out.println("Oops Lol");
+            }
+        });
+        saveExitView.setOnMouseClicked(e->{
+            try {
+                World.instance().save("savegame.dat");
+                World.reset();
+                Platform.exit();
+                //((Stage)gameWindow.getScene().getWindow()).close();
+
+            } catch (IOException e1) {
+                System.out.println("Oops Lol");
+            }
+        });
+        exitView.setOnMouseClicked(e->{var loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
+        Scene scene;
+        try {
+            scene = new Scene(loader.load());
+            var stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Cutting Corners Release Candidate");
+            stage.getIcons().add(new Image("media/windowicon.png"));
+            stage.show();
+            MainWindow mainWindow = loader.getController();
+            Platform.exit();
+            //World.reset();
+            //((Stage)gameWindow.getScene().getWindow()).close();
+        } catch (IOException e1) {
+            System.out.println("Couldn't Open main");
+        }});
+        gameWindow.getChildren().add(pauseView);
+        gameWindow.getChildren().add(resumeView);
+        gameWindow.getChildren().add(saveView);
+        gameWindow.getChildren().add(saveExitView);
+        gameWindow.getChildren().add(exitView);
+        pauseView.setVisible(World.instance().getIsPaused());
+        resumeView.setVisible(World.instance().getIsPaused());
+        saveExitView.setVisible(World.instance().getIsPaused());
+        saveView.setVisible(World.instance().getIsPaused());
+        exitView.setVisible(World.instance().getIsPaused());
     }
 
     @FXML
@@ -277,15 +339,24 @@ public class GameWindow {
         enemy.setIndicator(this::displayDamage);
         ProgressBar healthBar = new ProgressBar();
         healthBar.progressProperty().bind(enemy.getStats().healthProperty().divide(enemy.getTotalHealth()));
-        if(!(enemy instanceof Boss))
+        if((enemy instanceof Boss))
         {
-            healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
-            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 50));
+            if(!((Boss)enemy instanceof Circle))
+            {
+                healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+                healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 640));
+            }
+            else
+            {
+                healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+                healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 50));
+            }
+            
         }
         else
         {
             healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
-            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 640));
+            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 50));
         }
         healthBar.setScaleX(enemy.getTotalHealth() / 3);
         healthBar.setScaleY(1.5);

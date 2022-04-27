@@ -123,6 +123,9 @@ public class Player extends Entity {
 
     @Override
     public void performMovement(){
+        itemsNearby.clear();
+        if(!World.instance().getIsPaused())
+        {
         if (effects.size() > 0){
             applyBuffs();
         }
@@ -130,70 +133,73 @@ public class Player extends Entity {
 
         switch (state) {
             case standing: {
-                if (previousState == PlayerState.walking){
-                    walkingStep = 0;
-                    super.getObserver().changeImage(playerImage,facing);
-                        weaponObserver.changeImage(weaponImage, facing);
-                    previousState = PlayerState.standing;
+                    if (previousState == PlayerState.walking){
+                        walkingStep = 0;
+                        super.getObserver().changeImage(playerImage,facing);
+                                weaponObserver.changeImage(weaponImage, facing);
+                        if (keys.size() > 0){
+                            state = PlayerState.walking;
+                            super.getObserver().changeImage("media/Player/basewalk.gif",facing);
+                            weaponObserver.changeImage("media/player/swordwalk.gif", facing);
+                        }
+                        break;
+                    }
                 }
-                super.getObserver().changeImage(playerImage,facing);
-                        weaponObserver.changeImage(weaponImage, facing);
-                if (keys.size() > 0){
-                    state = PlayerState.walking;
-                    super.getObserver().changeImage("media/Player/basewalk.gif",facing);
-                    weaponObserver.changeImage("media/player/swordwalk.gif", facing);
+                case attacking: {
+                    if (attackCount==25)
+                    {
+                        performAttack();
+                        state =PlayerState.resting;
+                    }
+                    else
+                    {
+                        weaponObserver.changeImage("media/player/swordwalk.gif", facing);
+                        state = PlayerState.resting; 
+                        break;
+                    }
                 }
-                break;
-            }
-            case attacking: {
-                if (attackCount==25)
-                {
-                    performAttack();
-                    state =PlayerState.resting;
-                }
-                else
-                {
-                    weaponObserver.changeImage("media/player/swordwalk.gif", facing);
-                    state = PlayerState.resting; 
+                case resting:{
+                    attackCount--;
+                    if (attackCount == 0){
+                        state = PlayerState.standing; 
+                        weaponObserver.changeImage("media/player/swordwalk.gif", Direction.left);
+                        if(facing==Direction.right)
+                        {
+                            weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
+                        }
+                        attackCount = 25;
+                    }
                     break;
                 }
-            }
-            case resting:{
-                attackCount--;
-                if (attackCount == 0){
-                    state = PlayerState.standing; 
-                    weaponObserver.changeImage("media/player/swordwalk.gif", Direction.left);
-                    if(facing==Direction.right)
-                    {
+                case walking: {
+                    walkingStep = (walkingStep + 1) % 50;
+                    if (keys.size() == 0){state = PlayerState.standing;}
+                    if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
+                    try{KeyPressed(0);}
+                    catch(IndexOutOfBoundsException i){}
+                    break;
+                }
+                case drinking: {
+                    if (itemsNearby.size() > 0){
+                        // attackCount=0;
+                        DroppedItem item = findClosestItem();
+                        item.pickUp(this);
+    
+                        weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
+                    }
+                    if (attackCount <= 0) {
+                        attackCount = 25;
+                        state = PlayerState.standing;
                         weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
                     }
-                    attackCount = 25;
+                    attackCount--;
                 }
-                break;
             }
-            case walking: {
-                walkingStep = (walkingStep + 1) % 50;
-                if (keys.size() == 0){state = PlayerState.standing;}
-                if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
-                try{KeyPressed(0);}
-                catch(IndexOutOfBoundsException i){}
-                break;
-            }
-            case drinking: {
-                if (itemsNearby.size() > 0){
-                    // attackCount=0;
-                    DroppedItem item = findClosestItem();
-                    item.pickUp(this);
-
-                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
-                }
-                if (attackCount <= 0) {
-                    attackCount = 25;
-                    state = PlayerState.standing;
-                    weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
-                }
-                attackCount--;
-            }
+        }
+        else
+        {
+            try{KeyPressed(0);}
+            catch(IndexOutOfBoundsException i){}
         }
     }
 
@@ -231,89 +237,120 @@ public class Player extends Entity {
     }
 
     public void KeyPressed(int index){
-        Direction direction = CheckIfOutOfBounds();
-        if(state!=PlayerState.standing)
-            {
-                if(state!=PlayerState.walking)
+        if(!World.instance().getIsPaused())
+        {
+            Direction direction = CheckIfOutOfBounds();
+            if(state!=PlayerState.standing)
                 {
+                    if(state!=PlayerState.walking)
+                    {
+                        return;
+                    }
+                }
+            switch (keys.get(index)){
+                default:
                     return;
-                }
-            }
-        switch (keys.get(index)){
-            default:
-                return;
-            case W: {
-                if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (keys.contains(KeyCode.S)){return;}
-            if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
+                case W: {
+                    if (keys.size() > index + 1){KeyPressed((index + 1));}
+                if (keys.contains(KeyCode.S)){return;}
+                if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
 
-            
-            int newY = super.getY() - stats.getSpeed();
-            if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
-                super.getCoords().addYCoord(stats.getSpeed());
-            }
-            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-            //     super.getCoords().subYCoord(100);
-            // }
-                break;
-            }
-            case A: {
-                if (keys.size() > index + 1){KeyPressed((index + 1)); }
-            if (keys.contains(KeyCode.D)){return;}
-            if (direction != Direction.left){
-                super.getCoords().subXCoord(stats.getSpeed());
-                if (facing == Direction.right){
-                    facing = Direction.left;
-                    super.getObserver().changeImage("media/Player/basewalk.gif", Direction.left);
-                    weaponObserver.changeImage(weaponImage, Direction.left);
+                
+                int newY = super.getY() - stats.getSpeed();
+                if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
+                    super.getCoords().addYCoord(stats.getSpeed());
                 }
-            }
-            
-            int newX = super.getX() - stats.getSpeed();
-            if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
-                super.getCoords().addXCoord(stats.getSpeed());
-            }
-            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-            //     super.getCoords().subXCoord(100);
-            // }
-                break;
-            }
-            case S: {
-                if (keys.size() > index + 1){KeyPressed((index + 1));} 
-            if (keys.contains(KeyCode.W)){return;}
-            if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
-
-            int newY = super.getY() + stats.getSpeed();
-            if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
-                super.getCoords().subYCoord(stats.getSpeed());
-            }
-            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-            //     super.getCoords().addYCoord(100);
-            // }
-            
-                break;
-            }
-            case D: {
-                if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (keys.contains(KeyCode.A)){return;}
-            if (direction != Direction.right){
-                super.getCoords().addXCoord(stats.getSpeed());
-                if (facing == Direction.left){
-                    facing = Direction.right;
-                    super.getObserver().changeImage("media/Player/basewalk.gif", Direction.right);
-                    weaponObserver.changeImage(weaponImage, Direction.right);
+                // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                //     super.getCoords().subYCoord(100);
+                // }
+                    break;
                 }
-            }
-            
-            int newX = super.getX() + stats.getSpeed();
-            if (super.getX() > 1200 || obstacleInPath(newX, super.getY())){
-                super.getCoords().subXCoord(stats.getSpeed());
-            }
+                case A: {
+                    if (keys.size() > index + 1){KeyPressed((index + 1)); }
+                if (keys.contains(KeyCode.D)){return;}
+                if (direction != Direction.left){
+                    super.getCoords().subXCoord(stats.getSpeed());
+                    if (facing == Direction.right){
+                        facing = Direction.left;
+                        super.getObserver().changeImage("media/Player/basewalk.gif", Direction.left);
+                        weaponObserver.changeImage(weaponImage, Direction.left);
+                    }
+                }
+                
+                int newX = super.getX() - stats.getSpeed();
+                if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
+                    super.getCoords().addXCoord(stats.getSpeed());
+                }
+                // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                //     super.getCoords().subXCoord(100);
+                // }
+                    break;
+                }
+                case S: {
+                    if (keys.size() > index + 1){KeyPressed((index + 1));} 
+                if (keys.contains(KeyCode.W)){return;}
+                if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
 
-            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-            //     super.getCoords().addXCoord(stats.getSpeed());
-            // }
-                break;
+                int newY = super.getY() + stats.getSpeed();
+                if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
+                    super.getCoords().subYCoord(stats.getSpeed());
+                }
+                // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                //     super.getCoords().addYCoord(100);
+                // }
+                
+                    break;
+                }
+                case D: {
+                    if (keys.size() > index + 1){KeyPressed((index + 1));}
+                if (keys.contains(KeyCode.A)){return;}
+                if (direction != Direction.right){
+                    super.getCoords().addXCoord(stats.getSpeed());
+                    if (facing == Direction.left){
+                        facing = Direction.right;
+                        super.getObserver().changeImage("media/Player/basewalk.gif", Direction.right);
+                        weaponObserver.changeImage(weaponImage, Direction.right);
+                    }
+                }
+                
+                int newX = super.getX() + stats.getSpeed();
+                if (super.getX() > 1200 || obstacleInPath(newX, super.getY())){
+                    super.getCoords().subXCoord(stats.getSpeed());
+                }
+
+                // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                //     super.getCoords().addXCoord(stats.getSpeed());
+                // }
+                    break;
+                }
+                case SPACE: {
+                    if (itemsNearby.size() > 0){
+                        DroppedItem item = itemsNearby.get(0);
+                        item.pickUp(this);
+                        // super.getObserver().changeImage(i, d);
+                        break;
+                    }
+                }
+                
+                case ESCAPE:
+                    if(!World.instance().getIsPaused())
+                    {
+                        World.instance().setIsPaused(true);
+                        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+                    }
+                    else
+                    {
+                        World.instance().setIsPaused(false);
+                        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+                    }
+            }
+        }
+        else
+        {
+            if(keys.get(index)==KeyCode.ESCAPE)
+            {
+                World.instance().setIsPaused(false);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
             }
         }
     }
@@ -401,8 +438,7 @@ public class Player extends Entity {
                 {
                     if(((Boss)enemies.get(i)).getState()==EnemyState.patrolling)
                     {
-                        System.out.println(((Boss)enemies.get(i)).getState());
-                        if(super.getX()>500&&super.getX()<750)
+                        if(super.getX()>300&&super.getX()<800)
                         {
                             enemies.get(i).takeDamage(weapon.getDamage(), facing);
                             SWORD_HIT.play();

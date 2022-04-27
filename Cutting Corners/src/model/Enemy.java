@@ -37,7 +37,7 @@ public class Enemy extends Entity{
         this.vision = vision;
         this.sides = sides;
         this.weapon = weapon;
-        this.stats = stats;
+        this.stats = new Stats(stats.getStrength()*World.instance().getDifficulty(), stats.getSpeed()*World.instance().getDifficulty(), stats.getHealth()*World.instance().getDifficulty());
         this.size = size;
         this.totalHealth = totalHealth;
         this.walking=walking;
@@ -420,6 +420,9 @@ public class Enemy extends Entity{
 
     public void serialize(DataOutputStream file) throws IOException {
         // TODO Auto-generated method stub
+    }
+    public void setAttackCount(int i) {
+        attackCount=i;
     }
 
     
