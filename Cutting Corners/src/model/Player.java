@@ -323,14 +323,14 @@ public class Player extends Entity {
                 // }
                     break;
                 }
-                case SPACE: {
-                    if (itemsNearby.size() > 0){
-                        DroppedItem item = itemsNearby.get(0);
-                        item.pickUp(this);
-                        // super.getObserver().changeImage(i, d);
-                        break;
-                    }
-                }
+                // case SPACE: {
+                //     if (itemsNearby.size() > 0){
+                //         DroppedItem item = itemsNearby.get(0);
+                //         item.pickUp(this);
+                //         // super.getObserver().changeImage(i, d);
+                //         break;
+                //     }
+                // }
                 
                 case ESCAPE:
                     if(!World.instance().getIsPaused())

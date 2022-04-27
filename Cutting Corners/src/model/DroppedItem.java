@@ -36,13 +36,19 @@ public class DroppedItem extends Entity{
         unDroppedItem.setCountdown(countdown);
     }
 
+    public void setHomeScreen(Screen homeScreen){
+        this.homeScreen = homeScreen;
+    }
+
     @Override
     public void performMovement() {
+        System.out.println('k');
         PlayerRelation relation = playerOnScreen();
         if (relation != null){
             addItem(relation);
             double distance = relation.getDistance();
-            if (distance <= 250 && informant != null){informant.Notify(text, this);}
+            System.out.println('h');
+            if (distance <= 250 && informant != null){System.out.print('j'); informant.Notify(text, this);}
             else if (distance > 250 && informant != null){informant.Notify(null, this);}
         }
     }
