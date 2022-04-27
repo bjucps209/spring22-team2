@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javafx.util.Duration;
+
 public class RangedWeapon extends Equipment{
     private int range;
     private Projectile projectile;
@@ -40,7 +42,7 @@ public class RangedWeapon extends Equipment{
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Ranged");
         file.writeUTF(getName());
-        file.writeDouble(getCooldown());
+        file.writeInt(getCooldown());
         getBuffs().serialize(file);
         
         file.writeInt(range);

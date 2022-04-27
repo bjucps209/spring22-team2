@@ -4,12 +4,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class DroppedItem extends Entity{
-    Item unDroppedItem;
+    UsableItem unDroppedItem;
     playerInformer informant;
     Screen homeScreen;
     String text = "Press Space to Pick Up";
 
-    public DroppedItem(int xCoord, int yCoord, Item unDroppedItem, String image, int size, Screen homeScreen){
+    public DroppedItem(int xCoord, int yCoord, UsableItem unDroppedItem, String image, int size, Screen homeScreen){
         super(xCoord, yCoord, image, size);
         this.unDroppedItem = unDroppedItem;
         this.homeScreen = homeScreen;
@@ -19,6 +19,8 @@ public class DroppedItem extends Entity{
         // pickerUpper.addItem(unDroppedItem);
         World.instance().displayCurrentEntities().remove(this);
         unDroppedItem.performAction(pickerUpper);
+        // removeItem();
+        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
 
     public playerInformer getInformant() {
@@ -29,13 +31,29 @@ public class DroppedItem extends Entity{
         this.informant = informant;
     }
 
+    public void setUnDroppedCountdown(effectCountdown countdown){
+        unDroppedItem.setCountdown(countdown);
+    }
+
     @Override
     public void performMovement() {
         PlayerRelation relation = playerOnScreen();
         if (relation != null){
+            addItem(relation);
             double distance = relation.getDistance();
-            if (distance <= 250){informant.Notify(text, this);}
+            if (distance <= 250 && informant != null){informant.Notify(text, this);}
+            else if (distance > 250 && informant != null){informant.Notify(null, this);}
         }
+    }
+
+    public void addItem(PlayerRelation relation){
+        Player player = relation.getPlayer();
+        if (! player.getScreenItems().contains(this)) player.addItem(this);
+    }
+
+    public void removeItem(){
+        Player player = playerOnScreen().getPlayer();
+        player.removeItem(this);
     }
 
     public PlayerRelation playerOnScreen(){
@@ -54,6 +72,5 @@ public class DroppedItem extends Entity{
 
     @Override
     public void serialize(DataOutputStream file) throws IOException {
-        unDroppedItem.serialize(file);
     }
 }

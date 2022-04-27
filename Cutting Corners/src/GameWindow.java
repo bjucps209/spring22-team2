@@ -11,7 +11,9 @@ import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -43,6 +45,7 @@ public class GameWindow {
     ImageView saveView = new ImageView(SAVE_BTN);
     ImageView saveExitView = new ImageView(SAVEEXIT_BTN);
     ImageView exitView = new ImageView(EXIT_BTN);
+    VBox effectBox = new VBox();
     
 
     @FXML
@@ -67,26 +70,23 @@ public class GameWindow {
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         
-        //check if loading from save file
-        // if (isLoaded) {
-        //     World.instance().load("savegame.dat");
-        //     entities = World.instance().displayCurrentEntities();
-        // }
+        // check if loading from save file
+        if (isLoaded) {
+            World.instance().load("savegame.dat");
+            entities = World.instance().displayCurrentEntities();
+        }
 
-        // World.instance().getCurrentLevel().setObserver(() -> {
-        //     try {
-        //         Initialize();
-        //     } catch (IOException e) {
-        //         // TODO Auto-generated catch block
-        //         e.printStackTrace();
-        //     }
-        // });
+        gameWindow.getChildren().add(effectBox);
+        effectBox.relocate(950*ratioWidth, 200*ratioHeight);
+
         World.instance().getCurrentLevel().setObserver( me -> {
             try {
                 Initialize(isLoaded,userCampaign,cheatMode,difficulty);
             } catch (IOException e) {}
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
+        
+
         World.instance().setLoaded(isLoaded);
         World.instance().setCheatMode(cheatMode);
         World.instance().setCampaign(userCampaign);
@@ -225,14 +225,60 @@ public class GameWindow {
     @FXML
     void showItem(DroppedItem item){
         item.setInformant(this::Notify);
+        item.setUnDroppedCountdown(this::showEffectTimer);
     }
 
     @FXML
     void Notify(String text, DroppedItem item){
+        if (text == null){unNotify(item);}
         Label notification = new Label(text);
+        notification.setUserData("Notification");
         notification.setLayoutX(item.getX());
         notification.setLayoutY(item.getY() + 50);
         gameWindow.getChildren().add(notification);
+    }
+
+    @FXML
+    void unNotify(DroppedItem item){
+        for (Node node: gameWindow.getChildren()){
+            if (node.getUserData() != null && node.getUserData().equals("Notification")){
+                gameWindow.getChildren().remove(node);
+            }
+        }
+    }
+
+    @FXML
+    void showEffectTimer(Effect effect, String effectName, String icon){
+        // gameWindow.getChildren().remove(effectBox);
+        // effectBox.relocate(950*ratioWidth, 200*ratioHeight);
+
+        VBox effectDropdown = new VBox();
+        Label effectTitle = new Label(effectName);
+
+        Image image = new Image(icon);
+        ImageView imageview = new ImageView(image);
+        imageview.setFitHeight(25);
+        imageview.setPreserveRatio(true);
+
+        Label duration = new Label();
+        HBox row2 = new HBox();
+        
+        row2.getChildren().add(imageview);
+
+        duration.textProperty().bind(effect.DurationProperty().divide(50).asString());
+
+        if (effect.getDuration() <= 99999){row2.getChildren().add(duration);}
+        effectDropdown.getChildren().add(effectTitle);
+        effectDropdown.getChildren().add(row2);
+        effectDropdown.setUserData(effect);
+        effectDropdown.visibleProperty().bind(effect.DurationProperty().greaterThan(0));
+
+        for (Node node: effectBox.getChildren()){
+            if (node.getUserData() == null){continue;}
+            if (node.getUserData().equals(effect)){return;}
+        }
+
+        effectBox.getChildren().add(effectDropdown);
     }
 
     @FXML
@@ -368,16 +414,6 @@ public class GameWindow {
             gameWindow.getChildren().add(obstacleImage);
             obstacleImage.toBack();
         }
-    }
-    
-
-    /**
-     * saves the state of the game when the save button is clicked
-     * @param event
-     */
-    @FXML
-    void onSaveClicked(ActionEvent event) {
-
     }
     
     @FXML

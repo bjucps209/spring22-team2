@@ -16,7 +16,7 @@ public class Screen {
     private ObjType[][] objectLocations; // y then x
     private ArrayList<LvLObject> objectList;
 
-    private static int currentObjID; 
+    private int currentObjID; 
     
     public Screen(int x, int y, int z, Vector gridDim) {
         IDSeries = new int[] {x, y, z};
@@ -36,7 +36,7 @@ public class Screen {
         switch (objtype) { //defines newobject based on type
             case Player:
                 newobject = new LvLObject(name, imgPath, currentObjID, ObjType.Player, dimensions, topleftcell);
-                DataManager.DaMan().setPlayerScrID(this.getStrID());
+                DataManager.DaMan().setPlayerScrID(getStrID());
                 break;
             default:
                 newobject = new LvLObject(name, imgPath, currentObjID, objtype, dimensions, topleftcell);

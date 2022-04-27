@@ -109,7 +109,7 @@ public class MainWindow implements LevelObserver {
     }
 
     @FXML
-    void layBackground(Image placeImg) {
+    public void layBackground(Image placeImg) {
         BackgroundSize what = new BackgroundSize(100, 100, true, true, true, true); //Does a thing
         BackgroundImage thing = new BackgroundImage(placeImg, null, null, null, what); //Does another thing
         Background bg = new Background(thing); //idk
@@ -302,8 +302,9 @@ public class MainWindow implements LevelObserver {
         disableNavButtons();
         updateCurrentObject(null);
         updateCurrentObjectInfo(null);
-        if(DataManager.DaMan().getCurrentScreen().getBackgroundPathName() != null) {
-            layBackground(new Image(DataManager.DaMan().getCurrentScreen().getBackgroundPathName()));
+        String blah = DataManager.DaMan().getCurrentScreen().getBackgroundPathName();
+        if(blah != null && !blah.equals("")) {
+            layBackground(new Image(blah));
         }        
     }
 

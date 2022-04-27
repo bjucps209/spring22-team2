@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javafx.util.Duration;
+
 public class Armor extends Equipment{
 
     public Armor(String name, int Strength, int Health, int Speed, String image){
@@ -14,7 +16,7 @@ public class Armor extends Equipment{
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Armor");
         file.writeUTF(getName());
-        getBuffs().serialize(file);
+        super.getBuffs().serialize(file);
         file.writeUTF(super.getImage());
     }
 

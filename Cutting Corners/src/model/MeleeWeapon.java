@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
+import javafx.util.Duration;
 
 public class MeleeWeapon extends Equipment{
     private int range;
@@ -15,7 +16,7 @@ public class MeleeWeapon extends Equipment{
     private String image;
     private ArrayList<Entity> enemies;
 
-    public MeleeWeapon(String name, double cooldown, int Strength, int Speed, int Health, int range, String image){
+    public MeleeWeapon(String name, int cooldown, int Strength, int Speed, int Health, int range, String image){
         super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Speed, Health), image);
         this.range = range;
         this.image = image;
@@ -80,9 +81,7 @@ public class MeleeWeapon extends Equipment{
         file.writeUTF(getName());
         file.writeDouble(getCooldown());
 
-        file.writeInt(this.getBuffs().getStrength());
-        file.writeInt(this.getBuffs().getSpeed());
-        file.writeInt(this.getBuffs().getHealth());
+        super.getBuffs().serialize(file);
 
         file.writeInt(range);
         file.writeInt(damage);
@@ -94,9 +93,10 @@ public class MeleeWeapon extends Equipment{
         String name = file.readUTF();
         int cooldown = file.readInt();
 
-        int Strength = file.readInt();
-        int Speed = file.readInt();        
-        int Health = file.readInt();
+        Stats buffs = Stats.deserialize(file);
+        int Strength = buffs.getStrength();
+        int Health = buffs.getHealth();
+        int Speed = buffs.getSpeed();
 
         int range = file.readInt();
         int damage = file.readInt();

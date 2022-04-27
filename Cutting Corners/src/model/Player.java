@@ -7,6 +7,7 @@ import java.util.*;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
+import javafx.util.Duration;
 
 public class Player extends Entity {
 
@@ -32,6 +33,7 @@ public class Player extends Entity {
     KeyCode keyPressed;
     damageIndicator indicator;
     ArrayList<DroppedItem> itemsNearby = new ArrayList<DroppedItem>();
+    ArrayList<Effect> effects = new ArrayList<Effect>();
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -52,6 +54,14 @@ public class Player extends Entity {
 
     public void addItem(DroppedItem item){
         itemsNearby.add(item);
+    }
+
+    public void removeItem(DroppedItem item){
+        itemsNearby.remove(item);
+    }
+
+    public ArrayList<DroppedItem> getScreenItems(){
+        return itemsNearby;
     }
 
     public void setIndicator(damageIndicator indicator){
@@ -116,22 +126,24 @@ public class Player extends Entity {
         itemsNearby.clear();
         if(!World.instance().getIsPaused())
         {
-            switch (state) {
-                case standing: {
+        if (effects.size() > 0){
+            applyBuffs();
+        }
+        inObstacle();
+
+        switch (state) {
+            case standing: {
                     if (previousState == PlayerState.walking){
                         walkingStep = 0;
                         super.getObserver().changeImage(playerImage,facing);
-                            weaponObserver.changeImage(weaponImage, facing);
-                        previousState = PlayerState.standing;
+                                weaponObserver.changeImage(weaponImage, facing);
+                        if (keys.size() > 0){
+                            state = PlayerState.walking;
+                            super.getObserver().changeImage("media/Player/basewalk.gif",facing);
+                            weaponObserver.changeImage("media/player/swordwalk.gif", facing);
+                        }
+                        break;
                     }
-                    super.getObserver().changeImage(playerImage,facing);
-                            weaponObserver.changeImage(weaponImage, facing);
-                    if (keys.size() > 0){
-                        state = PlayerState.walking;
-                        super.getObserver().changeImage("media/Player/basewalk.gif",facing);
-                        weaponObserver.changeImage("media/player/swordwalk.gif", facing);
-                    }
-                    break;
                 }
                 case attacking: {
                     if (attackCount==25)
@@ -167,12 +179,56 @@ public class Player extends Entity {
                     catch(IndexOutOfBoundsException i){}
                     break;
                 }
+                case drinking: {
+                    if (itemsNearby.size() > 0){
+                        // attackCount=0;
+                        DroppedItem item = findClosestItem();
+                        item.pickUp(this);
+    
+                        weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
+                    }
+                    if (attackCount <= 0) {
+                        attackCount = 25;
+                        state = PlayerState.standing;
+                        weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
+                    }
+                    attackCount--;
+                }
             }
         }
         else
         {
             try{KeyPressed(0);}
             catch(IndexOutOfBoundsException i){}
+        }
+    }
+
+    public DroppedItem findClosestItem(){
+        int distance = 9999;
+        DroppedItem closest = null;
+        for (DroppedItem item: itemsNearby){
+            PlayerRelation relation = item.playerOnScreen();
+            if (relation == null){continue;}
+            if (relation.getDistance() < distance){
+                closest = item;
+            }
+        }
+
+        return closest;
+    }
+    
+
+    public void applyBuffs(){
+        for (int i = 0; i < effects.size(); i++){
+            Effect effect = effects.get(i);
+            if (! effect.getApplied())
+            {
+                effect.giveEffect(this);
+            }
+            effect.decrementDuration();
+            if (effect.getDuration() <= 0){
+                effect.removeEffect(this);
+            }
         }
     }
 
@@ -418,6 +474,12 @@ public class Player extends Entity {
         }
     }
 
+    public void inObstacle(){
+        if (obstacleInPath(super.getX(), super.getY())){
+            super.getCoords().setxCoord(super.getX() + 100);
+        }
+    }
+
     @Override
     public void takeDamage(int damage, Direction direction)
     {
@@ -463,9 +525,10 @@ public class Player extends Entity {
         
     }
     public Cell cellWithin(int row, int col){
-        Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
+        try{Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
         if (cell == null){cell = Cell.empty;}
-        return cell;
+        return cell;}
+        catch(Exception i){return Cell.empty;}
     }
 
     public boolean obstacleInPath(int xCoord, int yCoord){
@@ -515,6 +578,18 @@ public class Player extends Entity {
 
     public String getWeaponImage() {
         return weaponImage;
+    }
+
+    public ArrayList<Effect> getEffects() {
+        return effects;
+    }
+
+    public void addEffects(Effect effect) {
+        effects.add(effect);
+    }
+
+    public void removeEffects(Effect effect) {
+        effects.remove(effect);
     }
 
     public void setWeaponImage(String weaponImage) {
@@ -624,10 +699,8 @@ public class Player extends Entity {
         file.writeInt(this.getX());
         file.writeInt(this.getY());
         
-        // file.writeInt(inventory.size()); // how many items are in the inventory
 
         equippedItem.serialize(file);
-        armor.serialize(file);
         stats.serialize(file);
     }
 
@@ -637,10 +710,7 @@ public class Player extends Entity {
         int y = file.readInt();
         Player player = new Player(x, y);
 
-        // int numItems = file.readInt();
-
         player.setEquippedItem(Item.deserialize(file));
-        player.setArmor(Armor.deserialize(file));
         player.setStats(Stats.deserialize(file));
 
         return player;

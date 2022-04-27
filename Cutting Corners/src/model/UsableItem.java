@@ -3,50 +3,66 @@ package model;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.jar.Attributes.Name;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class UsableItem extends Item{
+    private boolean used;
     private int useCount;
     private int duration;
-    private Stats buffs;
+    private effectCountdown countdown;
+    private String Image;
 
     public UsableItem(String name, int cooldown, int useCount, int duration, int Strength, int Health, int Speed, String Image){
-        super(name, cooldown, new Stats(Strength, Health, Speed), Image);
+        super(name, cooldown, new Stats(Strength, Speed, Health), Image);
+        this.Image = Image;
         this.useCount = useCount;
         this.duration = duration;
     }
 
-    public void applyBuffs(Entity user){
+    public void applyBuffs(Entity user, Effect effect){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
-            enemy.getStats().ApplyBuffs(this);
+            enemy.getStats().ApplyBuffs(this.getBuffs());
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            player.getStats().ApplyBuffs(this);
+            if (super.getBuffs().getHealth() + player.getStats().getHealth() > player.getTotalHealth()){
+                player.getStats().setHealth((int) player.getTotalHealth());
+                super.getBuffs().setHealth(0);
+            }
+
+            player.addEffects(effect);
         }
     }
 
     public void unApplyBuffs(Entity user){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
-            enemy.getStats().unApplyBuffs(this);
+            enemy.getStats().unApplyBuffs(this.getBuffs());
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            player.getStats().unApplyBuffs(this);
+            player.getStats().unApplyBuffs(this.getBuffs());
         }
     }
 
     @Override
     public void performAction(Entity user){
-        applyBuffs(user);
-        KeyFrame frames = new KeyFrame(Duration.millis(duration), me -> unApplyBuffs(user));
-        Timeline duration = new Timeline(frames);
-        duration.play();
+        Effect effect = new Effect(duration, super.getBuffs());
+        if (used){return;}
+        applyBuffs(user, effect);
+        used = true;
+        useCount--;
+        if (countdown != null){
+
+            countdown.showEffectTimer(effect, super.getName(), Image);
+        }
     }
 
 
@@ -68,13 +84,14 @@ public class UsableItem extends Item{
         this.duration = duration;
     }
 
-    public Stats getBuffs() {
-        return buffs;
+    public void setCountdown(effectCountdown countdown){
+        this.countdown = countdown;
     }
 
-    public void setBuffs(Stats buffs) {
-        this.buffs = buffs;
+    public effectCountdown getCountdown(){
+        return countdown;
     }
+
 
 
 
@@ -83,8 +100,8 @@ public class UsableItem extends Item{
         file.writeUTF("UsableItem"); //type of item
         file.writeUTF(this.getName());
         // file.writeInt(this.getCooldown());
-        file.writeDouble(this.getCooldown());
-        buffs.serialize(file);
+        file.writeInt(getCooldown());
+        getBuffs().serialize(file);
         file.writeInt(useCount);
         file.writeInt(duration);
         file.writeUTF(super.getImage());
