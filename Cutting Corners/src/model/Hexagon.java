@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Hexagon extends Enemy{
-    static Equipment weapon = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, "media/Player/swordwalk.gif");
+    static Equipment weapon = new MeleeWeapon("Magic Wand", 1, 1, 0, 0, 500, "media/Player/swordwalk.gif");
     static String image = "media/Enemies/hexagon.png";
     static String walking = "media/Enemies/hexagonwalk.gif";
     static String attacking = "media/Enemies/hexagonattack.gif";
@@ -13,7 +13,15 @@ public class Hexagon extends Enemy{
     public Hexagon(int size, int xCoord, int yCoord, Screen homeScreen){
         super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,size*2,size*6, 20);
     }
-
+    @Override
+    public void performAttack()
+    {
+        Projectile fireball = new Projectile(super.getStats().getStrength(), 5, super.getX(), super.getY(), 500, "media/Player/fireball.png", 2, World.instance().getPlayer().getX(), World.instance().getPlayer().getX(), 2);
+        World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
+        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+        super.setAttackCount(100);
+    }
+    
     public static Stats sizeToStats(int size){
 
         //int speed = (int) 30 / size;

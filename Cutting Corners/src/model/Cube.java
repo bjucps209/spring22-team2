@@ -80,11 +80,14 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
     @Override
     public void performAttack1()
     {
-        if(attackCount>150&&attackCount<190)
+        if(World.instance().getPlayer()!=null)
         {
-            if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+            if(attackCount>150&&attackCount<190)
             {
-                World.instance().getPlayer().takeDamage(1, Direction.left);
+                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                {
+                    World.instance().getPlayer().takeDamage(1, Direction.left);
+                }
             }
         }
     }
@@ -92,11 +95,14 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
     @Override
     public void performAttack2()
     {
-        if(attackCount==150)
+        if(World.instance().getPlayer()!=null)
         {
-            if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+            if(attackCount==150)
             {
-                World.instance().getPlayer().takeDamage(10, Direction.left);
+                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                {
+                    World.instance().getPlayer().takeDamage(10, Direction.left);
+                }
             }
         }
     }
@@ -106,47 +112,55 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
     {
         if(World.instance().getPlayer().getCoords().getyCoord()<700)
         {
-            //The Math on this one doesn't work currently
-            if(attackCount>195)
+            if(World.instance().getPlayer()!=null)
             {
-                double temp = attackCount-195;
-                double divide = temp/30;
-                double percent = divide*640;
-                double pos = World.instance().getPlayer().getCoords().getxCoord();
-                double distance = Math.abs(pos-percent);
-                if(distance<10)
+                if(attackCount>195)
                 {
-                    World.instance().getPlayer().takeDamage(2, Direction.up);
+                    double temp = attackCount-195;
+                    double divide = temp/30;
+                    double percent = divide*640;
+                    double pos = World.instance().getPlayer().getCoords().getxCoord();
+                    double distance = Math.abs(pos-percent);
+                    if(distance<10)
+                    {
+                        World.instance().getPlayer().takeDamage(2, Direction.up);
+                    }
                 }
-            }
-            if(attackCount<195&&attackCount>170)
-            {
-                double temp = attackCount-170;
-                double divide = temp/25;
-                double percent = divide*1280;
-                double dispalce = 1280-percent;
-                double pos = World.instance().getPlayer().getCoords().getxCoord();
-                double distance = Math.abs(pos-dispalce);
-                if(distance<10)
+                if(attackCount<195&&attackCount>170)
                 {
-                    World.instance().getPlayer().takeDamage(2, Direction.up);
+                    double temp = attackCount-170;
+                    double divide = temp/25;
+                    double percent = divide*1280;
+                    double dispalce = 1280-percent;
+                    double pos = World.instance().getPlayer().getCoords().getxCoord();
+                    double distance = Math.abs(pos-dispalce);
+                    if(distance<10)
+                    {
+                        World.instance().getPlayer().takeDamage(2, Direction.up);
+                    }
                 }
-            }
-            if(attackCount<170&&attackCount>150)
-            {
-                double temp = attackCount-150;
-                double divide = temp/20;
-                double percent = 2*divide*1280;
-                double pos = World.instance().getPlayer().getCoords().getxCoord();
-                double distance = Math.abs(pos-percent);
-                if(distance<10)
+                if(attackCount<170&&attackCount>150)
                 {
-                    World.instance().getPlayer().takeDamage(2, Direction.up);
+                    double temp = attackCount-150;
+                    double divide = temp/20;
+                    double percent = 2*divide*1280;
+                    double pos = World.instance().getPlayer().getCoords().getxCoord();
+                    double distance = Math.abs(pos-percent);
+                    if(distance<10)
+                    {
+                        World.instance().getPlayer().takeDamage(2, Direction.up);
+                    }
                 }
             }
         }
     }
 
+
+    @Override
+    public EnemyState getState()
+    {
+        return state;
+    }
     
     @Override
     public void serialize(DataOutputStream file) throws IOException {

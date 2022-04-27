@@ -2,8 +2,7 @@ package model;
 
 public class Boss extends Enemy{
     int attackCooldown;
-    int hitX = 640;
-    int hitY = 700;
+    boolean dead = false;
     public Boss(int sides, int size, int xCoord, int yCoord, String image, Screen homeScreen, int vision, Stats stats, int totalHealth, int score){
         super(sides, size, xCoord, yCoord, image, homeScreen, vision, null, stats,image,image, totalHealth, 100, score);
     }
@@ -44,22 +43,24 @@ public class Boss extends Enemy{
     @Override
     public void performDie()
     {
-        System.out.println("Dead");
-        World.instance().getPlayer().addExperience(super.getScore());
-        World.instance().getPlayer().addScore(super.getScore());
-        World.instance().displayCurrentEntities().remove(this);
-        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
-        World.instance().setActiveBoss(false);
-        if(!World.instance().getCamapign())
-        {
-            if(World.instance().getCurrentLevel().getCurrentLevel()!=World.instance().getNumLevels()-1)
+            World.instance().getPlayer().addExperience(super.getScore());
+            World.instance().getPlayer().addScore(super.getScore());
+            World.instance().displayCurrentEntities().remove(this);
+            World.instance().setActiveBoss(false);
+            dead=true;
+            if(!World.instance().getCamapign())
             {
-                World.instance().passLevel();
+                if(World.instance().getCurrentLevel().getCurrentLevel()!=World.instance().getNumLevels()-1)
+                {
+                    World.instance().passLevel();
+                    System.out.println("Dead");
+                    World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+                }
+                else
+                {
+                    World.finishGame();
+                }
             }
-            else
-            {
-                World.finishGame();
-            }
-        }
+        
     }
 }
