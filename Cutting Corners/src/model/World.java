@@ -326,7 +326,7 @@ public class World {
             Screen screen4 = new Screen(1, 1, 1,"media/terrain/egypt/desertthreewaydown.png");
             Screen bossScreen = new Screen(1, 2, 1,"media/terrain/secret&boss/bossroom.png");
 
-            Triangle triangle1 = new Triangle(10, 1, 1, screen1);
+            Triangle triangle1 = new Triangle(1, 1, 1, screen1);
             Triangle triangle2 = new Triangle(2, 2, 6, screen3);
             Triangle triangle3 = new Triangle(1, 1, 1, screen2);
             Triangle triangle4 = new Triangle(2, 2, 6, screen2);
