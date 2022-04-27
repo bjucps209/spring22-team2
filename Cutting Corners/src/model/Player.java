@@ -189,7 +189,7 @@ public class Player extends Entity {
                     // attackCount=0;
                     DroppedItem item = findClosestItem();
                     item.pickUp(this);
-                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
+                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.left);
                 }
                 if (attackCount <= 0) {
                     attackCount = 25;

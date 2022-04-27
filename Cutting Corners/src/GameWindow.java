@@ -230,14 +230,12 @@ public class GameWindow {
 
     @FXML
     void Notify(String text, DroppedItem item){
-        System.out.println('u');
         if (text == null){unNotify(item);}
         Label notification = new Label(text);
         notification.setUserData("Notification");
         notification.setLayoutX(item.getX());
         notification.setLayoutY(item.getY() + 50);
         gameWindow.getChildren().add(notification);
-        System.out.println('x');
     }
 
     @FXML
@@ -253,7 +251,7 @@ public class GameWindow {
     void showEffectTimer(Effect effect, String effectName, String icon){
         // gameWindow.getChildren().remove(effectBox);
         // effectBox.relocate(950*ratioWidth, 200*ratioHeight);
-
+        
         VBox effectDropdown = new VBox();
         Label effectTitle = new Label(effectName);
 

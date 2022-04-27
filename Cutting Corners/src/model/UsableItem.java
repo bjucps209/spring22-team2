@@ -59,6 +59,7 @@ public class UsableItem extends Item{
         applyBuffs(user, effect);
         used = true;
         useCount--;
+        System.out.println(effect);
         if (countdown != null){
 
             countdown.showEffectTimer(effect, super.getName(), Image);
