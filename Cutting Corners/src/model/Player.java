@@ -181,12 +181,14 @@ public class Player extends Entity {
             }
             case drinking: {
                 if (itemsNearby.size() > 0){
-                    DroppedItem item = itemsNearby.get(0);
+                    // attackCount=0;
+                    DroppedItem item = findClosestItem();
                     item.pickUp(this);
 
                     weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
                 }
                 if (attackCount <= 0) {
+                    attackCount = 25;
                     state = PlayerState.standing;
                     weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
                 }
@@ -194,13 +196,33 @@ public class Player extends Entity {
             }
         }
     }
+
+    public DroppedItem findClosestItem(){
+        int distance = 9999;
+        DroppedItem closest = null;
+        for (DroppedItem item: itemsNearby){
+            PlayerRelation relation = item.playerOnScreen();
+            if (relation == null){continue;}
+            if (relation.getDistance() < distance){
+                closest = item;
+            }
+        }
+
+        return closest;
+    }
     
 
     public void applyBuffs(){
         for (int i = 0; i < effects.size(); i++){
             Effect effect = effects.get(i);
-            effect.giveEffect(this);
-            effects.remove(i);
+            if (! effect.getApplied())
+            {
+                effect.giveEffect(this);
+            }
+            effect.decrementDuration();
+            if (effect.getDuration() <= 0){
+                effect.removeEffect(this);
+            }
         }
     }
 

@@ -19,7 +19,7 @@ public class DroppedItem extends Entity{
         // pickerUpper.addItem(unDroppedItem);
         World.instance().displayCurrentEntities().remove(this);
         unDroppedItem.performAction(pickerUpper);
-        removeItem();
+        // removeItem();
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
 

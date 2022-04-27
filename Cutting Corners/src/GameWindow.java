@@ -29,7 +29,7 @@ public class GameWindow {
     Image background = new Image("media/terrain/medieval/medievalfourway.png");
     ImageView backgroundView = new ImageView(background);
     ArrayList<Character> keysPressed = new ArrayList<Character>();
-    HBox effectBox = new HBox();
+    VBox effectBox = new VBox();
     
 
     @FXML
@@ -68,6 +68,8 @@ public class GameWindow {
         //     entities = World.instance().displayCurrentEntities();
         // }
 
+        gameWindow.getChildren().add(effectBox);
+        effectBox.relocate(950*ratioWidth, 200*ratioHeight);
 
         World.instance().getCurrentLevel().setObserver( me -> {
             try {
@@ -76,7 +78,6 @@ public class GameWindow {
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         
-        effectBox.relocate(950*ratioWidth, 200*ratioHeight);
 
         World.instance().setLoaded(isLoaded);
         World.instance().setCheatMode(cheatMode);
@@ -120,6 +121,7 @@ public class GameWindow {
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         displayObstacles(currentScreen);
+
         
         ratioImage(backgroundView);
     }
@@ -162,6 +164,7 @@ public class GameWindow {
     @FXML
     void showItem(DroppedItem item){
         item.setInformant(this::Notify);
+        item.setUnDroppedCountdown(this::showEffectTimer);
     }
 
     @FXML
@@ -184,29 +187,37 @@ public class GameWindow {
     }
 
     @FXML
-    void showEffectTimer(int time, String effectName, String icon){
+    void showEffectTimer(Effect effect, String effectName, String icon){
+        // gameWindow.getChildren().remove(effectBox);
+        // effectBox.relocate(950*ratioWidth, 200*ratioHeight);
+
         VBox effectDropdown = new VBox();
         Label effectTitle = new Label(effectName);
+
         Image image = new Image(icon);
         ImageView imageview = new ImageView(image);
+        imageview.setFitHeight(25);
+        imageview.setPreserveRatio(true);
+
         Label duration = new Label();
+        HBox row2 = new HBox();
+        
+        row2.getChildren().add(imageview);
 
-        KeyFrame frames = new KeyFrame(Duration.seconds(1), me -> countdown(duration));
-        Timeline timer = new Timeline(frames);
-        timer.setCycleCount(time);
+        duration.textProperty().bind(effect.DurationProperty().divide(50).asString());
 
+        if (effect.getDuration() <= 99999){row2.getChildren().add(duration);}
         effectDropdown.getChildren().add(effectTitle);
-        HBox row2 = new HBox(imageview, duration);
         effectDropdown.getChildren().add(row2);
+        effectDropdown.setUserData(effect);
+        effectDropdown.visibleProperty().bind(effect.DurationProperty().greaterThan(0));
+
+        for (Node node: effectBox.getChildren()){
+            if (node.getUserData() == null){continue;}
+            if (node.getUserData().equals(effect)){return;}
+        }
+
         effectBox.getChildren().add(effectDropdown);
-    }
-
-    @FXML
-    void countdown(Label duration){
-        String text = duration.getText();
-        int time = Integer.parseInt(text);
-
-        duration.setText(time - 1 + "");
     }
 
     @FXML

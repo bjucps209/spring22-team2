@@ -88,7 +88,7 @@ public class World {
             Screen screen4 = new Screen(1, 1, 1,"media/terrain/egypt/desertthreewaydown.png");
             Screen bossScreen = new Screen(1, 2, 1,"media/terrain/secret&boss/bossroom.png");
 
-            Triangle triangle1 = new Triangle(1, 1, 1, screen1);
+            Triangle triangle1 = new Triangle(10, 1, 1, screen1);
             Triangle triangle2 = new Triangle(2, 2, 6, screen3);
             Triangle triangle3 = new Triangle(1, 1, 1, screen2);
             Triangle triangle4 = new Triangle(2, 2, 6, screen2);
@@ -96,18 +96,25 @@ public class World {
             Triangle triangle6 = new Triangle(2, 2, 6, screen4);
             Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
 
-            UsableItem item1 = new UsableItem("Health Potion", 2, 1, 9999999, 0, 5, 0, "media/Player/Bow.png");
-        
-            DroppedItem item = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, screen3);
+            UsableItem item1 = new UsableItem("Health Potion", 2, 1, 5, 0, 5, 0, "media/Player/Effects/health.png");
+            UsableItem item2 = new UsableItem("Strength Potion", 2, 1, 60, 3, 0, 0, "media/Player/Effects/strength.png");
+            UsableItem item3 = new UsableItem("Rage Potion", 2, 1, 45, 3, 0, 2, "media/Player/Effects/rage.png");
+            UsableItem item4 = new UsableItem("Rage Potion II", 2, 1, 30, 5, 0, 3, "media/Player/Effects/rage.png");
+
+            DroppedItem itemA = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, screen3);
+            DroppedItem itemB = new DroppedItem(300, 600, item2, "media/Player/Item.png", 100, screen1);
+            DroppedItem itemC = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, bossScreen);
 
             screen1.addEntity(triangle1);
+            screen1.addEntity(itemB);
             screen2.addEntity(triangle2);
             screen2.addEntity(triangle3);
             screen3.addEntity(triangle4);
-            screen3.addEntity(item);
+            screen3.addEntity(itemA);
             screen4.addEntity(triangle5);
             screen4.addEntity(triangle6);
             bossScreen.addEntity(triangleBoss);
+            bossScreen.addEntity(itemC);
 
             screen1.setUp(screen3);
             screen1.setRight(screen2);
@@ -144,6 +151,8 @@ public class World {
             Screen screen12 = new Screen(2, 2, 2, "media/terrain/caveman/cavemantwowayvertical.png");
             Screen screen13 = new Screen(3, 0, 2, "media/terrain/caveman/cavemanonewaydown.png");
             Screen bossScreen2 = new Screen(3, 2, 2, "media/terrain/secret&boss/bossroom.png");
+            
+           
 
             screen5.setUp(screen6);
 
@@ -187,9 +196,12 @@ public class World {
             Square square12 = new Square(4, 4, 8, screen6);
             Cube cubeBoss = new Cube(11, 0, 0, bossScreen2);
 
+            DroppedItem itemD = new DroppedItem(300, 600, item3, "media/Player/Item.png", 100, screen6);
+
             screen6.addEntity(square1);
             screen6.addEntity(square2);
             screen6.addEntity(square12);
+            screen6.addEntity(itemD);
             screen7.addEntity(square3);
             screen8.addEntity(square4);
             screen8.addEntity(square5);

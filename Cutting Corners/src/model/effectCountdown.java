@@ -1,5 +1,5 @@
 package model;
 
 public interface effectCountdown {
-    void showEffectTimer(int time, String effectName, String icon);
+    void showEffectTimer(Effect effect, String effectName, String icon);
 }

@@ -8,21 +8,25 @@ import java.util.jar.Attributes.Name;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class UsableItem extends Item{
+    private boolean used;
     private int useCount;
     private int duration;
     private Stats buffs;
     private effectCountdown countdown;
+    private String Image;
 
     public UsableItem(String name, int cooldown, int useCount, int duration, int Strength, int Health, int Speed, String Image){
         super(name, cooldown, new Stats(Strength, Speed, Health), Image);
+        this.Image = Image;
         this.useCount = useCount;
         this.duration = duration;
     }
 
-    public void applyBuffs(Entity user){
+    public void applyBuffs(Entity user, Effect effect){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
             enemy.getStats().ApplyBuffs(this.getBuffs());
@@ -33,7 +37,6 @@ public class UsableItem extends Item{
                 player.getStats().setHealth((int) player.getTotalHealth());
                 super.buffs.setHealth(0);
             }
-            Effect effect = new Effect(duration, super.buffs);
             player.addEffects(effect);
         }
     }
@@ -51,14 +54,15 @@ public class UsableItem extends Item{
 
     @Override
     public void performAction(Entity user){
-        applyBuffs(user);
+        Effect effect = new Effect(duration, super.buffs);
+        if (used){return;}
+        applyBuffs(user, effect);
+        used = true;
+        useCount--;
         if (countdown != null){
-            countdown.showEffectTimer(duration, super.getName(), super.getImage());
+
+            countdown.showEffectTimer(effect, super.getName(), Image);
         }
-        if (duration <= 0){
-            unApplyBuffs(user);
-        }
-        duration--;
     }
 
 

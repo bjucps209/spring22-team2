@@ -407,6 +407,7 @@ public class MainWindow {
                 {
                     KeyCode keyPressed = event.getCode();
                     if (keyPressed == KeyCode.SPACE){
+                        World.instance().getPlayer().setAttackCount(35);
                         World.instance().getPlayer().setState(PlayerState.drinking);
                     }
                     else{
