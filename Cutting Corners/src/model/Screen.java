@@ -217,7 +217,9 @@ public class Screen {
         int numEntities = file.readInt();
         for (int i = 0; i < numEntities; ++i) {
             Entity e = Entity.deserialize(file, screen);
-            screen.addEntity(e);
+            screen.addEntity(e);    
+            World.instance().getCurrentLevel().placeEntity(row, col, e);
+
         }
         int cellsTaken = file.readInt();
         for (int i = 0; i < cellsTaken; ++i) {

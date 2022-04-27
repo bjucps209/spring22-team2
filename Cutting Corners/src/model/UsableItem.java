@@ -15,7 +15,6 @@ public class UsableItem extends Item{
     private boolean used;
     private int useCount;
     private int duration;
-    private Stats buffs;
     private effectCountdown countdown;
     private String Image;
 
@@ -33,10 +32,11 @@ public class UsableItem extends Item{
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            if (super.buffs.getHealth() + player.getStats().getHealth() > player.getTotalHealth()){
+            if (super.getBuffs().getHealth() + player.getStats().getHealth() > player.getTotalHealth()){
                 player.getStats().setHealth((int) player.getTotalHealth());
-                super.buffs.setHealth(0);
+                super.getBuffs().setHealth(0);
             }
+
             player.addEffects(effect);
         }
     }
@@ -54,7 +54,7 @@ public class UsableItem extends Item{
 
     @Override
     public void performAction(Entity user){
-        Effect effect = new Effect(duration, super.buffs);
+        Effect effect = new Effect(duration, super.getBuffs());
         if (used){return;}
         applyBuffs(user, effect);
         used = true;
@@ -92,13 +92,6 @@ public class UsableItem extends Item{
         return countdown;
     }
 
-    public Stats getBuffs() {
-        return buffs;
-    }
-
-    public void setBuffs(Stats buffs) {
-        this.buffs = buffs;
-    }
 
 
 
@@ -108,7 +101,7 @@ public class UsableItem extends Item{
         file.writeUTF(this.getName());
         // file.writeInt(this.getCooldown());
         file.writeInt(getCooldown());
-        buffs.serialize(file);
+        getBuffs().serialize(file);
         file.writeInt(useCount);
         file.writeInt(duration);
         file.writeUTF(super.getImage());

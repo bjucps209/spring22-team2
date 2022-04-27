@@ -2,6 +2,9 @@ Some questions to ask:
     Does importing an entire package (ie javafx.scene.layout.*) actually
     negatively impact anything.
 
-4/23/22
+    4/26/22
+    40++ min debugging
+    4:38 pm - 6:14 pm -- 20 min
+    6:23 pm -
 
     Check DimensionMan and object place (if not empty part)

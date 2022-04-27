@@ -81,9 +81,7 @@ public class MeleeWeapon extends Equipment{
         file.writeUTF(getName());
         file.writeDouble(getCooldown());
 
-        file.writeInt(this.getBuffs().getStrength());
-        file.writeInt(this.getBuffs().getSpeed());
-        file.writeInt(this.getBuffs().getHealth());
+        super.getBuffs().serialize(file);
 
         file.writeInt(range);
         file.writeInt(damage);
@@ -95,9 +93,10 @@ public class MeleeWeapon extends Equipment{
         String name = file.readUTF();
         int cooldown = file.readInt();
 
-        int Strength = file.readInt();
-        int Speed = file.readInt();        
-        int Health = file.readInt();
+        Stats buffs = Stats.deserialize(file);
+        int Strength = buffs.getStrength();
+        int Health = buffs.getHealth();
+        int Speed = buffs.getSpeed();
 
         int range = file.readInt();
         int damage = file.readInt();

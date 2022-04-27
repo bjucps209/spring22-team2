@@ -203,14 +203,15 @@ public class Level {
 
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(currentLevel);
-        // file.writeInt(totalEnemies.size());
-        // for (Enemy e : totalEnemies) {
-        //     e.serialize(file);
-        // }
+
         file.writeInt(screens.size());
+
+        currentScreen.serialize(file);
+
         for (Screen s : screens) {
             s.serialize(file);
         }
+
         file.writeInt(currentRow);
         file.writeInt(currentCol);
     
@@ -220,16 +221,17 @@ public class Level {
         int currentLevel = file.readInt();
         Level lvl = new Level(currentLevel);
 
-        // int numEnemies = file.readInt();
-        // for (int i = 0; i < numEnemies; ++i) {
-        //     Enemy e = Enemy.deserialize(file);
-        //     lvl.getTotalEnemies().add(e);
-        // }
         int numScreens = file.readInt();
+
+        Screen screen = Screen.deserialize(file);
+        lvl.setCurrentScreen(screen);
+        lvl.getScreens().add(screen);
+
         for (int i = 0; i < numScreens; ++i) {
             Screen s = Screen.deserialize(file);
             lvl.getScreens().add(s);
         }
+
         lvl.setCurrentRow(file.readInt());
         lvl.setCurrentCol(file.readInt());
 

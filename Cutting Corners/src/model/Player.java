@@ -665,7 +665,6 @@ public class Player extends Entity {
         
 
         equippedItem.serialize(file);
-        armor.serialize(file);
         stats.serialize(file);
     }
 
@@ -676,7 +675,6 @@ public class Player extends Entity {
         Player player = new Player(x, y);
 
         player.setEquippedItem(Item.deserialize(file));
-        player.setArmor(Armor.deserialize(file));
         player.setStats(Stats.deserialize(file));
 
         return player;

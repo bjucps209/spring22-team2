@@ -72,6 +72,5 @@ public class DroppedItem extends Entity{
 
     @Override
     public void serialize(DataOutputStream file) throws IOException {
-        unDroppedItem.serialize(file);
     }
 }

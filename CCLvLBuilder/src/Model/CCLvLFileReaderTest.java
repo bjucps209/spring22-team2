@@ -6,33 +6,33 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 public class CCLvLFileReaderTest {
-    DataManager DM = DataManager.DaMan();
 
     @Test
     public void test_ReaderTest_TestSaveandLoad(){
-        DM.resetDaMan();
+        DataManager.DaMan().resetDaMan();
 
-        DM.attemptCreateScreen(Direction.North);
-        DM.createObject("Player", "imgthing.png", ObjType.Player, new Vector(2, 2), new Vector(1, 1));
+        DataManager.DaMan().attemptCreateScreen(Direction.North);
+        DataManager.DaMan().createObject("Player", "imgthing.png", ObjType.Player, new Vector(2, 2), new Vector(1, 1));
+        assertEquals("0,1,0", DataManager.DaMan().getPlayerScrID());
 
         try {
-            CCLvLFileReader.save(DM.getTheLevel(), "TestyTest", false);        
+            CCLvLFileReader.save(DataManager.DaMan().getTheLevel(), "TestyTest", false);        
         } catch (Exception e) {
             fail();
         }
         try {
-            DM.load("TestyTest");
+            DataManager.DaMan().load("TestyTest");
         } catch (Exception e) {
             fail();
         }
 
-        assertEquals( 2, DM.getScreens().size()); ///
-        assert DM.getCurrentScreen() != null; ///
+        assertEquals( 2, DataManager.DaMan().getScreens().size()); ///
+        assert DataManager.DaMan().getCurrentScreen() != null; ///
 
-        String playerLoc = DM.getPlayerScrID(); //Not implemented yet (Could switch to Screen from StrID)
+        String playerLoc = DataManager.DaMan().getPlayerScrID(); //Not implemented yet (Could switch to Screen from StrID)
         assertEquals("0,1,0", playerLoc);
         int incr = 0;
-        for (Screen sc : DM.getScreens()) {
+        for (Screen sc : DataManager.DaMan().getScreens()) {
 
             if(sc.getStrID().equals(playerLoc)) { //change to playerLoc
                 boolean testthing = false;
@@ -46,6 +46,6 @@ public class CCLvLFileReaderTest {
 
             incr += sc.getObjects().size();
         }
-        assertEquals( 2, incr); ///
+        assertEquals( 1, incr); ///
     }
 }
