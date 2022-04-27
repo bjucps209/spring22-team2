@@ -3,7 +3,7 @@ package model;
 public class DummyObject {
     String name;
     String imgPath;
-    String type;
+    String type; //Player, Boss, Entity, Obstacle, Item, SomethingElse
     int tlCellX; int tlCellY; //Top left cell coords
     int dimX; int dimY; //Dimensions
 
