@@ -106,6 +106,16 @@ public class World {
     public static void populate(){
         if(!World.instance().getCamapign())
         {
+            UsableItem item1 = new UsableItem("Health Potion", 2, 1, 5, 0, 5, 0, "media/Player/Effects/health.png");
+            UsableItem item2 = new UsableItem("Strength Potion", 2, 1, 60, 3, 0, 0, "media/Player/Effects/strength.png");
+            UsableItem item3 = new UsableItem("Rage Potion", 2, 1, 45, 3, 0, 2, "media/Player/Effects/rage.png");
+            UsableItem item4 = new UsableItem("Rage Potion II", 2, 1, 30, 5, -2, 3, "media/Player/Effects/rage.png");
+            UsableItem item5 = new UsableItem("Ultimate Potion", 2, 1, 30, 2, 10, 3, "media/Player/Effects/ultimate.png");
+            UsableItem item6 = new UsableItem("Speed Potion", 2, 1, 45, 0, 0, 4, "media/Player/Effects/speed.png");
+            UsableItem item7 = new UsableItem("Stamina Potion", 2, 1, 5, 5, 62, 3, "media/Player/Effects/health.png");
+            UsableItem item8 = new UsableItem("Rage Potion IV", 2, 1, 25, 8, -4, 4, "media/Player/Effects/rage.png");
+            UsableItem item9 = new UsableItem("Ultimate Potion II", 2, 1, 30, 4, 12, 3, "media/Player/Effects/ultimate.png");
+            
             Level secretLevel = new Level(0);
 
             Screen ss1 = new Screen(3, 0, 0, "media/terrain/secret&boss/secretonewayright.png");
@@ -141,9 +151,14 @@ public class World {
             Screen ss30 = new Screen(1, 5, 0, "media/terrain/secret&boss/secretthreewayleft.png");
             Screen secretBossRoom = new Screen(3, 6, 0, "media/terrain/secret&boss/bossroom.png");
 
+            DroppedItem itemA = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
+            DroppedItem itemB = new DroppedItem(300, 600, item2, "media/Player/Item.png", 100, ss28);
+            DroppedItem itemC = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, ss25);
+            
             ss1.setRight(ss6);
             
             ss2.setUp(ss8);
+            ss2.addEntity(itemA);
             
             ss3.setDown(ss4);
 
@@ -240,6 +255,7 @@ public class World {
             ss24.setUp(ss30);
 
             ss25.setDown(ss26);
+            ss25.addEntity(itemC);
 
             ss26.setUp(ss25);
             ss26.setDown(ss27);
@@ -317,21 +333,6 @@ public class World {
             Triangle triangle5 = new Triangle(1, 1, 1, screen4);
             Triangle triangle6 = new Triangle(2, 2, 6, screen4);
             Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
-
-            UsableItem item1 = new UsableItem("Health Potion", 2, 1, 5, 0, 5, 0, "media/Player/Effects/health.png");
-            UsableItem item2 = new UsableItem("Strength Potion", 2, 1, 60, 3, 0, 0, "media/Player/Effects/strength.png");
-            UsableItem item3 = new UsableItem("Rage Potion", 2, 1, 45, 3, 0, 2, "media/Player/Effects/rage.png");
-            UsableItem item4 = new UsableItem("Rage Potion II", 2, 1, 30, 5, -2, 3, "media/Player/Effects/rage.png");
-            UsableItem item5 = new UsableItem("Ultimate Potion", 2, 1, 30, 2, 10, 3, "media/Player/Effects/ultimate.png");
-            UsableItem item6 = new UsableItem("Speed Potion", 2, 1, 45, 0, 0, 4, "media/Player/Effects/speed.png");
-            UsableItem item7 = new UsableItem("Stamina Potion", 2, 1, 5, 5, 62, 3, "media/Player/Effects/health.png");
-            UsableItem item8 = new UsableItem("Rage Potion IV", 2, 1, 25, 8, -4, 4, "media/Player/Effects/rage.png");
-            UsableItem item9 = new UsableItem("Ultimate Potion II", 2, 1, 30, 4, 12, 3, "media/Player/Effects/ultimate.png");
-
-            
-            DroppedItem itemA = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, screen3);
-            DroppedItem itemB = new DroppedItem(300, 600, item2, "media/Player/Item.png", 100, screen1);
-            DroppedItem itemC = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, bossScreen);
             
 
             screen1.addEntity(triangle1);
