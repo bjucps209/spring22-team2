@@ -33,7 +33,6 @@
 
 ## Known Issues
 * Death does not load from last save-point
-* Serialization has a few minor bugs in the saving of the entities
 ## Recording
 * [Screen Recording: Title Screen](https://youtu.be/pOgFQCrmpjg)
 * [Screen Recording: Gameplay](https://youtu.be/HDGT9HjBVqo)
