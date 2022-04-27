@@ -7,12 +7,13 @@ public class DroppedItem extends Entity{
     UsableItem unDroppedItem;
     playerInformer informant;
     Screen homeScreen;
-    String text = "Press Space to Pick Up";
+    String text;
 
     public DroppedItem(int xCoord, int yCoord, UsableItem unDroppedItem, String image, int size, Screen homeScreen){
         super(xCoord, yCoord, image, size);
         this.unDroppedItem = unDroppedItem;
         this.homeScreen = homeScreen;
+        text = "Press Space to Pick Up " + unDroppedItem.getName();
     }
 
     public void pickUp(Player pickerUpper){
