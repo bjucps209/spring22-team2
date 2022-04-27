@@ -8,6 +8,7 @@ public class DroppedItem extends Entity{
     playerInformer informant;
     Screen homeScreen;
     String text;
+    boolean used = false;
 
     public DroppedItem(int xCoord, int yCoord, UsableItem unDroppedItem, String image, int size, Screen homeScreen){
         super(xCoord, yCoord, image, size);
@@ -17,6 +18,8 @@ public class DroppedItem extends Entity{
     }
 
     public void pickUp(Player pickerUpper){
+        if (used){return;}
+        used = true;
         // pickerUpper.addItem(unDroppedItem);
         World.instance().displayCurrentEntities().remove(this);
         unDroppedItem.performAction(pickerUpper);
@@ -42,13 +45,11 @@ public class DroppedItem extends Entity{
 
     @Override
     public void performMovement() {
-        System.out.println('k');
         PlayerRelation relation = playerOnScreen();
         if (relation != null){
             addItem(relation);
             double distance = relation.getDistance();
-            System.out.println('h');
-            if (distance <= 250 && informant != null){System.out.print('j'); informant.Notify(text, this);}
+            if (distance <= 250 && informant != null){informant.Notify(text, this);}
             else if (distance > 250 && informant != null){informant.Notify(null, this);}
         }
     }

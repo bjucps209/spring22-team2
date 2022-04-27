@@ -635,7 +635,6 @@ public class World {
 
     public void setDifficulty(int difficulty) {
         world.difficulty = difficulty;
-        System.out.println(difficulty);
     }
     public int getDifficulty() {
         return world.difficulty;
