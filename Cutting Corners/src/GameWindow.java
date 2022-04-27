@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -120,7 +121,7 @@ public class GameWindow {
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
         displayObstacles(currentScreen);
-        
+        // displaySaveButton();
         ratioImage(backgroundView);
     }
 
@@ -334,15 +335,14 @@ public class GameWindow {
             obstacleImage.toBack();
         }
     }
-    
 
-    /**
-     * saves the state of the game when the save button is clicked
-     * @param event
-     */
     @FXML
-    void onSaveClicked(ActionEvent event) {
+    void displaySaveButton() {
+        Button btnSave = new Button("Save");
+        btnSave.setFocusTraversable(false);
+        btnSave.relocate(950*ratioWidth, 150*ratioHeight);
 
+        gameWindow.getChildren().add(btnSave);
     }
     
     @FXML

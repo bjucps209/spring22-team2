@@ -208,10 +208,10 @@ public class Level {
 
         currentScreen.serialize(file);
 
-        // for (Screen s : screens) {
-        //     s.serialize(file);
-        // }
-        
+        for (Screen s : screens) {
+            s.serialize(file);
+        }
+
         file.writeInt(currentRow);
         file.writeInt(currentCol);
     
@@ -223,12 +223,14 @@ public class Level {
 
         int numScreens = file.readInt();
 
-        lvl.setCurrentScreen(Screen.deserialize(file));
+        Screen screen = Screen.deserialize(file);
+        lvl.setCurrentScreen(screen);
+        lvl.getScreens().add(screen);
 
-        // for (int i = 0; i < numScreens; ++i) {
-        //     Screen s = Screen.deserialize(file);
-        //     lvl.getScreens().add(s);
-        // }
+        for (int i = 0; i < numScreens; ++i) {
+            Screen s = Screen.deserialize(file);
+            lvl.getScreens().add(s);
+        }
 
         lvl.setCurrentRow(file.readInt());
         lvl.setCurrentCol(file.readInt());

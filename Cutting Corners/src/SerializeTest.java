@@ -12,13 +12,21 @@ import model.*;
 public class SerializeTest {
 
     @Test
-    public void saveRandomGameToLoad() throws IOException {
+    public void saveRandomGameToLoad_level2() throws IOException {
         World.reset();
         World.instance();
         World.instance().currentLevel = 1;
+        World.instance().getCurrentLevel().setCurrentScreen(World.instance().getCurrentLevel().getScreens().get(2));
         World.instance().save("savegame.dat");
     }
 
+    @Test
+    public void saveRandomGameToLoad_level1() throws IOException {
+        World.reset();
+        World.instance();
+        World.instance().getCurrentLevel().setCurrentScreen(World.instance().getCurrentLevel().getScreens().get(0));
+        World.instance().save("savegame.dat");
+    }
 
 
     @Test
