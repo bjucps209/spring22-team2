@@ -23,12 +23,11 @@
 * All bosses are present
 * Health for both enemies and players is displayed
 * Score is tracked
-* Pausing is functional
+* Pausing and pause screen are functional
 
 ### Serialization
 * Serialization methods are implemented for each class and for World.java
 * Saving is functional
-* Loading is partially functional
 * Unit tests are working and testing the first few lines of savegame.dat
 
 ### Level Builder
@@ -43,9 +42,13 @@
 * The walking animation does not continue playing when walking between screens
 * When dealing the final blow to an enemy, the attack animation does not play
 * World.instance().setDifficulty() does not set the difficulty to the parameterized integer
+* High Scores aren't being tracked on death
+* Loading systems aren't functional
+* Potions are not being picked up
+* Projectiles are only visible for a split second before becoming invisible
+* Dodecahedron Boss has numerous visual bugs
 ## Recording
-* [Screen Recording: Title Screen](https://youtu.be/pOgFQCrmpjg)
-* [Screen Recording: Gameplay](https://youtu.be/HDGT9HjBVqo)
+* [Screen Recording](https://youtu.be/uV1O_1nm1I0)
 ## Expenses
 |Name|Username|Ownership Area|Hours Completed|Remaining Hours|Journal|
 |---|---|---|---|----|---|
