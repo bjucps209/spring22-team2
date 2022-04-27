@@ -123,84 +123,84 @@ public class Player extends Entity {
 
     @Override
     public void performMovement(){
-        itemsNearby.clear();
+        //itemsNearby.clear();
         if(!World.instance().getIsPaused())
         {
+        // if (effects.size() > 0){
+        //     applyBuffs();
+        // }
         if (effects.size() > 0){
             applyBuffs();
         }
         inObstacle();
-
         switch (state) {
             case standing: {
-                    if (previousState == PlayerState.walking){
-                        walkingStep = 0;
-                        super.getObserver().changeImage(playerImage,facing);
-                                weaponObserver.changeImage(weaponImage, facing);
-                        if (keys.size() > 0){
-                            state = PlayerState.walking;
-                            super.getObserver().changeImage("media/Player/basewalk.gif",facing);
-                            weaponObserver.changeImage("media/player/swordwalk.gif", facing);
-                        }
-                        break;
-                    }
+                if (previousState == PlayerState.walking){
+                    walkingStep = 0;
+                    super.getObserver().changeImage(playerImage,facing);
+                        weaponObserver.changeImage(weaponImage, facing);
+                    previousState = PlayerState.standing;
                 }
-                case attacking: {
-                    if (attackCount==25)
-                    {
-                        performAttack();
-                        state =PlayerState.resting;
-                    }
-                    else
-                    {
-                        weaponObserver.changeImage("media/player/swordwalk.gif", facing);
-                        state = PlayerState.resting; 
-                        break;
-                    }
+                super.getObserver().changeImage(playerImage,facing);
+                        weaponObserver.changeImage(weaponImage, facing);
+                if (keys.size() > 0){
+                    state = PlayerState.walking;
+                    super.getObserver().changeImage("media/Player/basewalk.gif",facing);
+                    weaponObserver.changeImage("media/player/swordwalk.gif", facing);
                 }
-                case resting:{
-                    attackCount--;
-                    if (attackCount == 0){
-                        state = PlayerState.standing; 
-                        weaponObserver.changeImage("media/player/swordwalk.gif", Direction.left);
-                        if(facing==Direction.right)
-                        {
-                            weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
-                        }
-                        attackCount = 25;
-                    }
+                break;
+            }
+            case attacking: {
+                if (attackCount==25)
+                {
+                    performAttack();
+                    state =PlayerState.resting;
+                }
+                else
+                {
+                    weaponObserver.changeImage("media/player/swordwalk.gif", facing);
+                    state = PlayerState.resting; 
                     break;
-                }
-                case walking: {
-                    walkingStep = (walkingStep + 1) % 50;
-                    if (keys.size() == 0){state = PlayerState.standing;}
-                    if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
-                    try{KeyPressed(0);}
-                    catch(IndexOutOfBoundsException i){}
-                    break;
-                }
-                case drinking: {
-                    if (itemsNearby.size() > 0){
-                        // attackCount=0;
-                        DroppedItem item = findClosestItem();
-                        item.pickUp(this);
-    
-                        weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
-                    }
-                    if (attackCount <= 0) {
-                        attackCount = 25;
-                        state = PlayerState.standing;
-                        weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
-                    }
-                    attackCount--;
                 }
             }
+            case resting:{
+                attackCount--;
+                if (attackCount == 0){
+                    state = PlayerState.standing; 
+                    weaponObserver.changeImage("media/player/swordwalk.gif", Direction.left);
+                    if(facing==Direction.right)
+                    {
+                        weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
+                    }
+                    attackCount = 25;
+                }
+                break;
+            }
+            case walking: {
+                walkingStep = (walkingStep + 1) % 50;
+                if (keys.size() == 0){state = PlayerState.standing;}
+                if (keys.size() > 0&&state!=PlayerState.attacking){state = PlayerState.walking;}
+                try{KeyPressed(0);}
+                catch(IndexOutOfBoundsException i){}
+                break;
+            }
+            case drinking: {
+                if (itemsNearby.size() > 0){
+                    // attackCount=0;
+                    DroppedItem item = findClosestItem();
+                    item.pickUp(this);
+                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
+                }
+                if (attackCount <= 0) {
+                    attackCount = 25;
+                    state = PlayerState.standing;
+                    weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
+                }
+                attackCount--;
+            }
         }
-        else
-        {
-            try{KeyPressed(0);}
-            catch(IndexOutOfBoundsException i){}
-        }
+    }
+
     }
 
     public DroppedItem findClosestItem(){
@@ -402,6 +402,7 @@ public class Player extends Entity {
             MeleeWeapon weapon = (MeleeWeapon) equippedItem;
             weapon.setDamage(stats.getStrength());
             weapon.setSpeed((int) stats.getSpeed() / 2);
+            enemies = World.instance().displayCurrentEntities();
             for(int i=0;i<enemies.size();i++)
             {
                 if(!(enemies.get(i) instanceof Boss))
