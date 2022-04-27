@@ -17,7 +17,7 @@ public class Hexagon extends Enemy{
     @Override
     public void performAttack()
     {
-        Projectile fireball = new Projectile(super.getStats().getStrength(), 5, super.getX(), super.getY(), 500, "media/Player/fireball.png", 2, World.instance().getPlayer().getX(), World.instance().getPlayer().getX(), 2);
+        Projectile fireball = new Projectile(super.getStats().getStrength(), 2, super.getX(), super.getY(), 500, "media/Player/fireball.png", 2, World.instance().getPlayer().getX(), World.instance().getPlayer().getX(), 2);
         World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
         super.setAttackCount(100);
