@@ -12,7 +12,7 @@ public class Cube extends Boss{
 
     public Cube(int size, int xCoord, int yCoord, Screen homeScreen){
 
-super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30, 150);
+super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 15), 15*World.instance().getDifficulty(), 150);
     }
     public void performMovement()
     {
@@ -82,11 +82,11 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
     {
         if(World.instance().getPlayer()!=null)
         {
-            if(attackCount>150&&attackCount<190)
+            if(attackCount>150&&attackCount<170)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
                 {
-                    World.instance().getPlayer().takeDamage(1, Direction.left);
+                    World.instance().getPlayer().takeDamage(1*World.instance().getDifficulty(), Direction.left);
                 }
             }
         }
@@ -101,7 +101,7 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
             {
                 if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
                 {
-                    World.instance().getPlayer().takeDamage(10, Direction.left);
+                    World.instance().getPlayer().takeDamage(5*World.instance().getDifficulty(), Direction.left);
                 }
             }
         }
@@ -123,7 +123,7 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
                     double distance = Math.abs(pos-percent);
                     if(distance<10)
                     {
-                        World.instance().getPlayer().takeDamage(2, Direction.up);
+                        World.instance().getPlayer().takeDamage(1*World.instance().getDifficulty(), Direction.up);
                     }
                 }
                 if(attackCount<195&&attackCount>170)
@@ -136,7 +136,7 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
                     double distance = Math.abs(pos-dispalce);
                     if(distance<10)
                     {
-                        World.instance().getPlayer().takeDamage(2, Direction.up);
+                        World.instance().getPlayer().takeDamage(1*World.instance().getDifficulty(), Direction.up);
                     }
                 }
                 if(attackCount<170&&attackCount>150)
@@ -148,7 +148,7 @@ super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 30), 30,
                     double distance = Math.abs(pos-percent);
                     if(distance<10)
                     {
-                        World.instance().getPlayer().takeDamage(2, Direction.up);
+                        World.instance().getPlayer().takeDamage(1*World.instance().getDifficulty(), Direction.up);
                     }
                 }
             }

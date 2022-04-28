@@ -11,7 +11,7 @@ public class Pyramid extends Boss{
     private int currentAttack=0;
 
     public Pyramid(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 25), 25, 100);
+        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 12), 12*World.instance().getDifficulty(), 100);
     }
     @Override
     public void performMovement()
@@ -19,7 +19,6 @@ public class Pyramid extends Boss{
         if(attackCount==149)
         {
             state=EnemyState.patrolling;
-            System.out.println("Patrolling");
             super.getObserver().changeImage(image, Direction.left);
             currentAttack=0;
         }

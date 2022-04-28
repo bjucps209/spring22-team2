@@ -497,7 +497,7 @@ public class Player extends Entity {
                 case right: super.getCoords().addXCoord(100);
             }
 
-            if (stats.getHealth() <= 0){super.performDie();}
+            if (stats.getHealth() <= 0){performDie();}
         }
         AudioClip PLAYER_HURT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/playerhurt.mp3").toString());
         PLAYER_HURT.play();
@@ -507,12 +507,14 @@ public class Player extends Entity {
     @Override
     public void performDie()
     {
-        World.instance().displayCurrentEntities().remove(this);
-        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
         HighScoreManager scores = new HighScoreManager();
+        System.out.println(score);
         try
         {
+            System.out.println(score);
             scores.load();
+            System.out.println(score);
+            System.out.println(scores.get(0).getScore());
             if(score>scores.get(0).getScore())
             {
                 scores.addScore(new HighScore(score, "Player"));
@@ -521,9 +523,11 @@ public class Player extends Entity {
         }
         catch(IOException e)
         {
+            System.out.println("couldn't Load");
             System.out.println(e.getMessage());
         }
-        
+        World.instance().displayCurrentEntities().remove(this);
+        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
     public Cell cellWithin(int row, int col){
         try{Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];

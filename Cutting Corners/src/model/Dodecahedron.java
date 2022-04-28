@@ -38,23 +38,23 @@ public class Dodecahedron extends Boss{
                     {
                         case 1:
                             performAttack1();
-                            super.getObserver().changeImage("media/enemies/dodecabig.gif", Direction.left);
+                            super.getObserver().changeImage("media/enemies/dodecabig2.gif", Direction.left);
                             attackCount=225;
                             state=EnemyState.stunned;
                             currentAttack=1;
                             break;
                         case 2:
                             performAttack2();
-                            super.getObserver().changeImage("media/enemies/dodecadown.gif", Direction.left);
-                            attackCount=225;
+                            super.getObserver().changeImage("media/enemies/dodecadown2.gif", Direction.left);
+                            attackCount=325;
                             state=EnemyState.stunned;
                             currentAttack=2;
                             break;
                         case 3:
                             performAttack3();
-                            super.getObserver().changeImage("media/enemies/dodecaspin.gif", Direction.left);
+                            super.getObserver().changeImage("media/enemies/dodecaspin2.gif", Direction.left);
                             state=EnemyState.stunned;
-                            attackCount=225;
+                            attackCount=250;
                             currentAttack=3;
                             break;
                     }
@@ -81,12 +81,11 @@ public class Dodecahedron extends Boss{
     {
         if(World.instance().getPlayer()!=null)
         {
-            if(attackCount>150&&attackCount<190)
+            if(attackCount==175)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
-                {
-                    World.instance().getPlayer().takeDamage(1, Direction.left);
-                }
+                Projectile fireball = new Projectile(7*World.instance().getDifficulty(), 5, 640, 200, 500, "media/Player/fireball.png", 2, World.instance().getPlayer().getX(), World.instance().getPlayer().getY(), 2);
+                World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
             }
         }
     }
@@ -96,12 +95,23 @@ public class Dodecahedron extends Boss{
     {
         if(World.instance().getPlayer()!=null)
         {
-            if(attackCount==150)
+            if(attackCount==265)
             {
-                if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
-                {
-                    World.instance().getPlayer().takeDamage(10, Direction.left);
-                }
+                Projectile fireball = new Projectile(2*World.instance().getDifficulty(), 5, 200, 200, 500, "media/Player/fireball.png", 2, 200, 900, 2);
+                World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+            }
+            if(attackCount==220)
+            {
+                Projectile fireball = new Projectile(2*World.instance().getDifficulty(), 5, 1000, 200, 500, "media/Player/fireball.png", 2, 1000, 900, 2);
+                World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+            }
+            if(attackCount==175)
+            {
+                Projectile fireball = new Projectile(2*World.instance().getDifficulty(), 5, 640, 200, 500, "media/Player/fireball.png", 2, 640, 900, 2);
+                World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
             }
         }
     }
@@ -109,47 +119,13 @@ public class Dodecahedron extends Boss{
     @Override
     public void performAttack3()
     {
-        if(World.instance().getPlayer().getCoords().getyCoord()<700)
+        if(World.instance().getPlayer()!=null)
         {
-            if(World.instance().getPlayer()!=null)
+            if(attackCount>175&&attackCount<225&&attackCount%5==0)
             {
-                if(attackCount>195)
-                {
-                    double temp = attackCount-195;
-                    double divide = temp/30;
-                    double percent = divide*640;
-                    double pos = World.instance().getPlayer().getCoords().getxCoord();
-                    double distance = Math.abs(pos-percent);
-                    if(distance<10)
-                    {
-                        World.instance().getPlayer().takeDamage(2, Direction.up);
-                    }
-                }
-                if(attackCount<195&&attackCount>170)
-                {
-                    double temp = attackCount-170;
-                    double divide = temp/25;
-                    double percent = divide*1280;
-                    double dispalce = 1280-percent;
-                    double pos = World.instance().getPlayer().getCoords().getxCoord();
-                    double distance = Math.abs(pos-dispalce);
-                    if(distance<10)
-                    {
-                        World.instance().getPlayer().takeDamage(2, Direction.up);
-                    }
-                }
-                if(attackCount<170&&attackCount>150)
-                {
-                    double temp = attackCount-150;
-                    double divide = temp/20;
-                    double percent = 2*divide*1280;
-                    double pos = World.instance().getPlayer().getCoords().getxCoord();
-                    double distance = Math.abs(pos-percent);
-                    if(distance<10)
-                    {
-                        World.instance().getPlayer().takeDamage(2, Direction.up);
-                    }
-                }
+                Projectile fireball = new Projectile(2*World.instance().getDifficulty(), 5, 640, 200, 500, "media/Player/fireball.png", 2, World.instance().getPlayer().getX(), World.instance().getPlayer().getY(), 2);
+                World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
             }
         }
     }

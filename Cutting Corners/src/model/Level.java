@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Random;
 
+import javafx.scene.media.AudioClip;
+
 public class Level {
     private ArrayList<Enemy> totalEnemies;
     private ArrayList<Screen> screens = new ArrayList<Screen>();
@@ -15,6 +17,7 @@ public class Level {
     private int currentCol;
     private int currentLevel;
     ScreenObserver observer;
+    private AudioClip BOSS_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/bossfights.mp3").toString());
     Random rand = new Random();
 
     public Level(int currentLevel){
@@ -78,6 +81,9 @@ public class Level {
             if(currentScreen.getFilename().contains("bossroom"))
             {
                 World.instance().setActiveBoss(true);
+                World.instance().getMusic().stop();
+                World.instance().setMusic(BOSS_MUSIC);
+                World.instance().getMusic().play();
             }
             currentCol--;
             observer.Initialize(World.instance().isLoaded());
@@ -93,6 +99,9 @@ public class Level {
             if(currentScreen.getFilename().contains("bossroom"))
             {
                 World.instance().setActiveBoss(true);
+                World.instance().getMusic().stop();
+                World.instance().setMusic(BOSS_MUSIC);
+                World.instance().getMusic().play();
             }
             currentCol++;
             observer.Initialize(World.instance().isLoaded());
@@ -108,6 +117,9 @@ public class Level {
             if(currentScreen.getFilename().contains("bossroom"))
             {
                 World.instance().setActiveBoss(true);
+                World.instance().getMusic().stop();
+                World.instance().setMusic(BOSS_MUSIC);
+                World.instance().getMusic().play();
             }
             currentRow--;
             observer.Initialize(World.instance().isLoaded());
@@ -123,6 +135,9 @@ public class Level {
             if(currentScreen.getFilename().contains("bossroom"))
             {
                 World.instance().setActiveBoss(true);
+                World.instance().getMusic().stop();
+                World.instance().setMusic(BOSS_MUSIC);
+                World.instance().getMusic().play();
             }
             currentRow++;
             observer.Initialize(World.instance().isLoaded());

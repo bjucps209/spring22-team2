@@ -27,13 +27,27 @@ public class Projectile extends Entity{
     {
         if(Math.abs(super.getX()-targetX)>=Math.abs(super.getY()-targetY))
         {
-            super.setCoords(new Coordinates(super.getX()+speed, super.getY()));
+            if(super.getX()<targetX)
+            {
+                super.getCoords().setxCoord(super.getX()+speed);
+            }
+            else
+            {
+                super.getCoords().setxCoord(super.getX()-speed);
+            }
         }
         else
         {
-            super.setCoords(new Coordinates(super.getX(), super.getY()+speed));
+            if(super.getY()<targetY)
+            {
+                super.getCoords().setyCoord(super.getY()+speed);
+            }
+            else
+            {
+                super.getCoords().setyCoord(super.getY()-speed);
+            }
         }
-        if(Math.sqrt((Math.pow(super.getX()-World.instance().getPlayer().getX(),2)+(Math.pow(super.getY()-World.instance().getPlayer().getY(),2))))>5)
+        if(Math.sqrt((Math.pow(super.getX()-World.instance().getPlayer().getX(),2)+(Math.pow(super.getY()-World.instance().getPlayer().getY(),2))))<50)
         {
             World.instance().getPlayer().takeDamage(damage, Direction.left);
             this.performDie();

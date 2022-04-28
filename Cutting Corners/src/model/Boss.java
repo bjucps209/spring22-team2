@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.media.AudioClip;
+
 public class Boss extends Enemy{
     int attackCooldown;
     boolean dead = false;
@@ -52,8 +54,8 @@ public class Boss extends Enemy{
             {
                 if(World.instance().getCurrentLevel().getCurrentLevel()!=World.instance().getNumLevels()-1)
                 {
+                    World.instance().getMusic().stop();
                     World.instance().passLevel();
-                    System.out.println("Dead");
                     World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
                 }
                 else

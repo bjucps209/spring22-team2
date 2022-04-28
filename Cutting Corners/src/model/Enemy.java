@@ -164,24 +164,20 @@ public class Enemy extends Entity{
                         if(p.getDirection()==Direction.up)
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.down);
-                            System.out.println("Enemy Hit!");
                         }
                         else if(p.getDirection()==Direction.down)
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.up);
-                            System.out.println("Enemy Hit!");
                         }
                         if(p.getDirection()==Direction.left)
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.right);
-                            super.getObserver().changeImage(attacking, Direction.left);
-                            System.out.println("Enemy Hit!");
+                            super.getObserver().changeImage(attacking, Direction.right);
                         }
                         else
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.left);
-                            super.getObserver().changeImage(attacking, Direction.right);
-                            System.out.println("Enemy Hit!");
+                            super.getObserver().changeImage(attacking, Direction.left);
                         }
                     }
             }

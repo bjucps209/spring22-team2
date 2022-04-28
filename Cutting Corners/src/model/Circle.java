@@ -8,7 +8,7 @@ public class Circle extends Boss{
     static String image = "media/enemies/evil.png";
 
     public Circle(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 40), 40, 500);
+        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 20), 20*World.instance().getDifficulty(), 500);
     }
 
     @Override
@@ -30,6 +30,19 @@ public class Circle extends Boss{
                 super.setCoords(new Coordinates(super.getX(), super.getY()+super.getStats().getSpeed()));
             }
         }
+    }
+
+    public PlayerRelation PlayerInVision(){
+        for (Entity entity: super.getHomeScreen().getEntities()){
+            if (entity instanceof Player){
+                int xDifference = super.getX() - entity.getX();
+                int yDifference = super.getY() - entity.getY();
+                double square = Math.pow(xDifference, 2) + Math.pow(yDifference, 2);
+                double distance = Math.sqrt(square);
+                return new PlayerRelation(xDifference, yDifference, distance, (Player) entity);
+            }
+        }
+        return null;
     }
 
     @Override
