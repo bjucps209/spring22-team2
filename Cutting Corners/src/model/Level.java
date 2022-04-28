@@ -175,6 +175,7 @@ public class Level {
     }
 
     public static Level convertDummyLvL(DummyLevel lvl) {
+
         Level newlvl = new Level(0);
         String[][] adjscrkeeper = new String[lvl.dScreenList.size()][6]; 
 
@@ -257,6 +258,8 @@ public class Level {
             int[] leftid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][3]);
             if(leftid != null)curscr.setLeft(newlvl.findScreen(leftid[1], leftid[0]));
         }
+
+        newlvl.getCurrentScreen().addEntity(new Player(100, 100));
 
         return newlvl;
     } 
