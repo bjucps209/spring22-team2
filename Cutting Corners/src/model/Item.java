@@ -62,6 +62,15 @@ public abstract class Item {
 
     public abstract void serialize(DataOutputStream file) throws IOException;
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static Item deserialize(DataInputStream file) throws IOException {
         String type = file.readUTF();
         if (type.equals("UsableItem")) {

@@ -101,6 +101,17 @@ public abstract class Entity {
 
     public abstract void serialize(DataOutputStream file) throws IOException;
 
+
+    
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static Entity deserialize(DataInputStream file, Screen homeScreen) throws IOException {
         String type = file.readUTF();
 

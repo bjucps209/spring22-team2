@@ -17,6 +17,12 @@ public class Armor extends Equipment{
         super(name, 0, EquipmentType.ARMOR, new Stats(Strength, Health, Speed), image);
     }
 
+
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Armor");
@@ -25,6 +31,15 @@ public class Armor extends Equipment{
         file.writeUTF(super.getImage());
     }
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static Armor deserialize(DataInputStream file) throws IOException {
         String name = file.readUTF();
         Stats buffs = Stats.deserialize(file);

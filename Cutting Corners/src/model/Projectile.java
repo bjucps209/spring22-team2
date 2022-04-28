@@ -102,6 +102,11 @@ public class Projectile extends Entity{
     }
 
 
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Projectile");

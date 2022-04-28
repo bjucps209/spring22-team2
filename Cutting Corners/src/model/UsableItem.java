@@ -98,11 +98,15 @@ public class UsableItem extends Item{
 
 
 
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("UsableItem"); //type of item
         file.writeUTF(this.getName());
-        // file.writeInt(this.getCooldown());
         file.writeInt(getCooldown());
         getBuffs().serialize(file);
         file.writeInt(useCount);
@@ -111,6 +115,15 @@ public class UsableItem extends Item{
     }
 
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static UsableItem deserialize(DataInputStream file) throws IOException {
         String name = file.readUTF();
         int cooldown = file.readInt();

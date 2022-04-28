@@ -189,6 +189,11 @@ public class Screen {
     }
 
 
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(location.getRow());
         file.writeInt(location.getCol());
@@ -222,6 +227,15 @@ public class Screen {
     
     }
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static Screen deserialize(DataInputStream file) throws IOException {
         int row = file.readInt();
         int col = file.readInt();
