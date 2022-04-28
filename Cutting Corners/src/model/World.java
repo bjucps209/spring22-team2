@@ -3,6 +3,7 @@ package model;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -140,6 +141,8 @@ public class World {
         }
         return null;
     }
+
+    public static final String[] levellist = new String[] {"Levels/Sands1.dat"};
 
     public static void populate(){
         System.out.println(World.instance().getCamapign());
@@ -650,6 +653,21 @@ public class World {
             level1.placeEntity(0, 0, Cirkyle);
             World.instance().setDesertMusic();
             getCurrentLevel().getBaseScreen().addEntity(Cirkyle);
+        } else {
+            for (String lvlName: levellist) {
+                try {
+                    Level nextlvl = Level.convertDummyLvL(LvLBFileReader.load(lvlName));
+                    World.campaign.add(nextlvl);
+                } catch (FileNotFoundException e) {
+                    System.out.println(lvlName + " file not found");
+                } catch (IOException ee) {
+                    System.out.println(lvlName + " did not load correctly");
+                } catch (Exception eee) {
+                    System.out.println("Your method is bad. (Level.blah.bleahwfoiej) ");
+                    eee.getStackTrace();
+                }
+
+            }
         }
     }
 
