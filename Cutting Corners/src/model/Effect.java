@@ -20,7 +20,7 @@ public class Effect {
         applied = true;
         
         System.out.println(effects.getHealth());
-        if (effects.getHealth() > 50){user.setTotalHealth(user.getTotalHealth() + 5);System.out.println('u');}
+        if (effects.getHealth() > 50){user.setTotalHealth(user.getTotalHealth() + 5);}
         
         if (effects.getHealth() + user.getStats().getHealth() > user.getTotalHealth()){
             user.getStats().setHealth((int) user.getTotalHealth());
