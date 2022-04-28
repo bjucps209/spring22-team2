@@ -1,3 +1,8 @@
+//--------------------------------
+// Enemy.java
+// Enemy is the class that defines the entities
+// for the player to kill.
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

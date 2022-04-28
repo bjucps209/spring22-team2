@@ -1,3 +1,8 @@
+//--------------------------------
+// Enitity.java
+// The parent class for enemies and items
+// Defines the entities you see on the screen
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

@@ -1,3 +1,8 @@
+//--------------------------------
+// Triangle.java
+// The first of many enemies the player must face
+// Carries a basic sword, inherits from enemy
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

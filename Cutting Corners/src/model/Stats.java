@@ -1,3 +1,8 @@
+//--------------------------------
+// Stats.java
+// This class defines the strength, speed, and health for the player adn enemies
+// These stats are changed when damage is taken or a buff is provided
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

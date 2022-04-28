@@ -1,3 +1,9 @@
+//--------------------------------
+// Pyramid.java
+// The first of the many bosses.
+// The pyramid ends the first level and posseses multiple powerful attacks
+// inherits from boss
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

@@ -1,3 +1,8 @@
+//--------------------------------
+// Swing.java
+// No longer implemented,
+// the Swing class was a way to define the swing of a melee weapon
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

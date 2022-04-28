@@ -1,3 +1,8 @@
+//--------------------------------
+// Armor.java
+// Armor class provides buffs to user
+//----------------------------------
+
 package model;
 
 import java.io.DataInputStream;

@@ -1,3 +1,9 @@
+//--------------------------------
+// MeleeWeapon.java
+// MeleeWeapon defines the weapons with short range and high damage
+// MeleeWeapon is what the player starts with.
+// Each MeleeWeapon inherits from equipment
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

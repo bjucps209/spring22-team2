@@ -1,3 +1,9 @@
+//--------------------------------
+// Coordinates.java
+// Coordinates class provides easy access to
+// x and y coordinates for cells and entities.
+// Utilizes IntegerProperty for binding
+//----------------------------------
 package model;
 import java.util.Random;
 

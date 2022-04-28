@@ -1,3 +1,9 @@
+//--------------------------------
+// Boss.java
+// Boss class inherits from enemy
+// Bosses are found at the end of each level to be defeated
+//----------------------------------
+
 package model;
 
 import javafx.scene.media.AudioClip;

@@ -1,3 +1,8 @@
+//--------------------------------
+// RangedWeapon.java
+// Inherits from Equipment
+// Used as a weapon with long range and lower damage
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

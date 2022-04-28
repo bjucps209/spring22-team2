@@ -1,3 +1,8 @@
+//--------------------------------
+// Level.java
+// Level defines the group of screens and enemies that the player will travel through
+// Defeating the boss at the end of each level advances the player to the next level
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

@@ -1,3 +1,9 @@
+//--------------------------------
+// Projectile.java
+// Projectiles inherit from entity and are thus moving entities across a screen.
+// This class defines an entity that is shot from a location to a target x and y.
+// Utilized as a fireball for the octagon enemy
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

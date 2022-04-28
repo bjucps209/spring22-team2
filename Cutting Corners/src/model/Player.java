@@ -1,3 +1,9 @@
+//--------------------------------
+// Player.java
+// The player class defines the entity who the users controls.
+// The player can move across screens and advance levels by killing enemies.
+//----------------------------------
+
 package model;
 
 import java.io.DataInputStream;

@@ -1,3 +1,8 @@
+//--------------------------------
+// Screen.java
+// Screen class defines the segments that make up a level
+// Each screen posseses entities
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

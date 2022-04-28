@@ -1,3 +1,8 @@
+//--------------------------------
+// Equipment.java
+// Inherits from item, this class is used
+// for defining items that the player can use
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

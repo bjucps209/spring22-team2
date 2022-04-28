@@ -1,3 +1,8 @@
+//--------------------------------
+// UsableItem.java
+// Defines the items that can be picked up by the player and used
+// Such as potions.  Inherits Item
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

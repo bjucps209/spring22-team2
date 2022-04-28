@@ -1,3 +1,8 @@
+//--------------------------------
+// Item.java
+// Parent class with mostly abstract bodies.
+// Inherited by equipment and usableItem
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

@@ -1,3 +1,8 @@
+//--------------------------------
+// Square.java
+// One of the many enemies the player must face.
+// carries a sword, inherits from enemy
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;
