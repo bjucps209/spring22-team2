@@ -45,7 +45,7 @@
 * Loading systems aren't functional
 ## Recording
 * [Screen Recording: Gameplay](https://bju.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=b457c1cb-daaa-468e-b43e-ae8500656be0)
-* [Screen Recording: Level Builder](* [Screen Recording: Gameplay](https://bju.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=7d0d4b5b-0f21-4e28-b612-ae85005fcec5))
+* [Screen Recording: Level Builder](https://bju.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=5eb3024c-15ec-49fd-b0bc-ae8500645af6)
 
 ## Expenses
 |Name|Username|Ownership Area|Hours Completed|Remaining Hours|Journal|
