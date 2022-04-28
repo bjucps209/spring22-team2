@@ -1,3 +1,8 @@
+//--------------------------------
+// PlayerRelation.java
+// Makes it easy to determine the distances between
+// the player and another entity
+//----------------------------------
 package model;
 
 public class PlayerRelation {

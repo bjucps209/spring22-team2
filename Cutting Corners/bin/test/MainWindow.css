@@ -48,6 +48,12 @@
     background-color: white;
   }
 
+  .notification{
+    background-color: white;
+    -fx-font-size: 15px;
+    border: 8px black;
+  }
+
   .died {
     -fx-text-fill: orange;
     -fx-font-size: 40px;

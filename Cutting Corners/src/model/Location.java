@@ -1,3 +1,7 @@
+//--------------------------------
+// Location.java
+// Defines and x and y coordinate on a specific level
+//----------------------------------
 package model;
 
 public class Location {

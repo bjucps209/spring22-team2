@@ -1,3 +1,11 @@
+//--------------------------------
+// World.java
+// The main world of the entire game.  
+// Stores the levels.
+// Singleton class
+// On instantiation, creates and populates levels.
+// Save/load methods included but do not properly load state of game
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;
@@ -55,7 +63,6 @@ public class World {
         if (world == null){
             world = new World();
             populate();
-            System.out.println('x');
         }
         return world;
     }
@@ -148,15 +155,16 @@ public class World {
         System.out.println(World.instance().getCamapign());
         if(!World.instance().getCamapign())
         {
-            UsableItem item1 = new UsableItem("Health Potion", 2, 1, 5, 0, 5, 0, "media/Player/Effects/health.png");
+            UsableItem item1 = new UsableItem("Health Potion", 2, 1, 2, 0, 5, 0, "media/Player/Effects/health.png");
             UsableItem item2 = new UsableItem("Strength Potion", 2, 1, 60, 3, 0, 0, "media/Player/Effects/strength.png");
-            UsableItem item3 = new UsableItem("Rage Potion", 2, 1, 45, 3, 0, 2, "media/Player/Effects/rage.png");
+            UsableItem item3 = new UsableItem("Rage Potion", 2, 1, 45, 3, -1, 2, "media/Player/Effects/rage.png");
             UsableItem item4 = new UsableItem("Rage Potion II", 2, 1, 30, 5, -2, 3, "media/Player/Effects/rage.png");
             UsableItem item5 = new UsableItem("Ultimate Potion", 2, 1, 30, 2, 10, 3, "media/Player/Effects/ultimate.png");
             UsableItem item6 = new UsableItem("Speed Potion", 2, 1, 45, 0, 0, 4, "media/Player/Effects/speed.png");
             UsableItem item7 = new UsableItem("Stamina Potion", 2, 1, 5, 5, 62, 3, "media/Player/Effects/health.png");
             UsableItem item8 = new UsableItem("Rage Potion IV", 2, 1, 25, 8, -4, 4, "media/Player/Effects/rage.png");
             UsableItem item9 = new UsableItem("Ultimate Potion II", 2, 1, 30, 4, 12, 3, "media/Player/Effects/ultimate.png");
+            UsableItem item10 = new UsableItem("Health Potion II", 2, 1, 2, 0, 10, 0, "media/Player/Effects/health.png");
             
             Level secretLevel = new Level(0);
 
@@ -193,14 +201,175 @@ public class World {
             Screen ss30 = new Screen(1, 5, 0, "media/terrain/secret&boss/secretthreewayleft.png");
             Screen secretBossRoom = new Screen(3, 6, 0, "media/terrain/secret&boss/bossroom.png");
 
-            DroppedItem itemA = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
-            DroppedItem itemB = new DroppedItem(300, 600, item2, "media/Player/Item.png", 100, ss28);
-            DroppedItem itemC = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, ss25);
+            DroppedItem itemA1 = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
+            DroppedItem itemA2 = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
+            DroppedItem itemA3 = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
+            DroppedItem itemA4 = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
             
+            DroppedItem itemB1 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
+            DroppedItem itemB2 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
+            DroppedItem itemB3 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
+            DroppedItem itemB4 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
+            DroppedItem itemB5 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
+            
+            DroppedItem itemC1 = new DroppedItem(300, 300, item3, "media/Player/Item.png", 100, ss3);
+            DroppedItem itemC2 = new DroppedItem(300, 300, item3, "media/Player/Item.png", 100, ss3);
+            
+            DroppedItem itemD1 = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, ss25);
+            DroppedItem itemD2 = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, ss25);
+            
+            DroppedItem itemE1 = new DroppedItem(250, 200, item5, "media/Player/Item.png", 100, ss17);
+            DroppedItem itemE2 = new DroppedItem(250, 200, item5, "media/Player/Item.png", 100, ss17);
+            DroppedItem itemE3 = new DroppedItem(250, 200, item5, "media/Player/Item.png", 100, ss17);
+            
+            DroppedItem itemF = new DroppedItem(300, 525, item6, "media/Player/Item.png", 100, ss5);
+            
+            DroppedItem itemG1 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
+            DroppedItem itemG2 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
+            DroppedItem itemG3 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
+            DroppedItem itemG4 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
+            DroppedItem itemG5 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
+            
+            DroppedItem itemH1 = new DroppedItem(400, 600, item8, "media/Player/Item.png", 100, ss16);
+            DroppedItem itemH2 = new DroppedItem(400, 600, item8, "media/Player/Item.png", 100, ss16);
+            
+            DroppedItem itemI1 = new DroppedItem(300, 300, item9, "media/Player/Item.png", 100, ss30);
+            DroppedItem itemI2 = new DroppedItem(300, 300, item9, "media/Player/Item.png", 100, ss30);
+            
+            DroppedItem itemJ1 = new DroppedItem(200, 500, item10, "media/Player/Item.png", 100, ss20);
+            DroppedItem itemJ2 = new DroppedItem(200, 500, item10, "media/Player/Item.png", 100, ss20);
+
+            Triangle triangleS11 = new Triangle(3, 1, 1, ss2);
+            Triangle triangleS12 = new Triangle(3, 1, 1, ss2);
+            Triangle triangleS13 = new Triangle(3, 1, 1, ss2);
+            Triangle triangleS14 = new Triangle(3, 1, 1, ss2);
+            Triangle triangleS15 = new Triangle(3, 1, 1, ss2);
+            Triangle triangleS16 = new Triangle(3, 1, 1, ss2);
+            Triangle triangleS17 = new Triangle(3, 1, 1, ss2);
+            Triangle triangleS18 = new Triangle(3, 1, 1, ss2);
+            Triangle triangleS19 = new Triangle(3, 1, 1, ss2);
+
+            Triangle triangleS21 = new Triangle(5, 2, 6, ss3);
+            Triangle triangleS22 = new Triangle(5, 2, 6, ss3);
+            Triangle triangleS23 = new Triangle(5, 2, 6, ss3);
+            Triangle triangleS24 = new Triangle(5, 2, 6, ss3);
+
+            Square squareS11 = new Square(4, 0, 0, ss6);
+            Square squareS12 = new Square(4, 0, 0, ss6);
+            Square squareS13 = new Square(4, 0, 0, ss6);
+            Square squareS14 = new Square(4, 0, 0, ss6);
+            Square squareS15 = new Square(4, 0, 0, ss6);
+
+            Square squareS21 = new Square(3, 6, 0, ss2);
+            Square squareS22 = new Square(3, 6, 0, ss2);
+            Square squareS23 = new Square(3, 6, 0, ss2);
+            Square squareS24 = new Square(3, 6, 0, ss2);
+
+            Hexagon hexS11 = new Hexagon(6, 12, 6, ss15);
+            Hexagon hexS12 = new Hexagon(6, 12, 6, ss15);
+            Hexagon hexS13 = new Hexagon(6, 12, 6, ss15);
+            Hexagon hexS14 = new Hexagon(6, 12, 6, ss15);
+            Hexagon hexS15 = new Hexagon(6, 12, 6, ss15);
+
+            Hexagon hexS21 = new Hexagon(3, 12, 0, ss16);
+            Hexagon hexS22 = new Hexagon(3, 12, 0, ss16);
+            Hexagon hexS23 = new Hexagon(3, 12, 0, ss16);
+            Hexagon hexS24 = new Hexagon(3, 12, 0, ss16);
+            Hexagon hexS25 = new Hexagon(3, 12, 0, ss16);
+
+            Hexagon hexS31 = new Hexagon(7, 0, 6, ss10);
+            Hexagon hexS32 = new Hexagon(7, 0, 6, ss10);
+            Hexagon hexS33 = new Hexagon(7, 0, 6, ss10);
+            
+            Octagon octS11 = new Octagon(6, 0, 0, ss25);
+            Octagon octS12 = new Octagon(6, 0, 0, ss25);
+            Octagon octS13 = new Octagon(6, 0, 0, ss25);
+            Octagon octS14 = new Octagon(6, 0, 0, ss25);
+            Octagon octS15 = new Octagon(6, 0, 0, ss25);
+            Octagon octS16 = new Octagon(6, 0, 0, ss25);
+            Octagon octS17 = new Octagon(6, 0, 0, ss25);
+
+            Octagon octS21 = new Octagon(8, 4, 2, ss25);
+            Octagon octS22 = new Octagon(8, 4, 2, ss25);
+            Octagon octS23 = new Octagon(8, 4, 2, ss25);
+            Octagon octS24 = new Octagon(8, 4, 2, ss25);
+            Octagon octS25 = new Octagon(8, 4, 2, ss25);
+
+            ss1.addEntity(octS21);
+            ss2.addEntity(triangleS11);
+            ss2.addEntity(itemA3);
+            ss2.addEntity(squareS11);
+            ss3.addEntity(squareS12);
+            ss4.addEntity(triangleS12);
+            ss4.addEntity(itemB3);
+            ss5.addEntity(octS11);
+            ss6.addEntity(hexS11);
+            ss6.addEntity(triangleS21);
+            ss6.addEntity(squareS13);
+            ss7.addEntity(squareS14);
+            ss7.addEntity(squareS21);
+            ss7.addEntity(octS12);
+            ss7.addEntity(itemE2);
+            ss8.addEntity(triangleS13);
+            ss8.addEntity(squareS22);
+            ss9.addEntity(hexS21);
+            ss9.addEntity(octS13);
+            ss10.addEntity(squareS15);
+            ss10.addEntity(itemH1);
+            ss11.addEntity(hexS12);
+            ss11.addEntity(triangleS14);
+            ss12.addEntity(itemG2);
+            ss13.addEntity(hexS13);
+            ss14.addEntity(octS14);
+            ss14.addEntity(hexS31);
+            ss14.addEntity(itemA4);
+            ss15.addEntity(triangleS15);
+            ss15.addEntity(hexS22);
+            ss16.addEntity(octS15);
+            ss17.addEntity(octS22);
+            ss17.addEntity(itemB4);
+            ss18.addEntity(squareS23);
+            ss18.addEntity(hexS23);
+            ss19.addEntity(itemG3);
+            ss20.addEntity(triangleS22);
+            ss20.addEntity(itemG4);
+            ss21.addEntity(octS16);
+            ss21.addEntity(octS23);
+            ss22.addEntity(hexS14);
+            ss22.addEntity(hexS24);
+            ss22.addEntity(hexS32);
+            ss23.addEntity(squareS24);
+            ss24.addEntity(itemC2);
+            ss25.addEntity(triangleS16);
+            ss25.addEntity(triangleS23);
+            ss25.addEntity(hexS33);
+            ss26.addEntity(octS24);
+            ss26.addEntity(triangleS17);
+            ss26.addEntity(itemE3);
+            ss27.addEntity(triangleS18);
+            ss27.addEntity(triangleS24);
+            ss27.addEntity(octS17);
+            ss28.addEntity(itemJ2);
+            ss28.addEntity(hexS15);
+            ss28.addEntity(hexS25);
+            ss28.addEntity(octS25);
+            ss29.addEntity(itemB5);
+            ss29.addEntity(itemD2);
+            ss29.addEntity(itemG5);
+            ss29.addEntity(itemH2);
+            ss30.addEntity(triangleS19);
+            ss30.addEntity(itemI1);
+            
+
+            Circle secretBoss = new Circle(11, 6, 4, secretBossRoom);
+            secretBossRoom.addEntity(secretBoss);
+            secretBossRoom.addEntity(itemI2);
+
+
+
             ss1.setRight(ss6);
             
             ss2.setUp(ss8);
-            ss2.addEntity(itemA);
             
             ss3.setDown(ss4);
 
@@ -297,7 +466,6 @@ public class World {
             ss24.setUp(ss30);
 
             ss25.setDown(ss26);
-            ss25.addEntity(itemC);
 
             ss26.setUp(ss25);
             ss26.setDown(ss27);
@@ -321,9 +489,6 @@ public class World {
             ss30.setLeft(ss23);
 
             secretBossRoom.setLeft(ss28);
-
-            Circle secretBoss = new Circle(11, 6, 4, secretBossRoom);
-            secretBossRoom.addEntity(secretBoss);
 
             secretLevel.addScreen(ss1);
             secretLevel.addScreen(ss2);
@@ -382,12 +547,12 @@ public class World {
             screen3.addEntity(triangle2);
             screen2.addEntity(triangle3);
             screen2.addEntity(triangle4);
-            screen1.addEntity(itemB);
-            screen3.addEntity(itemA);
+            screen1.addEntity(itemB1);
+            screen3.addEntity(itemA1);
             screen4.addEntity(triangle5);
             screen4.addEntity(triangle6);
             bossScreen.addEntity(triangleBoss);
-            bossScreen.addEntity(itemC);
+            bossScreen.addEntity(itemD1);
 
             screen1.setUp(screen3);
             screen1.setRight(screen2);
@@ -471,20 +636,23 @@ public class World {
             Square square12 = new Square(4, 8, 4, screen6);
             Cube cubeBoss = new Cube(11, 0, 0, bossScreen2);
 
-            DroppedItem itemD = new DroppedItem(300, 600, item3, "media/Player/Item.png", 100, screen6);
+            
 
             screen6.addEntity(square1);
             screen6.addEntity(square2);
             screen6.addEntity(square12);
-            screen6.addEntity(itemD);
+            screen6.addEntity(itemC1);
             screen7.addEntity(square3);
             screen8.addEntity(square4);
             screen8.addEntity(square5);
+            screen8.addEntity(itemF);
             screen9.addEntity(square8);
+            screen9.addEntity(itemA2);
             screen10.addEntity(square9);
             screen11.addEntity(square10);
             screen12.addEntity(square6);
             screen12.addEntity(square7);
+            screen6.addEntity(itemB2);
             screen13.addEntity(square11);
             bossScreen2.addEntity(cubeBoss);
 
@@ -593,6 +761,7 @@ public class World {
             screen15.addEntity(hex2);
             screen15.addEntity(hex3);
             screen15.addEntity(hex4);
+            screen15.addEntity(itemG1);
 
             screen16.addEntity(hex5);
             screen16.addEntity(hex6);
@@ -603,6 +772,7 @@ public class World {
             screen18.addEntity(hex9);
             screen18.addEntity(hex10);
             screen18.addEntity(hex11);
+            screen6.addEntity(itemJ1);
 
             screen19.addEntity(hex12);
             screen19.addEntity(hex13);
@@ -629,6 +799,7 @@ public class World {
             screen26.addEntity(hex28);
 
             bossRoom3.addEntity(dodecaBoss);
+            bossRoom3.addEntity(itemE1);
 
             level3.addScreen(screen14);
             level3.addScreen(screen15);
@@ -650,7 +821,7 @@ public class World {
             
 
             Cirkyle = new Player(100, 100);
-            level1.placeEntity(0, 0, Cirkyle);
+            World.instance().getCurrentLevel().setCurrentScreen(screen1);
             World.instance().setDesertMusic();
             getCurrentLevel().getBaseScreen().addEntity(Cirkyle);
         } else {

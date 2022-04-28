@@ -1,3 +1,8 @@
+//--------------------------------
+// Equipment.java
+// Inherits from item, this class is used
+// for defining items that the player can use
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;
@@ -54,8 +59,23 @@ public abstract class Equipment extends Item {
     }
 
 
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     * Overridden by Child classes
+     */ 
     public abstract void serialize(DataOutputStream file) throws IOException;
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static Equipment deserialize(DataInputStream file) throws IOException {
         String equipmentType = file.readUTF();
         if (equipmentType.equals("Ranged")) {

@@ -1,3 +1,8 @@
+//--------------------------------
+// UsableItem.java
+// Defines the items that can be picked up by the player and used
+// Such as potions.  Inherits Item
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;
@@ -32,10 +37,7 @@ public class UsableItem extends Item{
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            if (super.getBuffs().getHealth() + player.getStats().getHealth() > player.getTotalHealth()){
-                player.getStats().setHealth((int) player.getTotalHealth());
-                super.getBuffs().setHealth(0);
-            }
+            
 
             player.addEffects(effect);
         }
@@ -96,11 +98,15 @@ public class UsableItem extends Item{
 
 
 
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("UsableItem"); //type of item
         file.writeUTF(this.getName());
-        // file.writeInt(this.getCooldown());
         file.writeInt(getCooldown());
         getBuffs().serialize(file);
         file.writeInt(useCount);
@@ -109,6 +115,15 @@ public class UsableItem extends Item{
     }
 
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static UsableItem deserialize(DataInputStream file) throws IOException {
         String name = file.readUTF();
         int cooldown = file.readInt();

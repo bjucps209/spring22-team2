@@ -1,3 +1,8 @@
+//--------------------------------
+// Circle.java
+// Circle class is for the secret boss
+// Not to be confused with Cirkyle the player
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;
@@ -48,7 +53,7 @@ public class Circle extends Boss{
     @Override
     public void performAttack1()
     {
-        World.instance().getPlayer().takeDamage(100, Direction.down);
+        World.instance().getPlayer().takeDamage(15, Direction.down);
     }
 
     @Override

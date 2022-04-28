@@ -1,3 +1,9 @@
+//--------------------------------
+// MeleeWeapon.java
+// MeleeWeapon defines the weapons with short range and high damage
+// MeleeWeapon is what the player starts with.
+// Each MeleeWeapon inherits from equipment
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;
@@ -75,6 +81,11 @@ public class MeleeWeapon extends Equipment{
     }
 
 
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Melee");
@@ -89,6 +100,15 @@ public class MeleeWeapon extends Equipment{
         file.writeUTF(image);
     }
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static MeleeWeapon deserialize(DataInputStream file) throws IOException {
         String name = file.readUTF();
         int cooldown = file.readInt();

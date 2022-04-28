@@ -1,3 +1,7 @@
+//--------------------------------
+// Effect.java
+// Effects are used for the application of buffs to the player
+//----------------------------------
 package model;
 
 import javafx.animation.KeyFrame;
@@ -18,7 +22,14 @@ public class Effect {
 
     public void giveEffect(Player user){
         applied = true;
+        
+        System.out.println(effects.getHealth());
         if (effects.getHealth() > 50){user.setTotalHealth(user.getTotalHealth() + 5);}
+        
+        if (effects.getHealth() + user.getStats().getHealth() > user.getTotalHealth()){
+            user.getStats().setHealth((int) user.getTotalHealth());
+            effects.setHealth(0);
+        }
         user.getStats().ApplyBuffs(effects);
     }
 
