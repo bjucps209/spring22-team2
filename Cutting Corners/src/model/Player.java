@@ -260,7 +260,7 @@ public class Player extends Entity {
 
                 
                 int newY = super.getY() - stats.getSpeed();
-                if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
+                if (newY < -25 || obstacleInPath(super.getX(), newY)){
                     super.getCoords().addYCoord(stats.getSpeed());
                 }
                 // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
@@ -281,7 +281,7 @@ public class Player extends Entity {
                 }
                 
                 int newX = super.getX() - stats.getSpeed();
-                if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
+                if (newX < -25 || obstacleInPath(newX, super.getY())){
                     super.getCoords().addXCoord(stats.getSpeed());
                 }
                 // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
@@ -295,7 +295,7 @@ public class Player extends Entity {
                 if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
 
                 int newY = super.getY() + stats.getSpeed();
-                if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
+                if (super.getY() > 725 || obstacleInPath(super.getX(), newY)){
                     super.getCoords().subYCoord(stats.getSpeed());
                 }
                 // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
@@ -317,7 +317,7 @@ public class Player extends Entity {
                 }
                 
                 int newX = super.getX() + stats.getSpeed();
-                if (super.getX() > 1200 || obstacleInPath(newX, super.getY())){
+                if (super.getX() > 1225 || obstacleInPath(newX, super.getY())){
                     super.getCoords().subXCoord(stats.getSpeed());
                 }
 

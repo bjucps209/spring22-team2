@@ -322,7 +322,7 @@ public class World {
             secretLevel.addScreen(secretBossRoom);
             secretLevel.setBaseScreen(ss1);
 
-            world.campaign.add(secretLevel);
+            World.campaign.add(secretLevel);
 
             Level level1 = new Level(1);
 
@@ -375,7 +375,7 @@ public class World {
             level1.addScreen(bossScreen);
             level1.setCurrentScreen(level1.findScreen(0, 0));
             level1.setBaseScreen(screen1);
-            world.campaign.add(level1);
+            World.campaign.add(level1);
 
             Level level2 = new Level(2);
 
@@ -464,7 +464,7 @@ public class World {
             level2.addScreen(bossScreen2);
             level2.setBaseScreen(screen5);
 
-            world.campaign.add(level2);
+            World.campaign.add(level2);
 
             Level level3 = new Level(3);
 
@@ -610,7 +610,7 @@ public class World {
             level3.addScreen(bossRoom3);
             level3.setBaseScreen(screen14);
 
-            world.campaign.add(level3);
+            World.campaign.add(level3);
             
 
             Cirkyle = new Player(100, 100);

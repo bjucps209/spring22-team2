@@ -42,6 +42,7 @@ public class GameWindow {
     Image SAVE_BTN = new Image("media/buttons/savebtn.png");
     Image SAVEEXIT_BTN = new Image("media/buttons/saveexitbtn.png");
     Image EXIT_BTN = new Image("media/buttons/exitbtn.png");
+    Label playerDied = new Label("You Died");
     ImageView pauseView = new ImageView(PAUSE_BACKGROUND);
     ImageView resumeView = new ImageView(RESUME_BTN);
     ImageView saveView = new ImageView(SAVE_BTN);
@@ -71,12 +72,7 @@ public class GameWindow {
         gameWindow.getChildren().clear();
         
         if (playerDead.get()){
-            int currentLevel = World.instance().getCurrentLevelNumber();
-            World.instance().reset();
-            World.instance().setCurrentLevel(currentLevel);
-            World.instance().getCurrentLevel().setCurrentScreen(
-                World.instance().getCurrentLevel().getBaseScreen());
-            playerDead.set(false);
+            World.instance().setIsPaused(true);
         }
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
@@ -102,6 +98,7 @@ public class GameWindow {
         World.instance().setCheatMode(cheatMode);
         World.instance().setCampaign(userCampaign);
         World.instance().setDifficulty(difficulty);
+        
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
         entityImage.setImage(new Image(entity.getImage()));
@@ -152,7 +149,27 @@ public class GameWindow {
         saveView.relocate(40, 300);
         saveExitView.relocate(640, 50);
         exitView.relocate(640, 300);
-        resumeView.setOnMouseClicked(e->{World.instance().setIsPaused(false);World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());});
+        playerDied.getStyleClass().add("title");
+        playerDied.relocate(350, 550);
+        
+        if (playerDead.get()){
+            effectBox.getChildren().clear();
+            resumeView.setOnMouseClicked(e-> {
+                int currentLevel = World.instance().getCurrentLevelNumber();
+                World.instance().reset();
+                World.instance().setCurrentLevel(currentLevel);
+                World.instance().getCurrentLevel().setCurrentScreen(
+                    World.instance().getCurrentLevel().getBaseScreen());
+                playerDead.set(false);
+                World.instance().setIsPaused(false);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+            });
+        }
+        else
+        {
+            resumeView.setOnMouseClicked(e->{World.instance().setIsPaused(false);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());});
+        }
         saveView.setOnMouseClicked(e->{
             try {
                 World.instance().save("savegame.dat");
@@ -192,11 +209,15 @@ public class GameWindow {
         gameWindow.getChildren().add(saveView);
         gameWindow.getChildren().add(saveExitView);
         gameWindow.getChildren().add(exitView);
+        gameWindow.getChildren().add(playerDied);
+
+        playerDied.setVisible(playerDead.get());
         pauseView.setVisible(World.instance().getIsPaused());
         resumeView.setVisible(World.instance().getIsPaused());
         saveExitView.setVisible(World.instance().getIsPaused());
         saveView.setVisible(World.instance().getIsPaused());
         exitView.setVisible(World.instance().getIsPaused());
+
     }
 
     @FXML
