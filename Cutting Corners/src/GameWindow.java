@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,7 +54,7 @@ public class GameWindow {
     
 
     @FXML
-    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,int difficulty) throws IOException{
+    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,IntegerProperty difficulty) throws IOException{
         
         if(ratioHeight>1)
         {
@@ -97,7 +98,7 @@ public class GameWindow {
         World.instance().setLoaded(isLoaded);
         World.instance().setCheatMode(cheatMode);
         World.instance().setCampaign(userCampaign);
-        World.instance().setDifficulty(difficulty);
+        World.instance().DifficultyProperty().bind(difficulty);
         
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));

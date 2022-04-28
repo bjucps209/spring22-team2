@@ -12,15 +12,16 @@ public abstract class Item {
     private Stats buffs;
     private String Image;
 
-    public Item(String name, int cooldown, Stats buffs, String Image){
+    public Item(String name, int cooldown, Stats buffs, String Image) {
         this.name = name;
         this.cooldown = cooldown;
         this.buffs = buffs;
     }
 
-    public void performAction(Entity user){}
+    // called by descendants of Item to perform specific actions on @user
+    public void performAction(Entity user) {
+    }
 
-    
     // Getters and Setters
     public String getName() {
         return name;
@@ -38,22 +39,21 @@ public abstract class Item {
         this.cooldown = cooldown;
     }
 
-    public void setBuffs(Stats buffs){
+    public void setBuffs(Stats buffs) {
         this.buffs = buffs;
     }
 
-    public Stats getBuffs(){
+    public Stats getBuffs() {
         return buffs;
     }
 
-    public void setImage(String Image){
+    public void setImage(String Image) {
         this.Image = Image;
     }
 
-    public String getImage(){
+    public String getImage() {
         return Image;
     }
-    
 
     public abstract void serialize(DataOutputStream file) throws IOException;
 

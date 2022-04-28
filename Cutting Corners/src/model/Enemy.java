@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javafx.util.Duration;
 
-public class Enemy extends Entity{
+public class Enemy extends Entity {
     private Screen homeScreen;
     private Cell cellWithin;
     private int vision;
@@ -20,7 +20,7 @@ public class Enemy extends Entity{
     private int size;
     private int stunCount;
     private int knockback;
-    private int attackCount=50;
+    private int attackCount = 50;
     private String walking;
     private String attacking;
     private String currentImage = "Standing";
@@ -29,38 +29,36 @@ public class Enemy extends Entity{
     private Direction facing = Direction.left;
     private damageIndicator indicator;
 
-    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon, Stats stats,String walking,String attacking,int totalHealth, int experience, int score)
-    {
-        super(col*100, row*100, image, size);
+    public Enemy(int sides, int size, int col, int row, String image, Screen homeScreen, int vision, Equipment weapon,
+            Stats stats, String walking, String attacking, int totalHealth, int experience, int score) {
+        super(col * 100, row * 100, image, size);
         this.score = score;
         this.homeScreen = homeScreen;
         this.vision = vision;
         this.sides = sides;
         this.weapon = weapon;
-        this.stats = new Stats(stats.getStrength()*World.instance().getDifficulty(), stats.getSpeed()*World.instance().getDifficulty(), stats.getHealth()*World.instance().getDifficulty());
+        this.stats = new Stats(stats.getStrength() * World.instance().getDifficulty(),
+                stats.getSpeed() * World.instance().getDifficulty(),
+                stats.getHealth() * World.instance().getDifficulty());
+        System.out.println(World.instance().DifficultyProperty().get());
         this.size = size;
         this.totalHealth = totalHealth;
-        this.walking=walking;
-        this.attacking=attacking;
+        this.walking = walking;
+        this.attacking = attacking;
         cellWithin = cellWithin(col, row);
         this.experience = experience;
-        //this.coords = new Corrdinates(WIDTH, HEIGHT);
-    }
-    public Stats getStats()
-    {
-        return stats;
-    }
-    public void generateEnemy(int xCoord, int yCoord){
-        //type = new Triangle(super.getSize(), xCoord, yCoord, homeScreen);
-        // switch (sides) {
-        //     case 3:{type = new Triangle(size);}
-        //     default: break;
-        // }
+        // this.coords = new Corrdinates(WIDTH, HEIGHT);
     }
 
-    public PlayerRelation PlayerInVision(){
-        for (Entity entity: homeScreen.getEntities()){
-            if (entity instanceof Player){
+    public Stats getStats() {
+        return stats;
+    }
+
+    // checks if and where the player is in relation to the enemy, returning
+    // @relation is player is on screen, null otherwise
+    public PlayerRelation PlayerInVision() {
+        for (Entity entity : homeScreen.getEntities()) {
+            if (entity instanceof Player) {
                 int xDifference = super.getX() - entity.getX();
                 int yDifference = super.getY() - entity.getY();
                 double square = Math.pow(xDifference, 2) + Math.pow(yDifference, 2);
@@ -71,146 +69,157 @@ public class Enemy extends Entity{
         return null;
     }
 
-    public Cell cellWithin(int row, int col){
-        try{Cell cell = homeScreen.getGrid()[row][col];
-            if (cell == null){cell = Cell.empty;}
-        return cell;
-        }catch(Exception i){return Cell.empty;}
+    // finds which cell the enemy is inside of using its xCoord and yCoord,
+    // returning @cell to indicate which one
+    public Cell cellWithin(int row, int col) {
+        try {
+            Cell cell = homeScreen.getGrid()[row][col];
+            if (cell == null) {
+                cell = Cell.empty;
+            }
+            return cell;
+        } catch (Exception i) {
+            return Cell.empty;
+        }
     }
 
+    // state machine to handle the enemy's movement, changes state based on how
+    // close the player is; patrolling is player is outside its @vision, seeking if
+    // player is within its @vision, attacking if within @attackRange, stunned if
+    // recently hit
     @Override
-    public void performMovement(){
+    public void performMovement() {
         PlayerRelation relation = PlayerInVision();
-        if(relation!=null)
-        {
-            if(relation.getDistance()<=((MeleeWeapon) weapon).getRange()&&state!=EnemyState.stunned)
-            {
-                state=EnemyState.attacking;
-                if(currentImage!="Attacking")
-                {
-                    super.getObserver().changeImage(attacking,Direction.left);
-                    currentImage="Attacking";
+        if (relation != null) {
+            if (relation.getDistance() <= ((MeleeWeapon) weapon).getRange() && state != EnemyState.stunned) {
+                state = EnemyState.attacking;
+                if (currentImage != "Attacking") {
+                    super.getObserver().changeImage(attacking, Direction.left);
+                    currentImage = "Attacking";
                 }
             }
         }
-        switch (state){
+        switch (state) {
             case stunned:
                 stunCount--;
-                if (knockback > 0){
+                if (knockback > 0) {
                     simpleMovement(10);
                     knockback--;
                 }
-                if(stunCount<=0)
-                {
-                    attackCount=50;
-                    state=EnemyState.patrolling;
-                    if(currentImage!="Standing")
-                    {
-                        super.getObserver().changeImage(super.getImage(),Direction.left);
-                        currentImage="Standing";
+                if (stunCount <= 0) {
+                    attackCount = 50;
+                    state = EnemyState.patrolling;
+                    if (currentImage != "Standing") {
+                        super.getObserver().changeImage(super.getImage(), Direction.left);
+                        currentImage = "Standing";
                     }
                 }
                 break;
             case patrolling: {
-                if(relation!=null)
-                {
-                    if (relation.distance < vision&&state!=EnemyState.stunned) {
-                        state = EnemyState.seeking; 
-                        if(currentImage!="Walking")
-                        {
-                            super.getObserver().changeImage(walking,Direction.left);
-                            currentImage="Walking";
+                if (relation != null) {
+                    if (relation.distance < vision && state != EnemyState.stunned) {
+                        state = EnemyState.seeking;
+                        if (currentImage != "Walking") {
+                            super.getObserver().changeImage(walking, Direction.left);
+                            currentImage = "Walking";
                         }
                     }
                 }
                 break;
             }
-            case seeking:{
-                if(relation!=null)
-                {
+            case seeking: {
+                if (relation != null) {
                     complexMovement(relation);
                 }
             }
             case attacking: {
-                if(attackCount==1)
-                {
+                if (attackCount == 1) {
                     performAttack();
                 }
                 attackCount--;
-                if (attackCount <= 0){
+                if (attackCount <= 0) {
                     state = EnemyState.seeking;
-                    attackCount=50;
-                    if(currentImage!="Walking")
-                    {
-                        super.getObserver().changeImage(walking,Direction.left);
-                        currentImage="Walking";
+                    attackCount = 50;
+                    if (currentImage != "Walking") {
+                        super.getObserver().changeImage(walking, Direction.left);
+                        currentImage = "Walking";
                     }
                 }
             }
-            default: break;
+            default:
+                break;
         }
     }
 
+    // decrements the player's health if the player is within the attack range when
+    // the attack completes
     @Override
     public void performAttack() {
         PlayerRelation p = PlayerInVision();
-        if(p!=null)
-        {
+        if (p != null) {
             MeleeWeapon weapon = (MeleeWeapon) this.weapon;
-                weapon.setDamage(getStats().getStrength());
-                weapon.setSpeed((int) getStats().getSpeed() / 2);
-                if(p.getDistance()<=weapon.getRange())
-                    {
-                        if(p.getDirection()==Direction.up)
-                        {
-                            p.getPlayer().takeDamage(weapon.getDamage(), Direction.down);
-                        }
-                        else if(p.getDirection()==Direction.down)
-                        {
-                            p.getPlayer().takeDamage(weapon.getDamage(), Direction.up);
-                        }
-                        if(p.getDirection()==Direction.left)
-                        {
-                            p.getPlayer().takeDamage(weapon.getDamage(), Direction.right);
-                            super.getObserver().changeImage(attacking, Direction.right);
-                        }
-                        else
-                        {
-                            p.getPlayer().takeDamage(weapon.getDamage(), Direction.left);
-                            super.getObserver().changeImage(attacking, Direction.left);
-                        }
-                    }
+            weapon.setDamage(getStats().getStrength());
+            weapon.setSpeed((int) getStats().getSpeed() / 2);
+            if (p.getDistance() <= weapon.getRange()) {
+                if (p.getDirection() == Direction.up) {
+                    p.getPlayer().takeDamage(weapon.getDamage(), Direction.down);
+                } else if (p.getDirection() == Direction.down) {
+                    p.getPlayer().takeDamage(weapon.getDamage(), Direction.up);
+                }
+                if (p.getDirection() == Direction.left) {
+                    p.getPlayer().takeDamage(weapon.getDamage(), Direction.right);
+                    super.getObserver().changeImage(attacking, Direction.right);
+                } else {
+                    p.getPlayer().takeDamage(weapon.getDamage(), Direction.left);
+                    super.getObserver().changeImage(attacking, Direction.left);
+                }
             }
+        }
     }
-    public void complexMovement(PlayerRelation relation){
+
+    // moves the enemy in a staircase pattern, according to @relation's xDifference
+    // and yDifference. if the xDifference > yDifference when the enemy changes a
+    // cell, it calls changeDirection()
+    public void complexMovement(PlayerRelation relation) {
         int xSpeed = 0;
         int ySpeed = 0;
-        switch (direction){
-            case up: ySpeed = -1 * stats.getSpeed();
-            case down: ySpeed = stats.getSpeed();
-            case left: xSpeed = -1 * stats.getSpeed();
-            case right: xSpeed = stats.getSpeed();
+        switch (direction) {
+            case up:
+                ySpeed = -1 * stats.getSpeed();
+            case down:
+                ySpeed = stats.getSpeed();
+            case left:
+                xSpeed = -1 * stats.getSpeed();
+            case right:
+                xSpeed = stats.getSpeed();
         }
 
         int newX = super.getX() + xSpeed;
         int newY = super.getY() + ySpeed;
 
-        if (obstacleInPath(newX, newY)){
-            switch (direction){
-                case up: direction = Direction.left;
-                case down: direction = Direction.right;
-                case left: direction = Direction.down;
-                case right: direction = Direction.up;
+        if (obstacleInPath(newX, newY)) {
+            switch (direction) {
+                case up:
+                    direction = Direction.left;
+                case down:
+                    direction = Direction.right;
+                case left:
+                    direction = Direction.down;
+                case right:
+                    direction = Direction.up;
             }
             simpleMovement(stats.getSpeed());
             return;
         }
-        
-        if (super.getX() % 100 > newX % 100){changeDirection(relation);}
-        if (super.getY() % 100 > newY % 100){changeDirection(relation);}
-        
 
-        switch (direction){
+        if (super.getX() % 100 > newX % 100) {
+            changeDirection(relation);
+        }
+        if (super.getY() % 100 > newY % 100) {
+            changeDirection(relation);
+        }
+
+        switch (direction) {
             case up: {
                 super.getCoords().subYCoord(stats.getSpeed());
                 break;
@@ -221,64 +230,84 @@ public class Enemy extends Entity{
             }
             case left: {
                 super.getCoords().subXCoord(stats.getSpeed());
-                if(facing==Direction.right)
-                {
+                if (facing == Direction.right) {
                     super.getObserver().changeImage(walking, Direction.right);
-                    facing=Direction.left;
+                    facing = Direction.left;
                 }
                 break;
             }
             case right: {
                 super.getCoords().addXCoord(stats.getSpeed());
-                if(facing==Direction.left)
-                {
+                if (facing == Direction.left) {
                     super.getObserver().changeImage(walking, Direction.left);
-                    facing=Direction.right;
+                    facing = Direction.right;
                 }
                 break;
             }
         }
     }
 
-    public void simpleMovement(int speed){
+    // moves enemy in a straight line, adding to or subtracting from its @xCoord or
+    // @yCoord
+    public void simpleMovement(int speed) {
         int xSpeed = 0;
         int ySpeed = 0;
 
-        switch (direction){
-            case up: ySpeed = -1 * speed;
-            case down: ySpeed = speed;
-            case left: xSpeed = -1 * speed;
-            case right: xSpeed = speed;
+        switch (direction) {
+            case up:
+                ySpeed = -1 * speed;
+            case down:
+                ySpeed = speed;
+            case left:
+                xSpeed = -1 * speed;
+            case right:
+                xSpeed = speed;
         }
 
         super.getCoords().setxCoord(super.getX() + xSpeed);
         super.getCoords().setyCoord(super.getY() + ySpeed);
     }
-    
-    public void changeDirection(PlayerRelation relation){
-        if (Math.abs(relation.xDifference) < Math.abs(relation.yDifference)){
-            if (relation.yDifference > 0){direction = Direction.up;}
-            else{direction = Direction.down;}
-        }
-        else{
-            if (relation.xDifference > 0){direction = Direction.left;}
-            else{direction = Direction.right;}
+
+    public void changeDirection(PlayerRelation relation) {
+        if (Math.abs(relation.xDifference) < Math.abs(relation.yDifference)) {
+            if (relation.yDifference > 0) {
+                direction = Direction.up;
+            } else {
+                direction = Direction.down;
+            }
+        } else {
+            if (relation.xDifference > 0) {
+                direction = Direction.left;
+            } else {
+                direction = Direction.right;
+            }
         }
     }
 
-    public boolean obstacleInPath(int xCoord, int yCoord){
+    // finds if the cell in the enemy's path is an obstacle using @xCoord and
+    // @yCoord, returning @true or @false
+    public boolean obstacleInPath(int xCoord, int yCoord) {
         int row = yCoord / 100;
         int col = xCoord / 100;
-        
 
-        for (int i = -1; i < 1; i++){
-            for (int j = 0; j < 2; j++){
-                if (cellWithin(row + i, col + j) != Cell.empty){
-                    switch(cellWithin(row + i, col + j)){
-                        case tree: if (i != 0 || j != 0){return false;}
-                        case plant: if (i != -1 || j != 0){return false;}
-                        case rock: if (i == -1){return false;}
-                        default: return true;
+        for (int i = -1; i < 1; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (cellWithin(row + i, col + j) != Cell.empty) {
+                    switch (cellWithin(row + i, col + j)) {
+                        case tree:
+                            if (i != 0 || j != 0) {
+                                return false;
+                            }
+                        case plant:
+                            if (i != -1 || j != 0) {
+                                return false;
+                            }
+                        case rock:
+                            if (i == -1) {
+                                return false;
+                            }
+                        default:
+                            return true;
                     }
                 }
             }
@@ -287,34 +316,38 @@ public class Enemy extends Entity{
         return false;
     }
 
+    // decrements the enemy's @stats.getHealth() and checks if it fell below 0,
+    // calls performDie() if so
     @Override
-    public void takeDamage(int damage, Direction direction){
+    public void takeDamage(int damage, Direction direction) {
         stats.subHealth(damage);
-        state=EnemyState.stunned;
-        if(currentImage!="Standing")
-        {
-            super.getObserver().changeImage(super.getImage(),Direction.left);
-            currentImage="Standing";
+        state = EnemyState.stunned;
+        if (currentImage != "Standing") {
+            super.getObserver().changeImage(super.getImage(), Direction.left);
+            currentImage = "Standing";
         }
-        knockback=10;
+        knockback = 10;
         this.direction = direction;
-        if(stunCount<=0)
-        {
-            stunCount=50;
+        if (stunCount <= 0) {
+            stunCount = 50;
         }
         int time = damage * 100 + 500;
         indicator.displayDamage(this, damage, time);
-        if (stats.getHealth() <= 0){performDie();}
+        if (stats.getHealth() <= 0) {
+            performDie();
+        }
     }
 
+    // removes the enemy from the @currentScreen, adds its @experience and @score to
+    // the player's
     @Override
-    public void performDie(){
+    public void performDie() {
         System.out.println('u');
         World.instance().getPlayer().addExperience(experience);
         World.instance().getPlayer().addScore(score);
         super.performDie();
     }
-    
+
     // Getters and Setters ---------------
 
     public Screen getHomeScreen() {
@@ -340,8 +373,8 @@ public class Enemy extends Entity{
     public void setCellWithin(Cell cellWithin) {
         this.cellWithin = cellWithin;
     }
-    public int getScore()
-    {
+
+    public int getScore() {
         return score;
     }
 
@@ -373,11 +406,11 @@ public class Enemy extends Entity{
         this.type = type;
     }
 
-    public void setTotalHealth(int totalHealth){
+    public void setTotalHealth(int totalHealth) {
         this.totalHealth = totalHealth;
     }
 
-    public double getTotalHealth(){
+    public double getTotalHealth() {
         return totalHealth;
     }
 
@@ -413,14 +446,12 @@ public class Enemy extends Entity{
         this.size = size;
     }
 
-
-
     public void serialize(DataOutputStream file) throws IOException {
         // TODO Auto-generated method stub
     }
+
     public void setAttackCount(int i) {
-        attackCount=i;
+        attackCount = i;
     }
 
-    
 }

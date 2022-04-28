@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
-public class MeleeWeapon extends Equipment{
+public class MeleeWeapon extends Equipment {
     private int range;
     private Direction direction;
     private int damage;
@@ -16,26 +16,25 @@ public class MeleeWeapon extends Equipment{
     private String image;
     private ArrayList<Entity> enemies;
 
-    public MeleeWeapon(String name, int cooldown, int Strength, int Speed, int Health, int range, String image){
+    public MeleeWeapon(String name, int cooldown, int Strength, int Speed, int Health, int range, String image) {
         super(name, cooldown, EquipmentType.MELEE_WEAPON, new Stats(Strength, Speed, Health), image);
         this.range = range;
         this.image = image;
     }
 
+    // spawns an instance of @swing at the @user's coordinates
     @Override
-    public void performAction(Entity user){
+    public void performAction(Entity user) {
         Swing swing = new Swing(direction, damage, range, user);
-        //swing.checkIfHit(enemies, direction);
+        // swing.checkIfHit(enemies, direction);
     }
 
-
-
     // Getters and Setters -------------------------
-    public void setEnemies(ArrayList<Entity> enemies){
+    public void setEnemies(ArrayList<Entity> enemies) {
         this.enemies = enemies;
     }
 
-    public void setDirection(Direction direction){
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
@@ -47,21 +46,22 @@ public class MeleeWeapon extends Equipment{
         this.image = image;
     }
 
-    public void setDamage(int damage){
+    public void setDamage(int damage) {
         this.damage = damage;
     }
 
-    public Direction getDirection(){
+    public Direction getDirection() {
         return direction;
     }
 
-    public int getDamage(){
+    public int getDamage() {
         return damage;
     }
 
-    public void setSpeed(int speed){
+    public void setSpeed(int speed) {
         this.speed = speed;
     }
+
     public int getSpeed() {
         return speed;
     }
@@ -73,7 +73,6 @@ public class MeleeWeapon extends Equipment{
     public void setRange(int range) {
         this.range = range;
     }
-
 
     @Override
     public void serialize(DataOutputStream file) throws IOException {
@@ -102,7 +101,7 @@ public class MeleeWeapon extends Equipment{
         int damage = file.readInt();
         int speed = file.readInt();
         String image = file.readUTF();
-        
+
         MeleeWeapon m = new MeleeWeapon(name, cooldown, Strength, Health, Speed, range, image);
         return m;
     }

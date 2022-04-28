@@ -6,6 +6,8 @@ import java.util.*;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -71,7 +73,7 @@ public class MainWindow {
     Boolean userCampaign = false;
     Boolean cheatMode = false;
     Boolean isLoaded = false;
-    int difficulty = 2;
+    IntegerProperty difficulty = new SimpleIntegerProperty(2);
     Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
     double ratioWidth = size.getWidth()/1280;
     double ratioHeight = size.getHeight()/800;
@@ -466,11 +468,11 @@ public class MainWindow {
     @FXML
     void diffSliderPressed(ImageView view)
     {
-        if(view==diffSliderLeft&&difficulty!=1)
+        if(view==diffSliderLeft&&difficulty.get()!=1)
         {
-            difficulty--;
+            difficulty.set(difficulty.get()-1);
             System.out.println(difficulty);
-            switch(difficulty)
+            switch(difficulty.get())
             {
                 case 1:
                     difficultyView.setImage(DIFFICULTY_EASY);
@@ -482,10 +484,10 @@ public class MainWindow {
             }
             diffSliderRight.setImage(SLIDER_RIGHT);
         }
-        if(view==diffSliderRight&&difficulty<3)
+        if(view==diffSliderRight&&difficulty.get()<3)
         {
-            difficulty++;
-            switch(difficulty)
+            difficulty.set(difficulty.get()+1);
+            switch(difficulty.get())
             {
                 case 2:
                     difficultyView.setImage(DIFFICULTY_NORMAL);

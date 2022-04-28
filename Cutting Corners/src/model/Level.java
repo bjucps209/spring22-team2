@@ -17,84 +17,56 @@ public class Level {
     private int currentCol;
     private int currentLevel;
     ScreenObserver observer;
-    private AudioClip BOSS_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/bossfights.mp3").toString());
+    private AudioClip BOSS_MUSIC = new AudioClip(
+            getClass().getResource("/media/Sounds/music/bossfights.mp3").toString());
     private Screen baseScreen;
     Random rand = new Random();
 
-    public Level(int currentLevel){
+    public Level(int currentLevel) {
         // generateEnemies();
         this.currentLevel = currentLevel;
     }
-
-    
 
     public Screen getBaseScreen() {
         return baseScreen;
     }
 
-
-
     public void setBaseScreen(Screen baseScreen) {
         this.baseScreen = baseScreen;
     }
 
-
-
-    public void setObserver(ScreenObserver observer){
+    public void setObserver(ScreenObserver observer) {
         this.observer = observer;
     }
 
-    public ScreenObserver getObserver(){
+    public ScreenObserver getObserver() {
         return observer;
     }
 
-    public void placeEntity(int row, int col, Entity entity){
+    public void placeEntity(int row, int col, Entity entity) {
         findScreen(row, col).addEntity(entity);
     }
 
-    public Screen findScreen(int row, int col){
-        for (Screen screen: screens){
-            if (screen.getLocation().getRow() == row && screen.getLocation().getCol() == col){
+    // finds a screen in the arraylist @screens in @currentLevel using @row and @col
+    // to match with each screen's specific grid coordinates
+    public Screen findScreen(int row, int col) {
+        for (Screen screen : screens) {
+            if (screen.getLocation().getRow() == row && screen.getLocation().getCol() == col) {
                 return screen;
             }
         }
         return null;
     }
 
-    // private void generateEnemies(){
-    //     int totalSize = currentLevel * 20 + 40;
-    //     while (true){
-    //         int size = rand.nextInt(currentLevel + 2) + 1;
-    //         int sides = rand.nextInt(currentLevel) + 3;
-    //         if (size >= totalSize){size = totalSize; break;}
-    //         else{totalSize -= size;}
-    //         Enemy enemy = new Enemy(sides, size);
-    //         totalEnemies.add(enemy);
-    //     }
-    //     distributeEnemies();
-    // }
-
-    // private void distributeEnemies(){
-        // ListIterator<Enemy> iterator = totalEnemies.listIterator();
-
-        // while (true){
-        //     int groupSize = rand.nextInt(4) + 1;
-        //     Enemy[] group = iterate(groupSize, iterator);
-        //     //int row = rand.nextInt(LEVEL_WIDTH);
-        //     //int col = rand.nextInt(LEVEL_HEIGHT);
-        //     //if (screens[row][col].full){continue;}
-        //     //else{screens[row][col].addEntityGroup(group);}
-        // }
-    // }
-
-    public void goLeft(){
-        if (currentScreen.getLeft() != null&&!World.instance().isActiveBoss()){
+    // sets the @currentScreen to the @currentScreen's @left parameter, playing
+    // music if necessary
+    public void goLeft() {
+        if (currentScreen.getLeft() != null && !World.instance().isActiveBoss()) {
             Player player = currentScreen.removePlayer();
             player.getCoords().setxCoord(950);
             currentScreen = currentScreen.getLeft();
             currentScreen.addEntity(player);
-            if(currentScreen.getFilename().contains("bossroom"))
-            {
+            if (currentScreen.getFilename().contains("bossroom")) {
                 World.instance().setActiveBoss(true);
                 World.instance().getMusic().stop();
                 World.instance().setMusic(BOSS_MUSIC);
@@ -105,14 +77,15 @@ public class Level {
         }
     }
 
-    public void goRight(){
-        if (currentScreen.getRight() != null&&!World.instance().isActiveBoss()){
+    // sets the @currentScreen to the @currentScreen's @right parameter, playing
+    // music if necessary
+    public void goRight() {
+        if (currentScreen.getRight() != null && !World.instance().isActiveBoss()) {
             Player player = currentScreen.removePlayer();
             player.getCoords().setxCoord(5);
             currentScreen = currentScreen.getRight();
             currentScreen.addEntity(player);
-            if(currentScreen.getFilename().contains("bossroom"))
-            {
+            if (currentScreen.getFilename().contains("bossroom")) {
                 World.instance().setActiveBoss(true);
                 World.instance().getMusic().stop();
                 World.instance().setMusic(BOSS_MUSIC);
@@ -123,14 +96,15 @@ public class Level {
         }
     }
 
-    public void goUp(){
-        if (currentScreen.getUp() != null&&!World.instance().isActiveBoss()){
+    // sets the @currentScreen to the @currentScreen's @up parameter, playing music
+    // if necessary
+    public void goUp() {
+        if (currentScreen.getUp() != null && !World.instance().isActiveBoss()) {
             Player player = currentScreen.removePlayer();
             player.getCoords().setyCoord(695);
             currentScreen = currentScreen.getUp();
             currentScreen.addEntity(player);
-            if(currentScreen.getFilename().contains("bossroom"))
-            {
+            if (currentScreen.getFilename().contains("bossroom")) {
                 World.instance().setActiveBoss(true);
                 World.instance().getMusic().stop();
                 World.instance().setMusic(BOSS_MUSIC);
@@ -141,14 +115,15 @@ public class Level {
         }
     }
 
-    public void goDown(){
-        if (currentScreen.getDown() != null&&!World.instance().isActiveBoss()){
+    // sets the @currentScreen to the @currentScreen's @down parameter, playing
+    // music if necessary
+    public void goDown() {
+        if (currentScreen.getDown() != null && !World.instance().isActiveBoss()) {
             Player player = currentScreen.removePlayer();
             player.getCoords().setyCoord(5);
             currentScreen = currentScreen.getDown();
             currentScreen.addEntity(player);
-            if(currentScreen.getFilename().contains("bossroom"))
-            {
+            if (currentScreen.getFilename().contains("bossroom")) {
                 World.instance().setActiveBoss(true);
                 World.instance().getMusic().stop();
                 World.instance().setMusic(BOSS_MUSIC);
@@ -159,48 +134,36 @@ public class Level {
         }
     }
 
-    public Enemy[] iterate(int groupSize, ListIterator<Enemy> iterator){
-        if (totalEnemies.size() - iterator.nextIndex() < groupSize){
-            groupSize = totalEnemies.size() - iterator.nextIndex();
-        }
-
-        Enemy[] group = new Enemy[groupSize];
-
-        for (int i = 0; i < groupSize; i++){
-            if (! iterator.hasNext()){return null;}
-            group[i] = (Enemy) iterator.next();
-        }
-
-        return group;
-    }
-
+    // converts the @dummyLevel from the worldBuilder to the actual @currentLevel in
+    // World
     public static Level convertDummyLvL(DummyLevel lvl) {
 
         Level newlvl = new Level(0);
-        String[][] adjscrkeeper = new String[lvl.dScreenList.size()][6]; 
+        String[][] adjscrkeeper = new String[lvl.dScreenList.size()][6];
 
         for (int idx = 0; idx < lvl.getDumScreens().size(); idx++) {
-            //screen stuff
+            // screen stuff
             DummyScreen dscr = lvl.getDumScreens().get(idx);
             int[] realID = dscr.getRealID();
             Screen newscr = new Screen(realID[0], realID[1], realID[2], dscr.getBackgroundImgPath());
 
-            if (dscr.screenID.equals(lvl.playerScrStrID)) newlvl.setCurrentScreen(newscr);
+            if (dscr.screenID.equals(lvl.playerScrStrID))
+                newlvl.setCurrentScreen(newscr);
 
             newlvl.screens.add(newscr);
             adjscrkeeper[idx] = dscr.getAdjacentStringIDs();
 
-            //Objects in screen
+            // Objects in screen
             for (int objidx = 0; objidx < dscr.getDumObjects().size(); objidx++) {
                 DummyObject dobj = dscr.getDumObj(objidx);
-                switch(dobj.type) {
+                switch (dobj.type) {
                     case "Obstacle":
                         newscr.setGridSquare(dobj.dimY, dobj.dimX, String.valueOf(Cell.tree));
                         break;
                     case "Player":
                         break;
                     case "Entity":
-                        switch(dobj.name) {
+                        switch (dobj.name) {
                             case "triangle":
                                 newscr.addEntity(new Triangle(4, dobj.tlCellX, dobj.tlCellY, newscr));
                                 break;
@@ -214,11 +177,11 @@ public class Level {
                                 newscr.addEntity(new Octagon(8, dobj.tlCellX, dobj.tlCellY, newscr));
                                 break;
                             default:
-                                newscr.addEntity(new Octagon(1000, dobj.tlCellX,  dobj.tlCellY, newscr));
+                                newscr.addEntity(new Octagon(1000, dobj.tlCellX, dobj.tlCellY, newscr));
                                 break;
                         }
                     case "Boss":
-                        switch(dobj.name) {
+                        switch (dobj.name) {
                             case "pyramidboss":
                                 newscr.addEntity(new Pyramid(11, dobj.tlCellX, dobj.tlCellY, newscr));
                                 break;
@@ -232,12 +195,13 @@ public class Level {
                                 break;
                         }
                     case "Item":
-                        UsableItem bleh = new UsableItem("Health Potion", 2, 1, 9999999, 0, 5, 0, "media/Player/Bow.png");
+                        UsableItem bleh = new UsableItem("Health Potion", 2, 1, 9999999, 0, 5, 0,
+                                "media/Player/Bow.png");
                         newscr.addEntity(new DroppedItem(200, 500, bleh, "media/Player/Item.png", 100, newscr));
                         break;
                     default:
                         break;
-                } 
+                }
 
             }
 
@@ -245,27 +209,31 @@ public class Level {
 
         for (int adjstridx = 0; adjstridx < adjscrkeeper.length; adjstridx++) {
             Screen curscr = newlvl.getScreens().get(adjstridx);
-            
+
             int[] upid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][0]);
-            if(upid != null) curscr.setUp(newlvl.findScreen(upid[1], upid[0]));
+            if (upid != null)
+                curscr.setUp(newlvl.findScreen(upid[1], upid[0]));
 
             int[] downid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][1]);
-            if(downid != null)curscr.setDown(newlvl.findScreen(downid[1], downid[0]));
+            if (downid != null)
+                curscr.setDown(newlvl.findScreen(downid[1], downid[0]));
 
             int[] rightid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][2]);
-            if(rightid != null)curscr.setRight(newlvl.findScreen(rightid[1], rightid[0]));
+            if (rightid != null)
+                curscr.setRight(newlvl.findScreen(rightid[1], rightid[0]));
 
             int[] leftid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][3]);
-            if(leftid != null)curscr.setLeft(newlvl.findScreen(leftid[1], leftid[0]));
+            if (leftid != null)
+                curscr.setLeft(newlvl.findScreen(leftid[1], leftid[0]));
         }
 
         newlvl.getCurrentScreen().addEntity(new Player(100, 100));
 
         return newlvl;
-    } 
+    }
 
     // Getters and Setters ----------------------------
-    
+
     public ArrayList<Screen> getScreens() {
         return screens;
     }
@@ -274,7 +242,7 @@ public class Level {
         this.screens = screens;
     }
 
-    public void addScreen(Screen screen){
+    public void addScreen(Screen screen) {
         screens.add(screen);
     }
 
@@ -294,10 +262,10 @@ public class Level {
         this.currentCol = currentCol;
     }
 
-    public Screen getCurrentScreen(){
+    public Screen getCurrentScreen() {
         return currentScreen;
     }
-    
+
     public ArrayList<Enemy> getTotalEnemies() {
         return totalEnemies;
     }
@@ -325,12 +293,12 @@ public class Level {
         // currentScreen.serialize(file);
 
         // for (Screen s : screens) {
-        //     s.serialize(file);
+        // s.serialize(file);
         // }
 
         file.writeInt(currentRow);
         file.writeInt(currentCol);
-    
+
     }
 
     public static Level deserialize(DataInputStream file) throws IOException {
@@ -346,8 +314,8 @@ public class Level {
         lvl.setCurrentScreen(screen);
 
         // for (int i = 0; i < numScreens; ++i) {
-        //     Screen s = Screen.deserialize(file);
-        //     lvl.getScreens().(s);
+        // Screen s = Screen.deserialize(file);
+        // lvl.getScreens().(s);
         // }
 
         lvl.setCurrentRow(file.readInt());

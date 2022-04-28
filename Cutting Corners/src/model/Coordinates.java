@@ -13,6 +13,7 @@ public class Coordinates {
         this.yCoord.set(yCoord);
     }
 
+    // randomly generates coordinates using @rand and returning @coords
     public static Coordinates randomCoords(int WIDTH, int HEIGHT){
         Random rand = new Random();
         Coordinates coords = new Coordinates(0,0);
