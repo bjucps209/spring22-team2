@@ -8,7 +8,7 @@
 ### Auxiliary Screens
 * Title Screen starts a new game and moves to the other screens where their respective button has been pressed.
 * Settings Screen sets variables to be used when starting the game that will be used at a later stage.
-* Help Screen has code to display a series of gifs explaining how to play the game. (javafx does not display these currently)
+* Help Screen has code to display a series of gifs explaining how to play the game.
 * High Scores Screen displays the current list of High Scores
 * About Screen scrolls up like movie credits and displays the work done as well as crediting media sources.
 
@@ -29,6 +29,7 @@
 * Serialization methods are implemented for each class and for World.java
 * Saving is functional
 * Unit tests are working and testing the first few lines of savegame.dat
+* Loading is still full of bugs
 
 ### Level Builder
 * GUI is functional
@@ -36,17 +37,12 @@
 
 ## Known Issues
 * Death does not load from last save-point
-* Most enemies appear in the top left corner of the screen
-* Some Bosses deal damage in strange places
 * Secret Boss does not move
 * The walking animation does not continue playing when walking between screens
 * When dealing the final blow to an enemy, the attack animation does not play
 * World.instance().setDifficulty() does not set the difficulty to the parameterized integer
 * High Scores aren't being tracked on death
 * Loading systems aren't functional
-* Potions are not being picked up
-* Projectiles are only visible for a split second before becoming invisible
-* Dodecahedron Boss has numerous visual bugs
 ## Recording
 * [Screen Recording](https://youtu.be/uV1O_1nm1I0)
 ## Expenses
