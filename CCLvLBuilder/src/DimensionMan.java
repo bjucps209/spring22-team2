@@ -9,24 +9,27 @@ import Model.Vector;
 
 public class DimensionMan {
     //Screen Dimensions
-    protected static final int widthConstant = 16;
-    protected static final int heightConstant = 9;
-    protected static final double screensizescalar = 60;
-    protected static double screenwidth = screensizescalar * widthConstant; 
-    protected static double screenheight = screensizescalar * heightConstant;
+    protected static final int widthConstant = 16; //For the pane ratio
+    protected static final int heightConstant = 9; //
+    protected static final double screensizescalar = 60; //
+    protected static double screenwidth = screensizescalar * widthConstant; //
+    protected static double screenheight = screensizescalar * heightConstant; //
     
     //Screen Dimensions applied to cell grid
     protected static Vector gridDimensionRef;
     protected static double gridtoPaneRatio;
     protected SideWithMargin sideWithMargin; // Which side does the grid not fully fit
 
-    private double cellLength;
-    private double sideMargin;
+    private double cellLength; //Length of one cell
+    private double sideMargin; //Size of the side margin
 
     private enum SideWithMargin {
         WIDTH, HEIGHT
     }
 
+    /**
+     * Self explanatory
+     */
     public Vector coordstoGrid(double y, double x) {
         int gridY = 0; int gridX = 0;
         int eh = 0;
@@ -43,6 +46,9 @@ public class DimensionMan {
         return new Vector(gridY, gridX);
     }
 
+    /**
+     * Self Explanatory
+     */
     public double[] gridtoCoords(Vector topleftcorner) {
         double coordY = 0; double coordX = 0;
         switch (sideWithMargin) {

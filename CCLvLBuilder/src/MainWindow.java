@@ -395,7 +395,10 @@ public class MainWindow implements LevelObserver {
         movetoScreen(DataManager.DaMan().getCurrentScreen().getStrID());
     }
 
-
+    /**
+     * opens a file and calls the deserialize methods for each object to load the game
+     * @param filename - the saved file
+     */
     @Override
     public void updateActionStatement(String statementMsg) {
         lblErrorMsg.setText(statementMsg);

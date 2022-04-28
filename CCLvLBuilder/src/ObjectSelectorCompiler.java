@@ -64,6 +64,9 @@ public class ObjectSelectorCompiler {
         currentSelectorSet = 0;
     }
 
+    /**
+     * Compiles the lists of Object Buttons
+     */
     public void compileLists() {
         compileSpecial();
         compileEntity();
@@ -133,6 +136,9 @@ public class ObjectSelectorCompiler {
         }
     }
 
+    /**
+     * Pushes the current btn list to the GUI
+     */
     public void pushCurrentBtnSet() {
         VBox curBox = getCurrentListSet().getCurrentVBox();
         setLocation.getChildren().clear();
@@ -141,6 +147,9 @@ public class ObjectSelectorCompiler {
         lblBtnSetCountCtrl.setText(   String.valueOf(getCurrentListSet().getCurrentVBoxIndex() + 1) + " of " + getCurrentListSet().getListSet().size());
     }
 
+    /**
+     * Moves to next object button set
+     */
     public void nextObjectSet() {
         currentSelectorSet++;
         if (currentSelectorSet >= setList.size()) {
@@ -150,6 +159,9 @@ public class ObjectSelectorCompiler {
         pushCurrentBtnSet();
     }
 
+    /**
+     * Moves to previous object button set
+     */
     public ObjectSelectorCompiler prevObjectSet() {
         currentSelectorSet--;
         if (currentSelectorSet < 0) {
@@ -160,12 +172,18 @@ public class ObjectSelectorCompiler {
         return this;
     }
 
+    /**
+     * Moves to next btn page
+     */
     public void nextObjectPage() {
         var curListSet = getCurrentListSet();
         curListSet.nextVBox();
         pushCurrentBtnSet();
     }
 
+    /**
+     * Blah blah blhafa ofje
+     */
     public void prevObjectPage() {
         var curListSet = getCurrentListSet();
         curListSet.prevVBox();

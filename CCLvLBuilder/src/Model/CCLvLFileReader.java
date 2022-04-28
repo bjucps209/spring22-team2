@@ -16,9 +16,12 @@ import java.io.InputStream;
 public class CCLvLFileReader {
     public static final String pathWay = "src/levels/";
 
-    public CCLvLFileReader() {
-    }
+    public CCLvLFileReader() {} //Does essentially nothing
 
+        /**
+     * saves level instance to dat file
+     * @param fileName - the saved file name
+     */
     public static String save(Level savelvl, String fileName, boolean saveCurrentWork)
             throws FileNotFoundException, IOException {
 
@@ -74,7 +77,10 @@ public class CCLvLFileReader {
 
     }
 
-    // returns String msg then the level
+    /**
+     * Opens a file with given name and extracts the data to a Level instance
+     * @param fileName - the name of the desired file
+     */
     public static Object[] load(String fileName) throws FileNotFoundException, IOException {
         fileName = pathWay + cleanFileIdentifier(fileName);
         int Directions = 6;
