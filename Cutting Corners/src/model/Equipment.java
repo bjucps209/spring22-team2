@@ -14,39 +14,32 @@ import javafx.util.Duration;
 public abstract class Equipment extends Item {
     private EquipmentType type;
 
-    public Equipment(String name, int cooldown, EquipmentType type, Stats buffs, String image){
+    public Equipment(String name, int cooldown, EquipmentType type, Stats buffs, String image) {
         super(name, cooldown, buffs, image);
         this.type = type;
     }
 
-    public void applyBuffs(Entity user){
-        if (user instanceof Enemy){
+    // applies the @buffs to its @user, calling their ApplyBuffs() methods
+    public void applyBuffs(Entity user) {
+        if (user instanceof Enemy) {
             Enemy enemy = (Enemy) user;
             enemy.getStats().ApplyBuffs(super.getBuffs());
-        }
-        else if (user instanceof Player){
+        } else if (user instanceof Player) {
             Player player = (Player) user;
             player.getStats().ApplyBuffs(super.getBuffs());
         }
     }
 
-    public void unApplyBuffs(Entity user){
-        if (user instanceof Enemy){
+    // unapplies the @buffs to its @user, calling their unApplyBuffs() methods
+    public void unApplyBuffs(Entity user) {
+        if (user instanceof Enemy) {
             Enemy enemy = (Enemy) user;
             enemy.getStats().unApplyBuffs(super.getBuffs());
-        }
-        else if (user instanceof Player){
+        } else if (user instanceof Player) {
             Player player = (Player) user;
             player.getStats().unApplyBuffs(super.getBuffs());
         }
     }
-
-    @Override
-    public void performAction(Entity user) {
-        super.performAction(user);
-    }
-
-
 
     // Getters and Setters ----------------------
 

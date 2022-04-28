@@ -91,11 +91,13 @@ public abstract class Entity {
     public void takeDamage(int damage, Direction direction){
     }
 
+    // removes the enitity from the @currrentScreen
     public void performDie(){
         World.instance().displayCurrentEntities().remove(this);
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
 
+    // implemented by descendents Player and Enemy
     public void performAttack(){}
 
 

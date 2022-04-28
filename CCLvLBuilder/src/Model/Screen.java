@@ -90,6 +90,8 @@ public class Screen {
         fillArea(an_object, an_object.getObjType());
     }
 
+
+    // Example, 0,0,0
     public String getStrID() {
         return String.valueOf(IDSeries[0]) + "," + String.valueOf(IDSeries[1]) + "," + String.valueOf(IDSeries[2]);
     }
@@ -108,7 +110,7 @@ public class Screen {
         return IDSeries;
     }
 
-
+    //The background path
     public String getBackgroundPathName() {
         return backgroundPathName;
     }

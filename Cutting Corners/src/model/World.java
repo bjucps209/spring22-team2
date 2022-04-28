@@ -16,12 +16,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.media.AudioClip;
 
 public class World {
     private static ArrayList<Level> campaign = new ArrayList<Level>();
     public static int currentLevel = 1;
-    private int difficulty = 2;
+    private IntegerProperty difficulty = new SimpleIntegerProperty(2);
     private static World world;
     private ScreenObserver observer;
     private boolean isPaused = false;
@@ -879,10 +881,13 @@ public class World {
     }
 
     public void setDifficulty(int difficulty) {
-        world.difficulty = difficulty;
+        world.difficulty.set(difficulty);
     }
 
     public int getDifficulty() {
+        return world.difficulty.get();
+    }
+    public IntegerProperty DifficultyProperty(){
         return world.difficulty;
     }
 
@@ -945,7 +950,7 @@ public class World {
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))) { // SaveGame.dat
 
             writer.writeInt(World.currentLevel);
-            writer.writeInt(this.difficulty);
+            writer.writeInt(this.difficulty.get());
             Level lvl = getCurrentLevel();
             lvl.serialize(writer);
 
@@ -963,7 +968,7 @@ public class World {
         try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) {
 
             currentLevel = reader.readInt();
-            difficulty = reader.readInt();
+            difficulty = new SimpleIntegerProperty(reader.readInt());
 
             Level lvl = Level.deserialize(reader);
             lvl.setCurrentScreen(lvl.findScreen(0, 0));

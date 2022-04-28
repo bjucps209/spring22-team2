@@ -17,6 +17,10 @@ public class Dodecahedron extends Boss{
     public Dodecahedron(int size, int xCoord, int yCoord, Screen homeScreen){
         super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 11), 11, 200);
     }
+
+    // state machine to determine the actions of the boss, whether they be resting
+    // after attacking, attacking using performAttack1() 2() or 3(), or stunned
+    // after a player attack
     public void performMovement()
     {
         if(attackCount==149)
@@ -80,6 +84,8 @@ public class Dodecahedron extends Boss{
                 break;
         }
     }
+
+    // shoots a projectile, @fireball, at the player
     @Override
     public void performAttack1()
     {
@@ -94,6 +100,7 @@ public class Dodecahedron extends Boss{
         }
     }
 
+    // shoots three @fireballs at the player
     @Override
     public void performAttack2()
     {
@@ -120,6 +127,7 @@ public class Dodecahedron extends Boss{
         }
     }
 
+    //shoots a lot of @fireballs at the player
     @Override
     public void performAttack3()
     {
