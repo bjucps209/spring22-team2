@@ -41,7 +41,6 @@
 * The walking animation does not continue playing when walking between screens
 * When dealing the final blow to an enemy, the attack animation does not play
 * World.instance().setDifficulty() does not set the difficulty to the parameterized integer
-* High Scores aren't being tracked on death
 * Loading systems aren't functional
 ## Recording
 * [Screen Recording: Gameplay](https://bju.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=b457c1cb-daaa-468e-b43e-ae8500656be0)
