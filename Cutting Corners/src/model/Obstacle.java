@@ -1,3 +1,7 @@
+//--------------------------------
+// Obstacle.java
+// Obstacles are positioned throughout each screen at a specif x and y coord
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

@@ -1,3 +1,11 @@
+//--------------------------------
+// World.java
+// The main world of the entire game.  
+// Stores the levels.
+// Singleton class
+// On instantiation, creates and populates levels.
+// Save/load methods included but do not properly load state of game
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

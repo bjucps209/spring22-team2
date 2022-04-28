@@ -1,3 +1,8 @@
+//--------------------------------
+// DroppedItem.java
+// Dropped items can be found across the map
+// This class defines items to be used or picked up
+//----------------------------------
 package model;
 
 import java.io.DataOutputStream;

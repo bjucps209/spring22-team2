@@ -1,3 +1,7 @@
+//--------------------------------
+// HighScore.java
+// Defines the high score for a player
+//----------------------------------
 package model;
 public class HighScore implements Comparable {
     private int score;

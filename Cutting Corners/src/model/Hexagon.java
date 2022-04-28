@@ -1,3 +1,8 @@
+//--------------------------------
+// Hexagon.java
+// Child class of enemy, one of the many
+// enemies the player must face
+//----------------------------------
 package model;
 
 import javafx.util.Duration;

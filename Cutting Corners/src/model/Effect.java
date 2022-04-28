@@ -1,3 +1,7 @@
+//--------------------------------
+// Effect.java
+// Effects are used for the application of buffs to the player
+//----------------------------------
 package model;
 
 import javafx.animation.KeyFrame;

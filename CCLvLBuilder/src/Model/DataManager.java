@@ -16,7 +16,10 @@ public class DataManager {
 
     private Screen currentScreen;
 
-
+        /**
+     * Uses CCLvLFileReader to load a level
+     * @param filename - the saved file
+     */
     public String load(String fileName) throws FileNotFoundException, IOException { 
         Object[] bleh = CCLvLFileReader.load(fileName);
 
@@ -36,10 +39,11 @@ public class DataManager {
          return CCLvLFileReader.save(theLevel, fileName, false);
     } 
 
-    ///Object stuff
-    //
-    //Checks if object is within bounds, sends error if not
-    //Makes currentScreen do the rest (Besides observers)
+    /** Object stuff
+    *
+    * Checks if object is within bounds, sends error if not
+    * Makes currentScreen do the rest (Besides observers)
+    */
     public void createObject(String name, String imgPath,ObjType objtype, Vector topLeftCell, Vector dimensions) {
         if (topLeftCell.getY() < 0 || topLeftCell.getY() + dimensions.getY() - 1 >= gridDimensions.getY()) {
             if(mrObserver != null) { mrObserver.updateActionStatement("Out of Bounds");}
@@ -83,7 +87,10 @@ public class DataManager {
         }
     }
 
-    //User shouldn't be able to cause an error in here
+    /**
+     * Self expanatory
+     * @param id - object's id
+     */
     public void deleteObject(int id) {
         String objname = currentScreen.findObject(id).getName();
         currentScreen.deleteObject(id);    
@@ -94,6 +101,11 @@ public class DataManager {
 
     }
 
+    /**
+     * Checks if desired grid location is out of bounds
+     * @param gridloc - the top left corner
+     * @param dimensions - the size of the object
+     */
     private boolean outOfBounds(Vector gridloc, Vector dimensions) {
         if (gridloc.getY() < 0 || gridloc.getY() + dimensions.getY() - 1 >= gridDimensions.getY()) {
             if(mrObserver != null) { mrObserver.updateActionStatement("Out of Bounds");}
@@ -107,7 +119,10 @@ public class DataManager {
 
     /// Screen Methods ///
     ///
-    //Returns new id number in the specified direction from currentScreen
+
+    /**
+     * Gives the hypothetical StrId of desired direction
+     */
     public int[] getAdjacentID(Direction direction, int[] screenID) {
         int nx = screenID[0]; int ny = screenID[1]; int nz = screenID[2];    
         switch(direction) {
@@ -163,6 +178,10 @@ public class DataManager {
         if (mrObserver != null) { mrObserver.createScreen(moveID); }
     }
 
+    /**
+     * attempts to move to a new sceen
+     * @param direction - the direction
+     */
     public void attemptMoveToScreen(Direction direction) {
         Screen nextScreen = currentScreen.getAdjacentScreen(direction);
         if (nextScreen != null) {
@@ -173,7 +192,9 @@ public class DataManager {
 
     }
     
-    //Deletes the current screen and moves to an adjacent one
+    /**
+     * Self explanatory
+     */
     public void deleteScreen() {
         var adjscrs = currentScreen.getAdjacentScreens();
         String oldScrStrID = currentScreen.getStrID();
@@ -198,7 +219,6 @@ public class DataManager {
 
     //Interesting Stuff
     //
-
     public void setMrObserver(LevelObserver anObserver){
         mrObserver = anObserver;
     }

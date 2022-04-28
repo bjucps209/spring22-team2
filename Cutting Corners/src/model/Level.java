@@ -1,3 +1,8 @@
+//--------------------------------
+// Level.java
+// Level defines the group of screens and enemies that the player will travel through
+// Defeating the boss at the end of each level advances the player to the next level
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;
@@ -286,11 +291,17 @@ public class Level {
         this.currentLevel = currentLevel;
     }
 
+
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(currentLevel);
         file.writeInt(screens.size());
 
-        // currentScreen.serialize(file);
+        currentScreen.serialize(file);
 
         // for (Screen s : screens) {
         // s.serialize(file);
@@ -301,6 +312,15 @@ public class Level {
 
     }
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static Level deserialize(DataInputStream file) throws IOException {
         int currentLevel = file.readInt();
         Level lvl = World.instance().getCurrentLevel();
@@ -308,9 +328,9 @@ public class Level {
 
         int numScreens = file.readInt();
 
-        // Screen screen2 = Screen.deserialize(file);
-        // screen.setEntities(screen2.getEntities());
-        // screen.setGrid(screen2.getGrid());
+        Screen screen2 = Screen.deserialize(file);
+        screen.setEntities(screen2.getEntities());
+        screen.setGrid(screen2.getGrid());
         lvl.setCurrentScreen(screen);
 
         // for (int i = 0; i < numScreens; ++i) {

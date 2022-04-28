@@ -1,3 +1,9 @@
+//--------------------------------
+// Buffs.java
+// Buffs are given to the player when drinking a potion
+// Buffs increase Stats
+//----------------------------------
+
 package model;
 
 import java.io.DataInputStream;

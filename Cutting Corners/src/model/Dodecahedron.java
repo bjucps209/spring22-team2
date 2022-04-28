@@ -1,3 +1,7 @@
+//--------------------------------
+// Dodecahedron.java
+// One of the many bosses
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;

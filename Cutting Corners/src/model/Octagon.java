@@ -1,3 +1,8 @@
+//--------------------------------
+// Octagon.java
+// One of the many enemies
+// Carries a sword and does high damage
+//----------------------------------
 package model;
 
 import javafx.util.Duration;

@@ -1,3 +1,8 @@
+//--------------------------------
+// Stats.java
+// This class defines the strength, speed, and health for the player adn enemies
+// These stats are changed when damage is taken or a buff is provided
+//----------------------------------
 package model;
 
 import java.io.DataInputStream;
@@ -66,6 +71,12 @@ public class Stats {
         speed -= buffs.speed;
     }
 
+
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(strength);
         file.writeInt(speed);
@@ -73,6 +84,15 @@ public class Stats {
     }
 
     
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static Stats deserialize(DataInputStream file) throws IOException {
         int strength = file.readInt();
         int speed = file.readInt();

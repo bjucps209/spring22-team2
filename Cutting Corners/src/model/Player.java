@@ -1,3 +1,9 @@
+//--------------------------------
+// Player.java
+// The player class defines the entity who the users controls.
+// The player can move across screens and advance levels by killing enemies.
+//----------------------------------
+
 package model;
 
 import java.io.DataInputStream;
@@ -706,6 +712,12 @@ public class Player extends Entity {
     }
 
 
+    
+    /**
+     * Saves the state of this class with the necessary variables to a binary file
+     * @param file
+     * @throws IOException
+     */
     @Override
     public void serialize(DataOutputStream file) throws IOException {
         file.writeUTF("Player");
@@ -717,6 +729,15 @@ public class Player extends Entity {
         stats.serialize(file);
     }
 
+    /**
+     * Factory method
+     * Reads the variables left in the file by serialize.
+     * Creates an instance of this class using those variables.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static Player deserialize(DataInputStream file) throws IOException {
         // create a Player and return it with variables from the file
         int x = file.readInt();
