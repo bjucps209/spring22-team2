@@ -7,6 +7,7 @@ import java.io.IOException;
 
 public class LvLBFileReader {
     
+    //Takes a LvLB level file and converts it to a fake level instance 
     public static DummyLevel load(String filePath) throws FileNotFoundException, IOException {
         int Directions = 6;
         DummyLevel newLvL = new DummyLevel();

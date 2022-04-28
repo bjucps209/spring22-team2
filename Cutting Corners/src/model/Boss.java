@@ -44,7 +44,7 @@ public class Boss extends Enemy{
     @Override
     public void performDie()
     {
-        System.out.println("Dead");
+        System.out.println("Ded");
         World.instance().getPlayer().addExperience(super.getScore());
         World.instance().getPlayer().addScore(super.getScore());
         World.instance().displayCurrentEntities().remove(this);

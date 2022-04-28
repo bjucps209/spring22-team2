@@ -144,6 +144,92 @@ public class Level {
         return group;
     }
 
+    public static Level convertDummyLvL(DummyLevel lvl) {
+        Level newlvl = new Level(0);
+        String[][] adjscrkeeper = new String[lvl.dScreenList.size()][6]; 
+
+        for (int idx = 0; idx < lvl.getDumScreens().size(); idx++) {
+            //screen stuff
+            DummyScreen dscr = lvl.getDumScreens().get(idx);
+            int[] realID = dscr.getRealID();
+            Screen newscr = new Screen(realID[0], realID[1], realID[2], dscr.getBackgroundImgPath());
+
+            if (dscr.screenID.equals(lvl.playerScrStrID)) newlvl.setCurrentScreen(newscr);
+
+            newlvl.screens.add(newscr);
+            adjscrkeeper[idx] = dscr.getAdjacentStringIDs();
+
+            //Objects in screen
+            for (int objidx = 0; objidx < dscr.getDumObjects().size(); objidx++) {
+                DummyObject dobj = dscr.getDumObj(objidx);
+                switch(dobj.type) {
+                    case "Obstacle":
+                        newscr.setGridSquare(dobj.dimY, dobj.dimX, String.valueOf(Cell.tree));
+                        break;
+                    case "Player":
+                        break;
+                    case "Entity":
+                        switch(dobj.name) {
+                            case "triangle":
+                                newscr.addEntity(new Triangle(4, dobj.tlCellX, dobj.tlCellY, newscr));
+                                break;
+                            case "square":
+                                newscr.addEntity(new Square(4, dobj.tlCellX, dobj.tlCellY, newscr));
+                                break;
+                            case "hexagon":
+                                newscr.addEntity(new Hexagon(6, dobj.tlCellX, dobj.tlCellY, newscr));
+                                break;
+                            case "octagon":
+                                newscr.addEntity(new Octagon(8, dobj.tlCellX, dobj.tlCellY, newscr));
+                                break;
+                            default:
+                                newscr.addEntity(new Octagon(1000, dobj.tlCellX,  dobj.tlCellY, newscr));
+                                break;
+                        }
+                    case "Boss":
+                        switch(dobj.name) {
+                            case "pyramidboss":
+                                newscr.addEntity(new Pyramid(11, dobj.tlCellX, dobj.tlCellY, newscr));
+                                break;
+                            case "cube":
+                                newscr.addEntity(new Cube(11, dobj.tlCellX, dobj.tlCellY, newscr));
+                                break;
+                            case "dodeca":
+                                newscr.addEntity(new Dodecahedron(11, dobj.tlCellX, dobj.tlCellY, newscr));
+                                break;
+                            default:
+                                break;
+                        }
+                    case "Item":
+                        UsableItem bleh = new UsableItem("Health Potion", 2, 1, 9999999, 0, 5, 0, "media/Player/Bow.png");
+                        newscr.addEntity(new DroppedItem(200, 500, bleh, "media/Player/Item.png", 100, newscr));
+                        break;
+                    default:
+                        break;
+                } 
+
+            }
+
+        }
+
+        for (int adjstridx = 0; adjstridx < adjscrkeeper.length; adjstridx++) {
+            Screen curscr = newlvl.getScreens().get(adjstridx);
+            
+            int[] upid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][0]);
+            if(upid != null) curscr.setUp(newlvl.findScreen(upid[1], upid[0]));
+
+            int[] downid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][1]);
+            if(downid != null)curscr.setDown(newlvl.findScreen(downid[1], downid[0]));
+
+            int[] rightid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][2]);
+            if(rightid != null)curscr.setRight(newlvl.findScreen(rightid[1], rightid[0]));
+
+            int[] leftid = DummyScreen.strIDtoRealID(adjscrkeeper[adjstridx][3]);
+            if(leftid != null)curscr.setLeft(newlvl.findScreen(leftid[1], leftid[0]));
+        }
+
+        return newlvl;
+    } 
 
     // Getters and Setters ----------------------------
     
@@ -198,8 +284,6 @@ public class Level {
     public void setCurrentLevel(int currentLevel) {
         this.currentLevel = currentLevel;
     }
-
-
 
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(currentLevel);

@@ -45,6 +45,28 @@ public class DummyScreen {
         this.adjacentStringIDs[idx] = adjacentStrID;
     }
 
-    
+    public String[] getAdjacentStringIDs() {
+        return adjacentStringIDs;
+    }
+
+    public int[] getRealID() {
+        int[] thing = new int[3];
+        String[] idstuff = screenID.split(",");
+        for (int idx = 0; idx < 3; idx++) {
+            thing[idx] = Integer.parseInt(idstuff[idx]);
+        }
+
+        return thing;
+    }
+
+    public static int[] strIDtoRealID(String strId) {
+        if (strId == null) return null;
+        int[] thing = new int[3];
+        String[] idstuff = strId.split(",");
+        for (int idx = 0; idx < 3; idx++) {
+            thing[idx] = Integer.parseInt(idstuff[idx]);
+        }
+        return thing;
+    }
 
 }
