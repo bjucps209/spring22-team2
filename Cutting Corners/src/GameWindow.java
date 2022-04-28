@@ -81,11 +81,6 @@ public class GameWindow {
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         
-        // check if loading from save file
-        if (isLoaded) {
-            World.instance().load("savegame.dat");
-            entities = World.instance().displayCurrentEntities();
-        }
 
         gameWindow.getChildren().add(effectBox);
         effectBox.relocate(950*ratioWidth, 200*ratioHeight);
@@ -97,6 +92,11 @@ public class GameWindow {
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         
+        // check if loading from save file
+        if (isLoaded) {
+            World.instance().load("savegame.dat");
+            entities = World.instance().displayCurrentEntities();
+        }
 
         World.instance().setLoaded(isLoaded);
         World.instance().setCheatMode(cheatMode);

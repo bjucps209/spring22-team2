@@ -618,7 +618,6 @@ public class World {
         }
     }
 
-    
 
     public void updateView(){
         levelTimer--;
@@ -640,6 +639,9 @@ public class World {
             getPlayer().performMovement();
         }
     }
+    
+
+
 
 
 
@@ -728,6 +730,8 @@ public class World {
             lvl.setCurrentScreen(lvl.findScreen(0, 0));
 
             campaign.set(currentLevel, lvl);
+            
+            observer.Initialize(isLoaded);
 
 
         }
