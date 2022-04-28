@@ -53,7 +53,7 @@ public class Circle extends Boss{
     @Override
     public void performAttack1()
     {
-        World.instance().getPlayer().takeDamage(100, Direction.down);
+        World.instance().getPlayer().takeDamage(15, Direction.down);
     }
 
     @Override
