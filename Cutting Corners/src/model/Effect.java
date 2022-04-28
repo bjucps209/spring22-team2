@@ -18,7 +18,14 @@ public class Effect {
 
     public void giveEffect(Player user){
         applied = true;
-        if (effects.getHealth() > 50){user.setTotalHealth(user.getTotalHealth() + 5);}
+        
+        System.out.println(effects.getHealth());
+        if (effects.getHealth() > 50){user.setTotalHealth(user.getTotalHealth() + 5);System.out.println('u');}
+        
+        if (effects.getHealth() + user.getStats().getHealth() > user.getTotalHealth()){
+            user.getStats().setHealth((int) user.getTotalHealth());
+            effects.setHealth(0);
+        }
         user.getStats().ApplyBuffs(effects);
     }
 

@@ -32,10 +32,7 @@ public class UsableItem extends Item{
         }
         else if (user instanceof Player){
             Player player = (Player) user;
-            if (super.getBuffs().getHealth() + player.getStats().getHealth() > player.getTotalHealth()){
-                player.getStats().setHealth((int) player.getTotalHealth());
-                super.getBuffs().setHealth(0);
-            }
+            
 
             player.addEffects(effect);
         }

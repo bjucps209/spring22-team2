@@ -266,6 +266,7 @@ public class GameWindow {
         if (text == null){unNotify(item);}
         Label notification = new Label(text);
         notification.setUserData("Notification");
+        notification.getStyleClass().add("notification");
         notification.setLayoutX(item.getX());
         notification.setLayoutY(item.getY() + 50);
         gameWindow.getChildren().add(notification);
@@ -304,7 +305,8 @@ public class GameWindow {
         effectDropdown.getChildren().add(effectTitle);
         effectDropdown.getChildren().add(row2);
         effectDropdown.setUserData(effect);
-        effectDropdown.visibleProperty().bind(effect.DurationProperty().greaterThan(0));
+        effectDropdown.getStyleClass().add("notification");
+        effectDropdown.visibleProperty().bind(effect.DurationProperty().greaterThan(1));
 
         for (Node node: effectBox.getChildren()){
             if (node.getUserData() == null){continue;}
