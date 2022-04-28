@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
@@ -34,6 +36,7 @@ public class Player extends Entity {
     damageIndicator indicator;
     ArrayList<DroppedItem> itemsNearby = new ArrayList<DroppedItem>();
     ArrayList<Effect> effects = new ArrayList<Effect>();
+    BooleanProperty dead = new SimpleBooleanProperty(false);
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -257,7 +260,7 @@ public class Player extends Entity {
 
                 
                 int newY = super.getY() - stats.getSpeed();
-                if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
+                if (newY < -25 || obstacleInPath(super.getX(), newY)){
                     super.getCoords().addYCoord(stats.getSpeed());
                 }
                 // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
@@ -278,7 +281,7 @@ public class Player extends Entity {
                 }
                 
                 int newX = super.getX() - stats.getSpeed();
-                if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
+                if (newX < -25 || obstacleInPath(newX, super.getY())){
                     super.getCoords().addXCoord(stats.getSpeed());
                 }
                 // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
@@ -292,7 +295,7 @@ public class Player extends Entity {
                 if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
 
                 int newY = super.getY() + stats.getSpeed();
-                if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
+                if (super.getY() > 725 || obstacleInPath(super.getX(), newY)){
                     super.getCoords().subYCoord(stats.getSpeed());
                 }
                 // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
@@ -314,7 +317,7 @@ public class Player extends Entity {
                 }
                 
                 int newX = super.getX() + stats.getSpeed();
-                if (super.getX() > 1200 || obstacleInPath(newX, super.getY())){
+                if (super.getX() > 1225 || obstacleInPath(newX, super.getY())){
                     super.getCoords().subXCoord(stats.getSpeed());
                 }
 
@@ -527,6 +530,7 @@ public class Player extends Entity {
             System.out.println(e.getMessage());
         }
         World.instance().displayCurrentEntities().remove(this);
+        dead.set(true);
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
     public Cell cellWithin(int row, int col){
@@ -579,6 +583,10 @@ public class Player extends Entity {
 
     public void setInventory(ArrayList<Item> inventory) {
         this.inventory = inventory;
+    }
+
+    public BooleanProperty getDead(){
+        return dead;
     }
 
     public String getWeaponImage() {

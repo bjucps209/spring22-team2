@@ -54,6 +54,7 @@ public class World {
         if (world == null){
             world = new World();
             populate();
+            System.out.println('x');
         }
         return world;
     }
@@ -114,9 +115,13 @@ public class World {
 
     }
 
-    public Level getCurrentLevel(){
+    public static Level getCurrentLevel(){
         Level current = campaign.get(currentLevel);
         return current;
+    }
+
+    public int getCurrentLevelNumber(){
+        return currentLevel;
     }
 
     public int getNumLevels()
@@ -137,6 +142,7 @@ public class World {
     }
 
     public static void populate(){
+        System.out.println(World.instance().getCamapign());
         if(!World.instance().getCamapign())
         {
             UsableItem item1 = new UsableItem("Health Potion", 2, 1, 5, 0, 5, 0, "media/Player/Effects/health.png");
@@ -347,8 +353,9 @@ public class World {
             secretLevel.addScreen(ss29);
             secretLevel.addScreen(ss30);
             secretLevel.addScreen(secretBossRoom);
+            secretLevel.setBaseScreen(ss1);
 
-            world.campaign.add(secretLevel);
+            World.campaign.add(secretLevel);
 
             Level level1 = new Level(1);
 
@@ -400,7 +407,8 @@ public class World {
             level1.addScreen(screen4);
             level1.addScreen(bossScreen);
             level1.setCurrentScreen(level1.findScreen(0, 0));
-            world.campaign.add(level1);
+            level1.setBaseScreen(screen1);
+            World.campaign.add(level1);
 
             Level level2 = new Level(2);
 
@@ -487,8 +495,9 @@ public class World {
             level2.addScreen(screen12);
             level2.addScreen(screen13);
             level2.addScreen(bossScreen2);
+            level2.setBaseScreen(screen5);
 
-            world.campaign.add(level2);
+            World.campaign.add(level2);
 
             Level level3 = new Level(3);
 
@@ -632,17 +641,18 @@ public class World {
             level3.addScreen(screen25);
             level3.addScreen(screen26);
             level3.addScreen(bossRoom3);
+            level3.setBaseScreen(screen14);
 
-            world.campaign.add(level3);
+            World.campaign.add(level3);
             
 
             Cirkyle = new Player(100, 100);
             level1.placeEntity(0, 0, Cirkyle);
             World.instance().setDesertMusic();
+            getCurrentLevel().getBaseScreen().addEntity(Cirkyle);
         }
     }
 
-    
 
     public void updateView(){
         levelTimer--;
@@ -664,6 +674,9 @@ public class World {
             getPlayer().performMovement();
         }
     }
+    
+
+
 
 
 
@@ -762,13 +775,15 @@ public class World {
         try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) 
         {   
 
-            World.currentLevel = reader.readInt();
-            this.difficulty = reader.readInt();
+            currentLevel = reader.readInt();
+            difficulty = reader.readInt();
 
             Level lvl = Level.deserialize(reader);
             lvl.setCurrentScreen(lvl.findScreen(0, 0));
 
-            World.campaign.set(currentLevel, lvl);
+            campaign.set(currentLevel, lvl);
+            
+            observer.Initialize(isLoaded);
 
 
         }

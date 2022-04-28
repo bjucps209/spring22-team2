@@ -4,6 +4,8 @@ import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,16 +42,19 @@ public class GameWindow {
     Image SAVE_BTN = new Image("media/buttons/savebtn.png");
     Image SAVEEXIT_BTN = new Image("media/buttons/saveexitbtn.png");
     Image EXIT_BTN = new Image("media/buttons/exitbtn.png");
+    Label playerDied = new Label("You Died");
     ImageView pauseView = new ImageView(PAUSE_BACKGROUND);
     ImageView resumeView = new ImageView(RESUME_BTN);
     ImageView saveView = new ImageView(SAVE_BTN);
     ImageView saveExitView = new ImageView(SAVEEXIT_BTN);
     ImageView exitView = new ImageView(EXIT_BTN);
     VBox effectBox = new VBox();
+    BooleanProperty playerDead = new SimpleBooleanProperty(false);
     
 
     @FXML
     public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,int difficulty) throws IOException{
+        
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -66,15 +71,12 @@ public class GameWindow {
         gameWindow.setMinHeight(size.getHeight());
         gameWindow.getChildren().clear();
         
-
+        if (playerDead.get()){
+            World.instance().setIsPaused(true);
+        }
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         
-        // check if loading from save file
-        if (isLoaded) {
-            World.instance().load("savegame.dat");
-            entities = World.instance().displayCurrentEntities();
-        }
 
         gameWindow.getChildren().add(effectBox);
         effectBox.relocate(950*ratioWidth, 200*ratioHeight);
@@ -86,11 +88,17 @@ public class GameWindow {
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         
+        // check if loading from save file
+        if (isLoaded) {
+            World.instance().load("savegame.dat");
+            entities = World.instance().displayCurrentEntities();
+        }
 
         World.instance().setLoaded(isLoaded);
         World.instance().setCheatMode(cheatMode);
         World.instance().setCampaign(userCampaign);
         World.instance().setDifficulty(difficulty);
+        
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
         entityImage.setImage(new Image(entity.getImage()));
@@ -120,6 +128,7 @@ public class GameWindow {
                 displayScoreAndExperience(player);
                     player.getObserver().changeImage(player.getImage(), player.getFacing());
                     player.getWeaponObserver().changeImage(player.getWeaponImage(), player.getFacing());
+                playerDead.bindBidirectional(player.getDead());
             }
             if (entity instanceof Enemy){
                 Enemy enemy = (Enemy) entity;
@@ -140,7 +149,27 @@ public class GameWindow {
         saveView.relocate(40, 300);
         saveExitView.relocate(640, 50);
         exitView.relocate(640, 300);
-        resumeView.setOnMouseClicked(e->{World.instance().setIsPaused(false);World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());});
+        playerDied.getStyleClass().add("title");
+        playerDied.relocate(350, 550);
+        
+        if (playerDead.get()){
+            effectBox.getChildren().clear();
+            resumeView.setOnMouseClicked(e-> {
+                int currentLevel = World.instance().getCurrentLevelNumber();
+                World.instance().reset();
+                World.instance().setCurrentLevel(currentLevel);
+                World.instance().getCurrentLevel().setCurrentScreen(
+                    World.instance().getCurrentLevel().getBaseScreen());
+                playerDead.set(false);
+                World.instance().setIsPaused(false);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+            });
+        }
+        else
+        {
+            resumeView.setOnMouseClicked(e->{World.instance().setIsPaused(false);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());});
+        }
         saveView.setOnMouseClicked(e->{
             try {
                 World.instance().save("savegame.dat");
@@ -180,11 +209,15 @@ public class GameWindow {
         gameWindow.getChildren().add(saveView);
         gameWindow.getChildren().add(saveExitView);
         gameWindow.getChildren().add(exitView);
+        gameWindow.getChildren().add(playerDied);
+
+        playerDied.setVisible(playerDead.get());
         pauseView.setVisible(World.instance().getIsPaused());
         resumeView.setVisible(World.instance().getIsPaused());
         saveExitView.setVisible(World.instance().getIsPaused());
         saveView.setVisible(World.instance().getIsPaused());
         exitView.setVisible(World.instance().getIsPaused());
+
     }
 
     @FXML

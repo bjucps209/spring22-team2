@@ -309,6 +309,7 @@ public class Enemy extends Entity{
 
     @Override
     public void performDie(){
+        System.out.println('u');
         World.instance().getPlayer().addExperience(experience);
         World.instance().getPlayer().addScore(score);
         super.performDie();
