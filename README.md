@@ -44,7 +44,7 @@
 * High Scores aren't being tracked on death
 * Loading systems aren't functional
 ## Recording
-* [Screen Recording](https://youtu.be/uV1O_1nm1I0)
+* [Screen Recording: Gameplay](https://bju.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=7d0d4b5b-0f21-4e28-b612-ae85005fcec5)
 ## Expenses
 |Name|Username|Ownership Area|Hours Completed|Remaining Hours|Journal|
 |---|---|---|---|----|---|
