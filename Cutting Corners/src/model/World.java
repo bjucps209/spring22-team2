@@ -618,7 +618,6 @@ public class World {
         }
     }
 
-    
 
     public void updateView(){
         levelTimer--;
@@ -640,6 +639,9 @@ public class World {
             getPlayer().performMovement();
         }
     }
+    
+
+
 
 
 
@@ -721,13 +723,15 @@ public class World {
         try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) 
         {   
 
-            World.currentLevel = reader.readInt();
-            this.difficulty = reader.readInt();
+            currentLevel = reader.readInt();
+            difficulty = reader.readInt();
 
             Level lvl = Level.deserialize(reader);
             lvl.setCurrentScreen(lvl.findScreen(0, 0));
 
-            World.campaign.set(currentLevel, lvl);
+            campaign.set(currentLevel, lvl);
+            
+            observer.Initialize(isLoaded);
 
 
         }
