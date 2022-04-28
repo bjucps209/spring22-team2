@@ -19,6 +19,7 @@ public class Square extends Enemy{
         super(4, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,(int)(size*1.5),size*4, 15);
     }
 
+    // Converts the stats based on the size of the enemy
     public static Stats sizeToStats(int size){
 
         //int speed = (int) 30 / size;

@@ -10,7 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Projectile extends Entity{
+public class Projectile extends Entity {
     private int damage;
     private int speed;
     private int range;
@@ -18,54 +18,44 @@ public class Projectile extends Entity{
     private int targetX;
     private int targetY;
 
-    public Projectile(int damage, int speed, int startX, int startY, int range, String image, int width, int targetX, int targetY, int size){
+    public Projectile(int damage, int speed, int startX, int startY, int range, String image, int width, int targetX,
+            int targetY, int size) {
         super(startX, startY, image, size);
         this.speed = speed;
         this.damage = damage;
         this.range = range;
         this.width = width;
-        this.targetX=targetX;
-        this.targetY=targetY;
+        this.targetX = targetX;
+        this.targetY = targetY;
     }
 
+    // moves the projectile across the screen starting at x, y and going to targetx,
+    // targety
     @Override
-    public void performMovement()
-    {
-        if(Math.abs(super.getX()-targetX)>=Math.abs(super.getY()-targetY))
-        {
-            if(super.getX()<targetX)
-            {
-                super.getCoords().setxCoord(super.getX()+speed);
+    public void performMovement() {
+        if (Math.abs(super.getX() - targetX) >= Math.abs(super.getY() - targetY)) {
+            if (super.getX() < targetX) {
+                super.getCoords().setxCoord(super.getX() + speed);
+            } else {
+                super.getCoords().setxCoord(super.getX() - speed);
             }
-            else
-            {
-                super.getCoords().setxCoord(super.getX()-speed);
-            }
-        }
-        else
-        {
-            if(super.getY()<targetY)
-            {
-                super.getCoords().setyCoord(super.getY()+speed);
-            }
-            else
-            {
-                super.getCoords().setyCoord(super.getY()-speed);
+        } else {
+            if (super.getY() < targetY) {
+                super.getCoords().setyCoord(super.getY() + speed);
+            } else {
+                super.getCoords().setyCoord(super.getY() - speed);
             }
         }
-        if(Math.sqrt((Math.pow(super.getX()-World.instance().getPlayer().getX(),2)+(Math.pow(super.getY()-World.instance().getPlayer().getY(),2))))<50)
-        {
+        if (Math.sqrt((Math.pow(super.getX() - World.instance().getPlayer().getX(), 2)
+                + (Math.pow(super.getY() - World.instance().getPlayer().getY(), 2)))) < 50) {
             World.instance().getPlayer().takeDamage(damage, Direction.left);
             this.performDie();
         }
-        if(super.getX()==targetX&&super.getY()==targetY)
-        {
+        if (super.getX() == targetX && super.getY() == targetY) {
             this.performDie();
             System.out.println("didn't reach target");
         }
     }
-
-
 
     // Getters and Setters ---------------------
 
@@ -101,9 +91,9 @@ public class Projectile extends Entity{
         this.width = width;
     }
 
-
     /**
      * Saves the state of this class with the necessary variables to a binary file
+     * 
      * @param file
      * @throws IOException
      */

@@ -19,6 +19,7 @@ public class Triangle extends Enemy{
         super(3, size, xCoord, yCoord, image, homeScreen, 600, weapon, sizeToStats(size),walking,attacking,size,size*3, 10);
     }
     
+    // Converts the stats based on the size of the enemy
     public static Stats sizeToStats(int size){
 
         // int speed = (int) 30 / size;

@@ -30,6 +30,7 @@ public class UsableItem extends Item{
         this.duration = duration;
     }
 
+    // Applies the buffs to the entity
     public void applyBuffs(Entity user, Effect effect){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
@@ -43,6 +44,7 @@ public class UsableItem extends Item{
         }
     }
 
+    // Removes the effects of a potion or usableitem
     public void unApplyBuffs(Entity user){
         if (user instanceof Enemy){
             Enemy enemy = (Enemy) user;
@@ -54,6 +56,7 @@ public class UsableItem extends Item{
         }
     }
 
+    // Applies the buffs of the usable item
     @Override
     public void performAction(Entity user){
         Effect effect = new Effect(duration, super.getBuffs());
@@ -61,7 +64,6 @@ public class UsableItem extends Item{
         applyBuffs(user, effect);
         used = true;
         useCount--;
-        System.out.println(effect);
         if (countdown != null){
 
             countdown.showEffectTimer(effect, super.getName(), Image);

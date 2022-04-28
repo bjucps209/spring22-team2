@@ -31,8 +31,10 @@ public class World {
     private boolean activeBoss;
     private int levelTimer = 45000;
     private AudioClip DESERT_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/desert.mp3").toString());
-    private AudioClip CAVEMAN_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/caveman.mp3").toString());
-    private AudioClip MEDIEVAL_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/medieval.mp3").toString());
+    private AudioClip CAVEMAN_MUSIC = new AudioClip(
+            getClass().getResource("/media/Sounds/music/caveman.mp3").toString());
+    private AudioClip MEDIEVAL_MUSIC = new AudioClip(
+            getClass().getResource("/media/Sounds/music/medieval.mp3").toString());
     private AudioClip SECRET_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/secret.mp3").toString());
     AudioClip current = DESERT_MUSIC;
     private static Player Cirkyle = new Player(0, 0);
@@ -45,127 +47,96 @@ public class World {
         this.activeBoss = activeBoss;
     }
 
-    private World(){}
-
-    public static void reset() {
-        world = null;
+    // creation of world singleton
+    private World() {
     }
 
-    public boolean getIsPaused() {
-        return isPaused;
-    }
-
-    public void setIsPaused(boolean isPaused) {
-        this.isPaused = isPaused;
-    }
-
-    public static World instance(){
-        if (world == null){
+    public static World instance() {
+        if (world == null) {
             world = new World();
             populate();
         }
         return world;
     }
 
-    public void passLevel(){
+    public static void reset() {
+        world = null;
+    }
+
+    /**
+     *  Changes the level to the one after the current level
+     *  Called when the player kills the boss
+     */
+    public void passLevel() {
         ScreenObserver temp;
-        if(currentLevel==-1)
-        {
-            currentLevel=3;
+        if (currentLevel == -1) {
+            currentLevel = 3;
             temp = getCurrentLevel().getObserver();
-            currentLevel=-1;
-        }
-        else
-        {
+            currentLevel = -1;
+        } else {
             temp = getCurrentLevel().getObserver();
         }
         currentLevel++;
         System.out.println(currentLevel);
-        
+
         getCurrentLevel().setCurrentScreen(getCurrentLevel().findScreen(getCurrentLevel().getScreens()
-        .get(0).getLocation().getRow(), getCurrentLevel().getScreens().get(0).getLocation().getCol()));
+                .get(0).getLocation().getRow(), getCurrentLevel().getScreens().get(0).getLocation().getCol()));
         getCurrentLevel().placeEntity(getCurrentLevel().getScreens()
-        .get(0).getLocation().getRow(), getCurrentLevel().getScreens().get(0).getLocation().getCol(), Cirkyle);
+                .get(0).getLocation().getRow(), getCurrentLevel().getScreens().get(0).getLocation().getCol(), Cirkyle);
         getCurrentLevel().setObserver(temp);
-        if(World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("desert"))
-        {
+        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("desert")) {
             current.stop();
-            current=DESERT_MUSIC;
+            current = DESERT_MUSIC;
             current.play();
         }
-        if(World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("caveman"))
-        {
+        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("caveman")) {
             current.stop();
-            current=CAVEMAN_MUSIC;
+            current = CAVEMAN_MUSIC;
             current.play();
         }
-        if(World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("medieval"))
-        {
+        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("medieval")) {
             current.stop();
-            current=MEDIEVAL_MUSIC;
+            current = MEDIEVAL_MUSIC;
             current.play();
         }
-        if(World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("secret"))
-        {
+        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("secret")) {
             current.stop();
-            current=SECRET_MUSIC;
+            current = SECRET_MUSIC;
             current.play();
         }
-        if((levelTimer/60)/50>100)
-        {
+        if ((levelTimer / 60) / 50 > 100) {
             World.instance().getPlayer().addScore(100);
+        } else {
+            World.instance().getPlayer().addScore((levelTimer / 60) / 50);
         }
-        else
-        {
-            World.instance().getPlayer().addScore((levelTimer/60)/50);
-        }
-        levelTimer=45000;
+        levelTimer = 45000;
 
     }
 
-    public static Level getCurrentLevel(){
-        Level current = campaign.get(currentLevel);
-        return current;
-    }
+    public static final String[] levellist = new String[] { "Levels/Sands1.dat" };
 
-    public int getCurrentLevelNumber(){
-        return currentLevel;
-    }
-
-    public int getNumLevels()
-    {
-        return campaign.size();
-    }
-
-    public static ArrayList<Entity> displayCurrentEntities(){
-        Level current = campaign.get(currentLevel);
-        return current.getCurrentScreen().getEntities();
-    }
-
-    public static Player getPlayer(){
-        for (Entity entity: displayCurrentEntities()){
-            if (entity instanceof Player){return (Player) entity;}
-        }
-        return null;
-    }
-
-    public static final String[] levellist = new String[] {"Levels/Sands1.dat"};
-
-    public static void populate(){
+    /**
+     * Populates the world singleton instance with levels, items, entities, and
+     * obstacles
+     */
+    public static void populate() {
         System.out.println(World.instance().getCamapign());
-        if(!World.instance().getCamapign())
-        {
+        if (!World.instance().getCamapign()) {
             UsableItem item1 = new UsableItem("Health Potion", 2, 1, 2, 0, 5, 0, "media/Player/Effects/health.png");
-            UsableItem item2 = new UsableItem("Strength Potion", 2, 1, 60, 3, 0, 0, "media/Player/Effects/strength.png");
+            UsableItem item2 = new UsableItem("Strength Potion", 2, 1, 60, 3, 0, 0,
+                    "media/Player/Effects/strength.png");
             UsableItem item3 = new UsableItem("Rage Potion", 2, 1, 45, 3, -1, 2, "media/Player/Effects/rage.png");
             UsableItem item4 = new UsableItem("Rage Potion II", 2, 1, 30, 5, -2, 3, "media/Player/Effects/rage.png");
-            UsableItem item5 = new UsableItem("Ultimate Potion", 2, 1, 30, 2, 10, 3, "media/Player/Effects/ultimate.png");
+            UsableItem item5 = new UsableItem("Ultimate Potion", 2, 1, 30, 2, 10, 3,
+                    "media/Player/Effects/ultimate.png");
             UsableItem item6 = new UsableItem("Speed Potion", 2, 1, 45, 0, 0, 4, "media/Player/Effects/speed.png");
             UsableItem item7 = new UsableItem("Stamina Potion", 2, 1, 5, 5, 62, 3, "media/Player/Effects/health.png");
             UsableItem item8 = new UsableItem("Rage Potion IV", 2, 1, 25, 8, -4, 4, "media/Player/Effects/rage.png");
-            UsableItem item9 = new UsableItem("Ultimate Potion II", 2, 1, 30, 4, 12, 3, "media/Player/Effects/ultimate.png");
-            UsableItem item10 = new UsableItem("Health Potion II", 2, 1, 2, 0, 10, 0, "media/Player/Effects/health.png");
-            
+            UsableItem item9 = new UsableItem("Ultimate Potion II", 2, 1, 30, 4, 12, 3,
+                    "media/Player/Effects/ultimate.png");
+            UsableItem item10 = new UsableItem("Health Potion II", 2, 1, 2, 0, 10, 0,
+                    "media/Player/Effects/health.png");
+
             Level secretLevel = new Level(0);
 
             Screen ss1 = new Screen(3, 0, 0, "media/terrain/secret&boss/secretonewayright.png");
@@ -205,37 +176,37 @@ public class World {
             DroppedItem itemA2 = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
             DroppedItem itemA3 = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
             DroppedItem itemA4 = new DroppedItem(200, 500, item1, "media/Player/Item.png", 100, ss2);
-            
+
             DroppedItem itemB1 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
             DroppedItem itemB2 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
             DroppedItem itemB3 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
             DroppedItem itemB4 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
             DroppedItem itemB5 = new DroppedItem(250, 600, item2, "media/Player/Item.png", 100, ss28);
-            
+
             DroppedItem itemC1 = new DroppedItem(300, 300, item3, "media/Player/Item.png", 100, ss3);
             DroppedItem itemC2 = new DroppedItem(300, 300, item3, "media/Player/Item.png", 100, ss3);
-            
+
             DroppedItem itemD1 = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, ss25);
             DroppedItem itemD2 = new DroppedItem(300, 600, item4, "media/Player/Item.png", 100, ss25);
-            
+
             DroppedItem itemE1 = new DroppedItem(250, 200, item5, "media/Player/Item.png", 100, ss17);
             DroppedItem itemE2 = new DroppedItem(250, 200, item5, "media/Player/Item.png", 100, ss17);
             DroppedItem itemE3 = new DroppedItem(250, 200, item5, "media/Player/Item.png", 100, ss17);
-            
+
             DroppedItem itemF = new DroppedItem(300, 525, item6, "media/Player/Item.png", 100, ss5);
-            
+
             DroppedItem itemG1 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
             DroppedItem itemG2 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
             DroppedItem itemG3 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
             DroppedItem itemG4 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
             DroppedItem itemG5 = new DroppedItem(450, 600, item7, "media/Player/Item.png", 100, ss6);
-            
+
             DroppedItem itemH1 = new DroppedItem(400, 600, item8, "media/Player/Item.png", 100, ss16);
             DroppedItem itemH2 = new DroppedItem(400, 600, item8, "media/Player/Item.png", 100, ss16);
-            
+
             DroppedItem itemI1 = new DroppedItem(300, 300, item9, "media/Player/Item.png", 100, ss30);
             DroppedItem itemI2 = new DroppedItem(300, 300, item9, "media/Player/Item.png", 100, ss30);
-            
+
             DroppedItem itemJ1 = new DroppedItem(200, 500, item10, "media/Player/Item.png", 100, ss20);
             DroppedItem itemJ2 = new DroppedItem(200, 500, item10, "media/Player/Item.png", 100, ss20);
 
@@ -280,7 +251,7 @@ public class World {
             Hexagon hexS31 = new Hexagon(7, 0, 6, ss10);
             Hexagon hexS32 = new Hexagon(7, 0, 6, ss10);
             Hexagon hexS33 = new Hexagon(7, 0, 6, ss10);
-            
+
             Octagon octS11 = new Octagon(6, 0, 0, ss25);
             Octagon octS12 = new Octagon(6, 0, 0, ss25);
             Octagon octS13 = new Octagon(6, 0, 0, ss25);
@@ -359,18 +330,15 @@ public class World {
             ss29.addEntity(itemH2);
             ss30.addEntity(triangleS19);
             ss30.addEntity(itemI1);
-            
 
             Circle secretBoss = new Circle(11, 6, 4, secretBossRoom);
             secretBossRoom.addEntity(secretBoss);
             secretBossRoom.addEntity(itemI2);
 
-
-
             ss1.setRight(ss6);
-            
+
             ss2.setUp(ss8);
-            
+
             ss3.setDown(ss4);
 
             ss4.setUp(ss3);
@@ -527,12 +495,12 @@ public class World {
 
             Level level1 = new Level(1);
 
-            Screen screen1 = new Screen(0, 0, 1,"media/terrain/egypt/desertonewayright.png");
+            Screen screen1 = new Screen(0, 0, 1, "media/terrain/egypt/desertonewayright.png");
             screen1.fillGrid();
-            Screen screen2 = new Screen(0, 1, 1,"media/terrain/egypt/desertthreewayleft.png");
-            Screen screen3 = new Screen(1, 0, 1,"media/terrain/egypt/desertonewayright.png");
-            Screen screen4 = new Screen(1, 1, 1,"media/terrain/egypt/desertthreewaydown.png");
-            Screen bossScreen = new Screen(1, 2, 1,"media/terrain/secret&boss/bossroom.png");
+            Screen screen2 = new Screen(0, 1, 1, "media/terrain/egypt/desertthreewayleft.png");
+            Screen screen3 = new Screen(1, 0, 1, "media/terrain/egypt/desertonewayright.png");
+            Screen screen4 = new Screen(1, 1, 1, "media/terrain/egypt/desertthreewaydown.png");
+            Screen bossScreen = new Screen(1, 2, 1, "media/terrain/secret&boss/bossroom.png");
 
             Triangle triangle1 = new Triangle(1, 1, 1, screen1);
             Triangle triangle2 = new Triangle(2, 2, 6, screen3);
@@ -541,7 +509,6 @@ public class World {
             Triangle triangle5 = new Triangle(1, 1, 1, screen4);
             Triangle triangle6 = new Triangle(2, 2, 6, screen4);
             Pyramid triangleBoss = new Pyramid(11, 0, 0, bossScreen);
-            
 
             screen1.addEntity(triangle1);
             screen3.addEntity(triangle2);
@@ -559,7 +526,7 @@ public class World {
 
             screen2.setLeft(screen1);
             screen2.setUp(screen4);
-            
+
             screen3.setDown(screen1);
             screen3.setRight(screen4);
 
@@ -591,8 +558,6 @@ public class World {
             Screen screen12 = new Screen(2, 2, 2, "media/terrain/caveman/cavemantwowayvertical.png");
             Screen screen13 = new Screen(3, 0, 2, "media/terrain/caveman/cavemanonewaydown.png");
             Screen bossScreen2 = new Screen(3, 2, 2, "media/terrain/secret&boss/bossroom.png");
-            
-           
 
             screen5.setUp(screen6);
 
@@ -619,7 +584,7 @@ public class World {
             screen12.setUp(bossScreen2);
 
             screen13.setDown(screen11);
-            
+
             bossScreen2.setDown(screen12);
 
             Square square1 = new Square(4, 0, 0, screen6);
@@ -635,8 +600,6 @@ public class World {
             Square square11 = new Square(4, 0, 0, screen13);
             Square square12 = new Square(4, 8, 4, screen6);
             Cube cubeBoss = new Cube(11, 0, 0, bossScreen2);
-
-            
 
             screen6.addEntity(square1);
             screen6.addEntity(square2);
@@ -677,16 +640,16 @@ public class World {
             Screen screen15 = new Screen(1, 2, 3, "media/terrain/medieval/medievalfourway.png");
             Screen screen16 = new Screen(1, 1, 3, "media/terrain/medieval/medievalthreewayup.png");
             Screen screen17 = new Screen(1, 3, 3, "media/terrain/medieval/medievalthreewayup.png");
-            Screen screen18 = new Screen(1,0,3,"media/terrain/medieval/medievalonewayright.png");
-            Screen screen19 = new Screen(1,4,3,"media/terrain/medieval/medievalonewayleft.png");
-            Screen screen20 = new Screen(2,1,3,"media/terrain/medieval/medievalthreewayleft.png");
-            Screen screen21 = new Screen(2,2,3,"media/terrain/medieval/medievaltwowayvertical.png");
-            Screen screen22 = new Screen(2,3,3,"media/terrain/medieval/medievalthreewayright.png");
-            Screen screen23 = new Screen(2,0,3,"media/terrain/medieval/medievalonewayright.png");
-            Screen screen24 = new Screen(2,4,3,"media/terrain/medieval/medievalonewayleft.png");
-            Screen screen25 = new Screen(3,1,3,"media/terrain/medieval/medievalonewaydown.png");
-            Screen screen26 = new Screen(3,2,3,"media/terrain/medieval/medievalonewaydown.png");
-            Screen bossRoom3 = new Screen(3,3,3,"media/terrain/secret&boss/bossroom.png");
+            Screen screen18 = new Screen(1, 0, 3, "media/terrain/medieval/medievalonewayright.png");
+            Screen screen19 = new Screen(1, 4, 3, "media/terrain/medieval/medievalonewayleft.png");
+            Screen screen20 = new Screen(2, 1, 3, "media/terrain/medieval/medievalthreewayleft.png");
+            Screen screen21 = new Screen(2, 2, 3, "media/terrain/medieval/medievaltwowayvertical.png");
+            Screen screen22 = new Screen(2, 3, 3, "media/terrain/medieval/medievalthreewayright.png");
+            Screen screen23 = new Screen(2, 0, 3, "media/terrain/medieval/medievalonewayright.png");
+            Screen screen24 = new Screen(2, 4, 3, "media/terrain/medieval/medievalonewayleft.png");
+            Screen screen25 = new Screen(3, 1, 3, "media/terrain/medieval/medievalonewaydown.png");
+            Screen screen26 = new Screen(3, 2, 3, "media/terrain/medieval/medievalonewaydown.png");
+            Screen bossRoom3 = new Screen(3, 3, 3, "media/terrain/secret&boss/bossroom.png");
 
             screen14.setUp(screen15);
 
@@ -818,14 +781,13 @@ public class World {
             level3.setBaseScreen(screen14);
 
             World.campaign.add(level3);
-            
 
             Cirkyle = new Player(100, 100);
             World.instance().getCurrentLevel().setCurrentScreen(screen1);
             World.instance().setDesertMusic();
             getCurrentLevel().getBaseScreen().addEntity(Cirkyle);
         } else {
-            for (String lvlName: levellist) {
+            for (String lvlName : levellist) {
                 try {
                     Level nextlvl = Level.convertDummyLvL(LvLBFileReader.load(lvlName));
                     World.campaign.add(nextlvl);
@@ -842,44 +804,93 @@ public class World {
         }
     }
 
-
-    public void updateView(){
+    /**
+     * Perform the movements of all entities on the screen
+     */
+    public void updateView() {
         levelTimer--;
-        try{for (Entity entity: displayCurrentEntities()){
-            if (! (entity instanceof Player)&&!isPaused){
-            entity.performMovement();
+        try {
+            for (Entity entity : displayCurrentEntities()) {
+                if (!(entity instanceof Player) && !isPaused) {
+                    entity.performMovement();
+                }
             }
+            if (observer != null) {
+                observer.Initialize(isLoaded);
+            }
+        } catch (ConcurrentModificationException c) {
+            return;
         }
-        if(observer!=null)
-        {
-            observer.Initialize(isLoaded);
-        }
-        }catch(ConcurrentModificationException c){return;}
     }
 
-    public void updatePlayer(){
-        if(getPlayer()!=null)
-        {
+    /**
+     * Moves the player
+     */
+    public void updatePlayer() {
+        if (getPlayer() != null) {
             getPlayer().performMovement();
         }
     }
-    
+
+    /**
+     * Ends the game and adds the scores to the high score list
+     */
+    public static void finishGame() {
+        World.instance().isPaused = true;
+        HighScoreManager scores = new HighScoreManager();
+        try {
+            scores.load();
+            scores.addScore(new HighScore(World.getPlayer().getScore(), "Player"));
+            scores.save();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 
+    // Getters and Setters -------------------------------
 
+    public static Level getCurrentLevel() {
+        Level current = campaign.get(currentLevel);
+        return current;
+    }
+
+    public int getCurrentLevelNumber() {
+        return currentLevel;
+    }
+
+    public int getNumLevels() {
+        return campaign.size();
+    }
+
+    public static ArrayList<Entity> displayCurrentEntities() {
+        Level current = campaign.get(currentLevel);
+        return current.getCurrentScreen().getEntities();
+    }
+
+    public static Player getPlayer() {
+        for (Entity entity : displayCurrentEntities()) {
+            if (entity instanceof Player) {
+                return (Player) entity;
+            }
+        }
+        return null;
+    }
 
     public void setDifficulty(int difficulty) {
         world.difficulty = difficulty;
     }
+
     public int getDifficulty() {
         return world.difficulty;
     }
+
     public void setCurrentLevel(int currentLevel) {
         World.currentLevel = currentLevel;
     }
-    public boolean getCamapign()
-    {
+
+    public boolean getCamapign() {
         return userCampaign;
     }
 
@@ -891,78 +902,65 @@ public class World {
         this.isLoaded = isLoaded;
     }
 
-    public void setCheatMode(Boolean cheatMode) 
-    {
-        this.cheatMode=cheatMode;
+    public void setCheatMode(Boolean cheatMode) {
+        this.cheatMode = cheatMode;
     }
 
-    public boolean getCheatMode()
-    {
+    public boolean getCheatMode() {
         return cheatMode;
     }
 
-    public void setCampaign(Boolean userCampaign)
-    {
-        this.userCampaign=userCampaign;
+    public void setCampaign(Boolean userCampaign) {
+        this.userCampaign = userCampaign;
     }
 
-    public AudioClip getMusic()
-    {
+    public AudioClip getMusic() {
         return current;
     }
 
-    public void setMusic(AudioClip music)
-    {
-        current=music;
+    public void setMusic(AudioClip music) {
+        current = music;
     }
 
-    public void setDesertMusic()
-    {
-        current=DESERT_MUSIC;
+    public void setDesertMusic() {
+        current = DESERT_MUSIC;
         current.play();
     }
 
-    public static void finishGame() {
-        World.instance().isPaused=true;
-        HighScoreManager scores = new HighScoreManager();
-        try
-        {
-            scores.load();
-            scores.addScore(new HighScore(World.getPlayer().getScore(),"Player"));
-            scores.save();
-        }
-        catch (IOException e)
-        {
-            System.out.println(e.getMessage());
-        }
+    public boolean getIsPaused() {
+        return isPaused;
     }
 
+    public void setIsPaused(boolean isPaused) {
+        this.isPaused = isPaused;
+    }
 
     /**
-     * opens a file and calls the serialize methods for each object to write to the file
+     * opens a file and calls the serialize methods for each object to write to the
+     * file
+     * 
      * @param filename - the file that will hold the saved game
      */
     public void save(String filename) throws IOException {
-        try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename)))
-        {  // SaveGame.dat
-            
+        try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))) { // SaveGame.dat
+
             writer.writeInt(World.currentLevel);
             writer.writeInt(this.difficulty);
             Level lvl = getCurrentLevel();
             lvl.serialize(writer);
 
-            
         }
     }
 
     /**
-     * opens a file and calls the deserialize methods for each object to load the game
+     * opens a file and calls the deserialize methods for each object to load the
+     * game
+     * 
      * @param filename - the saved file
      */
     public void load(String filename) throws IOException {
 
-        try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) 
-        {   
+        try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))) {
 
             currentLevel = reader.readInt();
             difficulty = reader.readInt();
@@ -971,9 +969,8 @@ public class World {
             lvl.setCurrentScreen(lvl.findScreen(0, 0));
 
             campaign.set(currentLevel, lvl);
-            
-            observer.Initialize(isLoaded);
 
+            observer.Initialize(isLoaded);
 
         }
     }

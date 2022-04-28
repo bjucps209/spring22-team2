@@ -23,6 +23,9 @@ public class Stats {
         this.health.set(health);
     }
 
+
+    // Getters and Setters ----------------
+    
     public int getStrength() {
         return strength;
     }

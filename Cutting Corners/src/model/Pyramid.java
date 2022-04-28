@@ -10,66 +10,62 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Pyramid extends Boss{
+public class Pyramid extends Boss {
     private static String image = "media/Enemies/pyramidboss.png";
     private EnemyState state = EnemyState.patrolling;
     private int attackCount = 150;
-    private int currentAttack=0;
+    private int currentAttack = 0;
 
-    public Pyramid(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 12), 12*World.instance().getDifficulty(), 100);
+    public Pyramid(int size, int xCoord, int yCoord, Screen homeScreen) {
+        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 12),
+                12 * World.instance().getDifficulty(), 100);
     }
+
+    // Performs the attack of the boss. 1, 2, or 3
     @Override
-    public void performMovement()
-    {
-        if(attackCount==149)
-        {
-            state=EnemyState.patrolling;
+    public void performMovement() {
+        if (attackCount == 149) {
+            state = EnemyState.patrolling;
             super.getObserver().changeImage(image, Direction.left);
-            currentAttack=0;
+            currentAttack = 0;
         }
         attackCount--;
-        switch(state)
-        {
+        switch (state) {
             case patrolling:
-                
-                if(attackCount<=0)
-                {
-                    state=EnemyState.attacking;
+
+                if (attackCount <= 0) {
+                    state = EnemyState.attacking;
                 }
                 break;
             case attacking:
-                if(World.instance().getPlayer()!=null)
-                {   
-                    switch((int)(Math.random()*3)+1)
-                    {
+                if (World.instance().getPlayer() != null) {
+                    switch ((int) (Math.random() * 3) + 1) {
                         case 1:
                             performAttack1();
                             super.getObserver().changeImage("media/enemies/pyramidfloat2.gif", Direction.left);
-                            attackCount=300;
-                            state=EnemyState.stunned;
-                            currentAttack=1;
+                            attackCount = 300;
+                            state = EnemyState.stunned;
+                            currentAttack = 1;
                             break;
                         case 2:
                             performAttack2();
                             super.getObserver().changeImage("media/enemies/pyramidspike2.gif", Direction.left);
-                            attackCount=225;
-                            state=EnemyState.stunned;
-                            currentAttack=2;
+                            attackCount = 225;
+                            state = EnemyState.stunned;
+                            currentAttack = 2;
                             break;
                         case 3:
                             performAttack3();
                             super.getObserver().changeImage("media/enemies/pyramidbounce2.gif", Direction.left);
-                            state=EnemyState.stunned;
-                            attackCount=350;
-                            currentAttack=3;
+                            state = EnemyState.stunned;
+                            attackCount = 350;
+                            currentAttack = 3;
                             break;
                     }
                 }
                 break;
-                case stunned:
-                switch(currentAttack)
-                {
+            case stunned:
+                switch (currentAttack) {
                     case 1:
                         performAttack1();
                         break;
@@ -83,29 +79,23 @@ public class Pyramid extends Boss{
                 break;
         }
     }
+
     @Override
-    public void performAttack1()
-    {
-        if(World.instance().getPlayer()!=null)
-        {
-            if(attackCount==250)
-            {
-                if(World.instance().getPlayer().getCoords().getxCoord()<200)
-                {
+    public void performAttack1() {
+        if (World.instance().getPlayer() != null) {
+            if (attackCount == 250) {
+                if (World.instance().getPlayer().getCoords().getxCoord() < 200) {
                     World.instance().getPlayer().takeDamage(5, Direction.left);
                 }
             }
-            if(attackCount==200)
-            {
-                if(World.instance().getPlayer().getCoords().getxCoord()>1000)
-                {
+            if (attackCount == 200) {
+                if (World.instance().getPlayer().getCoords().getxCoord() > 1000) {
                     World.instance().getPlayer().takeDamage(5, Direction.right);
                 }
             }
-            if(attackCount==150)
-            {
-                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
-                {
+            if (attackCount == 150) {
+                if (World.instance().getPlayer().getCoords().getxCoord() > 400
+                        && World.instance().getPlayer().getCoords().getxCoord() < 750) {
                     World.instance().getPlayer().takeDamage(5, Direction.up);
                 }
             }
@@ -113,59 +103,47 @@ public class Pyramid extends Boss{
     }
 
     @Override
-    public void performAttack2()
-    {
-        if(World.instance().getPlayer()!=null)
-        {
-            if(attackCount==185)
-            {
-                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
-                {
-                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
+    public void performAttack2() {
+        if (World.instance().getPlayer() != null) {
+            if (attackCount == 185) {
+                if (World.instance().getPlayer().getCoords().getxCoord() > 400
+                        && World.instance().getPlayer().getCoords().getxCoord() < 750) {
+                    World.instance().getPlayer().takeDamage(2 * World.instance().getDifficulty(), Direction.up);
                 }
             }
         }
     }
 
     @Override
-    public void performAttack3()
-    {
-        if(World.instance().getPlayer()!=null)
-        {
-            if(attackCount==300)
-            {
-                if(World.instance().getPlayer().getCoords().getxCoord()<200)
-                {
-                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.left);
+    public void performAttack3() {
+        if (World.instance().getPlayer() != null) {
+            if (attackCount == 300) {
+                if (World.instance().getPlayer().getCoords().getxCoord() < 200) {
+                    World.instance().getPlayer().takeDamage(2 * World.instance().getDifficulty(), Direction.left);
                 }
             }
-            if(attackCount==250)
-            {
-                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
-                {
-                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
+            if (attackCount == 250) {
+                if (World.instance().getPlayer().getCoords().getxCoord() > 400
+                        && World.instance().getPlayer().getCoords().getxCoord() < 750) {
+                    World.instance().getPlayer().takeDamage(2 * World.instance().getDifficulty(), Direction.up);
                 }
             }
-            if(attackCount==200)
-            {
-                if(World.instance().getPlayer().getCoords().getxCoord()>1000)
-                {
-                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.right);
+            if (attackCount == 200) {
+                if (World.instance().getPlayer().getCoords().getxCoord() > 1000) {
+                    World.instance().getPlayer().takeDamage(2 * World.instance().getDifficulty(), Direction.right);
                 }
             }
-            if(attackCount==150)
-            {
-                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
-                {
-                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
+            if (attackCount == 150) {
+                if (World.instance().getPlayer().getCoords().getxCoord() > 400
+                        && World.instance().getPlayer().getCoords().getxCoord() < 750) {
+                    World.instance().getPlayer().takeDamage(2 * World.instance().getDifficulty(), Direction.up);
                 }
             }
         }
     }
 
     @Override
-    public EnemyState getState()
-    {
+    public EnemyState getState() {
         return state;
     }
 
