@@ -12,20 +12,28 @@ import model.*;
 public class SerializeTest {
 
     @Test
-    public void saveRandomGameToLoad() throws IOException {
+    public void saveRandomGameToLoad_level2() throws IOException {
         World.reset();
         World.instance();
-        World.instance().currentLevel = 1;
+        World.instance().currentLevel = 2;
+        World.instance().getCurrentLevel().setCurrentScreen(World.instance().getCurrentLevel().getScreens().get(2));
         World.instance().save("savegame.dat");
     }
 
+    @Test
+    public void saveRandomGameToLoad_level1() throws IOException {
+        World.reset();
+        World.instance();
+        World.instance().getCurrentLevel().setCurrentScreen(World.instance().getCurrentLevel().getScreens().get(0));
+        World.instance().save("savegame.dat");
+    }
 
 
     @Test
     public void testSave_savesToFile() throws IOException  {
         World.reset();
         World.instance();
-        assertEquals(0, World.instance().currentLevel);
+        assertEquals(1, World.instance().currentLevel);
         World.instance().currentLevel = 0;
         World.instance().setDifficulty(6);
         World.instance().getCurrentLevel().setCurrentLevel(5);
@@ -48,7 +56,7 @@ public class SerializeTest {
     public void testLoad_loadsFromFile() {
         World.reset();
         World.instance();
-        assertEquals(0, World.instance().currentLevel);
+        assertEquals(1, World.instance().currentLevel);
         World.instance().currentLevel = 0;
         World.instance().setDifficulty(6);
         World.instance().getCurrentLevel().setCurrentLevel(5);
@@ -79,6 +87,7 @@ public class SerializeTest {
         assertEquals(6, World.instance().getDifficulty());
         assertEquals(5, World.instance().getCurrentLevel().getCurrentLevel());
         assertEquals(1, World.instance().getPlayer().getStats().getHealth());
+        assertEquals("FakeTestImage", World.instance().getPlayer().getWeaponImage());
 
     }
 }

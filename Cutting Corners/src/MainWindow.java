@@ -165,6 +165,11 @@ public class MainWindow {
         timer.setCycleCount(50);
         timerCredits.setCycleCount(Timeline.INDEFINITE);
         highScores.setText("High Scores:\n");
+        try {
+            scores.load();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
         for(int i=0;i<5;i++)
         {
             highScores.setText(highScores.getText()+"\n"+scores.get(i).getName()+":\t"+scores.get(i).getScore());
@@ -184,7 +189,8 @@ public class MainWindow {
         credits.setText("Credits\n\nBasic Gameplay:\t\t\t\tTripp Lawrence, Ethan Collins\nLevel Builder:\t\t\t\t\t\t\t\t"+
         "Seth Meyer\nSerialization:\t\t\t\t\t\t\t\tPaul Alger\nAuxillary Screens:\t\t\t\t\t\t\tEthan Collins\nNarative Lead:\t\t\t\t\t\t\t"+
         "Ethan Collins\n\n\nMedia\n\nCharacter Sprites:\t\t\t\t\t\t\tEthan Collins\nEnemy Sprites:\t\t\t\t\t\t\tEthan Collins\nBoss Sprites:"+
-        "\t\t\t\t\t\t\t\tEthan Collins\nTerrain:\t\t\t\t\t\t\t\t\tEthan Collins\nInterface Visuals:\t\t\t\t\t\t\tEthan Collins\n\nStaring Cirkyle as himself\n\nMusic\n\n"+
+        "\t\t\t\t\t\t\t\tEthan Collins\nTerrain:\t\t\t\t\t\t\t\t\tEthan Collins\nInterface Visuals:\t\t\t\t\t\t\tEthan Collins\n\nObstacles\n\nInspiration for the obstacles"+
+        " came from the stamp feature at pixilart.com\n\nStaring Cirkyle as himself\n\nMusic\n\n"+
         "Title Music:        Magic Tavern - Alexander Nakarada\nCaveman Level:  Little World - Nul Tiel Records\nEgypt Level:\t    Reverie - Nul"+
         " Tiel Records\nMedieval Level:  Fairy of the Forest - Alexander Nakarada\nSecret Level:\t    Lurking in the Shadows - Scott Holmes Music\n\n"+
         "Sound Effects\n\nBow Shoot:\t\t\t\tK6EQG35-bow-arrow-shot\nSword Attack:\t\t\t\tmixkit-dagger-woosh-1487\nSword Hit:\t\t\t\t"+
@@ -387,13 +393,13 @@ public class MainWindow {
         var scene = new Scene(loader.load());
         var stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("Cutting Corners Beta");
+        stage.setTitle("Cutting Corners Release Candidate");
         stage.getIcons().add(new Image("media/windowicon.png"));
         stage.show();
 
         GameWindow gameWindow = loader.getController();
         //gameWindow.Initialize();
-        gameWindow.Initialize(isLoaded, userCampaign,cheatMode);
+        gameWindow.Initialize(isLoaded, userCampaign,cheatMode,difficulty);
         // gameWindow.Initialize(defaultCampaign);
         pane.getScene().getWindow().hide();
         TITLE_MUSIC.stop();
@@ -407,6 +413,7 @@ public class MainWindow {
                 {
                     KeyCode keyPressed = event.getCode();
                     if (keyPressed == KeyCode.SPACE){
+                        World.instance().getPlayer().setAttackCount(35);
                         World.instance().getPlayer().setState(PlayerState.drinking);
                     }
                     else{
@@ -462,6 +469,7 @@ public class MainWindow {
         if(view==diffSliderLeft&&difficulty!=1)
         {
             difficulty--;
+            System.out.println(difficulty);
             switch(difficulty)
             {
                 case 1:

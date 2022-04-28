@@ -3,17 +3,25 @@ import java.util.*;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+
 import java.io.IOException;
 
+import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
 import java.awt.*;
@@ -29,20 +37,24 @@ public class GameWindow {
     Image background = new Image("media/terrain/medieval/medievalfourway.png");
     ImageView backgroundView = new ImageView(background);
     ArrayList<Character> keysPressed = new ArrayList<Character>();
-    HBox effectBox = new HBox();
+    Image PAUSE_BACKGROUND = new Image("media/titlescreen.png");
+    Image RESUME_BTN = new Image("media/buttons/resumebtn.png");
+    Image SAVE_BTN = new Image("media/buttons/savebtn.png");
+    Image SAVEEXIT_BTN = new Image("media/buttons/saveexitbtn.png");
+    Image EXIT_BTN = new Image("media/buttons/exitbtn.png");
+    Label playerDied = new Label("You Died");
+    ImageView pauseView = new ImageView(PAUSE_BACKGROUND);
+    ImageView resumeView = new ImageView(RESUME_BTN);
+    ImageView saveView = new ImageView(SAVE_BTN);
+    ImageView saveExitView = new ImageView(SAVEEXIT_BTN);
+    ImageView exitView = new ImageView(EXIT_BTN);
+    VBox effectBox = new VBox();
+    BooleanProperty playerDead = new SimpleBooleanProperty(false);
     
 
     @FXML
-    void onGreetClicked(ActionEvent event) {
-        var alert = new Alert(AlertType.INFORMATION, "Hello, world!");
-        alert.setHeaderText(null);
-        alert.show();
-
-    }
-    
-
-    @FXML
-    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode) throws IOException{
+    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,int difficulty) throws IOException{
+        
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -58,9 +70,23 @@ public class GameWindow {
         gameWindow.setMinWidth(size.getWidth());
         gameWindow.setMinHeight(size.getHeight());
         gameWindow.getChildren().clear();
-
+        
+        if (playerDead.get()){
+            World.instance().setIsPaused(true);
+        }
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
+        
+
+        gameWindow.getChildren().add(effectBox);
+        effectBox.relocate(950*ratioWidth, 200*ratioHeight);
+
+        World.instance().getCurrentLevel().setObserver( me -> {
+            try {
+                Initialize(isLoaded,userCampaign,cheatMode,difficulty);
+            } catch (IOException e) {}
+        } );
+        backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
         
         // check if loading from save file
         if (isLoaded) {
@@ -68,19 +94,11 @@ public class GameWindow {
             entities = World.instance().displayCurrentEntities();
         }
 
-
-        World.instance().getCurrentLevel().setObserver( me -> {
-            try {
-                Initialize(isLoaded,userCampaign,cheatMode);
-            } catch (IOException e) {}
-        } );
-        backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
-        
-        effectBox.relocate(950*ratioWidth, 200*ratioHeight);
-
         World.instance().setLoaded(isLoaded);
         World.instance().setCheatMode(cheatMode);
         World.instance().setCampaign(userCampaign);
+        World.instance().setDifficulty(difficulty);
+        
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
         entityImage.setImage(new Image(entity.getImage()));
@@ -94,7 +112,10 @@ public class GameWindow {
         entityImage.setPreserveRatio(true);
         if(entity instanceof Boss)
         {
-            entityImage.setFitWidth(1280);
+            if(!(((Boss)entity) instanceof Circle))
+            {
+                entityImage.setFitWidth(1280);
+            }
         }
             
         gameWindow.getChildren().add(entityImage);
@@ -107,6 +128,7 @@ public class GameWindow {
                 displayScoreAndExperience(player);
                     player.getObserver().changeImage(player.getImage(), player.getFacing());
                     player.getWeaponObserver().changeImage(player.getWeaponImage(), player.getFacing());
+                playerDead.bindBidirectional(player.getDead());
             }
             if (entity instanceof Enemy){
                 Enemy enemy = (Enemy) entity;
@@ -119,9 +141,83 @@ public class GameWindow {
         }
 
         Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
-        displayObstacles(currentScreen);
+            displayObstacles(currentScreen);
         
         ratioImage(backgroundView);
+        pauseView.relocate(0, 0);
+        resumeView.relocate(40, 50);
+        saveView.relocate(40, 300);
+        saveExitView.relocate(640, 50);
+        exitView.relocate(640, 300);
+        playerDied.getStyleClass().add("title");
+        playerDied.relocate(350, 550);
+        
+        if (playerDead.get()){
+            effectBox.getChildren().clear();
+            resumeView.setOnMouseClicked(e-> {
+                int currentLevel = World.instance().getCurrentLevelNumber();
+                World.instance().reset();
+                World.instance().setCurrentLevel(currentLevel);
+                World.instance().getCurrentLevel().setCurrentScreen(
+                    World.instance().getCurrentLevel().getBaseScreen());
+                playerDead.set(false);
+                World.instance().setIsPaused(false);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+            });
+        }
+        else
+        {
+            resumeView.setOnMouseClicked(e->{World.instance().setIsPaused(false);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());});
+        }
+        saveView.setOnMouseClicked(e->{
+            try {
+                World.instance().save("savegame.dat");
+            } catch (IOException e1) {
+                System.out.println("Oops Lol");
+            }
+        });
+        saveExitView.setOnMouseClicked(e->{
+            try {
+                World.instance().save("savegame.dat");
+                World.reset();
+                Platform.exit();
+                //((Stage)gameWindow.getScene().getWindow()).close();
+
+            } catch (IOException e1) {
+                System.out.println("Oops Lol");
+            }
+        });
+        exitView.setOnMouseClicked(e->{var loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
+        Scene scene;
+        try {
+            scene = new Scene(loader.load());
+            var stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Cutting Corners Release Candidate");
+            stage.getIcons().add(new Image("media/windowicon.png"));
+            stage.show();
+            MainWindow mainWindow = loader.getController();
+            Platform.exit();
+            //World.reset();
+            //((Stage)gameWindow.getScene().getWindow()).close();
+        } catch (IOException e1) {
+            System.out.println("Couldn't Open main");
+        }});
+        gameWindow.getChildren().add(pauseView);
+        gameWindow.getChildren().add(resumeView);
+        gameWindow.getChildren().add(saveView);
+        gameWindow.getChildren().add(saveExitView);
+        gameWindow.getChildren().add(exitView);
+        gameWindow.getChildren().add(playerDied);
+
+        playerDied.setVisible(playerDead.get());
+        pauseView.setVisible(World.instance().getIsPaused());
+        resumeView.setVisible(World.instance().getIsPaused());
+        saveExitView.setVisible(World.instance().getIsPaused());
+        saveView.setVisible(World.instance().getIsPaused());
+        exitView.setVisible(World.instance().getIsPaused());
+
     }
 
     @FXML
@@ -162,6 +258,7 @@ public class GameWindow {
     @FXML
     void showItem(DroppedItem item){
         item.setInformant(this::Notify);
+        item.setUnDroppedCountdown(this::showEffectTimer);
     }
 
     @FXML
@@ -184,29 +281,37 @@ public class GameWindow {
     }
 
     @FXML
-    void showEffectTimer(int time, String effectName, String icon){
+    void showEffectTimer(Effect effect, String effectName, String icon){
+        // gameWindow.getChildren().remove(effectBox);
+        // effectBox.relocate(950*ratioWidth, 200*ratioHeight);
+        
         VBox effectDropdown = new VBox();
         Label effectTitle = new Label(effectName);
+
         Image image = new Image(icon);
         ImageView imageview = new ImageView(image);
+        imageview.setFitHeight(25);
+        imageview.setPreserveRatio(true);
+
         Label duration = new Label();
+        HBox row2 = new HBox();
+        
+        row2.getChildren().add(imageview);
 
-        KeyFrame frames = new KeyFrame(Duration.seconds(1), me -> countdown(duration));
-        Timeline timer = new Timeline(frames);
-        timer.setCycleCount(time);
+        duration.textProperty().bind(effect.DurationProperty().divide(50).asString());
 
+        if (effect.getDuration() <= 99999){row2.getChildren().add(duration);}
         effectDropdown.getChildren().add(effectTitle);
-        HBox row2 = new HBox(imageview, duration);
         effectDropdown.getChildren().add(row2);
+        effectDropdown.setUserData(effect);
+        effectDropdown.visibleProperty().bind(effect.DurationProperty().greaterThan(0));
+
+        for (Node node: effectBox.getChildren()){
+            if (node.getUserData() == null){continue;}
+            if (node.getUserData().equals(effect)){return;}
+        }
+
         effectBox.getChildren().add(effectDropdown);
-    }
-
-    @FXML
-    void countdown(Label duration){
-        String text = duration.getText();
-        int time = Integer.parseInt(text);
-
-        duration.setText(time - 1 + "");
     }
 
     @FXML
@@ -267,15 +372,24 @@ public class GameWindow {
         enemy.setIndicator(this::displayDamage);
         ProgressBar healthBar = new ProgressBar();
         healthBar.progressProperty().bind(enemy.getStats().healthProperty().divide(enemy.getTotalHealth()));
-        if(!(enemy instanceof Boss))
+        if((enemy instanceof Boss))
         {
-            healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
-            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 50));
+            if(!((Boss)enemy instanceof Circle))
+            {
+                healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+                healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 640));
+            }
+            else
+            {
+                healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
+                healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 50));
+            }
+            
         }
         else
         {
             healthBar.layoutYProperty().bind(enemy.getYProperty().add(enemy.getSize() / 2 + 5));
-            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 640));
+            healthBar.layoutXProperty().bind(enemy.getXProperty().add(enemy.getSize() / 2 + 50));
         }
         healthBar.setScaleX(enemy.getTotalHealth() / 3);
         healthBar.setScaleY(1.5);
@@ -333,16 +447,6 @@ public class GameWindow {
             gameWindow.getChildren().add(obstacleImage);
             obstacleImage.toBack();
         }
-    }
-    
-
-    /**
-     * saves the state of the game when the save button is clicked
-     * @param event
-     */
-    @FXML
-    void onSaveClicked(ActionEvent event) {
-
     }
     
     @FXML

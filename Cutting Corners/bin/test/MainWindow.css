@@ -45,4 +45,12 @@
   .health{
     -fx-text-fill: red;
     -fx-font-size: 20px;
+    background-color: white;
+  }
+
+  .died {
+    -fx-text-fill: orange;
+    -fx-font-size: 40px;
+    border: 8px yellow;
+    font:600;
   }

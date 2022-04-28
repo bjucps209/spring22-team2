@@ -11,7 +11,7 @@ public class Pyramid extends Boss{
     private int currentAttack=0;
 
     public Pyramid(int size, int xCoord, int yCoord, Screen homeScreen){
-        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 25), 25, 100);
+        super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 12), 12*World.instance().getDifficulty(), 100);
     }
     @Override
     public void performMovement()
@@ -80,25 +80,28 @@ public class Pyramid extends Boss{
     @Override
     public void performAttack1()
     {
-        if(attackCount==250)
+        if(World.instance().getPlayer()!=null)
         {
-            if(World.instance().getPlayer().getCoords().getxCoord()>100)
+            if(attackCount==250)
             {
-                World.instance().getPlayer().takeDamage(5, Direction.left);
+                if(World.instance().getPlayer().getCoords().getxCoord()<200)
+                {
+                    World.instance().getPlayer().takeDamage(5, Direction.left);
+                }
             }
-        }
-        if(attackCount==200)
-        {
-            if(World.instance().getPlayer().getCoords().getxCoord()<1000)
+            if(attackCount==200)
             {
-                World.instance().getPlayer().takeDamage(5, Direction.right);
+                if(World.instance().getPlayer().getCoords().getxCoord()>1000)
+                {
+                    World.instance().getPlayer().takeDamage(5, Direction.right);
+                }
             }
-        }
-        if(attackCount==150)
-        {
-            if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+            if(attackCount==150)
             {
-                World.instance().getPlayer().takeDamage(5, Direction.up);
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                {
+                    World.instance().getPlayer().takeDamage(5, Direction.up);
+                }
             }
         }
     }
@@ -106,11 +109,14 @@ public class Pyramid extends Boss{
     @Override
     public void performAttack2()
     {
-        if(attackCount==185)
+        if(World.instance().getPlayer()!=null)
         {
-            if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+            if(attackCount==185)
             {
-                World.instance().getPlayer().takeDamage(10, Direction.up);
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                {
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
+                }
             }
         }
     }
@@ -118,36 +124,44 @@ public class Pyramid extends Boss{
     @Override
     public void performAttack3()
     {
-        if(attackCount==300)
+        if(World.instance().getPlayer()!=null)
         {
-            if(World.instance().getPlayer().getCoords().getxCoord()>100)
+            if(attackCount==300)
             {
-                World.instance().getPlayer().takeDamage(5, Direction.left);
+                if(World.instance().getPlayer().getCoords().getxCoord()<200)
+                {
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.left);
+                }
             }
-        }
-        if(attackCount==250)
-        {
-            if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+            if(attackCount==250)
             {
-                World.instance().getPlayer().takeDamage(5, Direction.up);
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                {
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
+                }
             }
-        }
-        if(attackCount==200)
-        {
-            if(World.instance().getPlayer().getCoords().getxCoord()<1000)
+            if(attackCount==200)
             {
-                World.instance().getPlayer().takeDamage(5, Direction.right);
+                if(World.instance().getPlayer().getCoords().getxCoord()>1000)
+                {
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.right);
+                }
             }
-        }
-        if(attackCount==150)
-        {
-            if(World.instance().getPlayer().getCoords().getxCoord()>500&&World.instance().getPlayer().getCoords().getxCoord()<750)
+            if(attackCount==150)
             {
-                World.instance().getPlayer().takeDamage(5, Direction.up);
+                if(World.instance().getPlayer().getCoords().getxCoord()>400&&World.instance().getPlayer().getCoords().getxCoord()<750)
+                {
+                    World.instance().getPlayer().takeDamage(2*World.instance().getDifficulty(), Direction.up);
+                }
             }
         }
     }
 
+    @Override
+    public EnemyState getState()
+    {
+        return state;
+    }
 
     @Override
     public void serialize(DataOutputStream file) throws IOException {

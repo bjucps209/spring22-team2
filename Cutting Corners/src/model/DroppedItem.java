@@ -7,19 +7,23 @@ public class DroppedItem extends Entity{
     UsableItem unDroppedItem;
     playerInformer informant;
     Screen homeScreen;
-    String text = "Press Space to Pick Up";
+    String text;
+    boolean used = false;
 
     public DroppedItem(int xCoord, int yCoord, UsableItem unDroppedItem, String image, int size, Screen homeScreen){
         super(xCoord, yCoord, image, size);
         this.unDroppedItem = unDroppedItem;
         this.homeScreen = homeScreen;
+        text = "Press Space to Pick Up " + unDroppedItem.getName();
     }
 
     public void pickUp(Player pickerUpper){
+        if (used){return;}
+        used = true;
         // pickerUpper.addItem(unDroppedItem);
         World.instance().displayCurrentEntities().remove(this);
         unDroppedItem.performAction(pickerUpper);
-        removeItem();
+        // removeItem();
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
 
@@ -33,6 +37,10 @@ public class DroppedItem extends Entity{
 
     public void setUnDroppedCountdown(effectCountdown countdown){
         unDroppedItem.setCountdown(countdown);
+    }
+
+    public void setHomeScreen(Screen homeScreen){
+        this.homeScreen = homeScreen;
     }
 
     @Override

@@ -37,7 +37,7 @@ public class Enemy extends Entity{
         this.vision = vision;
         this.sides = sides;
         this.weapon = weapon;
-        this.stats = stats;
+        this.stats = new Stats(stats.getStrength()*World.instance().getDifficulty(), stats.getSpeed()*World.instance().getDifficulty(), stats.getHealth()*World.instance().getDifficulty());
         this.size = size;
         this.totalHealth = totalHealth;
         this.walking=walking;
@@ -164,24 +164,20 @@ public class Enemy extends Entity{
                         if(p.getDirection()==Direction.up)
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.down);
-                            System.out.println("Enemy Hit!");
                         }
                         else if(p.getDirection()==Direction.down)
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.up);
-                            System.out.println("Enemy Hit!");
                         }
                         if(p.getDirection()==Direction.left)
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.right);
-                            super.getObserver().changeImage(attacking, Direction.left);
-                            System.out.println("Enemy Hit!");
+                            super.getObserver().changeImage(attacking, Direction.right);
                         }
                         else
                         {
                             p.getPlayer().takeDamage(weapon.getDamage(), Direction.left);
-                            super.getObserver().changeImage(attacking, Direction.right);
-                            System.out.println("Enemy Hit!");
+                            super.getObserver().changeImage(attacking, Direction.left);
                         }
                     }
             }
@@ -313,6 +309,7 @@ public class Enemy extends Entity{
 
     @Override
     public void performDie(){
+        System.out.println('u');
         World.instance().getPlayer().addExperience(experience);
         World.instance().getPlayer().addScore(score);
         super.performDie();
@@ -420,6 +417,9 @@ public class Enemy extends Entity{
 
     public void serialize(DataOutputStream file) throws IOException {
         // TODO Auto-generated method stub
+    }
+    public void setAttackCount(int i) {
+        attackCount=i;
     }
 
     

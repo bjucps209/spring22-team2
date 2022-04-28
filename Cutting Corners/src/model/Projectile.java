@@ -9,21 +9,55 @@ public class Projectile extends Entity{
     private int speed;
     private int range;
     private int width;
-    private int direction;
+    private int targetX;
+    private int targetY;
 
-    public Projectile(int damage, int speed, int startX, int startY, int range, String image, int width, int direction, int size){
+    public Projectile(int damage, int speed, int startX, int startY, int range, String image, int width, int targetX, int targetY, int size){
         super(startX, startY, image, size);
         this.speed = speed;
         this.damage = damage;
         this.range = range;
         this.width = width;
-        this.direction = direction;
+        this.targetX=targetX;
+        this.targetY=targetY;
     }
 
     @Override
-    public void performMovement(){}
-    
-    public Entity chickIfHit(){return null;}
+    public void performMovement()
+    {
+        if(Math.abs(super.getX()-targetX)>=Math.abs(super.getY()-targetY))
+        {
+            if(super.getX()<targetX)
+            {
+                super.getCoords().setxCoord(super.getX()+speed);
+            }
+            else
+            {
+                super.getCoords().setxCoord(super.getX()-speed);
+            }
+        }
+        else
+        {
+            if(super.getY()<targetY)
+            {
+                super.getCoords().setyCoord(super.getY()+speed);
+            }
+            else
+            {
+                super.getCoords().setyCoord(super.getY()-speed);
+            }
+        }
+        if(Math.sqrt((Math.pow(super.getX()-World.instance().getPlayer().getX(),2)+(Math.pow(super.getY()-World.instance().getPlayer().getY(),2))))<50)
+        {
+            World.instance().getPlayer().takeDamage(damage, Direction.left);
+            this.performDie();
+        }
+        if(super.getX()==targetX&&super.getY()==targetY)
+        {
+            this.performDie();
+            System.out.println("didn't reach target");
+        }
+    }
 
 
 
@@ -61,14 +95,6 @@ public class Projectile extends Entity{
         this.width = width;
     }
 
-    public int getDirection() {
-        return direction;
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
-    }
-
 
     @Override
     public void serialize(DataOutputStream file) throws IOException {
@@ -81,7 +107,8 @@ public class Projectile extends Entity{
         file.writeInt(speed);
         file.writeInt(range);
         file.writeInt(width);
-        file.writeInt(direction);
+        file.writeInt(targetX);
+        file.writeInt(targetY);
     }
 
     public static Projectile deserialize(DataInputStream file) throws IOException {
@@ -93,9 +120,10 @@ public class Projectile extends Entity{
         int speed = file.readInt();
         int range = file.readInt();
         int width = file.readInt();
-        int direction = file.readInt();
+        int targetX = file.readInt();
+        int targetY = file.readInt();
 
-        Projectile p = new Projectile(damage, speed, x, y, range, image, width, direction, size);
+        Projectile p = new Projectile(damage, speed, x, y, range, image, width, targetX, targetY, size);
         return p;
     }
 }

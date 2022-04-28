@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
@@ -14,7 +16,7 @@ public class Player extends Entity {
     ArrayList<Item> inventory;
     String weaponImage = "media/Player/swordwalk.gif";
     private EntityObserver weaponObserver;
-    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 150, weaponImage);
+    Item equippedItem = new MeleeWeapon("Basic Sword", 1, 1, 0, 0, 200, weaponImage);
     Equipment armor;
     Stats stats = new Stats(2, 5, 15);
     static String playerImage = "media/Player/Cirkyle v1.png";
@@ -34,6 +36,7 @@ public class Player extends Entity {
     damageIndicator indicator;
     ArrayList<DroppedItem> itemsNearby = new ArrayList<DroppedItem>();
     ArrayList<Effect> effects = new ArrayList<Effect>();
+    BooleanProperty dead = new SimpleBooleanProperty(false);
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -123,11 +126,16 @@ public class Player extends Entity {
 
     @Override
     public void performMovement(){
+        //itemsNearby.clear();
+        if(!World.instance().getIsPaused())
+        {
+        // if (effects.size() > 0){
+        //     applyBuffs();
+        // }
         if (effects.size() > 0){
             applyBuffs();
         }
         inObstacle();
-
         switch (state) {
             case standing: {
                 if (previousState == PlayerState.walking){
@@ -181,12 +189,13 @@ public class Player extends Entity {
             }
             case drinking: {
                 if (itemsNearby.size() > 0){
-                    DroppedItem item = itemsNearby.get(0);
+                    // attackCount=0;
+                    DroppedItem item = findClosestItem();
                     item.pickUp(this);
-
-                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.right);
+                    weaponObserver.changeImage("media/Player/useItem.gif", Direction.left);
                 }
                 if (attackCount <= 0) {
+                    attackCount = 25;
                     state = PlayerState.standing;
                     weaponObserver.changeImage("media/player/swordwalk.gif", Direction.right);
                 }
@@ -194,13 +203,35 @@ public class Player extends Entity {
             }
         }
     }
+
+    }
+
+    public DroppedItem findClosestItem(){
+        int distance = 9999;
+        DroppedItem closest = null;
+        for (DroppedItem item: itemsNearby){
+            PlayerRelation relation = item.playerOnScreen();
+            if (relation == null){continue;}
+            if (relation.getDistance() < distance){
+                closest = item;
+            }
+        }
+
+        return closest;
+    }
     
 
     public void applyBuffs(){
         for (int i = 0; i < effects.size(); i++){
             Effect effect = effects.get(i);
-            effect.giveEffect(this);
-            effects.remove(i);
+            if (! effect.getApplied())
+            {
+                effect.giveEffect(this);
+            }
+            effect.decrementDuration();
+            if (effect.getDuration() <= 0){
+                effect.removeEffect(this);
+            }
         }
     }
 
@@ -209,89 +240,120 @@ public class Player extends Entity {
     }
 
     public void KeyPressed(int index){
-        Direction direction = CheckIfOutOfBounds();
-        if(state!=PlayerState.standing)
-            {
-                if(state!=PlayerState.walking)
+        if(!World.instance().getIsPaused())
+        {
+            Direction direction = CheckIfOutOfBounds();
+            if(state!=PlayerState.standing)
                 {
+                    if(state!=PlayerState.walking)
+                    {
+                        return;
+                    }
+                }
+            switch (keys.get(index)){
+                default:
                     return;
-                }
-            }
-        switch (keys.get(index)){
-            default:
-                return;
-            case W: {
-                if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (keys.contains(KeyCode.S)){return;}
-            if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
+                case W: {
+                    if (keys.size() > index + 1){KeyPressed((index + 1));}
+                if (keys.contains(KeyCode.S)){return;}
+                if (direction != Direction.up){super.getCoords().subYCoord(stats.getSpeed());}
 
-            
-            int newY = super.getY() - stats.getSpeed();
-            if (newY < -stats.getSpeed() || obstacleInPath(super.getX(), newY)){
-                super.getCoords().addYCoord(stats.getSpeed());
-            }
-            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-            //     super.getCoords().subYCoord(100);
-            // }
-                break;
-            }
-            case A: {
-                if (keys.size() > index + 1){KeyPressed((index + 1)); }
-            if (keys.contains(KeyCode.D)){return;}
-            if (direction != Direction.left){
-                super.getCoords().subXCoord(stats.getSpeed());
-                if (facing == Direction.right){
-                    facing = Direction.left;
-                    super.getObserver().changeImage("media/Player/basewalk.gif", Direction.left);
-                    weaponObserver.changeImage(weaponImage, Direction.left);
+                
+                int newY = super.getY() - stats.getSpeed();
+                if (newY < -25 || obstacleInPath(super.getX(), newY)){
+                    super.getCoords().addYCoord(stats.getSpeed());
                 }
-            }
-            
-            int newX = super.getX() - stats.getSpeed();
-            if (newX < -stats.getSpeed() || obstacleInPath(newX, super.getY())){
-                super.getCoords().addXCoord(stats.getSpeed());
-            }
-            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-            //     super.getCoords().subXCoord(100);
-            // }
-                break;
-            }
-            case S: {
-                if (keys.size() > index + 1){KeyPressed((index + 1));} 
-            if (keys.contains(KeyCode.W)){return;}
-            if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
-
-            int newY = super.getY() + stats.getSpeed();
-            if (super.getY() > 700 || obstacleInPath(super.getX(), newY)){
-                super.getCoords().subYCoord(stats.getSpeed());
-            }
-            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-            //     super.getCoords().addYCoord(100);
-            // }
-            
-                break;
-            }
-            case D: {
-                if (keys.size() > index + 1){KeyPressed((index + 1));}
-            if (keys.contains(KeyCode.A)){return;}
-            if (direction != Direction.right){
-                super.getCoords().addXCoord(stats.getSpeed());
-                if (facing == Direction.left){
-                    facing = Direction.right;
-                    super.getObserver().changeImage("media/Player/basewalk.gif", Direction.right);
-                    weaponObserver.changeImage(weaponImage, Direction.right);
+                // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                //     super.getCoords().subYCoord(100);
+                // }
+                    break;
                 }
-            }
-            
-            int newX = super.getX() + stats.getSpeed();
-            if (super.getX() > 1200 || obstacleInPath(newX, super.getY())){
-                super.getCoords().subXCoord(stats.getSpeed());
-            }
+                case A: {
+                    if (keys.size() > index + 1){KeyPressed((index + 1)); }
+                if (keys.contains(KeyCode.D)){return;}
+                if (direction != Direction.left){
+                    super.getCoords().subXCoord(stats.getSpeed());
+                    if (facing == Direction.right){
+                        facing = Direction.left;
+                        super.getObserver().changeImage("media/Player/basewalk.gif", Direction.left);
+                        weaponObserver.changeImage(weaponImage, Direction.left);
+                    }
+                }
+                
+                int newX = super.getX() - stats.getSpeed();
+                if (newX < -25 || obstacleInPath(newX, super.getY())){
+                    super.getCoords().addXCoord(stats.getSpeed());
+                }
+                // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                //     super.getCoords().subXCoord(100);
+                // }
+                    break;
+                }
+                case S: {
+                    if (keys.size() > index + 1){KeyPressed((index + 1));} 
+                if (keys.contains(KeyCode.W)){return;}
+                if (direction != Direction.down){super.getCoords().addYCoord(stats.getSpeed());}
 
-            // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
-            //     super.getCoords().addXCoord(stats.getSpeed());
-            // }
-                break;
+                int newY = super.getY() + stats.getSpeed();
+                if (super.getY() > 725 || obstacleInPath(super.getX(), newY)){
+                    super.getCoords().subYCoord(stats.getSpeed());
+                }
+                // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                //     super.getCoords().addYCoord(100);
+                // }
+                
+                    break;
+                }
+                case D: {
+                    if (keys.size() > index + 1){KeyPressed((index + 1));}
+                if (keys.contains(KeyCode.A)){return;}
+                if (direction != Direction.right){
+                    super.getCoords().addXCoord(stats.getSpeed());
+                    if (facing == Direction.left){
+                        facing = Direction.right;
+                        super.getObserver().changeImage("media/Player/basewalk.gif", Direction.right);
+                        weaponObserver.changeImage(weaponImage, Direction.right);
+                    }
+                }
+                
+                int newX = super.getX() + stats.getSpeed();
+                if (super.getX() > 1225 || obstacleInPath(newX, super.getY())){
+                    super.getCoords().subXCoord(stats.getSpeed());
+                }
+
+                // if (cellWithin(super.getX()/100,super.getY()/100)!=Cell.empty){
+                //     super.getCoords().addXCoord(stats.getSpeed());
+                // }
+                    break;
+                }
+                // case SPACE: {
+                //     if (itemsNearby.size() > 0){
+                //         DroppedItem item = itemsNearby.get(0);
+                //         item.pickUp(this);
+                //         // super.getObserver().changeImage(i, d);
+                //         break;
+                //     }
+                // }
+                
+                case ESCAPE:
+                    if(!World.instance().getIsPaused())
+                    {
+                        World.instance().setIsPaused(true);
+                        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+                    }
+                    else
+                    {
+                        World.instance().setIsPaused(false);
+                        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+                    }
+            }
+        }
+        else
+        {
+            if(keys.get(index)==KeyCode.ESCAPE)
+            {
+                World.instance().setIsPaused(false);
+                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
             }
         }
     }
@@ -343,6 +405,7 @@ public class Player extends Entity {
             MeleeWeapon weapon = (MeleeWeapon) equippedItem;
             weapon.setDamage(stats.getStrength());
             weapon.setSpeed((int) stats.getSpeed() / 2);
+            enemies = World.instance().displayCurrentEntities();
             for(int i=0;i<enemies.size();i++)
             {
                 if(!(enemies.get(i) instanceof Boss))
@@ -379,8 +442,7 @@ public class Player extends Entity {
                 {
                     if(((Boss)enemies.get(i)).getState()==EnemyState.patrolling)
                     {
-                        System.out.println(((Boss)enemies.get(i)).getState());
-                        if(super.getX()>500&&super.getX()<750)
+                        if(super.getX()>300&&super.getX()<800)
                         {
                             enemies.get(i).takeDamage(weapon.getDamage(), facing);
                             SWORD_HIT.play();
@@ -438,7 +500,7 @@ public class Player extends Entity {
                 case right: super.getCoords().addXCoord(100);
             }
 
-            if (stats.getHealth() <= 0){super.performDie();}
+            if (stats.getHealth() <= 0){performDie();}
         }
         AudioClip PLAYER_HURT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/playerhurt.mp3").toString());
         PLAYER_HURT.play();
@@ -448,12 +510,14 @@ public class Player extends Entity {
     @Override
     public void performDie()
     {
-        World.instance().displayCurrentEntities().remove(this);
-        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
         HighScoreManager scores = new HighScoreManager();
+        System.out.println(score);
         try
         {
+            System.out.println(score);
             scores.load();
+            System.out.println(score);
+            System.out.println(scores.get(0).getScore());
             if(score>scores.get(0).getScore())
             {
                 scores.addScore(new HighScore(score, "Player"));
@@ -462,9 +526,12 @@ public class Player extends Entity {
         }
         catch(IOException e)
         {
+            System.out.println("couldn't Load");
             System.out.println(e.getMessage());
         }
-        
+        World.instance().displayCurrentEntities().remove(this);
+        dead.set(true);
+        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
     public Cell cellWithin(int row, int col){
         try{Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
@@ -516,6 +583,10 @@ public class Player extends Entity {
 
     public void setInventory(ArrayList<Item> inventory) {
         this.inventory = inventory;
+    }
+
+    public BooleanProperty getDead(){
+        return dead;
     }
 
     public String getWeaponImage() {

@@ -19,7 +19,7 @@ public class HighScoreManager {
         {
             for(int i=0;i<5;i++)
             {
-                scores[i]=new HighScore((i+1)*1000,"Default");
+                scores[i]=new HighScore((i+1)*100,"Default");
             }
         }
     }
@@ -51,7 +51,7 @@ public class HighScoreManager {
         {
             for(int i=0;i<5;i++)
             {
-                scores[i]=new HighScore((i+1)*1000,"Default");
+                scores[i]=new HighScore((i+1)*100,"Default");
             }
         }
     }
@@ -70,7 +70,7 @@ public class HighScoreManager {
     {
         for(int i=0;i<5;i++)
         {
-            scores[i]=new HighScore((i+1)*1000,"Default");
+            scores[i]=new HighScore((i+1)*100,"Default");
         }
     }
     public HighScore get(int i)

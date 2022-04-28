@@ -40,4 +40,16 @@ public class Octagon extends Enemy{
         Octagon t = new Octagon(size, x, y, homeScreen);
         return t;
     }
+    @Override
+    public void performDie(){
+        
+        System.out.println(World.instance().getCurrentLevel().getCurrentLevel());
+        if(!World.instance().getCamapign()&&World.instance().getCurrentLevel().getCurrentLevel()!=0)
+        {     
+            World.instance().setCurrentLevel(-1);
+            World.instance().passLevel();
+            World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+        }
+        super.performDie();
+    }
 }
