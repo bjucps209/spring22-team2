@@ -203,14 +203,13 @@ public class Level {
 
     public void serialize(DataOutputStream file) throws IOException {
         file.writeInt(currentLevel);
-
         file.writeInt(screens.size());
 
-        currentScreen.serialize(file);
+        // currentScreen.serialize(file);
 
-        for (Screen s : screens) {
-            s.serialize(file);
-        }
+        // for (Screen s : screens) {
+        //     s.serialize(file);
+        // }
 
         file.writeInt(currentRow);
         file.writeInt(currentCol);
@@ -219,18 +218,20 @@ public class Level {
 
     public static Level deserialize(DataInputStream file) throws IOException {
         int currentLevel = file.readInt();
-        Level lvl = new Level(currentLevel);
+        Level lvl = World.instance().getCurrentLevel();
+        Screen screen = lvl.getCurrentScreen();
 
         int numScreens = file.readInt();
 
-        Screen screen = Screen.deserialize(file);
+        // Screen screen2 = Screen.deserialize(file);
+        // screen.setEntities(screen2.getEntities());
+        // screen.setGrid(screen2.getGrid());
         lvl.setCurrentScreen(screen);
-        lvl.getScreens().add(screen);
 
-        for (int i = 0; i < numScreens; ++i) {
-            Screen s = Screen.deserialize(file);
-            lvl.getScreens().add(s);
-        }
+        // for (int i = 0; i < numScreens; ++i) {
+        //     Screen s = Screen.deserialize(file);
+        //     lvl.getScreens().(s);
+        // }
 
         lvl.setCurrentRow(file.readInt());
         lvl.setCurrentCol(file.readInt());
