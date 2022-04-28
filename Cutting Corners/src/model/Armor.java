@@ -11,15 +11,15 @@ import java.io.IOException;
 
 import javafx.util.Duration;
 
-public class Armor extends Equipment{
+public class Armor extends Equipment {
 
-    public Armor(String name, int Strength, int Health, int Speed, String image){
+    public Armor(String name, int Strength, int Health, int Speed, String image) {
         super(name, 0, EquipmentType.ARMOR, new Stats(Strength, Health, Speed), image);
     }
 
-
     /**
      * Saves the state of this class with the necessary variables to a binary file
+     * 
      * @param file
      * @throws IOException
      */

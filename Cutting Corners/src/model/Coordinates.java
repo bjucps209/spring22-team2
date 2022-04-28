@@ -5,6 +5,7 @@
 // Utilizes IntegerProperty for binding
 //----------------------------------
 package model;
+
 import java.util.Random;
 
 import javafx.beans.property.IntegerProperty;
@@ -14,15 +15,15 @@ public class Coordinates {
     private IntegerProperty xCoord = new SimpleIntegerProperty();
     private IntegerProperty yCoord = new SimpleIntegerProperty();
 
-    public Coordinates(int xCoord, int yCoord){
+    public Coordinates(int xCoord, int yCoord) {
         this.xCoord.set(xCoord);
         this.yCoord.set(yCoord);
     }
 
     // randomly generates coordinates using @rand and returning @coords
-    public static Coordinates randomCoords(int WIDTH, int HEIGHT){
+    public static Coordinates randomCoords(int WIDTH, int HEIGHT) {
         Random rand = new Random();
-        Coordinates coords = new Coordinates(0,0);
+        Coordinates coords = new Coordinates(0, 0);
         coords.setxCoord(rand.nextInt(WIDTH));
         coords.setyCoord(rand.nextInt(HEIGHT));
         return coords;
@@ -44,27 +45,27 @@ public class Coordinates {
         this.yCoord.set(yCoord);
     }
 
-    public void addXCoord(int addition){
+    public void addXCoord(int addition) {
         xCoord.set(xCoord.get() + addition);
     }
-    
-    public void subXCoord(int difference){
+
+    public void subXCoord(int difference) {
         xCoord.set(xCoord.get() - difference);
     }
 
-    public void addYCoord(int addition){
+    public void addYCoord(int addition) {
         yCoord.set(yCoord.get() + addition);
     }
 
-    public void subYCoord(int difference){
+    public void subYCoord(int difference) {
         yCoord.set(yCoord.get() - difference);
     }
 
-    public IntegerProperty getXProperty(){
+    public IntegerProperty getXProperty() {
         return xCoord;
     }
-    
-    public IntegerProperty getYProperty(){
+
+    public IntegerProperty getYProperty() {
         return yCoord;
     }
 }
