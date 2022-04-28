@@ -17,7 +17,7 @@ public class HighScoreTest {
         for(int i=0;i<5;i++)
         {
             assertEquals("Default", scores.get(i).getName());
-            assertEquals((i+1)*1000, scores.get(i).getScore());
+            assertEquals((i+1)*100, scores.get(i).getScore());
         }
     }
     @Test

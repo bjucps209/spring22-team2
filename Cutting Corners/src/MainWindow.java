@@ -165,6 +165,11 @@ public class MainWindow {
         timer.setCycleCount(50);
         timerCredits.setCycleCount(Timeline.INDEFINITE);
         highScores.setText("High Scores:\n");
+        try {
+            scores.load();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
         for(int i=0;i<5;i++)
         {
             highScores.setText(highScores.getText()+"\n"+scores.get(i).getName()+":\t"+scores.get(i).getScore());

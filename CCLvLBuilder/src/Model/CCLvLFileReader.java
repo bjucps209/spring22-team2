@@ -120,7 +120,7 @@ public class CCLvLFileReader {
                 Screen scr2 = lvlRef.getScreens().get(scrAdjStrs);
                 for (int adjScrDir = 0; adjScrDir < Directions; adjScrDir++) {
                     scr2.setAdjacentScreen(Direction.intToDir(adjScrDir),
-                            lvlRef.findScreen(adjStrIDCollection[scrAdjStrs][adjScrDir])); // Should handle null
+                    lvlRef.findScreen(adjStrIDCollection[scrAdjStrs][adjScrDir])); // Should handle null
                 }
             }
 

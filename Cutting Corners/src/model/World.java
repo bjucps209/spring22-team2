@@ -3,9 +3,12 @@ package model;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
+
+import javafx.scene.media.AudioClip;
 
 public class World {
     private static ArrayList<Level> campaign = new ArrayList<Level>();
@@ -19,6 +22,11 @@ public class World {
     private boolean userCampaign;
     private boolean activeBoss;
     private int levelTimer = 45000;
+    private AudioClip DESERT_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/desert.mp3").toString());
+    private AudioClip CAVEMAN_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/caveman.mp3").toString());
+    private AudioClip MEDIEVAL_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/medieval.mp3").toString());
+    private AudioClip SECRET_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/secret.mp3").toString());
+    AudioClip current = DESERT_MUSIC;
     private static Player Cirkyle = new Player(0, 0);
 
     public boolean isActiveBoss() {
@@ -52,14 +60,6 @@ public class World {
     }
 
     public void passLevel(){
-        if((levelTimer/60)/50>100)
-        {
-            World.instance().getPlayer().addScore(100);
-        }
-        else
-        {
-            World.instance().getPlayer().addScore((levelTimer/60)/50);
-        }
         ScreenObserver temp;
         if(currentLevel==-1)
         {
@@ -72,12 +72,46 @@ public class World {
             temp = getCurrentLevel().getObserver();
         }
         currentLevel++;
-        levelTimer=45000;
+        System.out.println(currentLevel);
+        
         getCurrentLevel().setCurrentScreen(getCurrentLevel().findScreen(getCurrentLevel().getScreens()
         .get(0).getLocation().getRow(), getCurrentLevel().getScreens().get(0).getLocation().getCol()));
         getCurrentLevel().placeEntity(getCurrentLevel().getScreens()
         .get(0).getLocation().getRow(), getCurrentLevel().getScreens().get(0).getLocation().getCol(), Cirkyle);
         getCurrentLevel().setObserver(temp);
+        if(World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("desert"))
+        {
+            current.stop();
+            current=DESERT_MUSIC;
+            current.play();
+        }
+        if(World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("caveman"))
+        {
+            current.stop();
+            current=CAVEMAN_MUSIC;
+            current.play();
+        }
+        if(World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("medieval"))
+        {
+            current.stop();
+            current=MEDIEVAL_MUSIC;
+            current.play();
+        }
+        if(World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("secret"))
+        {
+            current.stop();
+            current=SECRET_MUSIC;
+            current.play();
+        }
+        if((levelTimer/60)/50>100)
+        {
+            World.instance().getPlayer().addScore(100);
+        }
+        else
+        {
+            World.instance().getPlayer().addScore((levelTimer/60)/50);
+        }
+        levelTimer=45000;
 
     }
 
@@ -106,6 +140,8 @@ public class World {
         }
         return null;
     }
+
+    public static final String[] levellist = new String[] {"Levels/Sands1.dat"};
 
     public static void populate(){
         System.out.println(World.instance().getCamapign());
@@ -777,8 +813,24 @@ public class World {
             
 
             Cirkyle = new Player(100, 100);
-            screen1.addEntity(Cirkyle);
             World.instance().getCurrentLevel().setCurrentScreen(screen1);
+            World.instance().setDesertMusic();
+            getCurrentLevel().getBaseScreen().addEntity(Cirkyle);
+        } else {
+            for (String lvlName: levellist) {
+                try {
+                    Level nextlvl = Level.convertDummyLvL(LvLBFileReader.load(lvlName));
+                    World.campaign.add(nextlvl);
+                } catch (FileNotFoundException e) {
+                    System.out.println(lvlName + " file not found");
+                } catch (IOException ee) {
+                    System.out.println(lvlName + " did not load correctly");
+                } catch (Exception eee) {
+                    System.out.println("Your method is bad. (Level.blah.bleahwfoiej) ");
+                    eee.getStackTrace();
+                }
+
+            }
         }
     }
 
@@ -846,13 +898,30 @@ public class World {
         this.userCampaign=userCampaign;
     }
 
+    public AudioClip getMusic()
+    {
+        return current;
+    }
+
+    public void setMusic(AudioClip music)
+    {
+        current=music;
+    }
+
+    public void setDesertMusic()
+    {
+        current=DESERT_MUSIC;
+        current.play();
+    }
+
     public static void finishGame() {
-        //World.instance().isPaused=true;
+        World.instance().isPaused=true;
         HighScoreManager scores = new HighScoreManager();
         try
         {
             scores.load();
             scores.addScore(new HighScore(World.getPlayer().getScore(),"Player"));
+            scores.save();
         }
         catch (IOException e)
         {

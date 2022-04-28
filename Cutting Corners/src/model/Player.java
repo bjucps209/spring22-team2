@@ -510,12 +510,14 @@ public class Player extends Entity {
     @Override
     public void performDie()
     {
-        World.instance().displayCurrentEntities().remove(this);
-        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
         HighScoreManager scores = new HighScoreManager();
+        System.out.println(score);
         try
         {
+            System.out.println(score);
             scores.load();
+            System.out.println(score);
+            System.out.println(scores.get(0).getScore());
             if(score>scores.get(0).getScore())
             {
                 scores.addScore(new HighScore(score, "Player"));
@@ -524,8 +526,10 @@ public class Player extends Entity {
         }
         catch(IOException e)
         {
+            System.out.println("couldn't Load");
             System.out.println(e.getMessage());
         }
+        World.instance().displayCurrentEntities().remove(this);
         dead.set(true);
         World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
