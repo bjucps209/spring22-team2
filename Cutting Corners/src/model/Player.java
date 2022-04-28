@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
@@ -34,6 +36,7 @@ public class Player extends Entity {
     damageIndicator indicator;
     ArrayList<DroppedItem> itemsNearby = new ArrayList<DroppedItem>();
     ArrayList<Effect> effects = new ArrayList<Effect>();
+    BooleanProperty dead = new SimpleBooleanProperty(false);
 
     public Player(int xCoord, int yCoord){
         super(xCoord, yCoord, playerImage, 500);
@@ -497,7 +500,7 @@ public class Player extends Entity {
                 case right: super.getCoords().addXCoord(100);
             }
 
-            if (stats.getHealth() <= 0){super.performDie();}
+            if (stats.getHealth() <= 0){performDie();}
         }
         AudioClip PLAYER_HURT = new AudioClip(getClass().getResource("/media/Sounds/Soundeffects/playerhurt.mp3").toString());
         PLAYER_HURT.play();
@@ -523,7 +526,8 @@ public class Player extends Entity {
         {
             System.out.println(e.getMessage());
         }
-        
+        dead.set(true);
+        World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
     }
     public Cell cellWithin(int row, int col){
         try{Cell cell = World.instance().getCurrentLevel().getCurrentScreen().getGrid()[row][col];
@@ -575,6 +579,10 @@ public class Player extends Entity {
 
     public void setInventory(ArrayList<Item> inventory) {
         this.inventory = inventory;
+    }
+
+    public BooleanProperty getDead(){
+        return dead;
     }
 
     public String getWeaponImage() {

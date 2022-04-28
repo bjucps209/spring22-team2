@@ -15,12 +15,27 @@ public class Level {
     private int currentCol;
     private int currentLevel;
     ScreenObserver observer;
+    private Screen baseScreen;
     Random rand = new Random();
 
     public Level(int currentLevel){
         // generateEnemies();
         this.currentLevel = currentLevel;
     }
+
+    
+
+    public Screen getBaseScreen() {
+        return baseScreen;
+    }
+
+
+
+    public void setBaseScreen(Screen baseScreen) {
+        this.baseScreen = baseScreen;
+    }
+
+
 
     public void setObserver(ScreenObserver observer){
         this.observer = observer;

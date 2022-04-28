@@ -4,6 +4,8 @@ import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,10 +48,12 @@ public class GameWindow {
     ImageView saveExitView = new ImageView(SAVEEXIT_BTN);
     ImageView exitView = new ImageView(EXIT_BTN);
     VBox effectBox = new VBox();
+    BooleanProperty playerDead = new SimpleBooleanProperty(false);
     
 
     @FXML
     public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,int difficulty) throws IOException{
+        
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -66,7 +70,14 @@ public class GameWindow {
         gameWindow.setMinHeight(size.getHeight());
         gameWindow.getChildren().clear();
         
-
+        if (playerDead.get()){
+            int currentLevel = World.instance().getCurrentLevelNumber();
+            World.instance().reset();
+            World.instance().setCurrentLevel(currentLevel);
+            World.instance().getCurrentLevel().setCurrentScreen(
+                World.instance().getCurrentLevel().getBaseScreen());
+            playerDead.set(false);
+        }
 
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         
@@ -120,6 +131,7 @@ public class GameWindow {
                 displayScoreAndExperience(player);
                     player.getObserver().changeImage(player.getImage(), player.getFacing());
                     player.getWeaponObserver().changeImage(player.getWeaponImage(), player.getFacing());
+                playerDead.bindBidirectional(player.getDead());
             }
             if (entity instanceof Enemy){
                 Enemy enemy = (Enemy) entity;

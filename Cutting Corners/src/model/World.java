@@ -47,6 +47,7 @@ public class World {
         if (world == null){
             world = new World();
             populate();
+            System.out.println('x');
         }
         return world;
     }
@@ -81,9 +82,13 @@ public class World {
 
     }
 
-    public Level getCurrentLevel(){
+    public static Level getCurrentLevel(){
         Level current = campaign.get(currentLevel);
         return current;
+    }
+
+    public int getCurrentLevelNumber(){
+        return currentLevel;
     }
 
     public int getNumLevels()
@@ -104,6 +109,7 @@ public class World {
     }
 
     public static void populate(){
+        System.out.println(World.instance().getCamapign());
         if(!World.instance().getCamapign())
         {
             UsableItem item1 = new UsableItem("Health Potion", 2, 1, 5, 0, 5, 0, "media/Player/Effects/health.png");
@@ -314,6 +320,7 @@ public class World {
             secretLevel.addScreen(ss29);
             secretLevel.addScreen(ss30);
             secretLevel.addScreen(secretBossRoom);
+            secretLevel.setBaseScreen(ss1);
 
             world.campaign.add(secretLevel);
 
@@ -367,6 +374,7 @@ public class World {
             level1.addScreen(screen4);
             level1.addScreen(bossScreen);
             level1.setCurrentScreen(level1.findScreen(0, 0));
+            level1.setBaseScreen(screen1);
             world.campaign.add(level1);
 
             Level level2 = new Level(2);
@@ -454,6 +462,7 @@ public class World {
             level2.addScreen(screen12);
             level2.addScreen(screen13);
             level2.addScreen(bossScreen2);
+            level2.setBaseScreen(screen5);
 
             world.campaign.add(level2);
 
@@ -599,12 +608,13 @@ public class World {
             level3.addScreen(screen25);
             level3.addScreen(screen26);
             level3.addScreen(bossRoom3);
+            level3.setBaseScreen(screen14);
 
             world.campaign.add(level3);
             
 
             Cirkyle = new Player(100, 100);
-            level1.placeEntity(0, 0, Cirkyle);
+            getCurrentLevel().getBaseScreen().addEntity(Cirkyle);
         }
     }
 
