@@ -39,7 +39,7 @@
   }
 
   .inventory{
-    border: 3px black;
+    /*border: 3px black;*/
   }
 
   .health{
@@ -51,12 +51,12 @@
   .notification{
     background-color: white;
     -fx-font-size: 15px;
-    border: 8px black;
+    /*border: 8px black;*/
   }
 
   .died {
     -fx-text-fill: orange;
     -fx-font-size: 40px;
-    border: 8px yellow;
-    font:600;
+    /*border: 8px yellow;*/
+    -fx-font-size:600px;
   }

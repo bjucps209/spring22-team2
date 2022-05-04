@@ -5,10 +5,12 @@
 <?import javafx.scene.image.*?>
 
 
-<VBox fx:controller="NameWindow" fx:id="NameWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css" prefHeight="800" prefWidth="1280">
+<VBox fx:controller="NameWindow" fx:id="NameWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css" prefHeight="150" prefWidth="300"
+spacing="10" alignment="CENTER">
     <Label text="Enter Your Name"/>
     <TextField fx:id="txtName"/>
     <HBox>
         <Button fx:id="btnConfirm" onAction="#onConfirmPressed" text="Confirm"/>
         <Button fx:id="btnCancel" onAction="#onCancelPressed" text="Cancel"/>
+    </HBox>
 </VBox>

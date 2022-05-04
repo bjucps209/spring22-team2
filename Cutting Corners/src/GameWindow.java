@@ -54,7 +54,8 @@ public class GameWindow {
     
 
     @FXML
-    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,IntegerProperty difficulty,String name) throws IOException{
+    public void Initialize(boolean isLoaded,boolean userCampaign,boolean cheatMode,IntegerProperty difficulty,String name) throws IOException{
+        World.DifficultyProperty().bind(difficulty);
         ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         if(ratioHeight>1)
         {
@@ -110,7 +111,6 @@ public class GameWindow {
         World.instance().setLoaded(isLoaded);
         World.instance().setCheatMode(cheatMode);
         World.instance().setCampaign(userCampaign);
-        World.instance().DifficultyProperty().bind(difficulty);
         World.instance().setPlayerName(name);
         
         for (Entity entity: entities){

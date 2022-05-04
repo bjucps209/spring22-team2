@@ -36,6 +36,7 @@ public class NameWindow {
     @FXML
     void onConfirmPressed(ActionEvent e) throws IOException
     {
+        name = txtName.getText();
         var loader = new FXMLLoader(getClass().getResource("GameWindow.fxml"));
         var scene = new Scene(loader.load());
         var stage = new Stage();
@@ -49,6 +50,7 @@ public class NameWindow {
         
         gameWindow.updater();
         gameWindow.playerUpdater();
+        txtName.getScene().getWindow().hide();
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
             @Override
@@ -119,6 +121,5 @@ public class NameWindow {
         stage.getIcons().add(new Image("media/windowicon.png"));
         stage.show();
         MainWindow mainWindow = loader.getController();
-        mainWindow.initialize();
     }
 }

@@ -23,7 +23,7 @@ import javafx.scene.media.AudioClip;
 public class World {
     private static ArrayList<Level> campaign = new ArrayList<Level>();
     public static int currentLevel = 1;
-    private IntegerProperty difficulty = new SimpleIntegerProperty(2);
+    private static IntegerProperty difficulty = new SimpleIntegerProperty(2);
     private static World world;
     private ScreenObserver observer;
     private boolean isPaused = false;
@@ -32,7 +32,7 @@ public class World {
     private boolean userCampaign;
     private boolean activeBoss;
     private int levelTimer = 45000;
-    private String playerName;
+    private static String playerName = "";
     private Screen previousScreen = null;
     private AudioClip DESERT_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/desert.mp3").toString());
     private AudioClip CAVEMAN_MUSIC = new AudioClip(
@@ -882,8 +882,8 @@ public class World {
     public int getDifficulty() {
         return world.difficulty.get();
     }
-    public IntegerProperty DifficultyProperty(){
-        return world.difficulty;
+    public static IntegerProperty DifficultyProperty(){
+        return difficulty;
     }
 
     public void setCurrentLevel(int currentLevel) {
@@ -902,7 +902,7 @@ public class World {
         this.isLoaded = isLoaded;
     }
 
-    public void setCheatMode(Boolean cheatMode) {
+    public void setCheatMode(boolean cheatMode) {
         this.cheatMode = cheatMode;
     }
 
@@ -910,7 +910,7 @@ public class World {
         return cheatMode;
     }
 
-    public void setCampaign(Boolean userCampaign) {
+    public void setCampaign(boolean userCampaign) {
         this.userCampaign = userCampaign;
     }
 
@@ -952,12 +952,12 @@ public class World {
 
     public void setPlayerName(String name)
     {
-        world.playerName = name;
+        this.playerName = name;
     }
 
     public String getPlayerName()
     {
-        return world.playerName;
+        return playerName;
     }
 
     public boolean getIsPaused() {

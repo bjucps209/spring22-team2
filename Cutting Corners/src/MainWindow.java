@@ -66,9 +66,9 @@ public class MainWindow {
     Timeline timer = new Timeline(keyFrame);
     KeyFrame keyFrameCredits = new KeyFrame(Duration.millis(10),e->rollCredits());
     Timeline timerCredits = new Timeline(keyFrameCredits);
-    Boolean userCampaign = false;
-    Boolean cheatMode = false;
-    Boolean isLoaded = false;
+    boolean userCampaign = false;
+    boolean cheatMode = false;
+    boolean isLoaded = false;
     IntegerProperty difficulty = new SimpleIntegerProperty(2);
     Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
     double ratioWidth = size.getWidth()/1280;
@@ -396,6 +396,8 @@ public class MainWindow {
         pane.getScene().getWindow().hide();
         var stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("Cutting Corners");
+        stage.getIcons().add(new Image("media/windowicon.png"));
         stage.show();
         
         NameWindow nameWindow = loader.getController();
