@@ -54,8 +54,8 @@ public class GameWindow {
     
 
     @FXML
-    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,IntegerProperty difficulty) throws IOException{
-        
+    public void Initialize(boolean isLoaded,Boolean userCampaign,Boolean cheatMode,IntegerProperty difficulty,String name) throws IOException{
+        ArrayList<Entity> entities = World.instance().displayCurrentEntities();
         if(ratioHeight>1)
         {
             size = new Dimension((int)size.getWidth(), 800);
@@ -70,21 +70,33 @@ public class GameWindow {
         vBox.setMinHeight(size.getHeight());
         gameWindow.setMinWidth(size.getWidth());
         gameWindow.setMinHeight(size.getHeight());
-        gameWindow.getChildren().clear();
+        ArrayList<Node> toRemove = new ArrayList<>();
+        for(Node node:gameWindow.getChildren())
+        {
+            if(node.getUserData() instanceof Dodecahedron)
+            {
+                if(!((Dodecahedron)node.getUserData()).isPlayingGif())
+                {
+                    toRemove.add(node);
+                }
+            }
+            else
+            {
+                toRemove.add(node);
+            }
+        }
+        gameWindow.getChildren().removeAll(toRemove);
+        //gameWindow.getChildren().clear();
         
         if (playerDead.get()){
             World.instance().setIsPaused(true);
         }
-
-        ArrayList<Entity> entities = World.instance().displayCurrentEntities();
-        
-
         gameWindow.getChildren().add(effectBox);
         effectBox.relocate(950*ratioWidth, 200*ratioHeight);
 
         World.instance().getCurrentLevel().setObserver( me -> {
             try {
-                Initialize(isLoaded,userCampaign,cheatMode,difficulty);
+                Initialize(isLoaded,userCampaign,cheatMode,difficulty,name);
             } catch (IOException e) {}
         } );
         backgroundView.setImage(new Image(World.instance().getCurrentLevel().getCurrentScreen().getFilename()));
@@ -99,127 +111,138 @@ public class GameWindow {
         World.instance().setCheatMode(cheatMode);
         World.instance().setCampaign(userCampaign);
         World.instance().DifficultyProperty().bind(difficulty);
+        World.instance().setPlayerName(name);
         
         for (Entity entity: entities){
             EntityImageView entityImage = new EntityImageView(new Image(entity.getImage()));
-        entityImage.setImage(new Image(entity.getImage()));
-        entityImage.setX(entity.getX());
-        entityImage.setY(entity.getY());
-        entityImage.xProperty().bind(entity.getXProperty());
-        entityImage.yProperty().bind(entity.getYProperty());
-        entityImage.setUserData(entity);
-        entity.setObserver(entityImage);
-        //entityImage.setFitWidth(entity.getSize()*200*ratioWidth);
-        entityImage.setPreserveRatio(true);
-        if(entity instanceof Boss)
-        {
-            if(!(((Boss)entity) instanceof Circle))
+            entityImage.setImage(new Image(entity.getImage()));
+            entityImage.setX(entity.getX());
+            entityImage.setY(entity.getY());
+            entityImage.xProperty().bind(entity.getXProperty());
+            entityImage.yProperty().bind(entity.getYProperty());
+            entityImage.setUserData(entity);
+            entity.setObserver(entityImage);
+            //entityImage.setFitWidth(entity.getSize()*200*ratioWidth);
+            entityImage.setPreserveRatio(true);
+            if(entity instanceof Boss)
             {
-                entityImage.setFitWidth(1280);
+                if(!(((Boss)entity) instanceof Circle))
+                {
+                    entityImage.setFitWidth(1280);
+                }
             }
-        }
             
-        gameWindow.getChildren().add(entityImage);
-            //displayEntity(entity);
-            if(entity instanceof Player)
+            if(entity instanceof Dodecahedron)
             {
-                Player player = (Player) entity;
-                displayPlayerWeapon(player);
-                displayPlayerHealthBar(player);
-                displayScoreAndExperience(player);
-                    player.getObserver().changeImage(player.getImage(), player.getFacing());
-                    player.getWeaponObserver().changeImage(player.getWeaponImage(), player.getFacing());
-                playerDead.bindBidirectional(player.getDead());
+                if(!((Dodecahedron)entity).isPlayingGif())
+                {
+                    gameWindow.getChildren().add(entityImage);
+                }
             }
-            if (entity instanceof Enemy){
-                Enemy enemy = (Enemy) entity;
-                displayEnemyHealthBars(enemy);
+            else
+            {
+                gameWindow.getChildren().add(entityImage);
             }
-            if (entity instanceof DroppedItem){
-                DroppedItem item = (DroppedItem) entity;
-                showItem(item);
+                //displayEntity(entity);
+                if(entity instanceof Player)
+                {
+                    Player player = (Player) entity;
+                    displayPlayerWeapon(player);
+                    displayPlayerHealthBar(player);
+                    displayScoreAndExperience(player);
+                        player.getObserver().changeImage(player.getImage(), player.getFacing());
+                        player.getWeaponObserver().changeImage(player.getWeaponImage(), player.getFacing());
+                    playerDead.bindBidirectional(player.getDead());
+                }
+                if (entity instanceof Enemy){
+                    Enemy enemy = (Enemy) entity;
+                    displayEnemyHealthBars(enemy);
+                }
+                if (entity instanceof DroppedItem){
+                    DroppedItem item = (DroppedItem) entity;
+                    showItem(item);
+                }
             }
-        }
 
-        Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
-            displayObstacles(currentScreen);
-        
-        ratioImage(backgroundView);
-        pauseView.relocate(0, 0);
-        resumeView.relocate(40, 50);
-        saveView.relocate(40, 300);
-        saveExitView.relocate(640, 50);
-        exitView.relocate(640, 300);
-        playerDied.getStyleClass().add("title");
-        playerDied.relocate(350, 550);
-        
-        if (playerDead.get()){
-            effectBox.getChildren().clear();
-            resumeView.setOnMouseClicked(e-> {
-                int currentLevel = World.instance().getCurrentLevelNumber();
-                World.instance().reset();
-                World.instance().setCurrentLevel(currentLevel);
-                World.instance().getCurrentLevel().setCurrentScreen(
-                    World.instance().getCurrentLevel().getBaseScreen());
-                playerDead.set(false);
-                World.instance().setIsPaused(false);
-                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+            Screen currentScreen = World.instance().getCurrentLevel().getCurrentScreen();
+                displayObstacles(currentScreen);
+            
+            ratioImage(backgroundView);
+            pauseView.relocate(0, 0);
+            resumeView.relocate(40, 50);
+            saveView.relocate(40, 300);
+            saveExitView.relocate(640, 50);
+            exitView.relocate(640, 300);
+            playerDied.getStyleClass().add("title");
+            playerDied.relocate(350, 550);
+            
+            if (playerDead.get()){
+                effectBox.getChildren().clear();
+                resumeView.setOnMouseClicked(e-> {
+                    int currentLevel = World.instance().getCurrentLevelNumber();
+                    World.instance().reset();
+                    World.instance().setCurrentLevel(currentLevel);
+                    World.instance().getCurrentLevel().setCurrentScreen(
+                        World.instance().getCurrentLevel().getBaseScreen());
+                    playerDead.set(false);
+                    World.instance().setIsPaused(false);
+                    World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
+                });
+            }
+            else
+            {
+                resumeView.setOnMouseClicked(e->{World.instance().setIsPaused(false);
+                    World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());World.instance().playMusic();});
+            }
+            saveView.setOnMouseClicked(e->{
+                try {
+                    World.instance().save("savegame.dat");
+                } catch (IOException e1) {
+                    System.out.println("Oops Lol");
+                }
             });
-        }
-        else
-        {
-            resumeView.setOnMouseClicked(e->{World.instance().setIsPaused(false);
-                World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());});
-        }
-        saveView.setOnMouseClicked(e->{
+            saveExitView.setOnMouseClicked(e->{
+                try {
+                    World.instance().save("savegame.dat");
+                    World.reset();
+                    Platform.exit();
+                    //((Stage)gameWindow.getScene().getWindow()).close();
+
+                } catch (IOException e1) {
+                    System.out.println("Oops Lol");
+                }
+            });
+            exitView.setOnMouseClicked(e->{var loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
+            Scene scene;
             try {
-                World.instance().save("savegame.dat");
-            } catch (IOException e1) {
-                System.out.println("Oops Lol");
-            }
-        });
-        saveExitView.setOnMouseClicked(e->{
-            try {
-                World.instance().save("savegame.dat");
-                World.reset();
+                scene = new Scene(loader.load());
+                var stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("Cutting Corners Release Candidate");
+                stage.getIcons().add(new Image("media/windowicon.png"));
+                stage.show();
+                MainWindow mainWindow = loader.getController();
                 Platform.exit();
+                //World.reset();
                 //((Stage)gameWindow.getScene().getWindow()).close();
-
             } catch (IOException e1) {
-                System.out.println("Oops Lol");
-            }
-        });
-        exitView.setOnMouseClicked(e->{var loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
-        Scene scene;
-        try {
-            scene = new Scene(loader.load());
-            var stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Cutting Corners Release Candidate");
-            stage.getIcons().add(new Image("media/windowicon.png"));
-            stage.show();
-            MainWindow mainWindow = loader.getController();
-            Platform.exit();
-            //World.reset();
-            //((Stage)gameWindow.getScene().getWindow()).close();
-        } catch (IOException e1) {
-            System.out.println("Couldn't Open main");
-        }});
-        gameWindow.getChildren().add(pauseView);
-        gameWindow.getChildren().add(resumeView);
-        gameWindow.getChildren().add(saveView);
-        gameWindow.getChildren().add(saveExitView);
-        gameWindow.getChildren().add(exitView);
-        gameWindow.getChildren().add(playerDied);
+                System.out.println("Couldn't Open main");
+            }});
+            gameWindow.getChildren().add(pauseView);
+            gameWindow.getChildren().add(resumeView);
+            gameWindow.getChildren().add(saveView);
+            gameWindow.getChildren().add(saveExitView);
+            gameWindow.getChildren().add(exitView);
+            gameWindow.getChildren().add(playerDied);
 
-        playerDied.setVisible(playerDead.get());
-        pauseView.setVisible(World.instance().getIsPaused());
-        resumeView.setVisible(World.instance().getIsPaused());
-        saveExitView.setVisible(World.instance().getIsPaused());
-        saveView.setVisible(World.instance().getIsPaused());
-        exitView.setVisible(World.instance().getIsPaused());
+            playerDied.setVisible(playerDead.get());
+            pauseView.setVisible(World.instance().getIsPaused());
+            resumeView.setVisible(World.instance().getIsPaused());
+            saveExitView.setVisible(World.instance().getIsPaused());
+            saveView.setVisible(World.instance().getIsPaused());
+            exitView.setVisible(World.instance().getIsPaused());
 
-    }
+        }
 
     @FXML
     void updater(){

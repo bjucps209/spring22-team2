@@ -335,21 +335,25 @@ public class Player extends Entity {
         Level currentLevel = World.instance().getCurrentLevel();
         if (super.getCoords().getxCoord() > 1100 && currentLevel.getCurrentScreen().getRight() != null) {
             currentLevel.goRight();
+            super.getObserver().changeImage("media/Player/basewalk.gif", facing);
         } else if (super.getCoords().getxCoord() > 1100) {
             return Direction.right;
         }
         if (super.getCoords().getxCoord() <= 0 && currentLevel.getCurrentScreen().getLeft() != null) {
             currentLevel.goLeft();
+            super.getObserver().changeImage("media/Player/basewalk.gif", facing);
         } else if (super.getCoords().getxCoord() <= 0) {
             return Direction.left;
         }
         if (super.getCoords().getyCoord() >= 700 && currentLevel.getCurrentScreen().getDown() != null) {
             currentLevel.goDown();
+            super.getObserver().changeImage("media/Player/basewalk.gif", facing);
         } else if (super.getCoords().getyCoord() >= 700) {
             return Direction.down;
         }
         if (super.getCoords().getyCoord() <= 0 && currentLevel.getCurrentScreen().getUp() != null) {
             currentLevel.goUp();
+            super.getObserver().changeImage("media/Player/basewalk.gif", facing);
         } else if (super.getCoords().getyCoord() <= 0) {
             return Direction.up;
         }
@@ -475,14 +479,11 @@ public class Player extends Entity {
     @Override
     public void performDie() {
         HighScoreManager scores = new HighScoreManager();
-        System.out.println(score);
+        World.instance().getMusic().stop();
         try {
-            System.out.println(score);
             scores.load();
-            System.out.println(score);
-            System.out.println(scores.get(0).getScore());
             if (score > scores.get(0).getScore()) {
-                scores.addScore(new HighScore(score, "Player"));
+                scores.addScore(new HighScore(score, World.instance().getPlayerName()));
                 scores.save();
             }
         } catch (IOException e) {

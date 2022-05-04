@@ -27,8 +27,8 @@ public class Hexagon extends Enemy {
         if (World.instance().getPlayer() != null) {
             super.getObserver().changeImage(attacking, Direction.left);
             Projectile fireball = new Projectile(super.getStats().getStrength(), 5, super.getX(), super.getY(), 500,
-                    "media/Player/fireball.png", 2, World.instance().getPlayer().getX(),
-                    World.instance().getPlayer().getY(), 2);
+                    "media/Player/fireball.png", 2, World.instance().getPlayer().getX()+100,
+                    World.instance().getPlayer().getY()+100, 2);
             World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
             World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
             super.setAttackCount(150);

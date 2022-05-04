@@ -18,7 +18,7 @@ public class Pyramid extends Boss {
 
     public Pyramid(int size, int xCoord, int yCoord, Screen homeScreen) {
         super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 12),
-                12 * World.instance().getDifficulty(), 100);
+                12, 100);
     }
 
     // Performs the attack of the boss. 1, 2, or 3

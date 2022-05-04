@@ -33,6 +33,11 @@ public class Projectile extends Entity {
     // targety
     @Override
     public void performMovement() {
+        // while(targetX<1280&&targetY<800)
+        // {
+        //     targetX++;
+        //     targetY++;
+        // }        
         if (Math.abs(super.getX() - targetX) >= Math.abs(super.getY() - targetY)) {
             if (super.getX() < targetX) {
                 super.getCoords().setxCoord(super.getX() + speed);
@@ -47,7 +52,7 @@ public class Projectile extends Entity {
             }
         }
         if (Math.sqrt((Math.pow(super.getX() - World.instance().getPlayer().getX(), 2)
-                + (Math.pow(super.getY() - World.instance().getPlayer().getY(), 2)))) < 50) {
+                + (Math.pow(super.getY() - World.instance().getPlayer().getY(), 2)))) < 100) {
             World.instance().getPlayer().takeDamage(damage, Direction.left);
             this.performDie();
         }

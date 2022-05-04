@@ -14,7 +14,7 @@ public class Circle extends Boss {
 
     public Circle(int size, int xCoord, int yCoord, Screen homeScreen) {
         super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 20),
-                20 * World.instance().getDifficulty(), 500);
+                20, 500);
     }
 
     // moves according to how close the player is

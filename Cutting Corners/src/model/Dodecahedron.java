@@ -13,6 +13,7 @@ public class Dodecahedron extends Boss{
     int attackCount =150;
     int currentAttack=0;
     EnemyState state = EnemyState.patrolling;
+    boolean playingGif =false;
 
     public Dodecahedron(int size, int xCoord, int yCoord, Screen homeScreen){
         super(3, size, xCoord, yCoord, image, homeScreen, 700, new Stats(10, 9, 11), 11, 200);
@@ -28,6 +29,8 @@ public class Dodecahedron extends Boss{
             state=EnemyState.patrolling;
             currentAttack=0;
             super.getObserver().changeImage(image, Direction.left);
+            playingGif=false;
+            World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
         }
         attackCount--;
         switch(state)
@@ -42,6 +45,7 @@ public class Dodecahedron extends Boss{
             case attacking:
                 if(World.instance().getPlayer()!=null)
                 {   
+                    playingGif=true;
                     switch((int)(Math.random()*3)+1)
                     {
                         case 1:
@@ -135,7 +139,9 @@ public class Dodecahedron extends Boss{
         {
             if(attackCount>175&&attackCount<225&&attackCount%5==0)
             {
-                Projectile fireball = new Projectile(2*World.instance().getDifficulty(), 5, 640, 200, 500, "media/Player/fireball.png", 2, World.instance().getPlayer().getX(), World.instance().getPlayer().getY(), 2);
+                int displacementX = (int)(Math.random()*100+1)-50;
+                int displacementY = (int)(Math.random()*100+1)-50;
+                Projectile fireball = new Projectile(2*World.instance().getDifficulty(), 5, 640+displacementX, 200+displacementY, 500, "media/Player/fireball.png", 2, World.instance().getPlayer().getX(), World.instance().getPlayer().getY(), 2);
                 World.instance().getCurrentLevel().getCurrentScreen().addEntity(fireball);
                 World.instance().getCurrentLevel().getObserver().Initialize(World.instance().isLoaded());
             }
@@ -147,6 +153,11 @@ public class Dodecahedron extends Boss{
     public EnemyState getState()
     {
         return state;
+    }
+
+    public boolean isPlayingGif()
+    {
+        return playingGif;
     }
 
     @Override

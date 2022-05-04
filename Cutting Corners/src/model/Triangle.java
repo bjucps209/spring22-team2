@@ -25,6 +25,10 @@ public class Triangle extends Enemy{
         // int speed = (int) 30 / size;
         int speed = 20 / size;
         int strength = (int) size / 2;
+        if(strength<1)
+        {
+            strength=1;
+        }
         int health = (int) size;
         return new Stats(strength, speed, health);
     }

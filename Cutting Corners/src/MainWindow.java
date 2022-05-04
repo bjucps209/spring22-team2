@@ -3,7 +3,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import javafx.animation.AnimationTimer;
+import javax.swing.JOptionPane;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
@@ -12,9 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Dimension2D;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -28,12 +27,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Coordinates;
-import model.Direction;
 import model.HighScoreManager;
 import model.PlayerState;
 import model.World;
@@ -192,7 +188,8 @@ public class MainWindow {
         "Seth Meyer\nSerialization:\t\t\t\t\t\t\t\tPaul Alger\nAuxillary Screens:\t\t\t\t\t\t\tEthan Collins\nNarative Lead:\t\t\t\t\t\t\t"+
         "Ethan Collins\n\n\nMedia\n\nCharacter Sprites:\t\t\t\t\t\t\tEthan Collins\nEnemy Sprites:\t\t\t\t\t\t\tEthan Collins\nBoss Sprites:"+
         "\t\t\t\t\t\t\t\tEthan Collins\nTerrain:\t\t\t\t\t\t\t\t\tEthan Collins\nInterface Visuals:\t\t\t\t\t\t\tEthan Collins\n\nObstacles\n\nInspiration for the obstacles"+
-        " came from the stamp feature at pixilart.com\n\nStaring Cirkyle as himself\n\nMusic\n\n"+
+        "\ncame from the stamp feature"+
+        " at pixilart.com\n\nStaring Cirkyle as himself\n\nMusic\n\n"+
         "Title Music:        Magic Tavern - Alexander Nakarada\nCaveman Level:  Little World - Nul Tiel Records\nEgypt Level:\t    Reverie - Nul"+
         " Tiel Records\nMedieval Level:  Fairy of the Forest - Alexander Nakarada\nSecret Level:\t    Lurking in the Shadows - Scott Holmes Music\n\n"+
         "Sound Effects\n\nBow Shoot:\t\t\t\tK6EQG35-bow-arrow-shot\nSword Attack:\t\t\t\tmixkit-dagger-woosh-1487\nSword Hit:\t\t\t\t"+
@@ -390,79 +387,89 @@ public class MainWindow {
     }
     @FXML
     void onStartClicked() throws IOException{
+        //String name = JOptionPane.showInputDialog("Enter your Name");
+        String name = "Ethan";
         startView.setImage(START_BUTTON);
-        var loader = new FXMLLoader(getClass().getResource("GameWindow.fxml"));
+        TITLE_MUSIC.stop();
+        var loader = new FXMLLoader(getClass().getResource("NameWindow.fxml"));
         var scene = new Scene(loader.load());
+        pane.getScene().getWindow().hide();
         var stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("Cutting Corners Release Candidate");
-        stage.getIcons().add(new Image("media/windowicon.png"));
         stage.show();
+        
+        NameWindow nameWindow = loader.getController();
+        nameWindow.initialize(isLoaded,userCampaign,cheatMode,difficulty);
+        // var loader = new FXMLLoader(getClass().getResource("GameWindow.fxml"));
+        // var scene = new Scene(loader.load());
+        // var stage = new Stage();
+        // stage.setScene(scene);
+        // stage.setTitle("Cutting Corners");
+        // stage.getIcons().add(new Image("media/windowicon.png"));
+        // stage.show();
 
-        GameWindow gameWindow = loader.getController();
-        //gameWindow.Initialize();
-        gameWindow.Initialize(isLoaded, userCampaign,cheatMode,difficulty);
-        // gameWindow.Initialize(defaultCampaign);
-        pane.getScene().getWindow().hide();
-        TITLE_MUSIC.stop();
-        gameWindow.updater();
-        gameWindow.playerUpdater();
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        // GameWindow gameWindow = loader.getController();
+        // gameWindow.Initialize(isLoaded, userCampaign,cheatMode,difficulty,name);
+        // pane.getScene().getWindow().hide();
+        // TITLE_MUSIC.stop();
+        // gameWindow.updater();
+        // gameWindow.playerUpdater();
+        // scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
-            @Override
-            public void handle(KeyEvent event){
-                if(World.instance().getPlayer()!=null)
-                {
-                    KeyCode keyPressed = event.getCode();
-                    if (keyPressed == KeyCode.SPACE){
-                        World.instance().getPlayer().setAttackCount(35);
-                        World.instance().getPlayer().setState(PlayerState.drinking);
-                    }
-                    else{
-                        World.instance().getPlayer().removeKey(event.getCode());
+        //     @Override
+        //     public void handle(KeyEvent event){
+        //         if(World.instance().getPlayer()!=null)
+        //         {
+        //             KeyCode keyPressed = event.getCode();
+        //             if (keyPressed == KeyCode.SPACE){
+        //                 World.instance().getPlayer().setAttackCount(35);
+        //                 World.instance().getPlayer().setState(PlayerState.drinking);
+        //             }
+        //             else{
+        //                 World.instance().getPlayer().removeKey(event.getCode());
                         
-                        World.instance().getPlayer().addKey(event.getCode());
-                    }
-                }
-            }
-        });
+        //                 World.instance().getPlayer().addKey(event.getCode());
+        //             }
+        //         }
+        //     }
+        // });
 
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+        // scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             
-            @Override
-            public void handle(KeyEvent event){
-                if(World.instance().getPlayer()!=null)
-                {
-                    World.instance().getPlayer().removeKey(event.getCode());
-                }
-            }
-        });
+        //     @Override
+        //     public void handle(KeyEvent event){
+        //         if(World.instance().getPlayer()!=null)
+        //         {
+        //             World.instance().getPlayer().removeKey(event.getCode());
+        //         }
+        //     }
+        // });
 
-        scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
+        // scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
             
-            @Override
-            public void handle(MouseEvent event){
-                int xCoord = (int) event.getX();
-                int yCoord = (int) event.getY();
-                if(World.instance().getPlayer()!=null)
-                {
-                    World.instance().getPlayer().setMouseCoordinates(new Coordinates(xCoord, yCoord));
-                }
-            }
-        });
+        //     @Override
+        //     public void handle(MouseEvent event){
+        //         int xCoord = (int) event.getX();
+        //         int yCoord = (int) event.getY();
+        //         if(World.instance().getPlayer()!=null)
+        //         {
+        //             World.instance().getPlayer().setMouseCoordinates(new Coordinates(xCoord, yCoord));
+        //         }
+        //     }
+        // });
 
-        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        // scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
             
-            @Override
-            public void handle(MouseEvent event){
-                if(World.instance().getPlayer()!=null)
-                {
-                    World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
-                    World.instance().getPlayer().setState(PlayerState.attacking);
-                    System.out.println(World.instance().getPlayer().getCoords().getxCoord());
-                }
-            }
-        });
+        //     @Override
+        //     public void handle(MouseEvent event){
+        //         if(World.instance().getPlayer()!=null)
+        //         {
+        //             World.instance().getPlayer().setEnemies(World.instance().getCurrentLevel().getCurrentScreen().getEnemies());
+        //             World.instance().getPlayer().setState(PlayerState.attacking);
+        //             System.out.println(World.instance().getPlayer().getCoords().getxCoord());
+        //         }
+        //     }
+        // });
     }
 
     @FXML

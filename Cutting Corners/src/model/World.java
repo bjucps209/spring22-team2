@@ -32,6 +32,8 @@ public class World {
     private boolean userCampaign;
     private boolean activeBoss;
     private int levelTimer = 45000;
+    private String playerName;
+    private Screen previousScreen = null;
     private AudioClip DESERT_MUSIC = new AudioClip(getClass().getResource("/media/Sounds/music/desert.mp3").toString());
     private AudioClip CAVEMAN_MUSIC = new AudioClip(
             getClass().getResource("/media/Sounds/music/caveman.mp3").toString());
@@ -79,33 +81,13 @@ public class World {
             temp = getCurrentLevel().getObserver();
         }
         currentLevel++;
-        System.out.println(currentLevel);
 
         getCurrentLevel().setCurrentScreen(getCurrentLevel().findScreen(getCurrentLevel().getScreens()
                 .get(0).getLocation().getRow(), getCurrentLevel().getScreens().get(0).getLocation().getCol()));
         getCurrentLevel().placeEntity(getCurrentLevel().getScreens()
                 .get(0).getLocation().getRow(), getCurrentLevel().getScreens().get(0).getLocation().getCol(), Cirkyle);
         getCurrentLevel().setObserver(temp);
-        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("desert")) {
-            current.stop();
-            current = DESERT_MUSIC;
-            current.play();
-        }
-        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("caveman")) {
-            current.stop();
-            current = CAVEMAN_MUSIC;
-            current.play();
-        }
-        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("medieval")) {
-            current.stop();
-            current = MEDIEVAL_MUSIC;
-            current.play();
-        }
-        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("secret")) {
-            current.stop();
-            current = SECRET_MUSIC;
-            current.play();
-        }
+        World.instance().playMusic();
         if ((levelTimer / 60) / 50 > 100) {
             World.instance().getPlayer().addScore(100);
         } else {
@@ -122,7 +104,6 @@ public class World {
      * obstacles
      */
     public static void populate() {
-        System.out.println(World.instance().getCamapign());
         if (!World.instance().getCamapign()) {
             UsableItem item1 = new UsableItem("Health Potion", 2, 1, 2, 0, 5, 0, "media/Player/Effects/health.png");
             UsableItem item2 = new UsableItem("Strength Potion", 2, 1, 60, 3, 0, 0,
@@ -842,7 +823,7 @@ public class World {
         HighScoreManager scores = new HighScoreManager();
         try {
             scores.load();
-            scores.addScore(new HighScore(World.getPlayer().getScore(), "Player"));
+            scores.addScore(new HighScore(World.getPlayer().getScore(), world.getPlayerName()));
             scores.save();
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -870,6 +851,10 @@ public class World {
         Level current = campaign.get(currentLevel);
         return current.getCurrentScreen().getEntities();
     }
+    public static ArrayList<Entity> displayPreviousEntities() 
+    {
+        return World.instance().getPreviouScreen().getEntities();
+    }
 
     public static Player getPlayer() {
         for (Entity entity : displayCurrentEntities()) {
@@ -878,6 +863,16 @@ public class World {
             }
         }
         return null;
+    }
+
+    public void setPreviousScreen(Screen prev)
+    {
+        previousScreen=prev;
+    }
+
+    public Screen getPreviouScreen()
+    {
+        return previousScreen;
     }
 
     public void setDifficulty(int difficulty) {
@@ -930,6 +925,39 @@ public class World {
     public void setDesertMusic() {
         current = DESERT_MUSIC;
         current.play();
+    }
+
+    public void playMusic() {
+        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("desert")) {
+            current.stop();
+            current = DESERT_MUSIC;
+            current.play();
+        }
+        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("caveman")) {
+            current.stop();
+            current = CAVEMAN_MUSIC;
+            current.play();
+        }
+        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("medieval")) {
+            current.stop();
+            current = MEDIEVAL_MUSIC;
+            current.play();
+        }
+        if (World.instance().getCurrentLevel().getCurrentScreen().getFilename().contains("secret")) {
+            current.stop();
+            current = SECRET_MUSIC;
+            current.play();
+        }
+    }
+
+    public void setPlayerName(String name)
+    {
+        world.playerName = name;
+    }
+
+    public String getPlayerName()
+    {
+        return world.playerName;
     }
 
     public boolean getIsPaused() {

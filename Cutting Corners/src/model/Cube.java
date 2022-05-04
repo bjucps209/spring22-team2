@@ -16,7 +16,7 @@ public class Cube extends Boss {
 
     public Cube(int size, int xCoord, int yCoord, Screen homeScreen) {
         super(3, size, xCoord, yCoord, image, homeScreen, 700,
-                new Stats(10, 9, 15), 15 * World.instance().getDifficulty(),
+                new Stats(10, 9, 15), 15,
                 150);
     }
 

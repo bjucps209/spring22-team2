@@ -45,9 +45,8 @@ public class Enemy extends Entity {
         this.stats = new Stats(stats.getStrength() * World.instance().getDifficulty(),
                 stats.getSpeed() * World.instance().getDifficulty(),
                 stats.getHealth() * World.instance().getDifficulty());
-        System.out.println(World.instance().DifficultyProperty().get());
         this.size = size;
-        this.totalHealth = totalHealth;
+        this.totalHealth = totalHealth*World.instance().getDifficulty();
         this.walking = walking;
         this.attacking = attacking;
         cellWithin = cellWithin(col, row);
@@ -347,7 +346,6 @@ public class Enemy extends Entity {
     // the player's
     @Override
     public void performDie() {
-        System.out.println('u');
         World.instance().getPlayer().addExperience(experience);
         World.instance().getPlayer().addScore(score);
         super.performDie();

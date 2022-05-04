@@ -280,6 +280,7 @@ public class Level {
     }
 
     public void setCurrentScreen(Screen currentScreen) {
+        World.instance().setPreviousScreen(this.currentScreen);
         this.currentScreen = currentScreen;
     }
 
